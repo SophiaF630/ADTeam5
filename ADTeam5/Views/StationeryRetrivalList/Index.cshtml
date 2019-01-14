@@ -1,0 +1,45 @@
+﻿@model IEnumerable<ADTeam5.ViewModels.StationeryRetrivalList>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Stationery Retrival List</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ItemNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ItemName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Quantity)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ItemNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ItemName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Quantity)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.ItemNumber">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.ItemNumber">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.ItemNumber">Delete</a> |
+                <a asp-action="Voucher" asp-route-id="@item.ItemNumber">Add to Voucher</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
