@@ -22,6 +22,34 @@ namespace ADTeam5.Controllers
         // GET: StationeryRetrivalList
         public async Task<IActionResult> Index()
         {
+            DateTime start = DateTime.Now;
+            DateTime cutoff = DateTime.Now;
+            if (start.DayOfWeek >= DayOfWeek.Thursday)
+            {
+                start = start.AddDays(-7);
+            }
+            while (start.DayOfWeek != DayOfWeek.Thursday)
+            {
+                start = start.AddDays(-1);
+            }
+            Console.WriteLine("{0}", start);
+
+            if (cutoff.DayOfWeek >= DayOfWeek.Wednesday)
+            {
+                while (cutoff.DayOfWeek != DayOfWeek.Wednesday)
+                    cutoff = cutoff.AddDays(-1);
+            }
+            else
+            {
+                while (cutoff.DayOfWeek != DayOfWeek.Wednesday)
+                    cutoff = cutoff.AddDays(1);
+            }
+            Console.WriteLine("{0}", cutoff);
+
+            var a = _context.EmployeeRequestRecord
+                .Where(x => x.CompleteDate < start && x.CompleteDate < cutoff && x.Status == "Approved");
+            var b = _context.DisbursementList
+                .Where(x => x.Status == "PartialFullfilled");
 
             var q = from x in _context.RecordDetails
                     group x by x.ItemNumber into g
@@ -34,11 +62,12 @@ namespace ADTeam5.Controllers
             List < StationeryRetrivalList > result = new List<StationeryRetrivalList>();       
             foreach(var item in p)
             {
-                StationeryRetrivalList srList = new StationeryRetrivalList();
-                srList.ItemNumber = item.ItemNumber;
-                srList.ItemName = item.ItemName;
-                srList.Quantity = item.QuantityNeeded;
                 
+                    StationeryRetrivalList srList = new StationeryRetrivalList();
+                    srList.ItemNumber = item.ItemNumber;
+                    srList.ItemName = item.ItemName;
+                    srList.Quantity = item.QuantityNeeded;
+
                 result.Add(srList);
             }
 
