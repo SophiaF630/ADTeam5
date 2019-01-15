@@ -1,0 +1,42 @@
+﻿@model IEnumerable<ADTeam5.Models.EmployeeRequestRecord>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>View Requests</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Request Date
+            </th>
+            <th>
+                Requisition Form No.
+            </th>
+            <th>
+                Status
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RequestDate)
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.Rrid">
+                        @Html.DisplayFor(modelItem => item.Rrid)
+                    </a>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
