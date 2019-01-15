@@ -87,6 +87,8 @@ h1, h2, h3, h4, h5, h6 {
 p {
   margin-top: 0;
   margin-bottom: 1rem;
+  color:black;
+  font-display:inherit;
 }
 
 abbr[title],
@@ -161,8 +163,8 @@ sup {
 }
 
 a {
-  color: #007bff;
-  text-decoration: none;
+  color: #1c3d80;
+  text-decoration:none;
   background-color: transparent;
   -webkit-text-decoration-skip: objects;
 }
