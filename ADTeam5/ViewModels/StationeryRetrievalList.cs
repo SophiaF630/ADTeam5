@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ADTeam5.ViewModels
 {
-    public class StationeryRetrivalList
+    public class StationeryRetrievalList
     {
         [Display(Name = "Item Number")]
         public string ItemNumber { get; set; }
