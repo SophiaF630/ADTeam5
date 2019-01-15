@@ -33,6 +33,7 @@ namespace ADTeam5.Models
         public string UnitOfMeasure { get; set; }
         [ReadOnly(true)]
         public int Stock { get; set; }
+        public int Out { get; set; }
         public string Supplier1 { get; set; }
         public string Supplier2 { get; set; }
         public string Supplier3 { get; set; }
@@ -56,7 +57,6 @@ namespace ADTeam5.Models
         public Supplier Supplier2Navigation { get; set; }
         [Display(Name = "Supplier 3")]
         public Supplier Supplier3Navigation { get; set; }
-
         public virtual ICollection<InventoryTransRecord> InventoryTransRecord { get; set; }
         public virtual ICollection<RecordDetails> RecordDetails { get; set; }
     }

@@ -14,5 +14,6 @@ namespace ADTeam5.Models
         public string Status { get; set; }
 
         public virtual User StoreClerk { get; set; }
+        public virtual Supplier SupplierCodeNavigation { get; set; }
     }
 }

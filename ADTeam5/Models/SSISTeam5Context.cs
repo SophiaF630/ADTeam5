@@ -34,7 +34,7 @@ namespace ADTeam5.Models
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer("Server=(local);Database=SSISTeam5;Trusted_Connection=True;");
+                optionsBuilder.UseSqlServer("Server=.;Database=SSISTeam5;Trusted_Connection=True;");
             }
         }
 
@@ -47,7 +47,7 @@ namespace ADTeam5.Models
                 entity.HasKey(e => e.VoucherNo);
 
                 entity.Property(e => e.VoucherNo)
-                    .HasMaxLength(11)
+                    .HasMaxLength(25)
                     .IsUnicode(false)
                     .ValueGeneratedNever();
 
@@ -66,10 +66,21 @@ namespace ADTeam5.Models
                 entity.Property(e => e.SuperviserId).HasColumnName("SuperviserID");
 
                 entity.HasOne(d => d.Clerk)
-                    .WithMany(p => p.AdjustmentRecord)
+                    .WithMany(p => p.AdjustmentRecordClerk)
                     .HasForeignKey(d => d.ClerkId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_AdjustmentRecord_User");
+
+                entity.HasOne(d => d.Manager)
+                    .WithMany(p => p.AdjustmentRecordManager)
+                    .HasForeignKey(d => d.ManagerId)
+                    .HasConstraintName("FK_AdjustmentRecord_User1");
+
+                entity.HasOne(d => d.Superviser)
+                    .WithMany(p => p.AdjustmentRecordSuperviser)
+                    .HasForeignKey(d => d.SuperviserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_AdjustmentRecord_User2");
             });
 
             modelBuilder.Entity<Catalogue>(entity =>
@@ -186,6 +197,23 @@ namespace ADTeam5.Models
                     .HasForeignKey(d => d.CollectionPointId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Department_CollectionPoint");
+
+                entity.HasOne(d => d.CoveringHead)
+                    .WithMany(p => p.DepartmentCoveringHead)
+                    .HasForeignKey(d => d.CoveringHeadId)
+                    .HasConstraintName("FK_Department_User2");
+
+                entity.HasOne(d => d.Head)
+                    .WithMany(p => p.DepartmentHead)
+                    .HasForeignKey(d => d.HeadId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Department_User");
+
+                entity.HasOne(d => d.Rep)
+                    .WithMany(p => p.DepartmentRep)
+                    .HasForeignKey(d => d.RepId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Department_User1");
             });
 
             modelBuilder.Entity<DepartmentCoveringHeadRecord>(entity =>
@@ -226,6 +254,8 @@ namespace ADTeam5.Models
                     .HasMaxLength(5)
                     .IsUnicode(false);
 
+                entity.Property(e => e.RepId).HasColumnName("RepID");
+
                 entity.Property(e => e.StartDate).HasColumnType("datetime");
 
                 entity.Property(e => e.Status)
@@ -238,6 +268,18 @@ namespace ADTeam5.Models
                     .HasForeignKey(d => d.CollectionPointId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_DisbursementList_CollectionPoint");
+
+                entity.HasOne(d => d.DepartmentCodeNavigation)
+                    .WithMany(p => p.DisbursementList)
+                    .HasForeignKey(d => d.DepartmentCode)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_DisbursementList_Department");
+
+                entity.HasOne(d => d.Rep)
+                    .WithMany(p => p.DisbursementList)
+                    .HasForeignKey(d => d.RepId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_DisbursementList_User");
             });
 
             modelBuilder.Entity<EmployeeRequestRecord>(entity =>
@@ -261,8 +303,6 @@ namespace ADTeam5.Models
 
                 entity.Property(e => e.DepHeadId).HasColumnName("DepHeadID");
 
-                entity.Property(e => e.DepRepId).HasColumnName("DepRepID");
-
                 entity.Property(e => e.Remark)
                     .HasMaxLength(50)
                     .IsUnicode(false);
@@ -273,11 +313,21 @@ namespace ADTeam5.Models
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
-                entity.HasOne(d => d.DepEmp)
+                entity.HasOne(d => d.DepCodeNavigation)
                     .WithMany(p => p.EmployeeRequestRecord)
+                    .HasForeignKey(d => d.DepCode)
+                    .HasConstraintName("FK_EmployeeRequestRecord_Department");
+
+                entity.HasOne(d => d.DepEmp)
+                    .WithMany(p => p.EmployeeRequestRecordDepEmp)
                     .HasForeignKey(d => d.DepEmpId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_EmployeeRequestRecord_User");
+
+                entity.HasOne(d => d.DepHead)
+                    .WithMany(p => p.EmployeeRequestRecordDepHead)
+                    .HasForeignKey(d => d.DepHeadId)
+                    .HasConstraintName("FK_EmployeeRequestRecord_User1");
             });
 
             modelBuilder.Entity<InventoryTransRecord>(entity =>
@@ -288,18 +338,14 @@ namespace ADTeam5.Models
 
                 entity.Property(e => e.Date).HasColumnType("datetime");
 
-                entity.Property(e => e.DepOrSupplier)
-                    .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
                 entity.Property(e => e.ItemNumber)
                     .IsRequired()
                     .HasMaxLength(5)
                     .IsUnicode(false);
 
-                entity.Property(e => e.Qty)
+                entity.Property(e => e.RecordId)
                     .IsRequired()
+                    .HasColumnName("RecordID")
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
@@ -343,6 +389,12 @@ namespace ADTeam5.Models
                     .HasForeignKey(d => d.StoreClerkId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_PurchaseOrderRecord_User");
+
+                entity.HasOne(d => d.SupplierCodeNavigation)
+                    .WithMany(p => p.PurchaseOrderRecord)
+                    .HasForeignKey(d => d.SupplierCode)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_PurchaseOrderRecord_Supplier");
             });
 
             modelBuilder.Entity<RecordDetails>(entity =>

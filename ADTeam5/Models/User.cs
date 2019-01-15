@@ -7,9 +7,16 @@ namespace ADTeam5.Models
     {
         public User()
         {
-            AdjustmentRecord = new HashSet<AdjustmentRecord>();
+            AdjustmentRecordClerk = new HashSet<AdjustmentRecord>();
+            AdjustmentRecordManager = new HashSet<AdjustmentRecord>();
+            AdjustmentRecordSuperviser = new HashSet<AdjustmentRecord>();
+            DepartmentCoveringHead = new HashSet<Department>();
             DepartmentCoveringHeadRecord = new HashSet<DepartmentCoveringHeadRecord>();
-            EmployeeRequestRecord = new HashSet<EmployeeRequestRecord>();
+            DepartmentHead = new HashSet<Department>();
+            DepartmentRep = new HashSet<Department>();
+            DisbursementList = new HashSet<DisbursementList>();
+            EmployeeRequestRecordDepEmp = new HashSet<EmployeeRequestRecord>();
+            EmployeeRequestRecordDepHead = new HashSet<EmployeeRequestRecord>();
             PurchaseOrderRecord = new HashSet<PurchaseOrderRecord>();
         }
 
@@ -22,9 +29,16 @@ namespace ADTeam5.Models
         public string EmailAddress { get; set; }
 
         public virtual Department DepartmentCodeNavigation { get; set; }
-        public virtual ICollection<AdjustmentRecord> AdjustmentRecord { get; set; }
+        public virtual ICollection<AdjustmentRecord> AdjustmentRecordClerk { get; set; }
+        public virtual ICollection<AdjustmentRecord> AdjustmentRecordManager { get; set; }
+        public virtual ICollection<AdjustmentRecord> AdjustmentRecordSuperviser { get; set; }
+        public virtual ICollection<Department> DepartmentCoveringHead { get; set; }
         public virtual ICollection<DepartmentCoveringHeadRecord> DepartmentCoveringHeadRecord { get; set; }
-        public virtual ICollection<EmployeeRequestRecord> EmployeeRequestRecord { get; set; }
+        public virtual ICollection<Department> DepartmentHead { get; set; }
+        public virtual ICollection<Department> DepartmentRep { get; set; }
+        public virtual ICollection<DisbursementList> DisbursementList { get; set; }
+        public virtual ICollection<EmployeeRequestRecord> EmployeeRequestRecordDepEmp { get; set; }
+        public virtual ICollection<EmployeeRequestRecord> EmployeeRequestRecordDepHead { get; set; }
         public virtual ICollection<PurchaseOrderRecord> PurchaseOrderRecord { get; set; }
     }
 }
