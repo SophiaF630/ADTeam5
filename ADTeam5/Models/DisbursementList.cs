@@ -7,6 +7,7 @@ namespace ADTeam5.Models
     {
         public string Dlid { get; set; }
         public DateTime StartDate { get; set; }
+        public DateTime EstDeliverDate { get; set; }
         public DateTime CompleteDate { get; set; }
         public string DepartmentCode { get; set; }
         public int RepId { get; set; }
