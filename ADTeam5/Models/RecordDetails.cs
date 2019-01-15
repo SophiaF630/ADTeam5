@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 
 namespace ADTeam5.Models
 {
@@ -12,7 +11,6 @@ namespace ADTeam5.Models
         public int Quantity { get; set; }
         public string Remark { get; set; }
 
-        [Display(Name = "Item Number")]
         public virtual Catalogue ItemNumberNavigation { get; set; }
     }
 }

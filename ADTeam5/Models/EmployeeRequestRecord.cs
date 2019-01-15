@@ -10,11 +10,12 @@ namespace ADTeam5.Models
         public DateTime? CompleteDate { get; set; }
         public int DepEmpId { get; set; }
         public int? DepHeadId { get; set; }
-        public int? DepRepId { get; set; }
         public string DepCode { get; set; }
         public string Status { get; set; }
         public string Remark { get; set; }
 
+        public virtual Department DepCodeNavigation { get; set; }
         public virtual User DepEmp { get; set; }
+        public virtual User DepHead { get; set; }
     }
 }
