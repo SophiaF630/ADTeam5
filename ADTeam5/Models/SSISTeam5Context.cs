@@ -254,7 +254,7 @@ namespace ADTeam5.Models
                     .HasMaxLength(5)
                     .IsUnicode(false);
 
-                entity.Property(e => e.RepId).HasColumnName("RepID");
+               
 
                 entity.Property(e => e.StartDate).HasColumnType("datetime");
 
@@ -275,11 +275,13 @@ namespace ADTeam5.Models
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_DisbursementList_Department");
 
+
                 entity.HasOne(d => d.RepNavigation)
                     .WithMany(p => p.DisbursementList)
-                    .HasForeignKey(d => d.RepId)
+                    .HasForeignKey(d => d.RepNavigation)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_DisbursementList_User");
+
             });
 
             modelBuilder.Entity<EmployeeRequestRecord>(entity =>
