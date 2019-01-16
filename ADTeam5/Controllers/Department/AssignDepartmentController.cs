@@ -19,6 +19,17 @@ namespace ADTeam5.Controllers.Department
         }
         public IActionResult Index()
         {
+            //Change Dept according to the person using this
+            var q1 = context.Department.Where(x => x.DepartmentCode == "STAS").First();
+            Models.Department d1 = q1;
+            int currentRepId = d1.RepId;
+
+            var q2 = context.User.Where(x => x.UserId == currentRepId).First();
+            Models.User u1 = q2;
+            string currentRepName = u1.Name;
+
+            ViewData["CurrentRepName"] = currentRepName;
+
             List<User> u = new List<User>();
 
             var q = from x in context.Department where x.DepartmentCode == "STAS" select x;
@@ -35,7 +46,6 @@ namespace ADTeam5.Controllers.Department
             u = context.User.Where(x => x.DepartmentCode == "STAS" && x.UserId != repid && x.UserId != headid && x.UserId != coverheadid).OrderBy(x => x.Name).ToList();
 
             ViewBag.listofitems = u;
-            //ViewData["UserId"] = new SelectList(context.User, "UserId", "Name");
             return View();
         }
 
