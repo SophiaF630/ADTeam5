@@ -1,10 +1,32 @@
-﻿@model IEnumerable<ADTeam5.Models.EmployeeRequestRecord>
+﻿
+@model IEnumerable<ADTeam5.Models.EmployeeRequestRecord>
 
 @{
     ViewData["Title"] = "Index";
 }
 
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="stylesheet" href="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/js/bootstrap-datepicker.min.js"></script>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/css/bootstrap-datepicker.min.css" rel="stylesheet" />
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"/>
 <h2>View Requests</h2>
+<div class=" container border border-secondary" style=" height:60px;">
+    <div class=" row container">
+        <div class=" col-11 ">
+            <div class="row" style="padding-top:10px">
+                
+                    <input id="startdatepicker" value="Select start date" />
+                    
+                    <input id="enddatepicker" value="Select end date" />
+                
+                    <button type="button" name="Search" onclick="location.href='@Url.Action("Search", "ViewRequest")'">Search</button>
+            </div>
+            </div>
+    </div>
+</div>
 
 <table class="table">
     <thead>
@@ -40,3 +62,13 @@
         }
     </tbody>
 </table>
+
+<script>
+    $('#startdatepicker').datepicker({
+        uiLibrary: 'bootstrap4'
+    });
+
+    $('#enddatepicker').datepicker({
+        uiLibrary: 'bootstrap4'
+    });
+</script>
