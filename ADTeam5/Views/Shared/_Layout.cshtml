@@ -61,12 +61,19 @@
 
     @RenderSection("Scripts", required: false)
 
+    <button type="button" id="sidebarCollapse" class="btn btn-info">
+        <i class="fas fa-align-left"></i>
+    </button>
+    <tr>
+    </tr>
     <div class="wrapper">
+        
         <!-- Sidebar  -->
         <nav id="sidebar">
             <div class="sidebar-header">
                 <h3>Store Management</h3>
                 <strong>Store</strong>
+                
             </div>
 
             <ul class="list-unstyled components">
@@ -82,7 +89,7 @@
                         <li>
                             <a href="#">Disbursement List</a>
                         </li>
-                    </ul>
+                    </ul>   
                     </li>
                        <li>
                 </li>
@@ -114,34 +121,6 @@
                             <a href="#">Request Stock Adjustment Voucher</a>
                         </li>
                     </ul>
-@*>>>>>>> 85f379f92de5e2887cfc5eef0ae5395d31d46e19
-                    <a href="#">
-                        <i class="fas fa-briefcase"></i>
-                    <a class="nav-link text-dark" asp-area="" asp-controller="SuppliersController" asp-action="Index">Suppliers</a>
-               
-                </a>
-                <a href="#">
-                    <i class="fas fa-briefcase"></i>
-                    Departments
-                </a>
-                <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-                    <i class="fas fa-copy"></i>
-                    Inventory
-                </a>
-                <ul class="collapse list-unstyled" id="pageSubmenu">
-                    <li>
-                        <a href="#">Inventory Stock</a>
-                    </li>
-                    <li>
-                        <a href="#">Inventory Transaction Log</a>
-                    </li>
-                    <li>
-                        <a href="#">Order Stock</a>
-                    </li>
-                    <li>
-                        <a href="#">Request Stock Adjustment Voucher</a>
-                    </li>
-                </ul>*@
                 <a href="#">
                     <i class="fas fa-briefcase"></i>
                     Generate Reports
@@ -164,10 +143,7 @@
 
                 </div>
 
-                <button type="button" id="sidebarCollapse" class="btn btn-info">
-                    <i class="fas fa-align-left"></i>
-                    <span>Toggle Sidebar</span>
-                </button>
+                
 
         </div>
         </nav>
