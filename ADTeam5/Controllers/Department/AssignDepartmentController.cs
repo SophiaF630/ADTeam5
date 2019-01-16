@@ -20,7 +20,20 @@ namespace ADTeam5.Controllers.Department
         public IActionResult Index()
         {
             List<User> u = new List<User>();
-            u = context.User.OrderBy(x => x.Name).ToList();
+
+            var q = from x in context.Department where x.DepartmentCode == "STAS" select x;
+            Models.Department d = q.First();
+            int repid = d.RepId;
+            int headid = d.HeadId;
+            int coverheadid = 0;
+            if (d.CoveringHeadId != null)
+            {
+               coverheadid = (int)d.CoveringHeadId;
+            }
+
+            //Filter according to dept of the person who is using this
+            u = context.User.Where(x => x.DepartmentCode == "STAS" && x.UserId != repid && x.UserId != headid && x.UserId != coverheadid).OrderBy(x => x.Name).ToList();
+
             ViewBag.listofitems = u;
             //ViewData["UserId"] = new SelectList(context.User, "UserId", "Name");
             return View();
