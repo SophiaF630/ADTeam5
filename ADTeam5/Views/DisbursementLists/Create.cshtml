@@ -1,0 +1,65 @@
+﻿@model ADTeam5.Models.DisbursementList
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>DisbursementList</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Dlid" class="control-label"></label>
+                <input asp-for="Dlid" class="form-control" />
+                <span asp-validation-for="Dlid" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="StartDate" class="control-label"></label>
+                <input asp-for="StartDate" class="form-control" />
+                <span asp-validation-for="StartDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EstDeliverDate" class="control-label"></label>
+                <input asp-for="EstDeliverDate" class="form-control" />
+                <span asp-validation-for="EstDeliverDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CompleteDate" class="control-label"></label>
+                <input asp-for="CompleteDate" class="form-control" />
+                <span asp-validation-for="CompleteDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DepartmentCode" class="control-label"></label>
+                <select asp-for="DepartmentCode" class ="form-control" asp-items="ViewBag.DepartmentCode"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="RepId" class="control-label"></label>
+                <select asp-for="RepId" class ="form-control" asp-items="ViewBag.RepId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="CollectionPointId" class="control-label"></label>
+                <select asp-for="CollectionPointId" class ="form-control" asp-items="ViewBag.CollectionPointId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Status" class="control-label"></label>
+                <input asp-for="Status" class="form-control" />
+                <span asp-validation-for="Status" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
