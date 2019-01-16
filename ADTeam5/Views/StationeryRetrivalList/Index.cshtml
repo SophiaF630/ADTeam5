@@ -4,12 +4,20 @@
     ViewData["Title"] = "Index";
 }
 @*<style>
-    .page-item.active .page-link {
-        background-color: lightsteelblue;
-    }
-</style>*@
+        .page-item.active .page-link {
+            background-color: lightsteelblue;
+        }
+    </style>*@
 
-<h1>Stationery Retrival List</h1>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+
+<h1>Stationery Retrieval List</h1>
+
+<input type="text" name="daterange" value="Select start and end dates" width="267"/>
+<p class= "startDate"></p>
 
 <div class="container">
     <div class="row">
@@ -58,4 +66,20 @@
 
 <script>
     $('#StationeryRetrivalList').DataTable();
+</script>
+
+<script>
+    var startDate;
+    var endDate;
+
+    $(function () {
+        $('input[name="daterange"]').daterangepicker({
+            opens: 'middle'
+        }, function (start, end, label) {
+            console.log("A new date selection was made: " + start.format('DD-MM-YYYY') + ' to ' + end.format('DD-MM-YYYY'));
+        });
+    });
+
+    startDate = $('input[name = "daterange"]').datepicker(getDate);
+
 </script>
