@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace ADTeam5.Models
 {
@@ -13,6 +14,8 @@ namespace ADTeam5.Models
 
         public int CollectionPointId { get; set; }
         public string CollectionPointName { get; set; }
+
+        [DataType(DataType.Date)]
         public DateTime CollectionTime { get; set; }
         public string Location { get; set; }
 
