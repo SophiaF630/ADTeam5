@@ -153,9 +153,9 @@ namespace ADTeam5.Models
             {
                 entity.Property(e => e.CollectionPointId).HasColumnName("CollectionPointID");
 
-                entity.Property(e => e.CollectionPoint1)
+                entity.Property(e => e.CollectionPointName)
                     .IsRequired()
-                    .HasColumnName("CollectionPoint")
+                    .HasColumnName("CollectionPointName")
                     .HasMaxLength(50)
                     .IsUnicode(false);
 

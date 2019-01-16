@@ -12,7 +12,7 @@ namespace ADTeam5.Models
         }
 
         public int CollectionPointId { get; set; }
-        public string CollectionPoint1 { get; set; }
+        public string CollectionPointName { get; set; }
         public DateTime CollectionTime { get; set; }
         public string Location { get; set; }
 

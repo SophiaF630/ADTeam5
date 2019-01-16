@@ -10,11 +10,11 @@ using ADTeam5.ViewModels;
 
 namespace ADTeam5.Controllers
 {
-    public class StationeryRetrivalListController : Controller
+    public class StationeryRetrievalListController : Controller
     {
         private readonly SSISTeam5Context _context;
 
-        public StationeryRetrivalListController(SSISTeam5Context context)
+        public StationeryRetrievalListController(SSISTeam5Context context)
         {
             _context = context;
         }
@@ -59,11 +59,13 @@ namespace ADTeam5.Controllers
                     join y in _context.Catalogue on x.ItemNumber equals y.ItemNumber
                     select new { x.ItemNumber, y.ItemName, x.QuantityNeeded};
 
-            List < StationeryRetrivalList > result = new List<StationeryRetrivalList>();       
+
+
+
+            List < StationeryRetrievalList > result = new List<StationeryRetrievalList>();       
             foreach(var item in p)
-            {
-                
-                    StationeryRetrivalList srList = new StationeryRetrivalList();
+            {         
+                    StationeryRetrievalList srList = new StationeryRetrievalList();
                     srList.ItemNumber = item.ItemNumber;
                     srList.ItemName = item.ItemName;
                     srList.Quantity = item.QuantityNeeded;
