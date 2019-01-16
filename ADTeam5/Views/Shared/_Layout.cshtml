@@ -77,44 +77,45 @@
                     </a>
                     <ul class="collapse list-unstyled" id="homeSubmenu">
                         <li>
-                            <a href="#">Stationery Retrieval List</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="StationeryRetrivalList" asp-action="Index">Stationery RetrivalList</a>
                         </li>
                         <li>
                             <a href="#">Disbursement List</a>
                         </li>
                     </ul>
-                </li>
-                <li>
+                    </li>
+                       <li>
                     <a href="#">
                         <i class="fas fa-briefcase"></i>
-                        Suppliers
-                    </a>
-                    <a href="#">
-                        <i class="fas fa-briefcase"></i>
-                        Departments
-                    </a>
-                    <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-                        <i class="fas fa-copy"></i>
-                        Inventory
-                    </a>
-                    <ul class="collapse list-unstyled" id="pageSubmenu">
-                        <li>
-                            <a href="#">Inventory Stock</a>
-                        </li>
-                        <li>
-                            <a href="#">Inventory Transaction Log</a>
-                        </li>
-                        <li>
-                            <a href="#">Order Stock</a>
-                        </li>
-                        <li>
-                            <a href="#">Request Stock Adjustment Voucher</a>
-                        </li>
-                    </ul>
-                    <a href="#">
-                        <i class="fas fa-briefcase"></i>
-                        Generate Reports
-                    </a>
+                    <a class="nav-link text-dark" asp-area="" asp-controller="SuppliersController" asp-action="Index">Suppliers</a>
+               
+                </a>
+                <a href="#">
+                    <i class="fas fa-briefcase"></i>
+                    Departments
+                </a>
+                <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                    <i class="fas fa-copy"></i>
+                    Inventory
+                </a>
+                <ul class="collapse list-unstyled" id="pageSubmenu">
+                    <li>
+                        <a href="#">Inventory Stock</a>
+                    </li>
+                    <li>
+                        <a href="#">Inventory Transaction Log</a>
+                    </li>
+                    <li>
+                        <a href="#">Order Stock</a>
+                    </li>
+                    <li>
+                        <a href="#">Request Stock Adjustment Voucher</a>
+                    </li>
+                </ul>
+                <a href="#">
+                    <i class="fas fa-briefcase"></i>
+                    Generate Reports
+                </a>
                 </li>
             </ul>
 
