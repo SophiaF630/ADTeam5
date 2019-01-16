@@ -14,5 +14,7 @@ namespace ADTeam5.Models
         public string Status { get; set; }
 
         public virtual User Clerk { get; set; }
+        public virtual User Manager { get; set; }
+        public virtual User Superviser { get; set; }
     }
 }

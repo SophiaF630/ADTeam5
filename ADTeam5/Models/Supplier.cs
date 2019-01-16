@@ -10,6 +10,7 @@ namespace ADTeam5.Models
             CatalogueSupplier1Navigation = new HashSet<Catalogue>();
             CatalogueSupplier2Navigation = new HashSet<Catalogue>();
             CatalogueSupplier3Navigation = new HashSet<Catalogue>();
+            PurchaseOrderRecord = new HashSet<PurchaseOrderRecord>();
         }
 
         public string SupplierCode { get; set; }
@@ -26,5 +27,6 @@ namespace ADTeam5.Models
         public virtual ICollection<Catalogue> CatalogueSupplier1Navigation { get; set; }
         public virtual ICollection<Catalogue> CatalogueSupplier2Navigation { get; set; }
         public virtual ICollection<Catalogue> CatalogueSupplier3Navigation { get; set; }
+        public virtual ICollection<PurchaseOrderRecord> PurchaseOrderRecord { get; set; }
     }
 }

@@ -8,8 +8,8 @@ namespace ADTeam5.Models
         public int TransId { get; set; }
         public DateTime Date { get; set; }
         public string ItemNumber { get; set; }
-        public string DepOrSupplier { get; set; }
-        public string Qty { get; set; }
+        public string RecordId { get; set; }
+        public int Qty { get; set; }
         public int Balance { get; set; }
 
         public virtual Catalogue ItemNumberNavigation { get; set; }
