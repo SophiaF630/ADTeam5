@@ -18,6 +18,17 @@ namespace ADTeam5.Controllers.Department
 
         public IActionResult Index()
         {
+            //Change Dept according to the person using this
+            var q1 = context.Department.Where(x => x.DepartmentCode == "STAS" && x.CoveringHeadId != null).First();
+            Models.Department d1 = q1;
+            if (d1.CoveringHeadId!= null)
+            {
+                int coveringHeadId = (int)d1.CoveringHeadId;
+                var q2 = context.User.Where(x => x.UserId == coveringHeadId).First();
+                string name = q2.Name;
+                ViewData["CurrentDeptHead"] = name;
+            }
+
             List<User> u = new List<User>();
 
             var q = from x in context.Department where x.DepartmentCode == "STAS" select x;
@@ -50,10 +61,12 @@ namespace ADTeam5.Controllers.Department
                 context.Add(d2);
 
                 context.SaveChanges();
+                TempData["Alert1"] = "Deputy Head Appointed Successfully";
                 return RedirectToAction("Index");
             }
-            return View();
-            
+            TempData["Alert2"] = "Please Try Again";
+            return RedirectToAction("Index");
+
         }
     }
 }
