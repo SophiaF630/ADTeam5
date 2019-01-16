@@ -19,20 +19,35 @@ namespace ADTeam5.Controllers.Department
 
         public IActionResult Index()
         {
+            //Filter dept by the person who is using this
+            var q1 = context.DisbursementList.Where(x => x.DepartmentCode == "ENGL" && x.Status == "Pending Delivery").First();
+            DisbursementList d1 = q1;
+            int currentCollectionPoint = d1.CollectionPointId;
 
-            //var q1 = context.DisbursementList.Where(x => x.DepartmentCode == "STAS" && x.Status == "PendingDelivery").First();
-            //Models.DisbursementList d1 = q1;
-            //int currentCollectionPoint = d1.CollectionPointId;
+            var q2 = context.CollectionPoint.Where(x => x.CollectionPointId == currentCollectionPoint).First();
+            CollectionPoint c1 = q2;
+            string currentName = c1.CollectionPointName;
+            ViewData["Name"] = currentName;
 
-            //var q2 = context.CollectionPoint.Where(x => x.CollectionPointId == currentCollectionPoint).First();
-            //CollectionPoint c1 = q2;
-            //string currentName = c1.CollectionPointName;
-            ViewData["Name"] = "currentName";
+            List < CollectionPoint > u = new List<CollectionPoint>();
 
-            List<CollectionPoint> u = new List<CollectionPoint>();
-            u = context.CollectionPoint.ToList();
+            u = context.CollectionPoint.Where(x=> x.CollectionPointId != currentCollectionPoint).ToList();
             ViewBag.listofitems = u;
             return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Index(CollectionPoint cp)
+        {
+            //Filter by dept of person who is using this
+            int c1 = cp.CollectionPointId;
+            var q = context.DisbursementList.Where(x => x.DepartmentCode == "ENGL" && x.Status == "Pending Delivery").First();
+            Models.DisbursementList d1 = q;
+            d1.CollectionPointId = c1;
+            context.SaveChanges();
+
+            return RedirectToAction("Index");
         }
     }
 }

@@ -278,7 +278,7 @@ namespace ADTeam5.Models
 
                 entity.HasOne(d => d.RepNavigation)
                     .WithMany(p => p.DisbursementList)
-                    .HasForeignKey(d => d.RepNavigation)
+                    .HasForeignKey(d => d.RepId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_DisbursementList_User");
 

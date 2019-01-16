@@ -12,8 +12,9 @@ namespace ADTeam5.Models
         [Display(Name = "Estimate Deliver Date")]
         public DateTime? EstDeliverDate { get; set; }
         [Display(Name = "Complete Date")]
-        public DateTime? CompleteDate { get; set; }
+        public DateTime? CompleteDate { get; set; } 
         public string DepartmentCode { get; set; }
+        public int RepId { get; set; }
         public int CollectionPointId { get; set; }
         public string Status { get; set; }
 
