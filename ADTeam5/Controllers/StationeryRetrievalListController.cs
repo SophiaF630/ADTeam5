@@ -7,72 +7,36 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ADTeam5.Models;
 using ADTeam5.ViewModels;
+using ADTeam5.BusinessLogic;
 
 namespace ADTeam5.Controllers
 {
     public class StationeryRetrievalListController : Controller
     {
         private readonly SSISTeam5Context _context;
+        BizLogic b = new BizLogic();
 
         public StationeryRetrievalListController(SSISTeam5Context context)
         {
             _context = context;
         }
 
-        // GET: StationeryRetrivalList
+        // GET: StationeryRetrievalList
         public async Task<IActionResult> Index()
         {
-            DateTime start = DateTime.Now;
-            DateTime cutoff = DateTime.Now;
-            if (start.DayOfWeek >= DayOfWeek.Thursday)
+            List<RecordDetails> rd = b.GenerateDisbursementListDetails("ENGL");
+            List<StationeryRetrievalList> result = new List<StationeryRetrievalList>();
+            foreach (var item in rd)
             {
-                start = start.AddDays(-7);
-            }
-            while (start.DayOfWeek != DayOfWeek.Thursday)
-            {
-                start = start.AddDays(-1);
-            }
-            Console.WriteLine("{0}", start);
+                StationeryRetrievalList srList = new StationeryRetrievalList();
 
-            if (cutoff.DayOfWeek >= DayOfWeek.Wednesday)
-            {
-                while (cutoff.DayOfWeek != DayOfWeek.Wednesday)
-                    cutoff = cutoff.AddDays(-1);
-            }
-            else
-            {
-                while (cutoff.DayOfWeek != DayOfWeek.Wednesday)
-                    cutoff = cutoff.AddDays(1);
-            }
-            Console.WriteLine("{0}", cutoff);
-
-            var a = _context.EmployeeRequestRecord
-                .Where(x => x.CompleteDate < start && x.CompleteDate < cutoff && x.Status == "Approved");
-            var b = _context.DisbursementList
-                .Where(x => x.Status == "PartialFullfilled");
-
-            var q = from x in _context.RecordDetails
-                    group x by x.ItemNumber into g
-                    select new { ItemNumber = g.Key, QuantityNeeded = g.Sum(y => y.Quantity)};
-
-            var p = from x in q
-                    join y in _context.Catalogue on x.ItemNumber equals y.ItemNumber
-                    select new { x.ItemNumber, y.ItemName, x.QuantityNeeded};
-
-
-
-
-            List < StationeryRetrievalList > result = new List<StationeryRetrievalList>();       
-            foreach(var item in p)
-            {         
-                    StationeryRetrievalList srList = new StationeryRetrievalList();
-                    srList.ItemNumber = item.ItemNumber;
-                    srList.ItemName = item.ItemName;
-                    srList.Quantity = item.QuantityNeeded;
+                srList.ItemNumber = item.ItemNumber;
+                //srList.ItemName = item.ItemNumberNavigation.ItemName;
+                srList.ItemName = _context.Catalogue.FirstOrDefault(x => x.ItemNumber == item.ItemNumber).ItemName;
+                srList.Quantity = item.Quantity;
 
                 result.Add(srList);
             }
-
             return View(result);
         }
 
