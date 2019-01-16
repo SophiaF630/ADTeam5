@@ -7,8 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="Views\StationeryRetrivalList\Create.cshtml" />
-    <Content Remove="Views\StationeryRetrivalList\Delete.cshtml" />
+    <Content Remove="Views\StationeryRetrievalList\Create.cshtml" />
+    <Content Remove="Views\StationeryRetrievalList\Delete.cshtml" />
   </ItemGroup>
 
 
