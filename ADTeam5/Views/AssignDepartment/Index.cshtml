@@ -7,7 +7,7 @@
 <form asp-action="Index" method="post">
     <h1>Assign Department Representative</h1>
 
-    <p>Current Representative: </p>
+    <p>Current Representative: @ViewData["CurrentRepName"]</p>
 
     @*@if (ViewBag.IsValid)
         {

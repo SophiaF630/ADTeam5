@@ -22,6 +22,8 @@ namespace ADTeam5.Controllers.Department
             // GET: Outstanding Orders
             public IActionResult Index()
             {
+
+            
                 //Must filter by dept code based on dept head login
                 var q = context.EmployeeRequestRecord.Where(x => x.Status == "Submitted");
                 return View(q);
@@ -30,7 +32,18 @@ namespace ADTeam5.Controllers.Department
             // GET: OutstandingOrder/Details/id
             public IActionResult Details(string id)
             {
-                rrid = id;
+            rrid = id;
+
+            ViewData["RRID"] = rrid;
+            var q1 = context.EmployeeRequestRecord.Where(x => x.Rrid == rrid).First();
+            EmployeeRequestRecord e1 = q1;
+            int userid = e1.DepEmpId;
+
+            var q2 = context.User.Where(x => x.UserId == userid).First();
+            User u1 = q2;
+            string username = u1.Name;
+            ViewData["Name"] = username;
+
                 var q = context.RecordDetails.Where(x => x.Rrid == id);
                 return View(q);
             }
