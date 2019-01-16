@@ -6,12 +6,15 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ADTeam5.Models;
+using ADTeam5.ViewModels;
+using ADTeam5.BusinessLogic;
 
 namespace ADTeam5.Controllers
 {
     public class DisbursementListsController : Controller
     {
         private readonly SSISTeam5Context _context;
+        BizLogic b = new BizLogic();
 
         public DisbursementListsController(SSISTeam5Context context)
         {
@@ -33,17 +36,21 @@ namespace ADTeam5.Controllers
                 return NotFound();
             }
 
-            var disbursementList = await _context.DisbursementList
-                .Include(d => d.CollectionPointNavigation)
-                .Include(d => d.DepartmentCodeNavigation)
-                .Include(d => d.RepNavigation)
-                .FirstOrDefaultAsync(m => m.Dlid == id);
-            if (disbursementList == null)
+            List<RecordDetails> rd = b.GenerateDisbursementListDetails("ENGL");
+            List<DisbursementListDetails> result = new List<DisbursementListDetails>();
+            foreach (var item in rd)
             {
-                return NotFound();
-            }
+                DisbursementListDetails dlList = new DisbursementListDetails();
 
-            return View(disbursementList);
+                dlList.ItemNumber = item.ItemNumber;
+                //srList.ItemName = item.ItemNumberNavigation.ItemName;
+                dlList.ItemName = _context.Catalogue.FirstOrDefault(x => x.ItemNumber == item.ItemNumber).ItemName;
+                dlList.Quantity = item.Quantity;
+                dlList.Remark = item.Remark;
+
+                result.Add(dlList);
+            }
+            return View(result);
         }
 
         // GET: DisbursementLists/Create
