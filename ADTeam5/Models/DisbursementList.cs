@@ -14,8 +14,10 @@ namespace ADTeam5.Models
         [Display(Name = "Complete Date")]
         public DateTime? CompleteDate { get; set; }
         public string DepartmentCode { get; set; }
+        public int RepId { get; set; }
         public int CollectionPointId { get; set; }
         public string Status { get; set; }
+        
 
         public virtual CollectionPoint CollectionPointNavigation { get; set; }
         public virtual Department DepartmentCodeNavigation { get; set; }
