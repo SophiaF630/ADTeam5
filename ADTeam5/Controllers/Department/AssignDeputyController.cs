@@ -19,11 +19,41 @@ namespace ADTeam5.Controllers.Department
         public IActionResult Index()
         {
             List<User> u = new List<User>();
-            u = context.User.OrderBy(x => x.Name).ToList();
+
+            var q = from x in context.Department where x.DepartmentCode == "STAS" select x;
+            Models.Department d = q.First();
+            int repid = d.RepId;
+            int headid = d.HeadId;
+
+            //Filter according to dept of the person who is using this
+            u = context.User.Where(x => x.DepartmentCode == "STAS" && x.UserId != repid && x.UserId != headid).OrderBy(x => x.Name).ToList();
+ 
             ViewBag.listofitems = u;
-            //ViewData["UserId"] = new SelectList(context.User, "UserId", "Name");
             return View();
         }
-    
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Index(User u, DateTime startdate, DateTime enddate)
+        {
+            if(ModelState.IsValid)
+            {
+                int id = u.UserId;
+                //Filter according to dept of the person who is using this
+                Models.Department d1 = context.Department.Where(x => x.DepartmentCode == "STAS").First();
+                d1.CoveringHeadId = id;
+
+                Models.DepartmentCoveringHeadRecord d2 = new Models.DepartmentCoveringHeadRecord();
+                d2.UserId = u.UserId;
+                d2.StartDate = startdate;
+                d2.EndDate = enddate;
+                context.Add(d2);
+
+                context.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return View();
+            
+        }
     }
 }
