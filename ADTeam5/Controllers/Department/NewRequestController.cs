@@ -36,7 +36,7 @@ namespace ADTeam5.Controllers.Department
         // GET: /<controller>/
         public IActionResult Index()
         {
-            ViewData["ItemName"] = new SelectList(context.Catalogue, "ItemNumber", "ItemName");
+            ViewData["ItemNumber"] = new SelectList(context.Catalogue, "ItemNumber", "ItemName");
             return View();
         }
 
