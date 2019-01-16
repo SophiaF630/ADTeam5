@@ -1,8 +1,25 @@
-﻿@model IEnumerable<ADTeam5.ViewModels.StationeryRetrivalList>
+﻿@model IEnumerable<ADTeam5.ViewModels.StationeryRetrievalList>
 
 @{
     ViewData["Title"] = "Index";
 }
+<<<<<<< HEAD:ADTeam5/Views/StationeryRetrivalList/Index.cshtml
+@*<style>
+        .page-item.active .page-link {
+            background-color: lightsteelblue;
+        }
+    </style>*@
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+
+<h1>Stationery Retrieval List</h1>
+
+<input type="text" name="daterange" value="Select start and end dates" width="267"/>
+<p class= "startDate"></p>
+=======
 <style>
     .page-item.active .page-link {
         background-color: #8e9eab;
@@ -15,6 +32,7 @@
 </style>
 
 <h1>Stationery Retrieval List</h1>
+>>>>>>> e18fc20b0e647a606a8f3c209fc849bcfc8ef8b2:ADTeam5/Views/StationeryRetrievalList/Index.cshtml
 
 <div class="container">
     <div class="row">
@@ -63,4 +81,20 @@
 
 <script>
     $('#StationeryRetrivalList').DataTable();
+</script>
+
+<script>
+    var startDate;
+    var endDate;
+
+    $(function () {
+        $('input[name="daterange"]').daterangepicker({
+            opens: 'middle'
+        }, function (start, end, label) {
+            console.log("A new date selection was made: " + start.format('DD-MM-YYYY') + ' to ' + end.format('DD-MM-YYYY'));
+        });
+    });
+
+    startDate = $('input[name = "daterange"]').datepicker(getDate);
+
 </script>
