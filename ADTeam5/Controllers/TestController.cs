@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ADTeam5.BusinessLogic;
+using ADTeam5.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ADTeam5.Controllers
@@ -43,8 +44,15 @@ namespace ADTeam5.Controllers
 
         public IActionResult Index()
         {
+            BizLogic b = new BizLogic();
             string test = new BizLogic().IDGenerator("DL");
             Console.WriteLine("{0}", test);
+
+            List<RecordDetails> rd = b.GenerateDisbursementListDetails("ENGL");
+            foreach(RecordDetails i in rd)
+            {
+                Console.WriteLine("{0}, {1}, {2}", i.Rrid, i.ItemNumber, i.Quantity);
+            }
             return View();
         }
     }

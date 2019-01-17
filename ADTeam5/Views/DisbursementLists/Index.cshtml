@@ -1,0 +1,82 @@
+﻿@model IEnumerable<ADTeam5.Models.DisbursementList>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Disbursement List</h1>
+
+
+<input type="submit" value="Generate" class="btn btn-primary" />
+
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<p>
+    @ViewData["Department"]
+</p>
+<p>
+    @ViewData["role"]
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.CollectionPointNavigation.CollectionPointName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CollectionPointNavigation.CollectionTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DepartmentCodeNavigation)
+            </th>
+            <th>
+                Representative Name
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EstDeliverDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CompleteDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.CollectionPointNavigation.CollectionPointName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CollectionPointNavigation.CollectionTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DepartmentCodeNavigation.DepartmentCode)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RepNavigation.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EstDeliverDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CompleteDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Dlid">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Dlid">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Dlid">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

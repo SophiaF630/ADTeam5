@@ -153,9 +153,9 @@ namespace ADTeam5.Models
             {
                 entity.Property(e => e.CollectionPointId).HasColumnName("CollectionPointID");
 
-                entity.Property(e => e.CollectionPoint1)
+                entity.Property(e => e.CollectionPointName)
                     .IsRequired()
-                    .HasColumnName("CollectionPoint")
+                    .HasColumnName("CollectionPointName")
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
@@ -263,7 +263,7 @@ namespace ADTeam5.Models
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
-                entity.HasOne(d => d.CollectionPoint)
+                entity.HasOne(d => d.CollectionPointNavigation)
                     .WithMany(p => p.DisbursementList)
                     .HasForeignKey(d => d.CollectionPointId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
@@ -275,7 +275,7 @@ namespace ADTeam5.Models
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_DisbursementList_Department");
 
-                entity.HasOne(d => d.Rep)
+                entity.HasOne(d => d.RepNavigation)
                     .WithMany(p => p.DisbursementList)
                     .HasForeignKey(d => d.RepId)
                     .OnDelete(DeleteBehavior.ClientSetNull)

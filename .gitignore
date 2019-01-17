@@ -332,3 +332,6 @@ ASALocalRun/
 
 # Local History for Visual Studio
 .localhistory/
+ADTeam5/Views/Shared/_Layout.cshtml
+ADTeam5/Views/Shared/_Layout.cshtml
+ADTeam5/Views/StationeryRetrievalList/Index.cshtml

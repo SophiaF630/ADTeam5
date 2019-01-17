@@ -62,6 +62,23 @@
                 <select asp-for="Supplier3" class="form-control" asp-items="ViewBag.Supplier3"></select>
                 <span asp-validation-for="Supplier3" class="text-danger"></span>
             </div>
+
+            @*<div class="form-group">
+                <label asp-for="Supplier1" class="control-label"></label>
+                <select asp-for="Supplier1" class="form-control" asp-items="@(new SelectList(Catalogue.Supplier1, "SupplierCode", "SupplierCode"))"></select>
+                <span asp-validation-for="Supplier1" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Supplier2" class="control-label"></label>
+                <select asp-for="Supplier2" class="form-control" asp-items="ViewBag.Supplier2"></select>
+                <span asp-validation-for="Supplier2" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Supplier3" class="control-label"></label>
+                <select asp-for="Supplier3" class="form-control" asp-items="ViewBag.Supplier3"></select>
+                <span asp-validation-for="Supplier3" class="text-danger"></span>
+            </div>*@
+
             <div class="form-group">
                 <label asp-for="Supplier1Price" class="control-label"></label>
                 <input asp-for="Supplier1Price" class="form-control" />
@@ -96,3 +113,5 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+
+<script src="~/lib/jquery/dist/jquery.js"></script>
