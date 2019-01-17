@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ADTeam5.ViewModels.StationeryRetrievalList>
+﻿@model IEnumerable<ADTeam5.ViewModels.DisbursementListDetails>
 
 @{
     ViewData["Title"] = "Index";
@@ -10,12 +10,10 @@
         }
     </style>*@
 
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-
-@*<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
-<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />*@
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 
 
 <style>
@@ -48,28 +46,37 @@
                         <th>
                             @Html.DisplayNameFor(model => model.Quantity)
                         </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Remark)
+                        </th>
+                        <th>
+                            Action
+                        </th>
                         <th></th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach (var item in Model)
                     {
-                        <tr>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.ItemNumber)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.ItemName)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Quantity)
-                            </td>
-                            <td>
-                                <a asp-action="Edit" asp-route-id="@item.ItemNumber">Edit</a> |
-                                <a asp-action="Details" asp-route-id="@item.ItemNumber">Details</a> | 
-                                <a asp-action="Voucher" asp-route-id="@item.ItemNumber">Add to Voucher</a>
-                            </td>
-                        </tr>
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ItemNumber)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ItemName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Quantity)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Remark)
+                        </td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@item.ItemNumber">Edit</a> |
+                            <a asp-action="Details" asp-route-id="@item.ItemNumber">Details</a> |
+                            <a asp-action="Voucher" asp-route-id="@item.ItemNumber">Add to Voucher</a>
+                        </td>
+                    </tr>
                     }
                 </tbody>
             </table>
@@ -77,20 +84,11 @@
     </div>
 </div>
 
-
-<div class="age">
-    <span>age :</span>
-    <span class="editable">
-        38
-    </span>
-    <input type="button" value="edit" class="btn_edit"></input>
-</div>
-
 <script>
     $('#StationeryRetrivalList').DataTable();
 </script>
 
-@*<script>
+<script>
     var startDate;
     var endDate;
 
@@ -104,4 +102,4 @@
 
     startDate = $('input[name = "daterange"]').datepicker(getDate);
 
-</script>*@
+</script>
