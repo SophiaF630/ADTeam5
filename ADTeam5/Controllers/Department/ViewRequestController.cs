@@ -20,11 +20,29 @@ namespace ADTeam5.Controllers.Department
         }
         public IActionResult Index()
         {
-            //must filter by empId
+            //must filter by empId and make sure that DL and PO do not show
             var q = context.EmployeeRequestRecord;
             return View(q);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Index(DateTime startDate, DateTime endDate)
+        {
+            ViewData["StartDate"] = startDate;
+            ViewData["endDate"] = endDate;
+
+            if (startDate != null && endDate != null)
+            {
+                var t = context.EmployeeRequestRecord.Where(s => s.RequestDate >= startDate && s.RequestDate <= endDate);
+                return View(t);
+            }
+            else
+            {
+                var t = context.EmployeeRequestRecord;
+                return View(t);
+            }
+        }
         public IActionResult Details(string id)
         {
             rrid = id;
@@ -32,16 +50,26 @@ namespace ADTeam5.Controllers.Department
             ViewData["RRID"] = rrid;
             var q1 = context.EmployeeRequestRecord.Where(x => x.Rrid == rrid).First();
             EmployeeRequestRecord e1 = q1;
-            int userid = e1.DepEmpId;
 
-            var q2 = context.User.Where(x => x.UserId == userid).First();
-            User u1 = q2;
-            string username = u1.Name;
-            ViewData["Name"] = username;
+            if (e1.Status == "Approved")
+            {
+                var q = context.RecordDetails.Where(x => x.Rrid == id);
+                return View(q);
+            }
+            else
+            {
+                return RedirectToAction("Edit");
 
+            }
+        }
+
+        public IActionResult Edit(string id)
+        {
+            rrid = id;
+            ViewData["RRID"] = rrid;
             var q = context.RecordDetails.Where(x => x.Rrid == id);
             return View(q);
         }
-
     }
 }
+

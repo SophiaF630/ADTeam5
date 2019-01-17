@@ -5,70 +5,80 @@
     ViewData["Title"] = "Index";
 }
 
-
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script src="stylesheet" href="~/lib/bootstrap/dist/js/bootstrap.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/js/bootstrap-datepicker.min.js"></script>
-
-<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/css/bootstrap-datepicker.min.css" rel="stylesheet" />
-<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"/>
-<h2>View Requests</h2>
-<div class=" container border border-secondary" style=" height:60px;">
-    <div class=" row container">
-        <div class=" col-11 ">
-            <div class="row" style="padding-top:10px">
-                
-                    <input id="startdatepicker" value="Select start date" />
-                    
-                    <input id="enddatepicker" value="Select end date" />
-                
-                    <button type="button" name="Search" onclick="location.href='@Url.Action("Search", "ViewRequest")'">Search</button>
-            </div>
-            </div>
+<form asp-action="Index" method="post">
+    <div>
+        From:
+        <input type="date" name="startdate" id="start" value="=" />
+        <p class="getStartDate"></p>
+        To:
+        <input type="date" name="enddate" id="end" value=" = " />
+        <p class="getEndDate"></p>
     </div>
-</div>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                Request Date
-            </th>
-            <th>
-                Requisition Form No.
-            </th>
-            <th>
-                Status
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
+    <br />
+    <div class="form-group">
+        <input type="submit" value="Search" id="searchbtn" />
+    </div>
+    </form>
+    <table class="table">
+        <thead>
             <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.RequestDate)
-                </td>
-                <td>
-                    <a asp-action="Details" asp-route-id="@item.Rrid">
-                        @Html.DisplayFor(modelItem => item.Rrid)
-                    </a>
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Status)
-                </td>
+                <th>
+                    Request Date
+                </th>
+                <th>
+                    Requisition Form No. @ViewData["RRID"]
+
+                </th>
+                <th>
+                    Status
+                </th>
+                <th></th>
             </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RequestDate)
+                    </td>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@item.Rrid">
+                            @Html.DisplayFor(modelItem => item.Rrid)
+                        </a>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Status)
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+
+
+
+    <script>
+        $(document).ready(function () {
+            let now = new Date();
+
+            let day = ("0" + now.getDate()).slice(-2);
+            let month = ("0" + (now.getMonth() + 1)).slice(-2);
+
+            let today = (day) + "-" + (month) + "-" + now.getFullYear();
+
+
+            $('#start').val(today);
+            $('#end').val(today);
+            $('#assignbtn').click(function () {
+
+                testClicked();
+            });
+        });
+        function testClicked() {
+            $('.getStartDate').html($('#start').val());
+            $('.getEndDate').html($('#end').val());
         }
-    </tbody>
-</table>
 
-<script>
-    $('#startdatepicker').datepicker({
-        uiLibrary: 'bootstrap4'
-    });
-
-    $('#enddatepicker').datepicker({
-        uiLibrary: 'bootstrap4'
-    });
-</script>
+    </script>
