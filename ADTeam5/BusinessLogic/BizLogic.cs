@@ -113,7 +113,6 @@ namespace ADTeam5.BusinessLogic
 
             // Check if the disbursement list exists in the database
             var dl = _context.DisbursementList.FirstOrDefault(x => x.DepartmentCode == depCode && x.Status == "Pending Delivery");
-
             if (errList != null)
             {
                 if (dl == null)
@@ -155,7 +154,8 @@ namespace ADTeam5.BusinessLogic
                 foreach (RecordDetails r in selectederrList)
                 {
                     //check if dl record exists
-                    var rd = _context.RecordDetails.FirstOrDefault(x => x.Rrid == dl.Dlid && x.ItemNumber == r.ItemNumber);
+                    var rd = _context.RecordDetails.FirstOrDefault(x => x.Rrid == dl.Dlid && x.ItemNumber == r.ItemNumber && x.Remark == null);
+                    rd.Quantity = 0;
                     if (rd == null)
                     {
                         rd = new RecordDetails() { Rrid = dl.Dlid, ItemNumber = r.ItemNumber, Quantity = r.Quantity };
@@ -173,21 +173,49 @@ namespace ADTeam5.BusinessLogic
             return result;            
         }
 
-
-
-
+        //Generate Stationery Retrieval List for a department
         public List<StationeryRetrievalList> GetStationeryRetrievalLists()
         {
             List<StationeryRetrievalList> result = new List<StationeryRetrievalList>();
-            //foreach (var item in p)
-            //{
-            //    StationeryRetrievalList srList = new StationeryRetrievalList();
-            //    srList.ItemNumber = item.ItemNumber;
-            //    srList.ItemName = item.ItemName;
-            //    srList.Quantity = item.QuantityNeeded;
 
-            //    result.Add(srList);
-            //}
+            //get pending delivery disbursement list
+            List<DisbursementList> dlList = _context.DisbursementList.Where(x => x.Status == "Pending Delivery").ToList();
+           
+            //Find all needed Disbursement List ID, add to a list
+            List<string> dlidList= new List<string>();
+            foreach (DisbursementList dl in dlList)
+            {
+                dlidList.Add(dl.Dlid);
+            }
+
+            //Get all RecordDetails
+            List<RecordDetails> rdList = _context.RecordDetails.ToList();
+
+            //Select out needed Disbursement List Record details
+            List<RecordDetails> selecteddlList = new List<RecordDetails>();
+            foreach (RecordDetails r in rdList)
+            {
+                if (dlidList.Contains(r.Rrid))
+                {
+                    selecteddlList.Add(r);
+                }
+            }
+
+
+            var q = from x in selecteddlList
+                     group x by x.ItemNumber into g
+                     select new { g.Key, Quantiy = g.Sum(y => y.Quantity) };
+
+            foreach (var i in q.ToList())
+            {
+                StationeryRetrievalList srl = new StationeryRetrievalList();
+                srl.ItemNumber = i.Key;
+                srl.ItemName = _context.Catalogue.Find(i.Key).ItemName;
+                srl.Quantity = i.Quantiy;
+
+                result.Add(srl);
+            }
+
             return result;
         }
     }
