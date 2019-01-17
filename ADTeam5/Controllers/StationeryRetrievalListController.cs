@@ -25,9 +25,9 @@ namespace ADTeam5.Controllers
         public async Task<IActionResult> Index()
         {
             //Generate disbursement list
-            List<Department> dList = _context.Department.ToList();
+            List<Models.Department> dList = _context.Department.ToList();
             List<string> depCodeList = new List<string>();
-            foreach (Department d in dList)
+            foreach (Models.Department d in dList)
             {
                 depCodeList.Add(d.DepartmentCode);
             }
