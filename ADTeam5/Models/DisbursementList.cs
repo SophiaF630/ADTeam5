@@ -17,6 +17,7 @@ namespace ADTeam5.Models
         public int RepId { get; set; }
         public int CollectionPointId { get; set; }
         public string Status { get; set; }
+        
 
         public virtual CollectionPoint CollectionPointNavigation { get; set; }
         public virtual Department DepartmentCodeNavigation { get; set; }

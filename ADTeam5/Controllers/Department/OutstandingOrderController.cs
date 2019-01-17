@@ -23,7 +23,6 @@ namespace ADTeam5.Controllers.Department
             public IActionResult Index()
             {
 
-            
                 //Must filter by dept code based on dept head login
                 var q = context.EmployeeRequestRecord.Where(x => x.Status == "Submitted");
                 return View(q);

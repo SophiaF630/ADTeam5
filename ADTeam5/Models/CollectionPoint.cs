@@ -16,7 +16,10 @@ namespace ADTeam5.Models
 
         [Display(Name = "Collection Point Name")]
         public string CollectionPointName { get; set; }
+
+        [DataType(DataType.Date)]
         [Display(Name = "Collection Time")]
+
         public DateTime CollectionTime { get; set; }
         public string Location { get; set; }
 

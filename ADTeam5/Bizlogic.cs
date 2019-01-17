@@ -17,5 +17,13 @@ namespace ADTeam5
 
             }
         }
+
+        public List<String> GetItemDescription
+        {
+            get
+            {
+                return m.Catalogue.Select<Catalogue, string>(c => c.ItemName).ToList<String>();
+            }
+        }
     }
 }

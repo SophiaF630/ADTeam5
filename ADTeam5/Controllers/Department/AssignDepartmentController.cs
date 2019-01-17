@@ -17,6 +17,8 @@ namespace ADTeam5.Controllers.Department
         {
             this.context = context;
         }
+
+
         public IActionResult Index()
         {
             //Change Dept according to the person using this
@@ -53,25 +55,17 @@ namespace ADTeam5.Controllers.Department
         [ValidateAntiForgeryToken]
         public IActionResult Index(User u)
         {
-            int id = u.UserId;
-            var q = context.Department.Where(x => x.DepartmentCode == "STAS").First();
-            if (q.RepId == id)
-            {
-                //ViewBag.IsValid = true;
-                return Content("Same Person");
-            }
-
-            else
-            {
-                //ViewBag.IsValid = false;
                 if (ModelState.IsValid)
                 {
                     Models.Department d1 = context.Department.Where(x => x.DepartmentCode == "STAS").First();
                     d1.RepId = u.UserId;
                     context.SaveChanges();
+                    TempData["Alert1"] = "Department Representative Changed Successfully";
                     return RedirectToAction("Index");
                 }
-                return Content("Returned");
+                TempData["Alert2"] = "Please Try Again";
+                return RedirectToAction("Index");
+
                 //var selectedRep = u.Name;
                 //return View(u);
             }
@@ -80,4 +74,3 @@ namespace ADTeam5.Controllers.Department
 
 
     }
-}
