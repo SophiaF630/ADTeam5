@@ -8,7 +8,7 @@ namespace ADTeam5.Controllers
 {
     public class Test2Controller : Controller
     {
-        public IActionResult Index()
+        public IActionResult Sidebar()
         {
             return View();
         }

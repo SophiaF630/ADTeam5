@@ -42,9 +42,6 @@
 </style>
 
 <h1>Stationery Retrieval List</h1>
-
-<input type="submit" value="Generate" class="btn btn-primary" />
-
 <div class="container">
     <div class="form-group">
         <div class="row">
@@ -96,9 +93,11 @@
                     <input type="submit" value="Finish" class="btn btn-primary" />
                 }
             </div>
+
         </div>
     </div>
 </div>
+
 
 
     <script>
@@ -111,11 +110,6 @@
         });
     </script>
 
-
-
-    <script>
-        $('#StationeryRetrivalList').DataTable();
-    </script>
 
     @*<script>
             var startDate;
@@ -132,3 +126,15 @@
             startDate = $('input[name = "daterange"]').datepicker(getDate);
 
         </script>*@
+
+<script>
+    $('#StationeryRetrivalList').DataTable();
+</script>
+
+<script>
+
+    // SideNav Initialization
+    $(".button-collapse").sideNav();
+
+</script>
+
