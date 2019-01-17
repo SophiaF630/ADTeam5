@@ -113,8 +113,10 @@ namespace ADTeam5.BusinessLogic
 
             // Check if the disbursement list exists in the database
             var dl = _context.DisbursementList.FirstOrDefault(x => x.DepartmentCode == depCode && x.Status == "Pending Delivery");
-            if (errList != null)
+            //have employee request
+            if (errList.Count != 0)
             {
+                //no existing dl
                 if (dl == null)
                 {
                     //create a new dl  
@@ -170,6 +172,17 @@ namespace ADTeam5.BusinessLogic
                 
                 result = _context.RecordDetails.Where(x => x.Rrid == dl.Dlid).ToList();
             }
+            else
+            {
+                if (dl != null)
+                {
+                    result = _context.RecordDetails.Where(x => x.Rrid == dl.Dlid).ToList();
+                }
+                else
+                {
+                    result.Clear();
+                }               
+            }
             return result;            
         }
 
@@ -201,7 +214,6 @@ namespace ADTeam5.BusinessLogic
                 }
             }
 
-
             var q = from x in selecteddlList
                      group x by x.ItemNumber into g
                      select new { g.Key, Quantiy = g.Sum(y => y.Quantity) };
@@ -212,11 +224,24 @@ namespace ADTeam5.BusinessLogic
                 srl.ItemNumber = i.Key;
                 srl.ItemName = _context.Catalogue.Find(i.Key).ItemName;
                 srl.Quantity = i.Quantiy;
+                srl.QuantityRetrieved = i.Quantiy;
 
                 result.Add(srl);
             }
 
             return result;
+        }
+
+        //Update stationeery out quantity
+        public void UpdateCatalogueOut(string itemNumber, int outQty)
+        {
+            Catalogue catalogue = new Catalogue();
+            var i = _context.Catalogue.FirstOrDefault(x => x.ItemNumber == itemNumber);
+            if(i != null)
+            {
+                i.Out = outQty;
+                _context.SaveChanges();
+            }
         }
     }
 }

@@ -11,6 +11,25 @@
     </style>*@
 
 
+<!-- css for table on row editing -->
+@*<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">*@
+<!-- js for table on row editing -->
+@*<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>*@
+
+<script src="~/lib/jquery-editable/bootstable_withoutdelete.js"></script>
+
+
+@*<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>*@
+
+@*<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />*@
+
+
 <style>
     .page-item.active .page-link {
         background-color: #8e9eab;
@@ -24,49 +43,89 @@
 
 <h1>Stationery Retrieval List</h1>
 <div class="container">
-    <div class="row">
-        <div class="col-12">
-            <table id="StationeryRetrievalList" class="table table-striped table-bordered" style="width: 100%;">
-                <thead>
-                    <tr>
-                        <th>
-                            @Html.DisplayNameFor(model => model.ItemNumber)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.ItemName)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Quantity)
-                        </th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model)
-                    {
-                        <tr>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.ItemNumber)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.ItemName)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Quantity)
-                            </td>
-                            <td>
-                                <a asp-action="Edit" asp-route-id="@item.ItemNumber">Edit</a> |
-                                <a asp-action="Details" asp-route-id="@item.ItemNumber">Details</a> |
-                                <a asp-action="Delete" asp-route-id="@item.ItemNumber">Delete</a> |
-                                <a asp-action="Voucher" asp-route-id="@item.ItemNumber">Add to Voucher</a>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
+    <div class="form-group">
+        <div class="row">
+            <div class="col-12">
+                @using (Html.BeginForm("Index", "StationeryRetrievalList", FormMethod.Post))
+                {
+                    <table id="StationeryRetrievalList" class="table table-striped table-bordered" style="width: 100%;">
+                        <thead>
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.ItemNumber)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.ItemName)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Quantity)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.QuantityRetrieved)
+                                </th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.ItemNumber)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.ItemName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Quantity)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.QuantityRetrieved)
+                                    </td>
+                                    <td>
+                                        <a asp-action="Voucher" asp-route-id="@item.ItemNumber">Add to Voucher</a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                    <input type="submit" value="Finish" class="btn btn-primary" />
+                }
+            </div>
+
         </div>
     </div>
 </div>
+
+
+
+    <script>
+        $('#StationeryRetrievalList').SetEditable({
+            columnsEd: "3",
+            onEdit: function () { },
+            onDelete: function () { },
+            onBeforeDelete: function () { },
+            onAdd: function () { }
+        });
+    </script>
+
+
+    @*<script>
+            var startDate;
+            var endDate;
+
+            $(function () {
+                $('input[name="daterange"]').daterangepicker({
+                    opens: 'middle'
+                }, function (start, end, label) {
+                    console.log("A new date selection was made: " + start.format('DD-MM-YYYY') + ' to ' + end.format('DD-MM-YYYY'));
+                });
+            });
+
+            startDate = $('input[name = "daterange"]').datepicker(getDate);
+
+        </script>*@
 
 <script>
     $('#StationeryRetrivalList').DataTable();
@@ -78,3 +137,4 @@
     $(".button-collapse").sideNav();
 
 </script>
+
