@@ -6,17 +6,36 @@
     <title>@ViewData["Title"] - ADTeam5</title>
 
     <environment include="Development">
-        <!-- css -->
 
+        <!-- Site CSS -->
         <link rel="stylesheet" href="~/css/site.css" />
-        <link rel="stylesheet" href="~/css/style4.css" />
-        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+        <!-- DataTable CSS -->
         <link rel="stylesheet" href="~/lib/DataTables/DataTables-1.10.18/css/dataTables.bootstrap4.css" />
-        <!-- js -->
-        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.js"></script>
-        <script src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js"></script>
-        <script src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css"/>
+        <!-- Bootstrap core CSS -->
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+        <!-- Material Design Bootstrap CSS -->
+        <link rel="stylesheet" href="https://mdbootstrap.com/previews/docs/latest/css/mdb.min.css" />
+
+
+
+        <!-- DataTable JavaScript-->
+        <script src="~/lib/DataTables/jQuery-3.3.1/jquery-3.3.1.min.js"></script>
+        <script src="~/lib/DataTables/DataTables-1.10.18/js/jquery.dataTables.js"></script>
+        <script src="~/lib/DataTables/DataTables-1.10.18/js/dataTables.bootstrap4.js"></script>
+        <!-- JQuery -->
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <!-- Bootstrap tooltips -->
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
+        <!-- Bootstrap core JavaScript -->
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/js/bootstrap.min.js"></script>
+        <!-- Material Design Bootstrap core JavaScript-->
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.6.0/js/mdb.min.js"></script>
+        <!-- Materialize JavaScript -->
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/js/materialize.min.js"></script>
+
+
 
     </environment>
     <environment exclude="Development">
@@ -28,167 +47,333 @@
     </environment>
 
 
-    <script src="~/js/site.js" asp-append-version="true"></script>
 
-    <script src="~/lib/DataTables/jQuery-3.3.1/jquery-3.3.1.min.js"></script>
-    <script src="~/lib/DataTables/DataTables-1.10.18/js/jquery.dataTables.js"></script>
-    <script src="~/lib/DataTables/DataTables-1.10.18/js/dataTables.bootstrap4.js"></script>
 </head>
-<body>
+
+<body class="hidden-sn mdb-skin" aria-busy="true">
+
+    <!--Double navigation-->
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">ADTeam5</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                    <partial name="_LoginPartial" />
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
+        <!-- Sidebar navigation -->
+        <div class="wrapper">
+            <div id="slide-out" class="side-nav sn-bg-4 mdb-sidenav" style="transform: translateX(0px);">
+                <ul class="custom-scrollbar">
 
-
-    @RenderSection("Scripts", required: false)
-
-    <button type="button" id="sidebarCollapse" class="btn btn-info">
-        <i class="fas fa-align-left"></i>
-    </button>
-    <tr>
-    </tr>
-    <div class="wrapper">
-        
-        <!-- Sidebar  -->
-        <nav id="sidebar">
-            <div class="sidebar-header">
-                <h3>Store Management</h3>
-                <strong>Store</strong>
-                
-            </div>
-
-            <ul class="list-unstyled components">
-                <li class="active">
-                    <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-                        <i class="fas fa-home"></i>
-                        Lists
-                    </a>
-                    <ul class="collapse list-unstyled" id="homeSubmenu">
-                        <li>
-                            <a class="nav-link text-dark" asp-area="" asp-controller="StationeryRetrivalList" asp-action="Index">Stationery RetrivalList</a>
-                        </li>
-                        <li>
-                            <a href="#">Disbursement List</a>
-                        </li>
-                    </ul>   
+                    <!-- Logo -->
+                    <li>
+                        <div class="logo-wrapper waves-light waves-effect waves-light">
+                            <a href="#"><img src="~/img/teamlogo.png" class="img-fluid flex-center"></a>
+                        </div>
                     </li>
-                       <li>
-                </li>
-                <li>
-                    <a href="#">
-                        <i class="fas fa-briefcase"></i>
-                        <a class="nav-link text-dark" asp-area="" asp-controller="SuppliersController" asp-action="Index">Suppliers</a>
+                    <!--/. Logo -->
+                    <!-- Side navigation links -->
+                    <li>
 
+                        <ul class="collapsible collapsible-accordion">
+                            <li>
+                                <!-- Only for our use, to delete after switch case code is completed -->
+                                <div><ul><li><a href="#" class="waves-effect">Store Clerk Sidebar</a></li></ul></div>
+                                <!-- Tab One-->
+                                <a class="collapsible-header waves-effect arrow-r">
+                                    <i class="fas fa-people-carry"></i> Ingoing/outgoing Stationery<i class="fas fa-angle-down rotate-icon"></i>
+                                </a>
+                                <!-- Subtabs -->
+                                <div class="collapsible-body">
+                                    <ul>
+                                        <li>
+                                            <a href="#" class="waves-effect">Stationery Retrieval List</a>
+                                        </li>
+                                        <li>
+                                            <a href="#" class="waves-effect">Disbursement List</a>
+                                        </li>
+                                        <li>
+                                            <a href="#" class="waves-effect">Inventory Transaction Log</a>
+                                        </li>
+                                        <li>
+                                            <a href="#" class="waves-effect">Order Stock</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+
+                            <li>
+                                <!-- Tab Two-->
+                                <a class="collapsible-header waves-effect arrow-r">
+                                    <i class="fas fa-users"></i>
+                                    Contacts<i class="fas fa-angle-down rotate-icon"></i>
+                                </a>
+                                <!-- Subtabs -->
+                                <div class="collapsible-body">
+                                    <ul>
+                                        <li>
+                                            <a href="#" class="waves-effect">Supplier List</a>
+                                        </li>
+                                        <li>
+                                            <a href="#" class="waves-effect">Department List</a>
+                                        </li>
+
+                                    </ul>
+                                </div>
+                            </li>
+                            <li>
+                                <!-- Tab Three-->
+                                <a class="collapsible-header waves-effect arrow-r">
+                                    <i class="fas fa-user-edit"></i>
+                                    Management<i class="fas fa-angle-down rotate-icon"></i>
+                                </a>
+
+                                <!-- Subtabs -->
+                                <div class="collapsible-body">
+                                    <ul>
+                                        <li>
+                                            <a href="#" class="waves-effect">Request Stock Adjustment Voucher</a>
+                                        </li>
+                                        <li>
+                                            <a href="#" class="waves-effect">Generate Reports</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+                            <li>
+                                <!-- Only for our use, to delete after switch case code is completed -->
+                                <div><ul><li><a href="#" class="waves-effect"></a></li></ul></div>
+                                <div><ul><li><a href="#" class="waves-effect">Store Manager/Supervisor Sidebar</a></li></ul></div>
+
+                                <!-- Tab One-->
+                                <a class="collapsible-header waves-effect arrow-r">
+                                    <i class="fas fa-people-carry"></i> Ingoing/outgoing Stationery<i class="fas fa-angle-down rotate-icon"></i>
+                                </a>
+                                <!-- Subtabs -->
+                                <div class="collapsible-body">
+                                    <ul>
+                                        <li>
+                                            <a href="#" class="waves-effect">Stationery Retrieval List</a>
+                                        </li>
+                                        <li>
+                                            <a href="#" class="waves-effect">Disbursement List</a>
+                                        </li>
+                                        <li>
+                                            <a href="#" class="waves-effect">Inventory Transaction Log</a>
+                                        </li>
+                                        <li>
+                                            <a href="#" class="waves-effect">Order Stock</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+
+                            <li>
+                                <!-- Tab Two-->
+                                <a class="collapsible-header waves-effect arrow-r">
+                                    <i class="fas fa-users"></i>
+                                    Contacts<i class="fas fa-angle-down rotate-icon"></i>
+                                </a>
+                                <!-- Subtabs -->
+                                <div class="collapsible-body">
+                                    <ul>
+                                        <li>
+                                            <a href="#" class="waves-effect">Supplier List</a>
+                                        </li>
+                                        <li>
+                                            <a href="#" class="waves-effect">Department List</a>
+                                        </li>
+
+                                    </ul>
+                                </div>
+                            </li>
+                            <li>
+                                <!-- Tab Three-->
+                                <a class="collapsible-header waves-effect arrow-r">
+                                    <i class="fas fa-user-edit"></i>
+                                    Admin<i class="fas fa-angle-down rotate-icon"></i>
+                                </a>
+
+                                <!-- Subtabs -->
+                                <div class="collapsible-body">
+                                    <ul>
+                                        <li>
+                                            <a href="#" class="waves-effect">Approve/Reject Stock Adjustment Voucher</a>
+                                        </li>
+                                        <li>
+                                            <a href="#" class="waves-effect">Generate Reports</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+
+                            <li>
+                                <!-- Only for our use, to delete after switch case code is completed -->
+                                <div><ul><li><a href="#" class="waves-effect"></a></li></ul></div>
+                                <div><ul><li><a href="#" class="waves-effect">Department Rep Sidebar</a></li></ul></div>
+
+                                <!-- Tab One-->
+                                <a class="collapsible-header waves-effect arrow-r">
+                                    <i class="fas fa-map-marker-alt"></i> Change Collection Point<i class="fas fa-angle-down rotate-icon"></i>
+                                </a>
+                            </li>
+
+                            <li>
+                                <!-- Only for our use, to delete after switch case code is completed -->
+                                <div><ul><li><a href="#" class="waves-effect"></a></li></ul></div>
+                                <div><ul><li><a href="#" class="waves-effect">Department Staff Sidebar</a></li></ul></div>
+
+                                <!-- Tab One-->
+                                <a class="collapsible-header waves-effect arrow-r">
+                                    <i class="fas fa-pencil-alt"></i>Stationery Request<i class="fas fa-angle-down rotate-icon"></i>
+                                </a>
+                                <!-- Subtabs -->
+                                <div class="collapsible-body">
+                                    <ul>
+                                        <li>
+                                            <a href="#" class="waves-effect">New Stationery Request</a>
+                                        </li>
+                                        <li>
+                                            <a href="#" class="waves-effect">Edit Stationery Requests</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+
+                            <li>
+                                <!-- Only for our use, to delete after switch case code is completed -->
+                                <div><ul><li><a href="#" class="waves-effect"></a></li></ul></div>
+                                <div><ul><li><a href="#" class="waves-effect">Department Head Sidebar</a></li></ul></div>
+
+                                <!-- Tab One-->
+                                <a class="collapsible-header waves-effect arrow-r">
+                                    <i class="fas fa-sync"></i>Re-assign Staff<i class="fas fa-angle-down rotate-icon"></i>
+                                </a>
+                                <!-- Subtabs -->
+                                <div class="collapsible-body">
+                                    <ul>
+                                        <li>
+                                            <a href="#" class="waves-effect">Assign Deputy Head</a>
+                                        </li>
+                                        <li>
+                                            <a href="#" class="waves-effect">Assign Staff Rep</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+                            <li>
+                                <!-- Tab Two-->
+                                <a class="collapsible-header waves-effect arrow-r">
+                                    <i class="fas fa-users"></i>
+                                    Manage Requests<i class="fas fa-angle-down rotate-icon"></i>
+                                </a>
+                                <!-- Subtabs -->
+                                <div class="collapsible-body">
+                                    <ul>
+                                        <li>
+                                            <a href="#" class="waves-effect">Approve/Reject Requests</a>
+                                        </li>
+
+
+                                    </ul>
+                                </div>
+                            </li>
+
+                            <li>
+                                <!-- Tab Three-->
+                                <a class="collapsible-header waves-effect arrow-r">
+                                    <i class="fas fa-dollar-sign"></i>
+                                    View Expenditure<i class="fas fa-angle-down rotate-icon"></i>
+                                </a>
+                                <!-- Subtabs -->
+                                <div class="collapsible-body">
+                                    <ul>
+                                        <li>
+                                            <a href="#" class="waves-effect">Approve/Reject Requests</a>
+                                        </li>
+
+
+                                    </ul>
+                                </div>
+                            </li>
+
+                            <li>
+
+
+
+
+                        </ul>
+                    </li>
+
+                    <!--/. Side navigation links -->
+
+
+
+                </ul>
+                <div class="sidenav-bg mask-strong"></div>
+
+            </div>
+        </div>
+
+        <!--/. Sidebar navigation -->
+        <!-- Navbar -->
+        <nav class="navbar fixed-top navbar-toggleable-md navbar-expand-lg scrolling-navbar double-nav">
+            <!-- SideNav slide-out button -->
+            <div class="float-left">
+                <a href="#" data-activates="slide-out" class="button-collapse"><i class="fas fa-bars"></i></a>
+            </div>
+            <!-- Breadcrumb-->
+            <div class="breadcrumb-dn mr-auto">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"><h5>ADTeam5</h5></a>
+                @*<button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>*@
+            </div>
+            <ul class="nav navbar-nav nav-flex-icons ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link waves-effect waves-light"><i class="fas fa-envelope"></i> <span class="clearfix d-none d-sm-inline-block">Contact</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link waves-effect waves-light"><i class="far fa-comments"></i> <span class="clearfix d-none d-sm-inline-block">Support</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link waves-effect waves-light"><i class="fas fa-user"></i> <span class="clearfix d-none d-sm-inline-block">Account</span></a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle waves-effect waves-light" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        Dropdown
                     </a>
-                    <a href="#">
-                        <i class="fas fa-briefcase"></i>
-                        Departments
-                    </a>
-                    <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-                        <i class="fas fa-copy"></i>
-                        Inventory
-                    </a>
-                    <ul class="collapse list-unstyled" id="pageSubmenu">
-                        <li>
-                            <a href="#">Inventory Stock</a>
-                        </li>
-                        <li>
-                            <a href="#">Inventory Transaction Log</a>
-                        </li>
-                        <li>
-                            <a href="#">Order Stock</a>
-                        </li>
-                        <li>
-                            <a href="#">Request Stock Adjustment Voucher</a>
-                        </li>
-                    </ul>
-                <a href="#">
-                    <i class="fas fa-briefcase"></i>
-                    Generate Reports
-                </a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item waves-effect waves-light" href="#">Action</a>
+                        <a class="dropdown-item waves-effect waves-light" href="#">Another action</a>
+                        <a class="dropdown-item waves-effect waves-light" href="#">Something else here</a>
+                    </div>
                 </li>
             </ul>
-
-
-        </nav>
-
-
-        <!-- Page Content  -->
-        <div id="content">
-            <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                <div class="container-fluid">
-                    <main role="main" class="pb-3">
-                        @RenderBody()
-                    </main>
-                    <partial name="_CookieConsentPartial" />
-
-                </div>
-
-                
-
+            <a class="nav-link waves-effect waves-light"> @await Html.PartialAsync("_LoginPartial")</a>
+</nav>
+        <!-- /.Navbar -->
+    </header>
+    <!--/.Double navigation-->
+    <!--Main Layout-->
+    <main>
+        <div class="container-fluid mt-5">
+            @RenderBody()
         </div>
-        </nav>
-    </div>
-    </div>
-
+    </main>
+    <!--/Main Layout-->
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2019 - ADTeam5 - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            2019 - ADTeam5 - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
 
-    <environment include="Development">
-        <script src="~/lib/jquery/dist/jquery.js"></script>
-        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.js"></script>
-    </environment>
-    <environment exclude="Development">
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"
-                asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
-                asp-fallback-test="window.jQuery"
-                crossorigin="anonymous"
-                integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=">
-        </script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/js/bootstrap.bundle.min.js"
-                asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"
-                asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"
-                crossorigin="anonymous"
-                integrity="sha256-E/V4cWE4qvAeO5MOhjtGtqDzPndRO1LBk8lJ/PR7CA4=">
-        </script>
-    </environment>
-
-    </div>
-    <!-- /#wrapper -->
-    <!-- Menu Toggle Script -->
     <script>
-        $(document).ready(function () {
 
-            $('#sidebarCollapse').on('click', function () {
-                $('#sidebar').toggleClass('active');
-            });
+        // SideNav Initialization
+        $(".button-collapse").sideNav();
+        // SideNav Scrollbar Initialization
+        var sideNavScrollbar = document.querySelector('.custom-scrollbar');
+        Ps.initialize(sideNavScrollbar);
 
-        });
     </script>
+    <div class="drag-target" style="left: 0px; touch-action: pan-y; user-select: none; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></div>
 
-
+    @RenderSection("Scripts", required: false)
 </body>
-
-</html>
+        </html>

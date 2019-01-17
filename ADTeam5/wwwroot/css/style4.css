@@ -3,8 +3,6 @@
 */
 
 @import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
-@import "https://fonts.googleapis.com/css?family=OpenSans:300,400,500,600,700";
-
 body {
     font-family: 'Poppins', sans-serif;
     background: #fafafa;
@@ -21,39 +19,19 @@ p {
 a,
 a:hover,
 a:focus {
-    color: #fff;
+    color: inherit;
     text-decoration: none;
     transition: all 0.3s;
 }
 
 .navbar {
-    padding: 25px 20px;
-    background-color: #00076f;
+    padding: 15px 10px;
+    background: #fff;
     border: none;
     border-radius: 0;
     margin-bottom: 40px;
     box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
 }
-
-/* change the background color */
-/*.navbar-custom {
-    background-color: #00076f;
-}*/
-    /* change the brand and text color */
-    /*.navbar-custom .navbar-brand,
-    .navbar-custom .navbar-text {
-        color: rgba(255,255,255,.8);
-    }*/
-    /* change the link color */
-    /*.navbar-custom .navbar-nav .nav-link {
-        color: rgba(255,255,255,.5);
-    }*/
-    /* change the color of active or hovered links */
-    /*.navbar-custom .nav-item.active .nav-link,
-    .navbar-custom .nav-item:focus .nav-link,
-    .navbar-custom .nav-item:hover .nav-link {
-        color: #ffffff;
-    }*/
 
 .navbar-btn {
     box-shadow: none;
@@ -85,8 +63,8 @@ span {
 #sidebar {
     min-width: 250px;
     max-width: 250px;
-    background: #00076f;
-    color: #000;
+    background: #7386D5;
+    color: #fff;
     transition: all 0.3s;
 }
 
@@ -136,7 +114,6 @@ span {
 }
 
 #sidebar .sidebar-header {
-
     padding: 20px;
     background: #6d7fcc;
 }
@@ -147,9 +124,7 @@ span {
 }
 
 #sidebar ul.components {
-
     padding: 20px 0;
-
     border-bottom: 1px solid #47748b;
 }
 
@@ -159,15 +134,10 @@ span {
     display: block;
 }
 
-    #sidebar ul li a:hover {
-        color: #00076f;
-        background: #fff;
-    }
 #sidebar ul li a:hover {
     color: #7386D5;
     background: #fff;
 }
-
 
 #sidebar ul li a i {
     margin-right: 10px;
@@ -194,7 +164,7 @@ a[data-toggle="collapse"] {
 ul ul a {
     font-size: 0.9em !important;
     padding-left: 30px !important;
-    background: #6d7fcc;
+    background: transparent;
 }
 
 ul.CTAs {
