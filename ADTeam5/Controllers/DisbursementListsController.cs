@@ -6,21 +6,33 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ADTeam5.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using ADTeam5.Areas.Identity.Data;
 
 namespace ADTeam5.Controllers
 {
+    [Authorize]
+    //this part should add in all controller
     public class DisbursementListsController : Controller
     {
+        private readonly UserManager<ADTeam5User> _userManager;
         private readonly SSISTeam5Context _context;
+        readonly GeneralLogic userCheck;
 
-        public DisbursementListsController(SSISTeam5Context context)
+        public DisbursementListsController(SSISTeam5Context context, UserManager<ADTeam5User> userManager)
         {
             _context = context;
+            _userManager = userManager;
+            userCheck = new GeneralLogic(context);
         }
-
         // GET: DisbursementLists
         public async Task<IActionResult> Index()
         {
+            ADTeam5User user = await _userManager.GetUserAsync(HttpContext.User);
+            List<string> identity =userCheck.checkUserIdentityAsync(user);
+            ViewData["Department"] = identity[0];
+            ViewData["role"] = identity[1];
             var sSISTeam5Context = _context.DisbursementList.Include(d => d.CollectionPointNavigation).Include(d => d.DepartmentCodeNavigation).Include(d => d.RepNavigation);
             return View(await sSISTeam5Context.ToListAsync());
         }
