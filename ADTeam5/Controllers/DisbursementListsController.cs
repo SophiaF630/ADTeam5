@@ -49,8 +49,9 @@ namespace ADTeam5.Controllers
             {
                 return NotFound();
             }
+            string depCode = _context.DisbursementList.Find(id).DepartmentCode;
 
-            List<RecordDetails> rd = b.GenerateDisbursementListDetails("ENGL");
+            List<RecordDetails> rd = b.GenerateDisbursementListDetails(depCode);
             List<DisbursementListDetails> result = new List<DisbursementListDetails>();
             foreach (var item in rd)
             {
