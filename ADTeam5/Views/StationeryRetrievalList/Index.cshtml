@@ -10,10 +10,12 @@
         }
     </style>*@
 
-<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+@*<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
-<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />*@
 
 
 <style>
@@ -64,8 +66,7 @@
                             </td>
                             <td>
                                 <a asp-action="Edit" asp-route-id="@item.ItemNumber">Edit</a> |
-                                <a asp-action="Details" asp-route-id="@item.ItemNumber">Details</a> |
-                                <a asp-action="Delete" asp-route-id="@item.ItemNumber">Delete</a> |
+                                <a asp-action="Details" asp-route-id="@item.ItemNumber">Details</a> | 
                                 <a asp-action="Voucher" asp-route-id="@item.ItemNumber">Add to Voucher</a>
                             </td>
                         </tr>
@@ -76,11 +77,20 @@
     </div>
 </div>
 
+
+<div class="age">
+    <span>age :</span>
+    <span class="editable">
+        38
+    </span>
+    <input type="button" value="edit" class="btn_edit"></input>
+</div>
+
 <script>
     $('#StationeryRetrivalList').DataTable();
 </script>
 
-<script>
+@*<script>
     var startDate;
     var endDate;
 
@@ -94,4 +104,4 @@
 
     startDate = $('input[name = "daterange"]').datepicker(getDate);
 
-</script>
+</script>*@
