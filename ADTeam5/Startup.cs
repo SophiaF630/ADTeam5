@@ -14,7 +14,7 @@ using ADTeam5.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ADTeam5.Models;
-using Microsoft.EntityFrameworkCore;
+using ADTeam5.Areas.Identity.Data;
 
 namespace ADTeam5
 {
@@ -44,12 +44,12 @@ namespace ADTeam5
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDefaultIdentity<IdentityUser>()
-                .AddDefaultUI(UIFramework.Bootstrap4)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+            services.AddDbContext<ADTeam5UserContext>(options =>
+                    options.UseSqlServer(
+                        Configuration.GetConnectionString("ADTeam5UserContextConnection")));
+
+            services.AddDefaultIdentity<ADTeam5User>()
+                .AddEntityFrameworkStores<ADTeam5UserContext>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
