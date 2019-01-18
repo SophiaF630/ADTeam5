@@ -54,21 +54,20 @@ namespace ADTeam5.Controllers.Department
         [ValidateAntiForgeryToken]
         public IActionResult Index(DateTime startDate, DateTime endDate)
         {
-            //ViewData["StartDate"] = startDate;
-            //ViewData["endDate"] = endDate;
+            ViewData["StartDate"] = startDate;
+            ViewData["endDate"] = endDate;
 
-            //if (startDate != null && endDate != null)
-            //{
-            //    var t = context.DisbursementList.Where(s => s.StartDate >= startDate && s.CompleteDate <= endDate);
-            //    return View(t);
-            //}
-            //else
-            //{
-            //    var t = context.DisbursementList;
-            //    return View(t);
-            //}
+            if (startDate != null && endDate != null)
+            {
+                var t = context.DisbursementList.Where(s => s.StartDate >= startDate && s.CompleteDate <= endDate);
+                return View(t);
+            }
+            else
+            {
+                var t = context.DisbursementList;
+                return View(t);
+            }
 
-            return Content(sum.ToString());
         }
     }
 }
