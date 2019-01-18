@@ -15,7 +15,9 @@ namespace ADTeam5.Controllers.Department
         BizLogic b = new BizLogic();
             private readonly SSISTeam5Context context;
         static List<string> ItemNumberList= new List<string>();
+        static List<string> ItemNameList = new List<string>();
         static List<int> QuantityList = new List<int>();
+        static string id;
 
         public NewRequestController(SSISTeam5Context context)
             {
@@ -42,15 +44,29 @@ namespace ADTeam5.Controllers.Department
 
             string ItemNumber = itemNumber;
             ItemNumberList.Add(ItemNumber);
+
+            var q = context.Catalogue.Where(x => x.ItemNumber == ItemNumber).First();
+            string itemName = q.ItemName;
+            ItemNameList.Add(itemName);
+
             int Quantity = quantity;
             QuantityList.Add(quantity);
 
             //TemporaryRecordDetails t = new TemporaryRecordDetails(ItemNumber, Quantity);
 
-            ViewBag.ItemNumberList = ItemNumberList;
+            ViewBag.ItemNameList = ItemNameList;
             ViewBag.QuantityList = QuantityList;
 
             return View();
+        }
+
+       [HttpGet]
+        public IActionResult Details (string id)
+        {
+            ViewData["RRID"] = id;
+            var q = context.RecordDetails.Where(x => x.Rrid == id);
+
+            return View(q);
         }
 
         // POST: Save orders
@@ -60,7 +76,7 @@ namespace ADTeam5.Controllers.Department
         {
                 // Make new EmployeeRequestRecord
                 Models.EmployeeRequestRecord e = new Models.EmployeeRequestRecord();
-                string id = b.IDGenerator("STAS");
+                id = b.IDGenerator("STAS");
                 DateTime requestDate = DateTime.Now.Date;
                 int empId = 11233;  //Filter according to userID
                 int headId = 11213; //Filter according to dept head of person using this
@@ -85,7 +101,7 @@ namespace ADTeam5.Controllers.Department
                 context.RecordDetails.Add(r);
                     context.SaveChanges();
                 }
-            return Content("saved");
+            return RedirectToAction("Details", new { id });
         }
 
 

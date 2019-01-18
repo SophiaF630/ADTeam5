@@ -33,16 +33,16 @@
 </div>
 
 
-@if (ViewBag.ItemNumberList != null && ViewBag.QuantityList != null)
+@if (ViewBag.ItemNameList != null && ViewBag.QuantityList != null)
 {
     <table class="table">
         <thead>
             <tr>
                 <th>
-                    Item Number
+                    <ul>Item Name</ul>
                 </th>
                 <th>
-                    Quantity
+                    <ul>Quantity</ul>
                 </th>
 
                 <th></th>
@@ -54,7 +54,7 @@
             <tr>
 
             <td>
-                    @foreach (var item in ViewBag.ItemNumberList)
+                    @foreach (var item in ViewBag.ItemNameList)
                     {
             <ul>@item</ul>
                     }
@@ -73,9 +73,7 @@
 }
 <form asp-action="Submit" method="post">
     <div class="form-group">
-        <input type="submit" value="Submit" />
+        <input type="submit" value="Submit Request" class="btn btn-info" />
     </div>
 </form>
-
-
 
