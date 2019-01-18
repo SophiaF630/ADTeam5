@@ -2,24 +2,40 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ADTeam5.Areas.Identity.Data;
 using ADTeam5.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ADTeam5.Controllers.Department
 {
     public class AssignDeputyController : Controller
     {
-        private readonly SSISTeam5Context context;
+        static int userid;
+        static string dept;
+        static string role;
 
-        public AssignDeputyController(SSISTeam5Context context)
+        private readonly SSISTeam5Context context;
+        private readonly UserManager<ADTeam5User> _userManager;
+        readonly GeneralLogic userCheck;
+
+        public AssignDeputyController(SSISTeam5Context context, UserManager<ADTeam5User> userManager)
         {
             this.context = context;
+            _userManager = userManager;
+            userCheck = new GeneralLogic(context);
         }
 
-        public IActionResult Index()
+
+        public async Task<IActionResult>Index()
         {
-            //Change Dept according to the person using this
-            var q1 = context.Department.Where(x => x.DepartmentCode == "STAS" && x.CoveringHeadId != null).First();
+            ADTeam5User user = await _userManager.GetUserAsync(HttpContext.User);
+            userid = user.WorkID;
+            List<string> identity = userCheck.checkUserIdentityAsync(user);
+            dept = identity[0];
+            role = identity[1];
+
+            var q1 = context.Department.Where(x => x.DepartmentCode == dept).First();
             Models.Department d1 = q1;
             if (d1.CoveringHeadId!= null)
             {
@@ -31,13 +47,12 @@ namespace ADTeam5.Controllers.Department
 
             List<User> u = new List<User>();
 
-            var q = from x in context.Department where x.DepartmentCode == "STAS" select x;
+            var q = from x in context.Department where x.DepartmentCode == dept select x;
             Models.Department d = q.First();
             int repid = d.RepId;
             int headid = d.HeadId;
 
-            //Filter according to dept of the person who is using this
-            u = context.User.Where(x => x.DepartmentCode == "STAS" && x.UserId != repid && x.UserId != headid).OrderBy(x => x.Name).ToList();
+            u = context.User.Where(x => x.DepartmentCode == dept && x.UserId != repid && x.UserId != headid).OrderBy(x => x.Name).ToList();
  
             ViewBag.listofitems = u;
             return View();
@@ -51,7 +66,7 @@ namespace ADTeam5.Controllers.Department
             {
                 int id = u.UserId;
                 //Filter according to dept of the person who is using this
-                Models.Department d1 = context.Department.Where(x => x.DepartmentCode == "STAS").First();
+                Models.Department d1 = context.Department.Where(x => x.DepartmentCode == dept).First();
                 d1.CoveringHeadId = id;
 
                 Models.DepartmentCoveringHeadRecord d2 = new Models.DepartmentCoveringHeadRecord();
