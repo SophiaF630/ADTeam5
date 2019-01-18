@@ -11,6 +11,7 @@ namespace ADTeam5.Models
         [DataType(DataType.Date)]
         public DateTime StartDate { get; set; }
         [DataType(DataType.Date)]
+        [EndLaterThanV("StartDate")]
         public DateTime EndDate { get; set; }
 
         public virtual User User { get; set; }

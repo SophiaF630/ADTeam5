@@ -21,27 +21,38 @@ namespace ADTeam5.Models
         [MaxLength(4, ErrorMessage = "Maximum 4 digits")]
         public string ItemNumber { get; set; }
         [Required(ErrorMessage = "*This field is required")]
+        [MaxLength(10), RegularExpression(@"(^[A-Z]+[a-zA-Z'\s]*$)", ErrorMessage ="Alphabets only")]
         public string Category { get; set; }
         [Required(ErrorMessage = "*This field is required")]
+        [MaxLength(50)]
         [Display(Name = "Item Name")]
         public string ItemName { get; set; }
         [Display(Name = "Reorder Level")]
+        [RegularExpression(@"^[0-9]*$")]
+        [Range(0,10000, ErrorMessage ="Reorder Level cannot be negative")]
         public int? ReorderLevel { get; set; }
         [Display(Name = "Reorder Quantity")]
+        [RegularExpression(@"^[0-9]*$")]
+        [Range(0, 10000, ErrorMessage = "Reorder Quantity cannot be negative")]
         public int? ReorderQty { get; set; }
         [Display(Name = "Unit of Measure")]
+        [StringLength(10), RegularExpression(@"^[A-Z]+[a-zA-Z'\s]*$")]
         public string UnitOfMeasure { get; set; }
         [ReadOnly(true)]
+        [Range(0, 10000, ErrorMessage = "Stock cannot be negative")]
         public int Stock { get; set; }
         public int Out { get; set; }
         public string Supplier1 { get; set; }
         public string Supplier2 { get; set; }
         public string Supplier3 { get; set; }
         [DisplayFormat(ApplyFormatInEditMode = false, DataFormatString = "S{0:c}")]
+        [Range(0, 10000, ErrorMessage = "Price cannot be negative")]
         public decimal? Supplier1Price { get; set; }
         [DisplayFormat(ApplyFormatInEditMode = false, DataFormatString = "S{0:c}")]
+        [Range(0, 10000, ErrorMessage = "Price cannot be negative")]
         public decimal? Supplier2Price { get; set; }
         [DisplayFormat(ApplyFormatInEditMode = false, DataFormatString = "S{0:c}")]
+        [Range(0, 10000, ErrorMessage = "Stock cannot be negative")]
         public decimal? Supplier3Price { get; set; }
         [ScaffoldColumn(false)]
         [DataType(DataType.Date)]
@@ -52,6 +63,7 @@ namespace ADTeam5.Models
         [ScaffoldColumn(false)]
         [DataType(DataType.Date)]
         public DateTime? Last3OrderDate { get; set; }
+        [MaxLength(50)]
         public string Location { get; set; }
 
         [Display(Name = "Supplier 1")]
