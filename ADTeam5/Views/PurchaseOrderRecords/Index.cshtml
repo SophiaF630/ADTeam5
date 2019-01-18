@@ -1,0 +1,66 @@
+﻿@model IEnumerable<ADTeam5.Models.PurchaseOrderRecord>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.OrderDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ExpectedCompleteDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CompleteDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StoreClerk)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SupplierCodeNavigation)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.OrderDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ExpectedCompleteDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CompleteDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StoreClerk.DepartmentCode)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SupplierCodeNavigation.SupplierCode)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Poid">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Poid">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Poid">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

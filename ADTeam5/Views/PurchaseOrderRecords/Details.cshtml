@@ -1,0 +1,116 @@
+﻿@model ADTeam5.Models.PurchaseOrderRecord
+@using ADTeam5.Models
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    List<RecordDetails> recordDetails = (List<RecordDetails>)ViewData["RecordDetail"];
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>PurchaseOrderRecord</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.OrderDate)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.OrderDate)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ExpectedCompleteDate)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ExpectedCompleteDate)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.CompleteDate)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.CompleteDate)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Status)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Status)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.StoreClerk)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.StoreClerk.DepartmentCode)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.SupplierCodeNavigation)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.SupplierCodeNavigation.SupplierCode)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Poid">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @*@Html.DisplayNameFor(model => model.OrderDate)*@
+                ItemNumber
+            </th>
+            <th>
+                @*@Html.DisplayNameFor(model => model.ExpectedCompleteDate)*@
+                Quantity
+            </th>
+            <th>
+                @*@Html.DisplayNameFor(model => model.CompleteDate)*@
+                Remark
+            </th>
+            @*<th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StoreClerk)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SupplierCodeNavigation)
+            </th>*@
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in recordDetails)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ItemNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Quantity)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Remark)
+                </td>
+                @*<td>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StoreClerk.DepartmentCode)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SupplierCodeNavigation.SupplierCode)
+                </td>*@
+                <td>
+                    @*this part have to jump to the edit page of detail*@
+                    <a asp-action="Edit" asp-route-id="@item.Rdid">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Rdid">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Rdid">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
