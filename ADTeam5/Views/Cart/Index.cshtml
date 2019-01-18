@@ -1,7 +1,7 @@
 ﻿@*
     For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 *@
-
+@using ADTeam5.Models
 
 
 <h3>Cart Page</h3>
@@ -11,11 +11,11 @@
         <th>Name</th>
         <th>Quantity</th>
     </tr>
-    @foreach (var item in ViewBag.cart)
+    @foreach (Item item in ViewBag.cart)
     {
         <tr>
-            <td><a asp-controller="cart" asp-action="remove" asp-route-id="@item.Product.Id">Remove</a></td>
-            <td>@item.Itemname</td>
+            <td><a asp-controller="cart" asp-action="remove" @*asp-route-id="@item.Product.Id"*@>Remove</a></td>
+            <td>@item.ItemName</td>
             <td>@item.Quantity</td>
         </tr>
     }
