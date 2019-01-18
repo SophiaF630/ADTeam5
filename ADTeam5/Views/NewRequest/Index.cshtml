@@ -18,14 +18,14 @@
 
                 <div class="form-group">
                     <label> Quantity</label>
-                    <input asp-for="Quantity" class="form-control" min=" 1" />
-                    <span asp-validation-for="Quantity" class="text-danger"></span>
-                    <p id="negativevalidation"></p>
-
+                    @*<input asp-for="Quantity" class="form-control" " />
+                        <span asp-validation-for="Quantity" class="text-danger"></span>*@
+                    @Html.EditorFor(model => model.Quantity, new { htmlAttributes = new { @min = 1, @max = 999, @class = "form-control left-border-none", @id = "Quantity" } })
                 </div>
 
                 <div class="form-group">
-                    <input type="submit" value="Add Item" class="btn btn-primary" />
+                    <input type="submit" value="Add Item" class="btn btn-primary" id="Button1" />
+
                 </div>
 
             </form>
@@ -73,15 +73,45 @@
         </tbody>
     </table>
 }
-<form asp-action="Submit" method="post">
-    <div class="form-group">
-        <input type="submit" value="Submit Request" class="btn btn-info" />
-    </div>
-</form>
 
-<script>  
-    function negative(number) {
-        return number < 0;
-    };
-</script>
+@if (ViewData["SubmitButton"] != null)
+{
+    <form asp-action="Submit" method="post">
+        <div class="form-group">
+            <input type="submit" id="Button2" value="Submit Request" class="btn btn-info"  />
+            
+        </div>
+    </form>
+
+}
+
+@*<script>
+    $("#btnUpdate").click(function() {
+      alert("button");
+      $("#tblMain").hide();
+      $("#tblMainAlt").show();
+    });
+    </script>*@
+
+
+@*<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script>
+    $(function () {
+        $("#Button1").on('click', function () {
+            $("#Button2").show();
+        });
+    });
+</script>*@
+
+
+@*<script>
+        function myFunction() {
+           document.getElementById("myDIV").style.display = "block"
+        }
+    </script>*@
+@*<script>
+            function showDiv() {
+                document.getElementById('submitRequest').style.display = "";
+            }
+    </script>*@
 

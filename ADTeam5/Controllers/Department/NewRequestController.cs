@@ -26,6 +26,7 @@ namespace ADTeam5.Controllers.Department
         static List<string> ItemNameList = new List<string>();
         static List<int> QuantityList = new List<int>();
         static string id;
+        
 
         public NewRequestController(SSISTeam5Context context, UserManager<ADTeam5User> userManager)
         {
@@ -46,7 +47,8 @@ namespace ADTeam5.Controllers.Department
             catalogueList = (from x in context.Catalogue select x).ToList();
             catalogueList.Insert(0, new Catalogue { ItemNumber = "0", ItemName = "Select" });
             ViewBag.ListofCatalogueName = catalogueList;
-            
+
+            ViewData["SubmitButton"] = null;
             return View();
         }
 
@@ -72,6 +74,7 @@ namespace ADTeam5.Controllers.Department
             ViewBag.ItemNameList = ItemNameList;
             ViewBag.QuantityList = QuantityList;
 
+            ViewData["SubmitButton"] = "true";
             return View();
         }
 

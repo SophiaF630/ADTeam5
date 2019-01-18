@@ -55,6 +55,7 @@ namespace ADTeam5.Controllers.Department
             u = context.User.Where(x => x.DepartmentCode == dept && x.UserId != repid && x.UserId != headid).OrderBy(x => x.Name).ToList();
  
             ViewBag.listofitems = u;
+
             return View();
         }
 
