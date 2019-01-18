@@ -7,6 +7,7 @@ namespace ADTeam5.Models
     public partial class DepartmentCoveringHeadRecord
     {
         public int Chindex { get; set; }
+
         public int UserId { get; set; }
         [DataType(DataType.Date)]
         public DateTime StartDate { get; set; }
