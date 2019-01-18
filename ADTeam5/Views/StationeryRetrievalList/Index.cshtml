@@ -53,7 +53,7 @@
             <div class="modal-body">
 
                 @*<form>
-                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        
                         <div class="form-group">
                             <label asp-for="ItemNumber" class="control-label"></label>
                             <input asp-for="ItemNumber" class="form-control" asp-items="ViewBag.ItemNumber">
@@ -64,10 +64,8 @@
                             <input asp-for="QuantityRetrieved" class="form-control" />
                             <span asp-validation-for="QuantityRetrieved" class="text-danger"></span>
                         </div>
-                        <div class="form-group">
-                            <input type="submit" value="Save" class="btn btn-primary" />
-                        </div>
-                    </form>*@
+                    </form>
+                @Html.TextBoxFor(m=>m._____)*@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -106,7 +104,7 @@
                             @foreach (var item in Model)
                             {
                                 <tr>
-                                    <td class="td1">
+                                    <td class="nr">
                                         @Html.DisplayFor(modelItem => item.ItemNumber)
                                     </td>
                                     <td>
@@ -157,6 +155,7 @@
         var $text = $row.find(".nr").text(); // Find the text
         // Let's test it out
         alert($text);
+    });
 </script>
 
 @*<script>
@@ -176,7 +175,7 @@
     </script>*@
 
 <script>
-    $('#StationeryRetrivalList').DataTable();
+    //$('#StationeryRetrivalList').DataTable();
 </script>
 
 <script>

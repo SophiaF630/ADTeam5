@@ -243,5 +243,16 @@ namespace ADTeam5.BusinessLogic
                 _context.SaveChanges();
             }
         }
+
+        //Adjustment details
+        public List<RecordDetails> GetAdjustmentRecordDetails(int clerkID, string voucherNo)
+        {
+            List<RecordDetails> result = new List<RecordDetails>();
+            AdjustmentRecord ar = _context.AdjustmentRecord
+                .FirstOrDefault(x => x.VoucherNo == voucherNo && !x.VoucherNo.Contains("VTemp"));
+
+            result = _context.RecordDetails.Where(x => x.Rrid == ar.VoucherNo).ToList();
+            return result;
+        }
     }
 }

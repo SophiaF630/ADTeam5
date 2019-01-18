@@ -6,21 +6,34 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ADTeam5.Models;
+using ADTeam5.BusinessLogic;
+using Microsoft.AspNetCore.Identity;
+using ADTeam5.Areas.Identity.Data;
+using ADTeam5.ViewModels;
 
 namespace ADTeam5.Controllers
 {
     public class AdjustmentRecordsController : Controller
     {
-        private readonly SSISTeam5Context _context;
 
-        public AdjustmentRecordsController(SSISTeam5Context context)
+        private readonly UserManager<ADTeam5User> _userManager;
+        private readonly SSISTeam5Context _context;
+        BizLogic b = new BizLogic();
+        readonly GeneralLogic userCheck;
+
+        public AdjustmentRecordsController(SSISTeam5Context context, UserManager<ADTeam5User> userManager)
         {
             _context = context;
+            _userManager = userManager;
+            userCheck = new GeneralLogic(context);
         }
 
         // GET: AdjustmentRecords
         public async Task<IActionResult> Index()
         {
+            ADTeam5User user = await _userManager.GetUserAsync(HttpContext.User);
+            List<string> identity = userCheck.checkUserIdentityAsync(user);
+            int userID = user.WorkID;
             var sSISTeam5Context = _context.AdjustmentRecord.Include(a => a.Clerk).Include(a => a.Manager).Include(a => a.Superviser);
             return View(await sSISTeam5Context.ToListAsync());
         }
@@ -28,22 +41,30 @@ namespace ADTeam5.Controllers
         // GET: AdjustmentRecords/Details/5
         public async Task<IActionResult> Details(string id)
         {
+
+            ADTeam5User user = await _userManager.GetUserAsync(HttpContext.User);
+            List<string> identity = userCheck.checkUserIdentityAsync(user);
+            int userID = user.WorkID;
+
             if (id == null)
             {
                 return NotFound();
-            }
+            }           
 
-            var adjustmentRecord = await _context.AdjustmentRecord
-                .Include(a => a.Clerk)
-                .Include(a => a.Manager)
-                .Include(a => a.Superviser)
-                .FirstOrDefaultAsync(m => m.VoucherNo == id);
-            if (adjustmentRecord == null)
+            List<RecordDetails> rd = b.GetAdjustmentRecordDetails(userID, id);
+            List<AdjustmentRecordDetails> result = new List<AdjustmentRecordDetails>();
+            foreach (var item in rd)
             {
-                return NotFound();
-            }
+                AdjustmentRecordDetails arList = new AdjustmentRecordDetails();
 
-            return View(adjustmentRecord);
+                arList.ItemNumber = item.ItemNumber;
+                arList.ItemName = _context.Catalogue.FirstOrDefault(x => x.ItemNumber == item.ItemNumber).ItemName;
+                arList.Quantity = item.Quantity;
+                arList.Remark = item.Remark;
+
+                result.Add(arList);
+            }
+            return View(result);
         }
 
         // GET: AdjustmentRecords/Create
