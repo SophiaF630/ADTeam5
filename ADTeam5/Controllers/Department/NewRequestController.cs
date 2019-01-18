@@ -52,20 +52,40 @@ namespace ADTeam5.Controllers.Department
 
             return View();
         }
+
         // POST: Save orders
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Submit()
         {
-            
-            for(int i = 0; i < QuantityList.Count; i++)
-            {
+                // Make new EmployeeRequestRecord
                 Models.EmployeeRequestRecord e = new Models.EmployeeRequestRecord();
-                
-                Models.RecordDetails r = new Models.RecordDetails();
-                //QuantityList[0] = 
-            }
-           
+                string id = b.IDGenerator("STAS");
+                DateTime requestDate = DateTime.Now.Date;
+                int empId = 11233;  //Filter according to userID
+                int headId = 11213; //Filter according to dept head of person using this
+                string deptCode = "STAS"; //Filter according to dept code of person using this
+                string status = "Submitted";
+                e.Rrid = id;
+                e.RequestDate = requestDate;
+                e.DepEmpId = empId;
+                e.DepHeadId = headId;
+                e.DepCode = deptCode;
+                e.Status = status;
+                context.EmployeeRequestRecord.Add(e);
+                context.SaveChanges();
 
-            return View();
+                //Make new Record Details
+                for (int k = 0; k< QuantityList.Count; k++)
+                {
+                    Models.RecordDetails r = new Models.RecordDetails();
+                    r.Rrid = id;
+                    r.ItemNumber = ItemNumberList[k];
+                    r.Quantity = QuantityList[k];
+                context.RecordDetails.Add(r);
+                    context.SaveChanges();
+                }
+            return Content("saved");
         }
 
 

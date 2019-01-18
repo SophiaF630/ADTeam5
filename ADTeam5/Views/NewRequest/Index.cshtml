@@ -32,48 +32,50 @@
     </div>
 </div>
 
-<form asp-controller="NewRequest" method="post" class="form-horizontal" role="form">
-    @if (ViewBag.ItemNumberList != null && ViewBag.QuantityList != null)
-    {
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>
-                        Item Number
-                    </th>
-                    <th>
-                        Quantity
-                    </th>
 
-                    <th></th>
-                </tr>
-            </thead>
+@if (ViewBag.ItemNumberList != null && ViewBag.QuantityList != null)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Item Number
+                </th>
+                <th>
+                    Quantity
+                </th>
 
-            <tbody>
-                <pre>
-                <tr>
+                <th></th>
+            </tr>
+        </thead>
 
-                <td>
+        <tbody>
+            <pre>
+            <tr>
+
+            <td>
                     @foreach (var item in ViewBag.ItemNumberList)
                     {
-                <ul>@item</ul>
+            <ul>@item</ul>
                     }
                 </td>
 
-                <td>
+            <td>
                     @foreach (var item in ViewBag.QuantityList)
                     {
-                <ul>@item</ul>
+            <ul>@item</ul>
                     }
                 </td>
             </tr>
            </pre>
-            </tbody>
-        </table>
-    }
+        </tbody>
+    </table>
+}
+<form asp-action="Submit" method="post">
     <div class="form-group">
-        <input type="submit" value="Save" />
+        <input type="submit" value="Submit" />
     </div>
-    </form>
+</form>
+
 
 
