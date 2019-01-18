@@ -93,6 +93,7 @@ namespace ADTeam5.Controllers
             ViewData["CollectionPointId"] = new SelectList(_context.CollectionPoint, "CollectionPointId", "CollectionPointName", disbursementList.CollectionPointId);
             ViewData["DepartmentCode"] = new SelectList(_context.Department, "DepartmentCode", "DepartmentCode", disbursementList.DepartmentCode);
             ViewData["RepId"] = new SelectList(_context.User, "UserId", "Name", disbursementList.RepId);
+
             return View(disbursementList);
         }
 
@@ -111,7 +112,7 @@ namespace ADTeam5.Controllers
             }
             ViewData["CollectionPointId"] = new SelectList(_context.CollectionPoint, "CollectionPointId", "CollectionPointName", disbursementList.CollectionPointId);
             ViewData["DepartmentCode"] = new SelectList(_context.Department, "DepartmentCode", "DepartmentCode", disbursementList.DepartmentCode);
-            ViewData["RepId"] = new SelectList(_context.User, "UserId", "DepartmentCode", disbursementList.RepId);
+            //ViewData["RepId"] = new SelectList(_context.User, "UserId", "DepartmentCode", disbursementList.RepId);
             return View(disbursementList);
         }
 
@@ -149,7 +150,7 @@ namespace ADTeam5.Controllers
             }
             ViewData["CollectionPointId"] = new SelectList(_context.CollectionPoint, "CollectionPointId", "CollectionPointName", disbursementList.CollectionPointId);
             ViewData["DepartmentCode"] = new SelectList(_context.Department, "DepartmentCode", "DepartmentCode", disbursementList.DepartmentCode);
-            ViewData["RepId"] = new SelectList(_context.User, "UserId", "DepartmentCode", disbursementList.RepId);
+            //ViewData["RepId"] = new SelectList(_context.User, "UserId", "DepartmentCode", disbursementList.RepId);
             return View(disbursementList);
         }
 
