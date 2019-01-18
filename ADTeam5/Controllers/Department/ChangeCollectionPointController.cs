@@ -2,25 +2,39 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ADTeam5.Areas.Identity.Data;
 using ADTeam5.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ADTeam5.Controllers.Department
 {
     public class ChangeCollectionPointController : Controller
     {
+        static int userid;
+        static string dept;
+        static string role;
 
         private readonly SSISTeam5Context context;
+        private readonly UserManager<ADTeam5User> _userManager;
+        readonly GeneralLogic userCheck;
 
-        public ChangeCollectionPointController(SSISTeam5Context context)
+        public ChangeCollectionPointController(SSISTeam5Context context, UserManager<ADTeam5User> userManager)
         {
             this.context = context;
+            _userManager = userManager;
+            userCheck = new GeneralLogic(context);
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult>Index()
         {
-            //Filter dept by the person who is using this
-            var q1 = context.DisbursementList.Where(x => x.DepartmentCode == "ENGL" && x.Status == "Pending Delivery").First();
+            ADTeam5User user = await _userManager.GetUserAsync(HttpContext.User);
+            userid = user.WorkID;
+            List<string> identity = userCheck.checkUserIdentityAsync(user);
+            dept = identity[0];
+            role = identity[1];
+
+            var q1 = context.DisbursementList.Where(x => x.DepartmentCode == dept && x.Status == "Pending Delivery").First();
             DisbursementList d1 = q1;
             int currentCollectionPoint = d1.CollectionPointId;
 
@@ -40,11 +54,10 @@ namespace ADTeam5.Controllers.Department
         [ValidateAntiForgeryToken]
         public IActionResult Index(CollectionPoint cp)
         {
-            //Filter by dept of person who is using this
             if (ModelState.IsValid)
             {
                 int c1 = cp.CollectionPointId;
-                var q = context.DisbursementList.Where(x => x.DepartmentCode == "ENGL" && x.Status == "Pending Delivery").First();
+                var q = context.DisbursementList.Where(x => x.DepartmentCode == dept && x.Status == "Pending Delivery").First();
                 Models.DisbursementList d1 = q;
                 d1.CollectionPointId = c1;
                 context.SaveChanges();

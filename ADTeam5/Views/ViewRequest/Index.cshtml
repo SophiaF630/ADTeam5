@@ -5,20 +5,18 @@
     ViewData["Title"] = "Index";
 }
 
+<h1>View Request</h1>
 <form asp-action="Index" method="post">
     <div>
         From:
         <input type="date" name="startdate" id="start" value="=" />
-        <p class="getStartDate"></p>
+
         To:
         <input type="date" name="enddate" id="end" value=" = " />
-        <p class="getEndDate"></p>
-    </div>
 
-    <br />
-    <div class="form-group">
         <input type="submit" value="Search" id="searchbtn" />
     </div>
+
     </form>
     <table class="table">
         <thead>

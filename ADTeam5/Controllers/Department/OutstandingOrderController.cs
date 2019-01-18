@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ADTeam5.Areas.Identity.Data;
 using ADTeam5.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -11,20 +13,32 @@ namespace ADTeam5.Controllers.Department
 {
     public class OutstandingOrderController : Controller
     {
-            private readonly SSISTeam5Context context;
-            private static string rrid;
+        static int userid;
+        static string dept;
+        static string role;
 
-            public OutstandingOrderController(SSISTeam5Context context)
+        private readonly SSISTeam5Context context;
+        private readonly UserManager<ADTeam5User> _userManager;
+        private static string rrid;
+        readonly GeneralLogic userCheck;
+
+        public OutstandingOrderController(SSISTeam5Context context, UserManager<ADTeam5User> userManager)
+        {
+            this.context = context;
+            _userManager = userManager;
+            userCheck = new GeneralLogic(context);
+        }
+
+        // GET: Outstanding Orders
+        public async Task<IActionResult>Index()
             {
-                this.context = context;
-            }
+            ADTeam5User user = await _userManager.GetUserAsync(HttpContext.User);
+            userid = user.WorkID;
+            List<string> identity = userCheck.checkUserIdentityAsync(user);
+            dept = identity[0];
+            role = identity[1];
 
-            // GET: Outstanding Orders
-            public IActionResult Index()
-            {
-
-                //Must filter by dept code based on dept head login
-                var q = context.EmployeeRequestRecord.Where(x => x.Status == "Submitted");
+            var q = context.EmployeeRequestRecord.Where(x => x.Status == "Submitted" && x.DepCode == dept);
                 return View(q);
             }
 
