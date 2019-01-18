@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ADTeam5.Areas.Identity.Data;
 using ADTeam5.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -11,17 +13,31 @@ namespace ADTeam5.Controllers.Department
 {
     public class ViewRequestController : Controller
     {
+        static int userid;
+        static string dept;
+        static string role;
+
         private readonly SSISTeam5Context context;
+        private readonly UserManager<ADTeam5User> _userManager;
+        readonly GeneralLogic userCheck;
         static string rrid;
 
-        public ViewRequestController(SSISTeam5Context context)
+        public ViewRequestController(SSISTeam5Context context, UserManager<ADTeam5User> userManager)
         {
             this.context = context;
+            _userManager = userManager;
+            userCheck = new GeneralLogic(context);
         }
-        public IActionResult Index()
+
+        public async Task<IActionResult> Index()
         {
-            //must filter by empId and make sure that DL and PO do not show
-            var q = context.EmployeeRequestRecord;
+            ADTeam5User user = await _userManager.GetUserAsync(HttpContext.User);
+            userid = user.WorkID;
+            List<string> identity = userCheck.checkUserIdentityAsync(user);
+            dept = identity[0];
+            role = identity[1];
+
+            var q = context.EmployeeRequestRecord.Where(x => x.DepCode == dept);
             return View(q);
         }
 
@@ -34,12 +50,12 @@ namespace ADTeam5.Controllers.Department
 
             if (startDate != null && endDate != null)
             {
-                var t = context.EmployeeRequestRecord.Where(s => s.RequestDate >= startDate && s.RequestDate <= endDate);
+                var t = context.EmployeeRequestRecord.Where(s => s.RequestDate >= startDate && s.RequestDate <= endDate && s.DepCode == dept);
                 return View(t);
             }
             else
             {
-                var t = context.EmployeeRequestRecord;
+                var t = context.EmployeeRequestRecord.Where(x => x.DepCode == dept);
                 return View(t);
             }
         }

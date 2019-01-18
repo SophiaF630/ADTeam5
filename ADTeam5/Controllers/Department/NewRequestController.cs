@@ -6,26 +6,42 @@ using System.Threading.Tasks;
 using ADTeam5.Models;
 using Microsoft.AspNetCore.Mvc;
 using ADTeam5.BusinessLogic;
-
+using ADTeam5.Areas.Identity.Data;
+using Microsoft.AspNetCore.Identity;
 
 namespace ADTeam5.Controllers.Department
 {
     public class NewRequestController : Controller
     {
+        static int userid;
+        static string dept;
+        static string role;
+
+        private readonly SSISTeam5Context context;
+        private readonly UserManager<ADTeam5User> _userManager;
+        readonly GeneralLogic userCheck;
+
         BizLogic b = new BizLogic();
-            private readonly SSISTeam5Context context;
         static List<string> ItemNumberList= new List<string>();
         static List<string> ItemNameList = new List<string>();
         static List<int> QuantityList = new List<int>();
         static string id;
 
-        public NewRequestController(SSISTeam5Context context)
-            {
-                this.context = context;
-            }
-
-            public IActionResult Index()
+        public NewRequestController(SSISTeam5Context context, UserManager<ADTeam5User> userManager)
         {
+            this.context = context;
+            _userManager = userManager;
+            userCheck = new GeneralLogic(context);
+        }
+
+        public async Task<IActionResult>Index()
+        {
+            ADTeam5User user = await _userManager.GetUserAsync(HttpContext.User);
+            userid = user.WorkID;
+            List<string> identity = userCheck.checkUserIdentityAsync(user);
+            dept = identity[0];
+            role = identity[1];
+
             List<Catalogue> catalogueList = new List<Catalogue>();
             catalogueList = (from x in context.Catalogue select x).ToList();
             catalogueList.Insert(0, new Catalogue { ItemNumber = "0", ItemName = "Select" });
@@ -52,8 +68,6 @@ namespace ADTeam5.Controllers.Department
             int Quantity = quantity;
             QuantityList.Add(quantity);
 
-            //TemporaryRecordDetails t = new TemporaryRecordDetails(ItemNumber, Quantity);
-
             ViewBag.ItemNameList = ItemNameList;
             ViewBag.QuantityList = QuantityList;
 
@@ -76,11 +90,12 @@ namespace ADTeam5.Controllers.Department
         {
                 // Make new EmployeeRequestRecord
                 Models.EmployeeRequestRecord e = new Models.EmployeeRequestRecord();
-                id = b.IDGenerator("STAS");
+                id = b.IDGenerator(dept);
                 DateTime requestDate = DateTime.Now.Date;
-                int empId = 11233;  //Filter according to userID
-                int headId = 11213; //Filter according to dept head of person using this
-                string deptCode = "STAS"; //Filter according to dept code of person using this
+                int empId = userid;
+                var findHeadId= context.Department.Where(x => x.DepartmentCode == dept).First();
+                int headId = findHeadId.HeadId;
+                string deptCode = dept; 
                 string status = "Submitted";
                 e.Rrid = id;
                 e.RequestDate = requestDate;
