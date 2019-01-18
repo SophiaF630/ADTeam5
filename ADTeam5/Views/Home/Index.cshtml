@@ -2,10 +2,52 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
-<div class="user-pic">
-    <img class="img-responsive img-rounded" src="~/img/stationery.jpg" alt="User picture">
-</div>
+
+<style>
+    body, html {
+        height: 100%;
+        margin: 0;
+        font-family: Arial, Helvetica, sans-serif;
+        background-image: url("/img/homepage_stationery.jpg");
+        background-repeat: no-repeat;
+        background-size: cover;
+    
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+
+
+    /* Position text in the middle of the page/image */
+    .bg-text {
+        background-color: rgba(0,0,0, 0.4); /* Fallback color */
+        /*background-color: rgba(204, 204, 204, 0.4); /* Black w/opacity/see-through */
+        color: white;
+        font-weight: bold;
+        border: 3px solid #f1f1f1;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 2;
+        width: 80%;
+        padding: 20px;
+        text-align: center;
+    }
+</style>
+<body>
+
+    <div class="bg-image"></div>
+
+    <div class="bg-text">
+        <h1 class="display-4">Welcome</h1>
+        <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    </div>
+
+</body>
+
+
+@*<div class="user-pic">
+        <img class="img-responsive img-rounded" src="~/img/stationery.jpg" alt="User picture">
+    </div>*@
