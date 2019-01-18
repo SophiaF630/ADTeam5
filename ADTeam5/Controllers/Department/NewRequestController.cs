@@ -67,6 +67,7 @@ namespace ADTeam5.Controllers.Department
 
             int Quantity = quantity;
             QuantityList.Add(quantity);
+            
 
             ViewBag.ItemNameList = ItemNameList;
             ViewBag.QuantityList = QuantityList;
