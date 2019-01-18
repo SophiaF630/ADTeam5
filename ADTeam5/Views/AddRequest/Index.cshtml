@@ -3,17 +3,6 @@
     For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 *@
 
-<div>
+Total Data = @ViewData["Totaldata"]
 
-    <h3> Add Item request</h3>
 
-    @*<form action="/Request/Storedata" method="post">*@
-        ItemName:<br>
-        @Html.DropDownList("ItemName", new SelectList(ViewBag.itemname, "ItemName"))<br />
-        @*<input type="text" name="ItemName"><br />*@
-        Quantity:<br>
-        <input type="text" name="Quantity"><br />
-        <a asp-controller="cart" asp-action="buy" method="post">Buy Now</a>
-        @*<input type="submit" value="add item" />
-    </form>*@
-</div>
