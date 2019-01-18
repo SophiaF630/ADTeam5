@@ -27,9 +27,6 @@ namespace ADTeam5.ViewModels
         public string ItemName { get; set; }
         [Display(Name = "Quantity Needed")]
         public int Quantity { get; set; }
-        [Display(Name = "Quantity Retrieved")]
-        [Required(ErrorMessage = "*This field is required")]
-        public int QuantityRetrieved { get; set; }
 
 
     }

@@ -44,13 +44,10 @@ namespace ADTeam5.Models
         [DisplayFormat(ApplyFormatInEditMode = false, DataFormatString = "S{0:c}")]
         public decimal? Supplier3Price { get; set; }
         [ScaffoldColumn(false)]
-        [DataType(DataType.Date)]
         public DateTime? Last1OrderDate { get; set; }
         [ScaffoldColumn(false)]
-        [DataType(DataType.Date)]
         public DateTime? Last2OrderDate { get; set; }
         [ScaffoldColumn(false)]
-        [DataType(DataType.Date)]
         public DateTime? Last3OrderDate { get; set; }
         public string Location { get; set; }
 
