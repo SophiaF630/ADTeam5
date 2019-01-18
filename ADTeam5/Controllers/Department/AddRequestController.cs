@@ -19,27 +19,29 @@ namespace ADTeam5.Controllers.Department
             this.context = context;
         }
 
-        public IActionResult Index()
+        public ViewResult Index()
         {
             SSISTeam5Context e = new SSISTeam5Context();
             ViewExpenditure ve = new ViewExpenditure();
 
-            //ve.explist= (from x in e.Catalogue join b in e.RecordDetails on x.ItemNumber equals b.ItemNumber
-            //             select new ViewExpenditure()
-            //             {
 
-            //             }
-                
-                
+           var q = (from x in e.Catalogue
+                    join b in e.RecordDetails on x.ItemNumber equals b.ItemNumber
+                       select new ViewExpenditure()
+                          {
+                            
+                          }
+
+
                 //from x in e.Catalogue
                 //        join b in e.RecordDetails
                 //        on x.ItemNumber equals b.ItemNumber
                 //        where x.ItemNumber== b.ItemNumber
                 //        select new ViewExpenditure()
                 //        {
-                          
-                         
-                //        };
+
+
+                          //        };
 
 
 
