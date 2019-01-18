@@ -25,21 +25,45 @@ namespace ADTeam5.Controllers
         public async Task<IActionResult> Index()
         {
             //Generate disbursement list
-            List<Department> dList = _context.Department.ToList();
+            List<Models.Department> dList = _context.Department.ToList();
             List<string> depCodeList = new List<string>();
-            foreach (Department d in dList)
+            foreach (Models.Department d in dList)
             {
                 depCodeList.Add(d.DepartmentCode);
             }
 
             for (int i = 0; i < depCodeList.Count(); i++)
             {                
-                //List<RecordDetails> rd = b.GenerateDisbursementListDetails(depCodeList[i]);
-                List<RecordDetails> rd = b.GenerateDisbursementListDetails("ENGL");
+                List<RecordDetails> rd = b.GenerateDisbursementListDetails(depCodeList[i]);
             }
 
-            List<StationeryRetrievalList> result = b.GetStationeryRetrievalLists();           
+            List<StationeryRetrievalList> result = b.GetStationeryRetrievalLists();
+            //ViewData["ItemNumber"] = new SelectList(_context.Catalogue, "ItemNumber", "ItemName", recordDetails.ItemNumber);
             return View(result);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Index(List<StationeryRetrievalList> stationeryRetrievalLists)
+        {
+             
+            foreach (StationeryRetrievalList srl in stationeryRetrievalLists)
+            {
+                if (srl.ItemNumber != srl.ItemNumber)
+                {
+                    return NotFound();
+                }
+
+                Catalogue catalogue = _context.Catalogue.Find(srl.ItemNumber);
+                catalogue.Out = 20;
+
+                //b.UpdateCatalogueOut(srl.ItemNumber, 20);
+            }
+            _context.SaveChanges();
+
+            List<StationeryRetrievalList> result = b.GetStationeryRetrievalLists();
+
+            return View();
         }
 
         // GET: StationeryRetrivalList/Details/5
@@ -85,58 +109,58 @@ namespace ADTeam5.Controllers
         //    return View(recordDetails);
         //}
 
-        // GET: StationeryRetrivalList/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
+        //// GET: StationeryRetrivalList/Edit/5
+        //public async Task<IActionResult> Edit(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            var recordDetails = await _context.RecordDetails.FindAsync(id);
-            if (recordDetails == null)
-            {
-                return NotFound();
-            }
-            ViewData["ItemNumber"] = new SelectList(_context.Catalogue, "ItemNumber", "ItemNumber", recordDetails.ItemNumber);
-            return View(recordDetails);
-        }
+        //    var recordDetails = await _context.RecordDetails.FindAsync(id);
+        //    if (recordDetails == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    ViewData["ItemNumber"] = new SelectList(_context.Catalogue, "ItemNumber", "ItemNumber", recordDetails.ItemNumber);
+        //    return View(recordDetails);
+        //}
 
-        // POST: StationeryRetrivalList/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Rdid,Rrid,ItemNumber,Quantity,Remark")] RecordDetails recordDetails)
-        {
-            if (id != recordDetails.Rdid)
-            {
-                return NotFound();
-            }
+        //// POST: StationeryRetrivalList/Edit/5
+        //// To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        //// more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> Edit(int id, [Bind("Rdid,Rrid,ItemNumber,Quantity,Remark")] RecordDetails recordDetails)
+        //{
+        //    if (id != recordDetails.Rdid)
+        //    {
+        //        return NotFound();
+        //    }
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(recordDetails);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!RecordDetailsExists(recordDetails.Rdid))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["ItemNumber"] = new SelectList(_context.Catalogue, "ItemNumber", "ItemNumber", recordDetails.ItemNumber);
-            return View(recordDetails);
-        }
+        //    if (ModelState.IsValid)
+        //    {
+        //        try
+        //        {
+        //            _context.Update(recordDetails);
+        //            await _context.SaveChangesAsync();
+        //        }
+        //        catch (DbUpdateConcurrencyException)
+        //        {
+        //            if (!RecordDetailsExists(recordDetails.Rdid))
+        //            {
+        //                return NotFound();
+        //            }
+        //            else
+        //            {
+        //                throw;
+        //            }
+        //        }
+        //        return RedirectToAction(nameof(Index));
+        //    }
+        //    ViewData["ItemNumber"] = new SelectList(_context.Catalogue, "ItemNumber", "ItemNumber", recordDetails.ItemNumber);
+        //    return View(recordDetails);
+        //}
 
         //// GET: StationeryRetrivalList/Delete/5
         //public async Task<IActionResult> Delete(int? id)
@@ -172,5 +196,7 @@ namespace ADTeam5.Controllers
         {
             return _context.RecordDetails.Any(e => e.Rdid == id);
         }
+
+    
     }
 }
