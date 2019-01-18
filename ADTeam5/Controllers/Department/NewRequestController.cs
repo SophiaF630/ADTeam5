@@ -5,11 +5,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using ADTeam5.Models;
 using Microsoft.AspNetCore.Mvc;
+using ADTeam5.BusinessLogic;
+
 
 namespace ADTeam5.Controllers.Department
 {
     public class NewRequestController : Controller
     {
+        BizLogic b = new BizLogic();
             private readonly SSISTeam5Context context;
         static List<string> ItemNumberList= new List<string>();
         static List<int> QuantityList = new List<int>();
@@ -25,6 +28,7 @@ namespace ADTeam5.Controllers.Department
             catalogueList = (from x in context.Catalogue select x).ToList();
             catalogueList.Insert(0, new Catalogue { ItemNumber = "0", ItemName = "Select" });
             ViewBag.ListofCatalogueName = catalogueList;
+            
             return View();
         }
 
@@ -48,6 +52,22 @@ namespace ADTeam5.Controllers.Department
 
             return View();
         }
+        // POST: Save orders
+        public IActionResult Submit()
+        {
+            
+            for(int i = 0; i < QuantityList.Count; i++)
+            {
+                Models.EmployeeRequestRecord e = new Models.EmployeeRequestRecord();
+                
+                Models.RecordDetails r = new Models.RecordDetails();
+                //QuantityList[0] = 
+            }
+           
+
+            return View();
+        }
+
 
     }
 }

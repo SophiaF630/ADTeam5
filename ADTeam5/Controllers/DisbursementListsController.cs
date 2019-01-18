@@ -61,7 +61,7 @@ namespace ADTeam5.Controllers
                 dlList.ItemName = _context.Catalogue.FirstOrDefault(x => x.ItemNumber == item.ItemNumber).ItemName;
                 dlList.Quantity = item.Quantity;
                 dlList.Remark = item.Remark;
-
+                
                 result.Add(dlList);
             }
             return View(result);
@@ -70,6 +70,7 @@ namespace ADTeam5.Controllers
         // GET: DisbursementLists/Create
         public IActionResult Create()
         {
+            
             ViewData["CollectionPointId"] = new SelectList(_context.CollectionPoint, "CollectionPointId", "CollectionPointName");
             ViewData["DepartmentCode"] = new SelectList(_context.Department, "DepartmentCode", "DepartmentCode");
             ViewData["RepId"] = new SelectList(_context.User, "UserId", "DepartmentCode");
