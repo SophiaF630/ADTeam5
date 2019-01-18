@@ -62,22 +62,22 @@ namespace ADTeam5.Controllers.Department
             }
 
             [HttpPost]
-            public IActionResult ApproveOrder()
+            public async Task<IActionResult> ApproveOrder()
             {
                 EmployeeRequestRecord e1 = context.EmployeeRequestRecord.Where(x => x.Rrid == rrid).First();
                 e1.Status = "Approved";
-                context.SaveChanges();
+                await context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
 
             //Please put in validation reason for null
             [HttpPost]
-            public IActionResult RejectOrder(string rejectReason)
+            public async Task<IActionResult> RejectOrder(string rejectReason)
             {
                 EmployeeRequestRecord e1 = context.EmployeeRequestRecord.Where(x => x.Rrid == rrid).First();
-                e1.Status = "Reject";
+                e1.Status = "Rejected";
                 e1.Remark = rejectReason.ToString();
-                context.SaveChanges();
+                await context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
         }

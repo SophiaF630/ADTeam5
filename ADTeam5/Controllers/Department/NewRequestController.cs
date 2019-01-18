@@ -86,7 +86,7 @@ namespace ADTeam5.Controllers.Department
         // POST: Save orders
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Submit()
+        public async Task<IActionResult> Submit()
         {
                 // Make new EmployeeRequestRecord
                 Models.EmployeeRequestRecord e = new Models.EmployeeRequestRecord();
@@ -104,7 +104,7 @@ namespace ADTeam5.Controllers.Department
                 e.DepCode = deptCode;
                 e.Status = status;
                 context.EmployeeRequestRecord.Add(e);
-                context.SaveChanges();
+                await context.SaveChangesAsync();
 
                 //Make new Record Details
                 for (int k = 0; k< QuantityList.Count; k++)
@@ -114,7 +114,7 @@ namespace ADTeam5.Controllers.Department
                     r.ItemNumber = ItemNumberList[k];
                     r.Quantity = QuantityList[k];
                 context.RecordDetails.Add(r);
-                    context.SaveChanges();
+                    await context.SaveChangesAsync();
                 }
             return RedirectToAction("Details", new { id });
         }

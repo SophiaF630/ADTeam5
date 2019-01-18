@@ -52,7 +52,7 @@ namespace ADTeam5.Controllers.Department
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Index(CollectionPoint cp)
+        public async Task<IActionResult> Index(CollectionPoint cp)
         {
             if (ModelState.IsValid)
             {
@@ -60,7 +60,7 @@ namespace ADTeam5.Controllers.Department
                 var q = context.DisbursementList.Where(x => x.DepartmentCode == dept && x.Status == "Pending Delivery").First();
                 Models.DisbursementList d1 = q;
                 d1.CollectionPointId = c1;
-                context.SaveChanges();
+                await context.SaveChangesAsync();
                 TempData["Alert1"] = "Collection Point Changed Successfully";
                 return RedirectToAction("Index");
             }
