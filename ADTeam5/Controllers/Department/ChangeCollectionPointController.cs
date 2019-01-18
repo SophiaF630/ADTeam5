@@ -41,13 +41,20 @@ namespace ADTeam5.Controllers.Department
         public IActionResult Index(CollectionPoint cp)
         {
             //Filter by dept of person who is using this
-            int c1 = cp.CollectionPointId;
-            var q = context.DisbursementList.Where(x => x.DepartmentCode == "ENGL" && x.Status == "Pending Delivery").First();
-            Models.DisbursementList d1 = q;
-            d1.CollectionPointId = c1;
-            context.SaveChanges();
-
+            if (ModelState.IsValid)
+            {
+                int c1 = cp.CollectionPointId;
+                var q = context.DisbursementList.Where(x => x.DepartmentCode == "ENGL" && x.Status == "Pending Delivery").First();
+                Models.DisbursementList d1 = q;
+                d1.CollectionPointId = c1;
+                context.SaveChanges();
+                TempData["Alert1"] = "Collection Point Changed Successfully";
+                return RedirectToAction("Index");
+            }
+            TempData["Alert2"] = "Please Try Again";
             return RedirectToAction("Index");
+
+
         }
     }
 }
