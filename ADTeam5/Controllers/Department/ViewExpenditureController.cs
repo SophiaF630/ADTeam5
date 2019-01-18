@@ -68,6 +68,7 @@ namespace ADTeam5.Controllers.Department
                 var t = context.DisbursementList;
                 return View(t);
             }
+<<<<<<< HEAD
 
           
         }
@@ -97,6 +98,9 @@ namespace ADTeam5.Controllers.Department
                      }).ToList();
 
             return View(q);
+=======
+
+>>>>>>> a517407431875ca00afc6d56c311218d89438067
         }
     }
 }
