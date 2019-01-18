@@ -37,7 +37,8 @@ namespace ADTeam5.Controllers
                 List<RecordDetails> rd = b.GenerateDisbursementListDetails(depCodeList[i]);
             }
 
-            List<StationeryRetrievalList> result = b.GetStationeryRetrievalLists();           
+            List<StationeryRetrievalList> result = b.GetStationeryRetrievalLists();
+            //ViewData["ItemNumber"] = new SelectList(_context.Catalogue, "ItemNumber", "ItemName", recordDetails.ItemNumber);
             return View(result);
         }
 
