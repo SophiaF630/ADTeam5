@@ -22,31 +22,33 @@ namespace ADTeam5.Controllers.Department
         public ViewResult Index()
         {
             SSISTeam5Context e = new SSISTeam5Context();
-            ViewExpenditure ve = new ViewExpenditure();
+
+            List<ViewExpenditure> ve = new List<ViewExpenditure>();
+            
+           
+            var q = (from x in e.Catalogue
+                     join b in e.RecordDetails on x.ItemNumber equals b.ItemNumber
+                     join c in e.DisbursementList on b.Rrid equals c.Dlid
+                     where c.Status.Contains("completed")
+                     
+                     select new ViewExpenditure()
+                     {
+                         quantity = b.Quantity,
+                         price = x.Supplier1Price,
+                         subtotal = b.Quantity * x.Supplier1Price,
+                         orderno = c.Dlid,
+                         status = c.Status,
+                         CompleteDate= c.CompleteDate
+
+                     }).ToList();
+            DateTime test = DateTime.Parse("2019/01/10");
+
+            ViewExpenditure a = new ViewExpenditure();
+
+        
 
 
-           var q = (from x in e.Catalogue
-                    join b in e.RecordDetails on x.ItemNumber equals b.ItemNumber
-                       select new ViewExpenditure()
-                          {
-                            
-                          }
-
-
-                //from x in e.Catalogue
-                //        join b in e.RecordDetails
-                //        on x.ItemNumber equals b.ItemNumber
-                //        where x.ItemNumber== b.ItemNumber
-                //        select new ViewExpenditure()
-                //        {
-
-
-                          //        };
-
-
-
-
-            return View();
+            return View(q);
         }
 
         public IActionResult Viewexpenditure()

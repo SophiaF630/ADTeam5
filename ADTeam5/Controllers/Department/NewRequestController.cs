@@ -12,7 +12,7 @@ namespace ADTeam5.Controllers.Department
 {
     public class NewRequestController : Controller
     {
-        BizLogic b = new BizLogic();
+        //BizLogic b = new BizLogic();
             private readonly SSISTeam5Context context;
         static List<string> ItemNumberList= new List<string>();
         static List<int> QuantityList = new List<int>();

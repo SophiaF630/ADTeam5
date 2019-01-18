@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using ADTeam5.Models;
+using ADTeam5.ViewModels;
 
 namespace ADTeam5.Controllers.Department
 {
@@ -54,21 +55,48 @@ namespace ADTeam5.Controllers.Department
         [ValidateAntiForgeryToken]
         public IActionResult Index(DateTime startDate, DateTime endDate)
         {
-            //ViewData["StartDate"] = startDate;
-            //ViewData["endDate"] = endDate;
+            ViewData["StartDate"] = startDate;
+            ViewData["endDate"] = endDate;
 
-            //if (startDate != null && endDate != null)
-            //{
-            //    var t = context.DisbursementList.Where(s => s.StartDate >= startDate && s.CompleteDate <= endDate);
-            //    return View(t);
-            //}
-            //else
-            //{
-            //    var t = context.DisbursementList;
-            //    return View(t);
-            //}
+            if (startDate != null && endDate != null)
+            {
+                var t = context.DisbursementList.Where(s => s.StartDate >= startDate && s.CompleteDate <= endDate);
+                return View(t);
+            }
+            else
+            {
+                var t = context.DisbursementList;
+                return View(t);
+            }
 
-            return Content(sum.ToString());
+          
+        }
+
+
+        public IActionResult Details (string Dlid)
+        {
+            SSISTeam5Context e = new SSISTeam5Context();
+            dlid = Dlid;
+            List<ViewExpenditure> ve = new List<ViewExpenditure>();
+            string a = "1" + dlid + "2";
+            ViewData["id"] = a;
+            var q = (from x in e.Catalogue
+                     join b in e.RecordDetails on x.ItemNumber equals b.ItemNumber
+                     join c in e.DisbursementList on b.Rrid equals c.Dlid
+                     where c.Dlid.Equals(Dlid) 
+
+                     select new ViewExpenditure()
+                     {
+                         orderno = c.Dlid,
+                         quantity = b.Quantity,
+                         price = x.Supplier1Price,
+                         subtotal = b.Quantity * x.Supplier1Price,
+                         itemname= x.ItemName
+                        
+
+                     }).ToList();
+
+            return View(q);
         }
     }
 }
