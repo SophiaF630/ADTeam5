@@ -9,28 +9,38 @@ using ADTeam5.Models;
 
 namespace ADTeam5.Controllers.Department
 {
-    [Route("cart")]
+   
     public class CartController : Controller
     {
-        [Route("index")]
-        public IActionResult Index()
+        private readonly SSISTeam5Context _context;
+
+        public CartController(SSISTeam5Context context)
         {
-            var cart = SessionHelper.GetObjectFromJson<List<Item>>(HttpContext.Session, "cart");
+            _context = context;
+        }
+
+
+        public IActionResult Index()
+
+        {
+            List<Item> cart = SessionHelper.GetObjectFromJson<List<Item>>(HttpContext.Session, "cart");
             ViewBag.cart = cart;
-           // ViewBag.total = cart.Sum(item => item.Quantity);
+            // ViewBag.total = cart.Sum(item => item.Quantity);
             return View();
         }
 
-        [Route("buy")]
-        public IActionResult Buy(string itemname, int quantity)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Buy([Bind("ItemName,Quantity")] Item item)
         {
             //ProductModel productModel = new ProductModel();
             if (SessionHelper.GetObjectFromJson<List<Item>>(HttpContext.Session, "cart") == null)
             {
-                List<Item> cart = new List<Item>();
                 Item i = new Item();
-                i.ItemName = itemname;
-                i.Quantity = quantity;
+                i.ItemName = item.ItemName;
+                i.Quantity = item.Quantity;
+
+                List<Item> cart = SessionHelper.GetObjectFromJson<List<Item>>(HttpContext.Session, "cart");
                 cart.Add(i);
                 SessionHelper.SetObjectAsJson(HttpContext.Session, "cart", cart);
             }
@@ -48,7 +58,7 @@ namespace ADTeam5.Controllers.Department
             //    }
             //    SessionHelper.SetObjectAsJson(HttpContext.Session, "cart", cart);
             //}
-            return RedirectToAction("Index");
+            return View("Index");
         }
     }
 }

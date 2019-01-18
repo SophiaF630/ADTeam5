@@ -33,9 +33,7 @@ namespace ADTeam5
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //add by cliff
-            services.AddMvc();
-            services.AddSession();
+
 
             services.Configure<CookiePolicyOptions>(options =>
             {
@@ -78,9 +76,6 @@ namespace ADTeam5
 
             app.UseAuthentication();
 
-            //add by cliff
-            app.UseSession();
-            app.UseStaticFiles();
 
             app.UseMvc(routes =>
             {

@@ -7,22 +7,18 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.orderno)
+                @Html.DisplayNameFor(model => model.itemname)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.status)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.subtotal)
-            </th>
+
             <th>
                 @Html.DisplayNameFor(model => model.price)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.quantity)
             </th>
+
             <th>
-                @Html.DisplayNameFor(model => model.CompleteDate)
+                @Html.DisplayNameFor(model => model.subtotal)
             </th>
             <th></th>
         </tr>
@@ -31,22 +27,21 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.orderno)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.status)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.subtotal)
+                @Html.DisplayFor(modelItem => item.itemname)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.price)
             </td>
+      
+            <td>
+                @Html.DisplayFor(modelItem => item.subtotal)
+            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.quantity)
             </td>
+     
             <td>
-                @Html.DisplayFor(modelItem => item.CompleteDate)
+               
             </td>
             <td>
                 @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
