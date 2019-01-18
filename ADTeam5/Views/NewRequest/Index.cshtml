@@ -18,8 +18,10 @@
 
                 <div class="form-group">
                     <label> Quantity</label>
-                    <input asp-for="Quantity" class="form-control" />
+                    <input asp-for="Quantity" class="form-control" min=" 1" />
                     <span asp-validation-for="Quantity" class="text-danger"></span>
+                    <p id="negativevalidation"></p>
+
                 </div>
 
                 <div class="form-group">
@@ -76,4 +78,10 @@
         <input type="submit" value="Submit Request" class="btn btn-info" />
     </div>
 </form>
+
+<script>  
+    function negative(number) {
+        return number < 0;
+    };
+</script>
 

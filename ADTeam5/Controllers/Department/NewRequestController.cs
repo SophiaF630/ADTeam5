@@ -51,6 +51,7 @@ namespace ADTeam5.Controllers.Department
 
             int Quantity = quantity;
             QuantityList.Add(quantity);
+            
 
             //TemporaryRecordDetails t = new TemporaryRecordDetails(ItemNumber, Quantity);
 
