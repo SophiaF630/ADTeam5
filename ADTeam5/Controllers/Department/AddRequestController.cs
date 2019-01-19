@@ -36,9 +36,9 @@ namespace ADTeam5.Controllers.Department
                          quantity = b.Quantity,
                          price = x.Supplier1Price,
                          subtotal = b.Quantity * x.Supplier1Price,
-                         orderno = c.Dlid,
+                        
                          status = c.Status,
-                         CompleteDate= c.CompleteDate
+                        
 
                      }).ToList();
             DateTime test = DateTime.Parse("2019/01/10");

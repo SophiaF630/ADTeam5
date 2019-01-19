@@ -41,8 +41,10 @@
                     @Html.DisplayFor(modelItem => item.CompleteDate)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Dlid)
-                </td>
+                    <a asp-action="Details" asp-route-Dlid="@item.Dlid">
+                        @Html.DisplayFor(modelItem => item.Dlid)
+                    </a>
+                    </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Status)
                 </td>

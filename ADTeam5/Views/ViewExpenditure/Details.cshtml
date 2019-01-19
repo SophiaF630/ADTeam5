@@ -1,0 +1,54 @@
+﻿@model IEnumerable<ADTeam5.ViewModels.Renderview>
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1><br/>
+<p>Order No: @ViewBag.orderid</p>
+
+
+<p>
+    <a asp-action="Index">Back</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                No
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Category)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Quantity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Subtotal)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @{int i = 0;}
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @(++i)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Category)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Quantity)
+                </td>
+                <td>
+                    $@Html.DisplayFor(modelItem => item.Subtotal)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<h6>Total Expenditure: $@Model.Sum(x => x.Subtotal) </h6>
