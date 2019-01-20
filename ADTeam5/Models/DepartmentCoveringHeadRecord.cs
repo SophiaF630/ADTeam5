@@ -10,8 +10,10 @@ namespace ADTeam5.Models
 
         public int UserId { get; set; }
         [DataType(DataType.Date)]
+        [Required(ErrorMessage = "Start Date is mandatory")]
         public DateTime StartDate { get; set; }
         [DataType(DataType.Date)]
+        [Required(ErrorMessage = "End Date is mandatory")]
         public DateTime EndDate { get; set; }
 
         public virtual User User { get; set; }
