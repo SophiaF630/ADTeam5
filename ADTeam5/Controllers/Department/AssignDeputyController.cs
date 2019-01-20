@@ -80,7 +80,13 @@ namespace ADTeam5.Controllers.Department
                 TempData["Alert1"] = "Deputy Head Appointed Successfully";
                 return RedirectToAction("Index");
             }
-            TempData["Alert2"] = "Please Try Again";
+            DateTime dt = DateTime.Now;
+            if (startdate <dt)
+            {
+                TempData["Alert2"] = "Start date cannot be in the past";
+                return RedirectToAction("Index");
+            }
+            TempData["Alert2"] = "Missing details, please try again";
             return RedirectToAction("Index");
 
         }
