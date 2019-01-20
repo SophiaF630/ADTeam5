@@ -218,5 +218,20 @@ namespace ADTeam5.BusinessLogic
 
             return result;
         }
+        public Models.Department getDepartmentDetails(string dept)
+        {
+            var q1 = _context.Department.Where(x => x.DepartmentCode == dept).First();
+            Models.Department d = q1;
+            return d;
+        }
+
+        public Models.User getUser(int userid)
+        {
+            var q = _context.User.Where(x => x.UserId == userid).First();
+            Models.User u= q;
+            return u;
+        }
+
+
     }
 }

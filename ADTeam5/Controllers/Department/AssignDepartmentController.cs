@@ -30,29 +30,26 @@ namespace ADTeam5.Controllers.Department
             userCheck = new GeneralLogic(context);
         }
 
-
-        public async Task<IActionResult>Index()
+        public async Task<IActionResult> Index()
         {
-            ADTeam5User user =await _userManager.GetUserAsync(HttpContext.User);
+            ADTeam5User user = await _userManager.GetUserAsync(HttpContext.User);
             userid = user.WorkID;
             List<string> identity = userCheck.checkUserIdentityAsync(user);
-            dept= identity[0];
+            dept = identity[0];
             role = identity[1];
 
-            var q1 = context.Department.Where(x => x.DepartmentCode == dept).First();
-            Models.Department d1 = q1;
+
+            Models.Department d1 = b.getDepartmentDetails(dept);
             int currentRepId = d1.RepId;
 
-            var q2 = context.User.Where(x => x.UserId == currentRepId).First();
-            Models.User u1 = q2;
+            Models.User u1 = b.getUser(currentRepId);
             string currentRepName = u1.Name;
 
             ViewData["CurrentRepName"] = currentRepName;
 
             List<User> u = new List<User>();
 
-            var q = from x in context.Department where x.DepartmentCode == dept select x;
-            Models.Department d = q.First();
+            Models.Department d = b.getDepartmentDetails(dept);
             int repid = d.RepId;
             int headid = d.HeadId;
             int coverheadid = 0;
@@ -71,20 +68,20 @@ namespace ADTeam5.Controllers.Department
         [ValidateAntiForgeryToken]
         public IActionResult Index(User u)
         {
-                if (ModelState.IsValid)
-                {
-                    Models.Department d1 = context.Department.Where(x => x.DepartmentCode == dept).First();
-                    d1.RepId = u.UserId;
-                    context.SaveChanges();
-                    TempData["Alert1"] = "Department Representative Changed Successfully";
-                    return RedirectToAction("Index");
-                }
-                TempData["Alert2"] = "Please Try Again";
+            if (ModelState.IsValid)
+            {
+                Models.Department d2 = context.Department.Where(x => x.DepartmentCode == dept).First();
+                d2.RepId = u.UserId;
+                context.SaveChanges();
+                TempData["Alert1"] = "Department Representative Changed Successfully";
                 return RedirectToAction("Index");
-
             }
-           
+            TempData["Alert2"] = "Please Try Again";
+            return RedirectToAction("Index");
+
         }
 
-
     }
+
+
+}
