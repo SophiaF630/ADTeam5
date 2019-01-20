@@ -232,9 +232,6 @@ namespace ADTeam5.BusinessLogic
             return u;
         }
 
-        public void Save()
-        {
-            _context.SaveChanges();
-        }
+
     }
 }
