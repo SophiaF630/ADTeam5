@@ -26,6 +26,7 @@ namespace ADTeam5.Controllers.Department
             userCheck = new GeneralLogic(context);
         }
 
+
         public async Task<IActionResult>Index()
         {
             ADTeam5User user = await _userManager.GetUserAsync(HttpContext.User);
@@ -54,12 +55,13 @@ namespace ADTeam5.Controllers.Department
             u = context.User.Where(x => x.DepartmentCode == dept && x.UserId != repid && x.UserId != headid).OrderBy(x => x.Name).ToList();
  
             ViewBag.listofitems = u;
+
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Index(User u, DateTime startdate, DateTime enddate)
+        public IActionResult Index(User u, DateTime startdate, DateTime enddate)
         {
             if(ModelState.IsValid)
             {
@@ -74,7 +76,7 @@ namespace ADTeam5.Controllers.Department
                 d2.EndDate = enddate;
                 context.Add(d2);
 
-                await context.SaveChangesAsync();
+                context.SaveChanges();
                 TempData["Alert1"] = "Deputy Head Appointed Successfully";
                 return RedirectToAction("Index");
             }

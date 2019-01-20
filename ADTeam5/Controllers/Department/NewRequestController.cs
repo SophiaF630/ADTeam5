@@ -26,6 +26,7 @@ namespace ADTeam5.Controllers.Department
         static List<string> ItemNameList = new List<string>();
         static List<int> QuantityList = new List<int>();
         static string id;
+        
 
         public NewRequestController(SSISTeam5Context context, UserManager<ADTeam5User> userManager)
         {
@@ -46,7 +47,8 @@ namespace ADTeam5.Controllers.Department
             catalogueList = (from x in context.Catalogue select x).ToList();
             catalogueList.Insert(0, new Catalogue { ItemNumber = "0", ItemName = "Select" });
             ViewBag.ListofCatalogueName = catalogueList;
-            
+
+            ViewData["SubmitButton"] = null;
             return View();
         }
 
@@ -72,6 +74,7 @@ namespace ADTeam5.Controllers.Department
             ViewBag.ItemNameList = ItemNameList;
             ViewBag.QuantityList = QuantityList;
 
+            ViewData["SubmitButton"] = "true";
             return View();
         }
 
@@ -87,7 +90,7 @@ namespace ADTeam5.Controllers.Department
         // POST: Save orders
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Submit()
+        public IActionResult Submit()
         {
                 // Make new EmployeeRequestRecord
                 Models.EmployeeRequestRecord e = new Models.EmployeeRequestRecord();
@@ -105,7 +108,7 @@ namespace ADTeam5.Controllers.Department
                 e.DepCode = deptCode;
                 e.Status = status;
                 context.EmployeeRequestRecord.Add(e);
-                await context.SaveChangesAsync();
+                context.SaveChanges();
 
                 //Make new Record Details
                 for (int k = 0; k< QuantityList.Count; k++)
@@ -115,7 +118,7 @@ namespace ADTeam5.Controllers.Department
                     r.ItemNumber = ItemNumberList[k];
                     r.Quantity = QuantityList[k];
                 context.RecordDetails.Add(r);
-                    await context.SaveChangesAsync();
+                    context.SaveChanges();
                 }
             return RedirectToAction("Details", new { id });
         }

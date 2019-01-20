@@ -30,6 +30,7 @@ namespace ADTeam5.Controllers.Department
             userCheck = new GeneralLogic(context);
         }
 
+
         public async Task<IActionResult>Index()
         {
             ADTeam5User user =await _userManager.GetUserAsync(HttpContext.User);
@@ -68,14 +69,13 @@ namespace ADTeam5.Controllers.Department
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Index(User u)
+        public IActionResult Index(User u)
         {
                 if (ModelState.IsValid)
                 {
-                     var q = context.Department.Where(x => x.DepartmentCode == dept).First();
-                Models.Department d1 = q;
+                    Models.Department d1 = context.Department.Where(x => x.DepartmentCode == dept).First();
                     d1.RepId = u.UserId;
-                    await context.SaveChangesAsync();
+                    context.SaveChanges();
                     TempData["Alert1"] = "Department Representative Changed Successfully";
                     return RedirectToAction("Index");
                 }
