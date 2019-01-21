@@ -10,6 +10,9 @@ namespace ADTeam5.Controllers
     {
         public IActionResult Sidebar()
         {
+
+            //ViewBag.itemname = new Bizlogic1().GetItemDescription;
+
             return View();
         }
     }

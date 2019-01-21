@@ -218,5 +218,29 @@ namespace ADTeam5.BusinessLogic
 
             return result;
         }
+
+
+        //Update stationeery out quantity
+        public void UpdateCatalogueOut(string itemNumber, int outQty)
+        {
+            Catalogue catalogue = new Catalogue();
+            var i = _context.Catalogue.FirstOrDefault(x => x.ItemNumber == itemNumber);
+            if(i != null)
+            {
+                i.Out = outQty;
+                _context.SaveChanges();
+            }
+        }
+
+        //Adjustment details
+        public List<RecordDetails> GetAdjustmentRecordDetails(int clerkID, string voucherNo)
+        {
+            List<RecordDetails> result = new List<RecordDetails>();
+            AdjustmentRecord ar = _context.AdjustmentRecord
+                .FirstOrDefault(x => x.VoucherNo == voucherNo && !x.VoucherNo.Contains("VTemp"));
+
+            result = _context.RecordDetails.Where(x => x.Rrid == ar.VoucherNo).ToList();
+            return result;
+        }
     }
 }

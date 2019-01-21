@@ -6,13 +6,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ADTeam5.Models;
+using ADTeam5.BusinessLogic;
 
 namespace ADTeam5.Controllers
 {
     public class CataloguesController : Controller
     {
         private readonly SSISTeam5Context _context;
-
+        BizLogic b = new BizLogic();
         public CataloguesController(SSISTeam5Context context)
         {
             _context = context;
@@ -21,8 +22,10 @@ namespace ADTeam5.Controllers
         // GET: Catalogues
         public async Task<IActionResult> Index()
         {
+
             var sSISTeam5Context = _context.Catalogue.Include(c => c.Supplier1Navigation).Include(c => c.Supplier2Navigation).Include(c => c.Supplier3Navigation);
             return View(await sSISTeam5Context.ToListAsync());
+            
         }
 
         // GET: Catalogues/Details/5

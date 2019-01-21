@@ -19,16 +19,23 @@
                 @Html.DisplayNameFor(model => model.ApproveDate)
             </th>
             <th>
+
                 @Html.DisplayNameFor(model => model.SuperviserId)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.ManagerId)
+
+                @Html.DisplayNameFor(model => model.Clerk)
+
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Status)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Clerk)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
             </th>
             <th></th>
         </tr>
@@ -42,9 +49,13 @@
             <td>
                 @Html.DisplayFor(modelItem => item.ApproveDate)
             </td>
+
             <td>
                 @Html.DisplayFor(modelItem => item.SuperviserId)
             </td>
+
+
+
             <td>
                 @Html.DisplayFor(modelItem => item.ManagerId)
             </td>
@@ -53,6 +64,9 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Clerk.DepartmentCode)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.VoucherNo">Edit</a> |

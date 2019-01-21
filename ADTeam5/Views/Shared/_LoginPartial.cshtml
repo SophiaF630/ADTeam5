@@ -7,6 +7,7 @@
 
     @if (SignInManager.IsSignedIn(User))
     {
+
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle waves-effect waves-light" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                 Hello @User.Identity.Name!
@@ -19,15 +20,33 @@
             </div>
         </li>
 
-    }
+
+
+
+        @*<li class="nav-item">
+                <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                    <button type="submit" class="nav-link btn btn-link text-white">Logout</button>
+                </form>
+            </li>*@
+    }@*<li class="nav-item">
+                <a class="nav-link dropdown-toggle waves-effect waves-light" text-white" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                    Hello @User.Identity.Name!
+                </a>
+                    <div class="nav-link dropdown-menu dropdown-menu-right waves-effect waves-light" aria-labelledby="navbarDropdownMenuLink">
+
+                        <a class="dropdown-item waves-effect waves-light" href="#">Logout</a>
+                    </div>
+        </li>*@
     else
     {
         <li class="nav-item">
+     
             <i class="fas fa-plus-circle"></i> <span class="clearfix d-none d-sm-inline-block"><a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Register</a></span>
         </li>
         <li class="nav-item">
             <i class="fas fa-sign-in-alt"></i> <span class="clearfix d-none d-sm-inline-block"><a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a></span>
-        </li>
+            </li>
+            
     }
 
 </ul>
