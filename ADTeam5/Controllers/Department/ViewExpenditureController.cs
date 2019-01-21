@@ -89,8 +89,7 @@ namespace ADTeam5.Controllers.Department
                          Category = g.Key.Category,
                          Quantity = g.Sum(a=>a.b.Quantity),
                          Subtotal= g.Sum(a=> a.x.Supplier1Price* a.b.Quantity)
-                        
-                         
+                                         
                      }).ToList();
 
  
