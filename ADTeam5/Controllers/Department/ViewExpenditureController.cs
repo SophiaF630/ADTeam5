@@ -53,14 +53,14 @@ namespace ADTeam5.Controllers.Department
 
             @ViewData["Sum"] = sum;
             return View(q);
-        }
+       }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Index(DateTime startDate, DateTime endDate)
         {
-            ViewData["StartDate"] = startDate;
-            ViewData["endDate"] = endDate;
+            ViewData["StartDate"] = startDate.ToShortDateString();
+            ViewData["endDate"] = endDate.ToShortDateString();
 
             if (startDate != null && endDate != null)
             {
@@ -81,24 +81,6 @@ namespace ADTeam5.Controllers.Department
 
             List<Renderview> rv = new List<Renderview>();
             rv = b.GetExpenditureDetails(Dlid);
-
-            //var p = (from x in e.Catalogue
-            //         join b in e.RecordDetails on x.ItemNumber equals b.ItemNumber
-            //         join c in e.DisbursementList on b.Rrid equals c.Dlid
-            //         where c.Dlid.Equals(Dlid) && c.Status.Equals("Completed")
-
-            //         group new { x, b, c } by new { x.Category } into g
-
-            //         select new Renderview
-
-            //         {
-            //             Category = g.Key.Category,
-            //             Quantity = g.Sum(a => a.b.Quantity),
-            //             Subtotal = g.Sum(a => a.x.Supplier1Price * a.b.Quantity)
-
-            //         }).ToList();
-
-
 
             ViewBag.orderid = Dlid;
             return View(rv);

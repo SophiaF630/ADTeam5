@@ -9,13 +9,16 @@
     <div class="form-group">
         From:
         <input type="date" name="startdate" id="start" value="=" />
-        @*<p class="getStartDate"></p>*@
         To:
         <input type="date" name="enddate" id="end" value=" = " />
-        @*<p class="getEndDate"></p>*@
 
         <input type="submit" value="Search" id="searchbtn" />
     </div>
+    @if (ViewData["StartDate"] != null && ViewData["EndDate"] != null)
+    {
+        <p>Between @ViewData["StartDate"] to @ViewData["endDate"]</p>
+    }
+
 </form>
 <table class="table">
     <thead>

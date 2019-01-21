@@ -7,6 +7,7 @@ namespace ADTeam5.Models
     public partial class DisbursementList
     {
         [Required]
+        [Display(Name = "Disbusement List No.")]
         public string Dlid { get; set; }
         [Display(Name = "Start Date")]
         public DateTime StartDate { get; set; }
