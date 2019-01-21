@@ -38,7 +38,6 @@ namespace ADTeam5.Controllers.Department
             dept = identity[0];
             role = identity[1];
 
-
             Models.Department d1 = b.getDepartmentDetails(dept);
             int currentRepId = d1.RepId;
 

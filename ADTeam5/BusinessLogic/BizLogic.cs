@@ -232,6 +232,30 @@ namespace ADTeam5.BusinessLogic
             return u;
         }
 
+        public string  getCurrentDeputyHeadName(int currentDeputyHeadId)
+        {
+            var q = _context.User.Where(x => x.UserId == currentDeputyHeadId).First();
+            Models.User u = q;
+            string name = u.Name;
+            return name;
+        }
+
+        public Models.DepartmentCoveringHeadRecord findCurrentDeputyHeadToEdit(int currentDeputyHeadId)
+        {
+            DateTime today = DateTime.Now;
+            var q = _context.DepartmentCoveringHeadRecord.Where(x => x.UserId == currentDeputyHeadId && x.EndDate >= today).First();
+            DepartmentCoveringHeadRecord d2 = new DepartmentCoveringHeadRecord();
+            d2 = q;
+            return d2;
+        }
+
+        public List<User> populateAssignDeputyDropDownList(string dept, int repid, int headid)
+        {
+            var q = _context.User.Where(x => x.DepartmentCode == dept && x.UserId != repid && x.UserId != headid).OrderBy(x => x.Name).ToList();
+            List<User> u = new List<User>();
+            u = q;
+            return u;
+        }
 
     }
 }

@@ -38,34 +38,24 @@ namespace ADTeam5.Controllers.Department
             role = identity[1];
 
             Models.Department d1 = b.getDepartmentDetails(dept);
+            
             if (d1.CoveringHeadId != null)
             {
                 edit = true;
                 currentDeputyHeadId = (int)d1.CoveringHeadId;
-                var q2 = context.User.Where(x => x.UserId == currentDeputyHeadId).First();
-                string name = q2.Name;
+                string name = b.getCurrentDeputyHeadName(currentDeputyHeadId);
                 ViewData["CurrentDeputyHead"] = name;
-                DateTime today = DateTime.Now;
-                var q3 = context.DepartmentCoveringHeadRecord.Where(x => x.UserId == currentDeputyHeadId && x.EndDate >= today).First();
-                DepartmentCoveringHeadRecord d2 = new DepartmentCoveringHeadRecord();
-                d2 = q3;
-                DateTime CurrentDeputyHeadStartDate = d2.StartDate;
-                DateTime CurrentDeputyHeadEndDate = d2.EndDate;
-                ViewData["CurrentDeputyHeadStartDate"] = CurrentDeputyHeadStartDate.ToShortDateString();
-                ViewData["CurrentDeputyHeadEndDate"] = CurrentDeputyHeadEndDate.ToShortDateString();
+                Models.DepartmentCoveringHeadRecord d2 = b.findCurrentDeputyHeadToEdit(currentDeputyHeadId);
+                ViewData["CurrentDeputyHeadStartDate"] = d2.StartDate.ToShortDateString();
+                ViewData["CurrentDeputyHeadEndDate"] = d2.EndDate.ToShortDateString();
             }
-
-            List<User> u = new List<User>();
-
-            Models.Department d = b.getDepartmentDetails(dept);
-            int repid = d.RepId;
-            int headid = d.HeadId;
-
-            u = context.User.Where(x => x.DepartmentCode == dept && x.UserId != repid && x.UserId != headid).OrderBy(x => x.Name).ToList();
-
-            ViewBag.listofitems = u;
-
-            return View();
+                List<User> userList = new List<User>();
+                Models.Department d = b.getDepartmentDetails(dept);
+                int repid = d.RepId;
+                int headid = d.HeadId;
+                userList = b.populateAssignDeputyDropDownList(dept, repid, headid);
+                ViewBag.listofitems = userList;
+                return View();
         }
 
         [HttpPost]
