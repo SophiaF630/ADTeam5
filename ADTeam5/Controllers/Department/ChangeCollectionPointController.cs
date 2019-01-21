@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ADTeam5.Areas.Identity.Data;
-using ADTeam5.BusinessLogic;
 using ADTeam5.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -19,7 +18,6 @@ namespace ADTeam5.Controllers.Department
         private readonly SSISTeam5Context context;
         private readonly UserManager<ADTeam5User> _userManager;
         readonly GeneralLogic userCheck;
-        BizLogic b = new BizLogic();
 
         public ChangeCollectionPointController(SSISTeam5Context context, UserManager<ADTeam5User> userManager)
         {
@@ -36,12 +34,18 @@ namespace ADTeam5.Controllers.Department
             dept = identity[0];
             role = identity[1];
 
-            DisbursementList d1 = b.searchDLByPendingDeliveryAndDept(dept);
+            var q1 = context.DisbursementList.Where(x => x.DepartmentCode == dept && x.Status == "Pending Delivery").First();
+            DisbursementList d1 = q1;
             int currentCollectionPoint = d1.CollectionPointId;
-            ViewData["Name"] = b.getCollectionPointName(currentCollectionPoint);
+
+            var q2 = context.CollectionPoint.Where(x => x.CollectionPointId == currentCollectionPoint).First();
+            CollectionPoint c1 = q2;
+            string currentName = c1.CollectionPointName;
+            ViewData["Name"] = currentName;
 
             List < CollectionPoint > u = new List<CollectionPoint>();
-            u = b.populateCPDropDownList(currentCollectionPoint);
+
+            u = context.CollectionPoint.Where(x=> x.CollectionPointId != currentCollectionPoint).ToList();
             ViewBag.listofitems = u;
             return View();
         }

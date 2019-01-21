@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ADTeam5.Areas.Identity.Data;
-using ADTeam5.BusinessLogic;
 using ADTeam5.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -22,7 +21,6 @@ namespace ADTeam5.Controllers.Department
         private readonly UserManager<ADTeam5User> _userManager;
         private static string rrid;
         readonly GeneralLogic userCheck;
-        BizLogic b = new BizLogic();
 
         public OutstandingOrderController(SSISTeam5Context context, UserManager<ADTeam5User> userManager)
         {
@@ -40,7 +38,8 @@ namespace ADTeam5.Controllers.Department
             dept = identity[0];
             role = identity[1];
 
-                return View(b.searchOutstandingRequests(dept));
+            var q = context.EmployeeRequestRecord.Where(x => x.Status == "Submitted" && x.DepCode == dept);
+                return View(q);
             }
 
             // GET: OutstandingOrder/Details/id
@@ -49,14 +48,17 @@ namespace ADTeam5.Controllers.Department
             rrid = id;
 
             ViewData["RRID"] = rrid;
-            EmployeeRequestRecord e1 = b.searchEmployeeRequestByRRID(rrid);
+            var q1 = context.EmployeeRequestRecord.Where(x => x.Rrid == rrid).First();
+            EmployeeRequestRecord e1 = q1;
             int userid = e1.DepEmpId;
 
-            User u1 = b.getUser(userid);
+            var q2 = context.User.Where(x => x.UserId == userid).First();
+            User u1 = q2;
             string username = u1.Name;
             ViewData["Name"] = username;
 
-            return View(b.searchRecordDetailsByRRID(rrid));
+                var q = context.RecordDetails.Where(x => x.Rrid == id);
+                return View(q);
             }
 
             [HttpPost]

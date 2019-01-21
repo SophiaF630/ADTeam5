@@ -50,6 +50,16 @@ namespace ADTeam5.Controllers.Department
                 ViewData["CurrentDeputyHeadEndDate"] = d2.EndDate.ToShortDateString();
             }
 
+<<<<<<< HEAD
+                List<User> userList = new List<User>();
+                Models.Department d = b.getDepartmentDetails(dept);
+                int repid = d.RepId;
+                int headid = d.HeadId;
+                userList = b.populateAssignDeputyDropDownList(dept, repid, headid);
+                ViewBag.listofitems = userList;
+                return View();
+
+=======
             List<User> userList = new List<User>();
             Models.Department d = b.getDepartmentDetails(dept);
             int repid = d.RepId;
@@ -57,6 +67,11 @@ namespace ADTeam5.Controllers.Department
             userList = b.populateAssignDeputyDropDownList(dept, repid, headid);
             ViewBag.listofitems = userList;
             return View();
+<<<<<<< HEAD
+=======
+>>>>>>> a1cc7950dad4628fdeeb75d2da22bd9c70cfd5e2
+
+>>>>>>> f2e082205f208a592d366be797875cb5bd66d23a
         }
 
         [HttpPost]
@@ -98,9 +113,28 @@ namespace ADTeam5.Controllers.Department
                 {
                     TempData["Alert3"] = "Edits Saved Successfully";
                 }
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+                    return RedirectToAction("Index");
+            }
+
+            DateTime dt = DateTime.Now;
+           
+            if (startdate <dt)
+
+            {
+=======
+
+>>>>>>> a1cc7950dad4628fdeeb75d2da22bd9c70cfd5e2
+>>>>>>> f2e082205f208a592d366be797875cb5bd66d23a
                 return RedirectToAction("Index");
 
             }
+<<<<<<< HEAD
+
+=======
+>>>>>>> a1cc7950dad4628fdeeb75d2da22bd9c70cfd5e2
             return RedirectToAction("Index");
         }
         

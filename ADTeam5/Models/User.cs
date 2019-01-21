@@ -42,6 +42,5 @@ namespace ADTeam5.Models
         public virtual ICollection<EmployeeRequestRecord> EmployeeRequestRecordDepEmp { get; set; }
         public virtual ICollection<EmployeeRequestRecord> EmployeeRequestRecordDepHead { get; set; }
         public virtual ICollection<PurchaseOrderRecord> PurchaseOrderRecord { get; set; }
-
     }
 }

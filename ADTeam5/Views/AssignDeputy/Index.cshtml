@@ -34,13 +34,37 @@
 }
 @if (TempData["Alert4"] != null)
 {
+<<<<<<< HEAD
     <div class="alert alert-success" role="alert">
         <button type="button" class="close" data-dismiss="alert" aira-label="close">
             <span aria-hidden="true">&times</span>
         </button>
         @TempData["Alert4"]
     </div>
+=======
+    <p>Appointed Deputy Head: @ViewData["CurrentDeputyHead"]</p>
+    <p>From: @ViewData["CurrentDeputyHeadStartDate"] To: @ViewData["CurrentDeputyHeadEndDate"]</p>
+
+<<<<<<< HEAD
+
+    <div>
+        From:
+        <input type="date" name="startdate" id="start" value="=" />
+      
+        To:
+        <input type="date" name="enddate" id="end" value=" = " />
+    </div>
+
+        @if (ViewData["CurrentDeputyHead"] != null)
+        {
+            <p>Appointed Deputy Head: @ViewData["CurrentDeputyHead"]</p>
+            <p>From: @ViewData["CurrentDeputyHeadStartDate"] To: @ViewData["CurrentDeputyHeadEndDate"]</p>
+
+=======
+    <p>Edit Submitted Details Below:</p>
+>>>>>>> f2e082205f208a592d366be797875cb5bd66d23a
 }
+>>>>>>> a1cc7950dad4628fdeeb75d2da22bd9c70cfd5e2
 
 @if (ViewData["CurrentDeputyHead"] != null)
 {

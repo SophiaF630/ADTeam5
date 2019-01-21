@@ -22,7 +22,7 @@ namespace ADTeam5.Controllers
         }
 
         // GET: StationeryRetrievalList
-        public async Task<IActionResult>Index()
+        public async Task<IActionResult> Index()
         {
             //Generate disbursement list
             List<Models.Department> dList = _context.Department.ToList();
