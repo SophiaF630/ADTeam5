@@ -50,14 +50,29 @@ namespace ADTeam5.Controllers.Department
 
             if (startDate != null && endDate != null)
             {
-                var t = context.EmployeeRequestRecord.Where(s => s.RequestDate >= startDate && s.RequestDate <= endDate && s.DepCode == dept);
-                return View(t);
+                if (ModelState.IsValid)
+                {
+                    var t = context.EmployeeRequestRecord.Where(s => s.RequestDate >= startDate && s.RequestDate <= endDate && s.DepCode == dept);
+                    return View(t);
+                }
+                else
+                {
+                    TempData["Alert2"] = "Please Fill in All Details!";
+                    return RedirectToAction("Index");
+                }
+            }
+            if (startDate > endDate || endDate < startDate)
+            {
+                //TempData["Alert1"] = "Start end error";
+                //return RedirectToAction("Index");
+                return Content("start end error");
             }
             else
             {
                 var t = context.EmployeeRequestRecord.Where(x => x.DepCode == dept);
                 return View(t);
             }
+
         }
         public IActionResult Details(string id)
         {

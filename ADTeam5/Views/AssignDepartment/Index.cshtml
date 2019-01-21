@@ -7,8 +7,6 @@
 <form asp-action="Index" method="post">
     <h1>Assign Department Representative</h1>
 
-    <p>Current Representative: @ViewData["CurrentRepName"]</p>
-
     @if (TempData["Alert1"] != null)
     {
         <div class="alert alert-success" role="alert">
@@ -27,6 +25,9 @@
             @TempData["Alert2"]
         </div>
     }
+
+    <p>Current Representative: @ViewData["CurrentRepName"]</p>
+
     <div class="form-group">
         <p>
             New Representative:

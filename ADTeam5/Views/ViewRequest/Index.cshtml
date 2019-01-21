@@ -5,78 +5,97 @@
     ViewData["Title"] = "Index";
 }
 
+@if (TempData["Alert1"] != null)
+{
+    <div class="alert alert-success" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aira-label="close">
+            <span aria-hidden="true">&times</span>
+        </button>
+        @TempData["Alert1"]
+    </div>
+}
+@if (TempData["Alert2"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aira-label="close">
+            <span aria-hidden="true">&times</span>
+        </button>
+        @TempData["Alert2"]
+    </div>
+}
+
 <h1>View Request</h1>
 <form asp-action="Index" method="post">
     <div>
         From:
         <input type="date" name="startdate" id="start" value="=" />
-
+        
         To:
         <input type="date" name="enddate" id="end" value=" = " />
 
         <input type="submit" value="Search" id="searchbtn" />
     </div>
 
-    </form>
-    <table class="table">
-        <thead>
+</form>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Request Date
+            </th>
+            <th>
+                Requisition Form No. @ViewData["RRID"]
+
+            </th>
+            <th>
+                Status
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
             <tr>
-                <th>
-                    Request Date
-                </th>
-                <th>
-                    Requisition Form No. @ViewData["RRID"]
+                <td>
+                    @Html.DisplayFor(modelItem => item.RequestDate)
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.Rrid">
+                        @Html.DisplayFor(modelItem => item.Rrid)
+                    </a>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
 
-                </th>
-                <th>
-                    Status
-                </th>
-                <th></th>
             </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.RequestDate)
-                    </td>
-                    <td>
-                        <a asp-action="Details" asp-route-id="@item.Rrid">
-                            @Html.DisplayFor(modelItem => item.Rrid)
-                        </a>
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Status)
-                    </td>
-
-                </tr>
-            }
-        </tbody>
-    </table>
-
-
-
-    <script>
-        $(document).ready(function () {
-            let now = new Date();
-
-            let day = ("0" + now.getDate()).slice(-2);
-            let month = ("0" + (now.getMonth() + 1)).slice(-2);
-
-            let today = (day) + "-" + (month) + "-" + now.getFullYear();
-
-
-            $('#start').val(today);
-            $('#end').val(today);
-            $('#assignbtn').click(function () {
-
-                testClicked();
-            });
-        });
-        function testClicked() {
-            $('.getStartDate').html($('#start').val());
-            $('.getEndDate').html($('#end').val());
         }
+    </tbody>
+</table>
 
-    </script>
+
+
+<script>
+    $(document).ready(function () {
+        let now = new Date();
+
+        let day = ("0" + now.getDate()).slice(-2);
+        let month = ("0" + (now.getMonth() + 1)).slice(-2);
+
+        let today = (day) + "-" + (month) + "-" + now.getFullYear();
+
+
+        $('#start').val(today);
+        $('#end').val(today);
+        $('#assignbtn').click(function () {
+
+            testClicked();
+        });
+    });
+    function testClicked() {
+        $('.getStartDate').html($('#start').val());
+        $('.getEndDate').html($('#end').val());
+    }
+
+</script>

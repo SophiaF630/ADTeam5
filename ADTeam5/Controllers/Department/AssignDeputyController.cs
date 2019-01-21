@@ -51,9 +51,7 @@ namespace ADTeam5.Controllers.Department
             int headid = d.HeadId;
 
             u = context.User.Where(x => x.DepartmentCode == dept && x.UserId != repid && x.UserId != headid).OrderBy(x => x.Name).ToList();
- 
             ViewBag.listofitems = u;
-
             return View();
         }
 
@@ -79,6 +77,7 @@ namespace ADTeam5.Controllers.Department
                 return RedirectToAction("Index");
             }
             DateTime dt = DateTime.Now;
+           
             if (startdate <dt)
             {
                 TempData["Alert2"] = "Start date cannot be in the past";
