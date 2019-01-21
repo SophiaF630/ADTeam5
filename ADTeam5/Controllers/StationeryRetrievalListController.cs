@@ -24,19 +24,21 @@ namespace ADTeam5.Controllers
         // GET: StationeryRetrievalList
         public async Task<IActionResult> Index()
         {
-            List<RecordDetails> rd = b.GenerateDisbursementListDetails("ENGL");
-            List<StationeryRetrievalList> result = new List<StationeryRetrievalList>();
-            foreach (var item in rd)
+            //Generate disbursement list
+            List<Models.Department> dList = _context.Department.ToList();
+            List<string> depCodeList = new List<string>();
+            foreach (Models.Department d in dList)
             {
-                StationeryRetrievalList srList = new StationeryRetrievalList();
-
-                srList.ItemNumber = item.ItemNumber;
-                //srList.ItemName = item.ItemNumberNavigation.ItemName;
-                srList.ItemName = _context.Catalogue.FirstOrDefault(x => x.ItemNumber == item.ItemNumber).ItemName;
-                srList.Quantity = item.Quantity;
-
-                result.Add(srList);
+                depCodeList.Add(d.DepartmentCode);
             }
+
+            for (int i = 0; i < depCodeList.Count(); i++)
+            {                
+                //List<RecordDetails> rd = b.GenerateDisbursementListDetails(depCodeList[i]);
+                List<RecordDetails> rd = b.GenerateDisbursementListDetails("ENGL");
+            }
+
+            List<StationeryRetrievalList> result = b.GetStationeryRetrievalLists();           
             return View(result);
         }
 

@@ -1,0 +1,95 @@
+﻿@model ADTeam5.Models.User
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Assign Deputy Head</h1>
+
+@if (TempData["Alert1"] != null)
+{
+    <div class="alert alert-success" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aira-label="close">
+            <span aria-hidden="true">&times</span>
+        </button>
+        @TempData["Alert1"]
+    </div>
+}
+@if (TempData["Alert2"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aira-label="close">
+            <span aria-hidden="true">&times</span>
+        </button>
+        @TempData["Alert2"]
+    </div>
+}
+@if (TempData["Alert3"] != null)
+{
+    <div class="alert alert-success" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aira-label="close">
+            <span aria-hidden="true">&times</span>
+        </button>
+        @TempData["Alert3"]
+    </div>
+}
+@if (TempData["Alert4"] != null)
+{
+
+    <div class="alert alert-success" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aira-label="close">
+            <span aria-hidden="true">&times</span>
+        </button>
+        @TempData["Alert4"]
+    </div>
+}
+
+@if (ViewData["CurrentDeputyHead"] != null)
+{
+    <p>Appointed Deputy Head: @ViewData["CurrentDeputyHead"]</p>
+    <p>From: @ViewData["CurrentDeputyHeadStartDate"] To: @ViewData["CurrentDeputyHeadEndDate"]</p>
+    <p>Edit Submitted Details Below:</p>
+}
+<form asp-action="Index" method="post">
+    <div class="form-group">
+        <p>
+            Deputy Head:
+            @Html.DropDownListFor(m => m.UserId, new SelectList(ViewBag.listofitems, "UserId", "Name"), "Select")
+        </p>
+    </div>
+
+    <div>
+        From:
+        <input type="date" name="startdate" id="start" value="=" />
+        To:
+        <input type="date" name="enddate" id="end" value=" = " />
+    </div>
+
+    <br />
+    <div class="form-group">
+        <input type="reset" value="Cancel" onclick="window.location.reload()" />
+        <input type="submit" value="Assign" id="assignbtn" />
+    </div>
+
+</form>
+<script>
+    $(document).ready(function () {
+        let now = new Date();
+
+        let day = ("0" + now.getDate()).slice(-2);
+        let month = ("0" + (now.getMonth() + 1)).slice(-2);
+
+        let today = (day) + "-" + (month) + "-" + now.getFullYear();
+
+
+        $('#start').val(today);
+        $('#end').val(today);
+        $('#assignbtn').click(function () {
+
+            testClicked();
+        });
+    });
+    function testClicked() {
+        $('.getStartDate').html($('#start').val());
+        $('.getEndDate').html($('#end').val());
+    }
+</script>

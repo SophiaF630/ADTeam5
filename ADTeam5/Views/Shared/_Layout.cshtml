@@ -61,12 +61,19 @@
 
     @RenderSection("Scripts", required: false)
 
+    <button type="button" id="sidebarCollapse" class="btn btn-info">
+        <i class="fas fa-align-left"></i>
+    </button>
+    <tr>
+    </tr>
     <div class="wrapper">
+        
         <!-- Sidebar  -->
         <nav id="sidebar">
             <div class="sidebar-header">
                 <h3>Store Management</h3>
                 <strong>Store</strong>
+                
             </div>
 
             <ul class="list-unstyled components">
@@ -76,18 +83,24 @@
                         Lists
                     </a>
                     <ul class="collapse list-unstyled" id="homeSubmenu">
+
+
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="StationeryRetrievalList" asp-action="Index">Stationery Retrieval List</a>
+
                         </li>
                         <li>
                             <a class="nav-link text-dark" asp-area="" asp-controller="DisbursementListS" asp-action="Index">Disbursement List</a>
                         </li>
-                    </ul>
+                    </ul>   
+                    </li>
+                       <li>
                 </li>
                 <li>
                     <a href="#">
                         <i class="fas fa-briefcase"></i>
-                        Suppliers
+                        <a class="nav-link text-dark" asp-area="" asp-controller="SuppliersController" asp-action="Index">Suppliers</a>
+
                     </a>
                     <a href="#">
                         <i class="fas fa-briefcase"></i>
@@ -111,10 +124,10 @@
                             <a href="#">Request Stock Adjustment Voucher</a>
                         </li>
                     </ul>
-                    <a href="#">
-                        <i class="fas fa-briefcase"></i>
-                        Generate Reports
-                    </a>
+                <a href="#">
+                    <i class="fas fa-briefcase"></i>
+                    Generate Reports
+                </a>
                 </li>
             </ul>
 
@@ -133,10 +146,7 @@
 
                 </div>
 
-                <button type="button" id="sidebarCollapse" class="btn btn-info">
-                    <i class="fas fa-align-left"></i>
-                    <span>Toggle Sidebar</span>
-                </button>
+                
 
         </div>
         </nav>

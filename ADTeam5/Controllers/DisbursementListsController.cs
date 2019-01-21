@@ -6,21 +6,38 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ADTeam5.Models;
+using ADTeam5.ViewModels;
+using ADTeam5.BusinessLogic;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using ADTeam5.Areas.Identity.Data;
 
 namespace ADTeam5.Controllers
 {
+    [Authorize]
+    //this part should add in all controller
     public class DisbursementListsController : Controller
     {
+        private readonly UserManager<ADTeam5User> _userManager;
         private readonly SSISTeam5Context _context;
 
-        public DisbursementListsController(SSISTeam5Context context)
+        BizLogic b = new BizLogic();
+
+        readonly GeneralLogic userCheck;
+
+        public DisbursementListsController(SSISTeam5Context context, UserManager<ADTeam5User> userManager)
         {
             _context = context;
+            _userManager = userManager;
+            userCheck = new GeneralLogic(context);
         }
-
         // GET: DisbursementLists
         public async Task<IActionResult> Index()
         {
+            ADTeam5User user = await _userManager.GetUserAsync(HttpContext.User);
+            List<string> identity =userCheck.checkUserIdentityAsync(user);
+            ViewData["Department"] = identity[0];
+            ViewData["role"] = identity[1];
             var sSISTeam5Context = _context.DisbursementList.Include(d => d.CollectionPointNavigation).Include(d => d.DepartmentCodeNavigation).Include(d => d.RepNavigation);
             return View(await sSISTeam5Context.ToListAsync());
         }
@@ -33,22 +50,27 @@ namespace ADTeam5.Controllers
                 return NotFound();
             }
 
-            var disbursementList = await _context.DisbursementList
-                .Include(d => d.CollectionPointNavigation)
-                .Include(d => d.DepartmentCodeNavigation)
-                .Include(d => d.RepNavigation)
-                .FirstOrDefaultAsync(m => m.Dlid == id);
-            if (disbursementList == null)
+            List<RecordDetails> rd = b.GenerateDisbursementListDetails("ENGL");
+            List<DisbursementListDetails> result = new List<DisbursementListDetails>();
+            foreach (var item in rd)
             {
-                return NotFound();
-            }
+                DisbursementListDetails dlList = new DisbursementListDetails();
 
-            return View(disbursementList);
+                dlList.ItemNumber = item.ItemNumber;
+                //srList.ItemName = item.ItemNumberNavigation.ItemName;
+                dlList.ItemName = _context.Catalogue.FirstOrDefault(x => x.ItemNumber == item.ItemNumber).ItemName;
+                dlList.Quantity = item.Quantity;
+                dlList.Remark = item.Remark;
+                
+                result.Add(dlList);
+            }
+            return View(result);
         }
 
         // GET: DisbursementLists/Create
         public IActionResult Create()
         {
+            
             ViewData["CollectionPointId"] = new SelectList(_context.CollectionPoint, "CollectionPointId", "CollectionPointName");
             ViewData["DepartmentCode"] = new SelectList(_context.Department, "DepartmentCode", "DepartmentCode");
             ViewData["RepId"] = new SelectList(_context.User, "UserId", "DepartmentCode");
@@ -70,7 +92,7 @@ namespace ADTeam5.Controllers
             }
             ViewData["CollectionPointId"] = new SelectList(_context.CollectionPoint, "CollectionPointId", "CollectionPointName", disbursementList.CollectionPointId);
             ViewData["DepartmentCode"] = new SelectList(_context.Department, "DepartmentCode", "DepartmentCode", disbursementList.DepartmentCode);
-            ViewData["RepId"] = new SelectList(_context.User, "UserId", "DepartmentCode", disbursementList.RepId);
+            //ViewData["RepId"] = new SelectList(_context.User, "UserId", "DepartmentCode", disbursementList.RepId);
             return View(disbursementList);
         }
 
@@ -89,7 +111,7 @@ namespace ADTeam5.Controllers
             }
             ViewData["CollectionPointId"] = new SelectList(_context.CollectionPoint, "CollectionPointId", "CollectionPointName", disbursementList.CollectionPointId);
             ViewData["DepartmentCode"] = new SelectList(_context.Department, "DepartmentCode", "DepartmentCode", disbursementList.DepartmentCode);
-            ViewData["RepId"] = new SelectList(_context.User, "UserId", "DepartmentCode", disbursementList.RepId);
+            //ViewData["RepId"] = new SelectList(_context.User, "UserId", "DepartmentCode", disbursementList.RepId);
             return View(disbursementList);
         }
 
@@ -127,7 +149,7 @@ namespace ADTeam5.Controllers
             }
             ViewData["CollectionPointId"] = new SelectList(_context.CollectionPoint, "CollectionPointId", "CollectionPointName", disbursementList.CollectionPointId);
             ViewData["DepartmentCode"] = new SelectList(_context.Department, "DepartmentCode", "DepartmentCode", disbursementList.DepartmentCode);
-            ViewData["RepId"] = new SelectList(_context.User, "UserId", "DepartmentCode", disbursementList.RepId);
+            //ViewData["RepId"] = new SelectList(_context.User, "UserId", "DepartmentCode", disbursementList.RepId);
             return View(disbursementList);
         }
 

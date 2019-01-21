@@ -1,0 +1,45 @@
+﻿@model ADTeam5.Models.CollectionPoint
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+
+<form asp-action="Index" method="post">
+    <h1>Change Collection Point</h1>
+
+    @if (TempData["Alert1"] != null)
+    {
+        <div class="alert alert-success" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aira-label="close">
+                <span aria-hidden="true">&times</span>
+            </button>
+            @TempData["Alert1"]
+        </div>
+    }
+    @if (TempData["Alert2"] != null)
+    {
+        <div class="alert alert-danger" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aira-label="close">
+                <span aria-hidden="true">&times</span>
+            </button>
+            @TempData["Alert2"]
+        </div>
+    }
+
+    <div class="form-group">
+        <p>Current Collection Point: @ViewData["Name"]</p>
+
+    </div>
+    <div class="form-group">
+        <p>
+            Change Collection Point:
+            @Html.DropDownListFor(m => m.CollectionPointId, new SelectList(ViewBag.listofitems, "CollectionPointId", "CollectionPointName"), "Select")
+        </p>
+    </div>
+
+    <div class="form-group">
+        <input type="reset" value="Cancel" />
+        <input type="Submit" value="Submit" />
+    </div>
+</form>

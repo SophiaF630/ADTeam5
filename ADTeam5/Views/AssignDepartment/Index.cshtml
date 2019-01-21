@@ -1,0 +1,52 @@
+﻿@model ADTeam5.Models.User
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<form asp-action="Index" method="post">
+    <h1>Assign Department Representative</h1>
+
+    @if (TempData["Alert1"] != null)
+    {
+        <div class="alert alert-success" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aira-label="close">
+                <span aria-hidden="true">&times</span>
+            </button>
+            @TempData["Alert1"]
+        </div>
+    }
+    @if (TempData["Alert2"] != null)
+    {
+        <div class="alert alert-danger" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aira-label="close">
+                <span aria-hidden="true">&times</span>
+            </button>
+            @TempData["Alert2"]
+        </div>
+    }
+
+    <p>Current Representative: @ViewData["CurrentRepName"]</p>
+
+    <div class="form-group">
+        <p>
+            New Representative:
+            @Html.DropDownListFor(m => m.UserId, new SelectList(ViewBag.listofitems, "UserId", "Name"), "Select")
+        </p>
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Save" />
+    </div>
+</form>
+
+@*<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        function selectedItem(ddlItem) {
+            var selvalue = ddlItem.selectedItem;
+            var seltext = ddlItem.options[ddlItem.selectedIndex].innerHTML;
+            $('#txt').val(seltext);
+        }
+    </script>*@
+@*new { @onChange = "selectedItem(this)" }*@
+@*<label asp-for="Name"></label>*@
+@*@Html.DropDownListFor(model => model.UserId, new SelectList(Model.Name, "UserId", "Name", Model.UserId))*@

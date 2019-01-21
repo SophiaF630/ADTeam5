@@ -1,0 +1,43 @@
+﻿@model IEnumerable<ADTeam5.ViewModels.OutstandingOrderDetails>
+
+@{
+    ViewData["Title"] = "Details";
+}
+<h1></h1>
+<h2>Details</h2>
+<p>Requisition Form No: @ViewData["RRID"]</p>
+<p>Employee Name: @ViewData["Name"]</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ItemName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Quantity)
+            </th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ItemName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Quantity)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+<form asp-controller="OutstandingOrder" asp-action="RejectOrder" method="post">
+    Reason For Rejection: <input type="text" name="rejectReason"> <button type="submit">Reject</button>
+</form>
+
+<form asp-controller="OutstandingOrder" asp-action="ApproveOrder" method="post"><button type="submit">Approve</button></form>
