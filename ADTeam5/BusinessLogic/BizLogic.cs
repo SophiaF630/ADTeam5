@@ -218,5 +218,96 @@ namespace ADTeam5.BusinessLogic
 
             return result;
         }
+        public Models.Department getDepartmentDetails(string dept)
+        {
+            var q1 = _context.Department.Where(x => x.DepartmentCode == dept).First();
+            Models.Department d = q1;
+            return d;
+        }
+
+        public Models.User getUser(int userid)
+        {
+            var q = _context.User.Where(x => x.UserId == userid).First();
+            Models.User u= q;
+            return u;
+        }
+
+        public string  getCurrentDeputyHeadName(int currentDeputyHeadId)
+        {
+            var q = _context.User.Where(x => x.UserId == currentDeputyHeadId).First();
+            Models.User u = q;
+            string name = u.Name;
+            return name;
+        }
+
+        public Models.DepartmentCoveringHeadRecord findCurrentDeputyHeadToEdit(int currentDeputyHeadId)
+        {
+            DateTime today = DateTime.Now;
+            var q = _context.DepartmentCoveringHeadRecord.Where(x => x.UserId == currentDeputyHeadId && x.EndDate >= today).First();
+            DepartmentCoveringHeadRecord d2 = new DepartmentCoveringHeadRecord();
+            d2 = q;
+            return d2;
+        }
+
+        public List<User> populateAssignDeputyDropDownList(string dept, int repid, int headid)
+        {
+            var q = _context.User.Where(x => x.DepartmentCode == dept && x.UserId != repid && x.UserId != headid).OrderBy(x => x.Name).ToList();
+            List<User> u = new List<User>();
+            u = q;
+            return u;
+        }
+
+        public List<EmployeeRequestRecord> searchRequestByDateAndDept(DateTime startDate, DateTime endDate, string dept)
+        {
+            var t = _context.EmployeeRequestRecord.Where(s => s.RequestDate >= startDate && s.RequestDate <= endDate && s.DepCode == dept);
+            List<EmployeeRequestRecord> list = new List<EmployeeRequestRecord>();
+            list = t.ToList();
+            return list;
+        }
+
+        public List<EmployeeRequestRecord> searchRequestByDept(string dept)
+        {
+            return _context.EmployeeRequestRecord.Where(x => x.DepCode == dept).ToList();
+        }
+
+        public EmployeeRequestRecord searchEmployeeRequestByRRID(string rrid)
+        {
+            var q1 = _context.EmployeeRequestRecord.Where(x => x.Rrid == rrid).First();
+            EmployeeRequestRecord e1 = new EmployeeRequestRecord();
+            e1 = q1;
+            return e1;
+        }
+
+        public List<RecordDetails> searchRecordDetailsByRRID(string rrid)
+        {
+           return _context.RecordDetails.Where(x => x.Rrid == rrid).ToList();
+        }
+
+        public DisbursementList searchDLByPendingDeliveryAndDept(string dept)
+        {
+            return _context.DisbursementList.Where(x => x.DepartmentCode == dept && x.Status == "Pending Delivery").First(); 
+        }
+        public string getCollectionPointName(int currentCollectionPoint)
+        {
+            var q2 = _context.CollectionPoint.Where(x => x.CollectionPointId == currentCollectionPoint).First();
+            CollectionPoint c1 = q2;
+            string currentName = c1.CollectionPointName;
+            return currentName;
+        }
+        public List<CollectionPoint> populateCPDropDownList(int currentCollectionPoint)
+        {
+            return _context.CollectionPoint.Where(x => x.CollectionPointId != currentCollectionPoint).ToList();
+        }
+        public void Save()
+        {
+            _context.SaveChanges();
+        }
+
+        public List<EmployeeRequestRecord> searchOutstandingRequests(string dept)
+        {
+            var q = _context.EmployeeRequestRecord.Where(x => x.Status == "Submitted" && x.DepCode == dept);
+            return q.ToList();
+        }
+
     }
 }

@@ -7,10 +7,11 @@ namespace ADTeam5.Models
     public partial class EmployeeRequestRecord
     {
         public string Rrid { get; set; }
+
         [Display(Name ="Request Date")]
         [DataType(DataType.Date)]
-        [NotBeforeTodayV]
         public DateTime RequestDate { get; set; }
+
         [DataType(DataType.Date)]
         [EndLaterThanV("RequestDate")]
         public DateTime? CompleteDate { get; set; }
@@ -18,7 +19,6 @@ namespace ADTeam5.Models
         [Display(Name ="Employee ID")]
         public int DepEmpId { get; set; }
         public int? DepHeadId { get; set; }
-        [MaxLength(4, ErrorMessage = "Invalid Department Code")]
         public string DepCode { get; set; }
         [StringLength(50), RegularExpression(@"^[A-Z]+[a-zA-Z'\s]*$")]
         public string Status { get; set; }

@@ -69,34 +69,32 @@ namespace ADTeam5.Controllers.Department
                 return View(t);
             }
 
-          
         }
 
-
-        public IActionResult Details (string Dlid)
+        public IActionResult Details(string Dlid)
         {
             SSISTeam5Context e = new SSISTeam5Context();
-            dlid = Dlid;
-            List<ViewExpenditure> ve = new List<ViewExpenditure>();
-            string a = "1" + dlid + "2";
-            ViewData["id"] = a;
-            var q = (from x in e.Catalogue
+
+
+            var p = (from x in e.Catalogue
                      join b in e.RecordDetails on x.ItemNumber equals b.ItemNumber
                      join c in e.DisbursementList on b.Rrid equals c.Dlid
-                     where c.Dlid.Equals(Dlid) 
+                     where c.Dlid.Equals(Dlid) && c.Status.Equals("Completed")
 
-                     select new ViewExpenditure()
+                     group new { x,b,c} by new { x.Category } into g
+
+                     select new Renderview
+
                      {
-                         orderno = c.Dlid,
-                         quantity = b.Quantity,
-                         price = x.Supplier1Price,
-                         subtotal = b.Quantity * x.Supplier1Price,
-                         itemname= x.ItemName
-                        
-
+                         Category = g.Key.Category,
+                         Quantity = g.Sum(a=>a.b.Quantity),
+                         Subtotal= g.Sum(a=> a.x.Supplier1Price* a.b.Quantity)
+                                         
                      }).ToList();
 
-            return View(q);
+            ViewBag.orderid = Dlid;
+            return View(p);
+        
         }
     }
 }

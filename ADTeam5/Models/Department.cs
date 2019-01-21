@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace ADTeam5.Models
@@ -30,7 +29,7 @@ namespace ADTeam5.Models
         public int? CoveringHeadId { get; set; }
         [StringLength(50)]
         public string CollectionPassword { get; set; }
-        [Display(Name ="Collection Point")]
+
         public virtual CollectionPoint CollectionPoint { get; set; }
         public virtual User CoveringHead { get; set; }
         public virtual User Head { get; set; }

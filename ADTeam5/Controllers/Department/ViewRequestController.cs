@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ADTeam5.Areas.Identity.Data;
+using ADTeam5.BusinessLogic;
 using ADTeam5.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -11,18 +14,32 @@ namespace ADTeam5.Controllers.Department
 {
     public class ViewRequestController : Controller
     {
-        private readonly SSISTeam5Context context;
-        static string rrid;
+        static int userid;
+        static string dept;
+        static string role;
 
-        public ViewRequestController(SSISTeam5Context context)
+        private readonly SSISTeam5Context context;
+        private readonly UserManager<ADTeam5User> _userManager;
+        readonly GeneralLogic userCheck;
+        static string rrid;
+        BizLogic b = new BizLogic();
+
+        public ViewRequestController(SSISTeam5Context context, UserManager<ADTeam5User> userManager)
         {
             this.context = context;
+            _userManager = userManager;
+            userCheck = new GeneralLogic(context);
         }
-        public IActionResult Index()
+
+        public async Task<IActionResult> Index()
         {
-            //must filter by empId and make sure that DL and PO do not show
-            var q = context.EmployeeRequestRecord;
-            return View(q);
+            ADTeam5User user = await _userManager.GetUserAsync(HttpContext.User);
+            userid = user.WorkID;
+            List<string> identity = userCheck.checkUserIdentityAsync(user);
+            dept = identity[0];
+            role = identity[1];
+
+            return View(b.searchRequestByDept(dept));
         }
 
         [HttpPost]
@@ -34,32 +51,46 @@ namespace ADTeam5.Controllers.Department
 
             if (startDate != null && endDate != null)
             {
-                var t = context.EmployeeRequestRecord.Where(s => s.RequestDate >= startDate && s.RequestDate <= endDate);
-                return View(t);
+                if (ModelState.IsValid)
+                {
+                    return View(b.searchRequestByDateAndDept(startDate, endDate, dept));
+                }
+                else
+                {
+                    TempData["Alert2"] = "Please Fill in All Details!";
+                    return RedirectToAction("Index");
+                }
+            }
+            if (startDate > endDate || endDate < startDate)
+            {
+                //TempData["Alert1"] = "Start end error";
+                //return RedirectToAction("Index");
+                return Content("start end error");
             }
             else
             {
-                var t = context.EmployeeRequestRecord;
-                return View(t);
+                return View(b.searchRequestByDept(dept));
             }
+
         }
         public IActionResult Details(string id)
         {
             rrid = id;
-
             ViewData["RRID"] = rrid;
-            var q1 = context.EmployeeRequestRecord.Where(x => x.Rrid == rrid).First();
-            EmployeeRequestRecord e1 = q1;
+            //var q1 = context.EmployeeRequestRecord.Where(x => x.Rrid == rrid).First();
+            EmployeeRequestRecord e1 = new EmployeeRequestRecord();
+            e1 = b.searchEmployeeRequestByRRID(rrid);
 
-            if (e1.Status == "Approved")
+            if (e1.Status == "Submitted")
             {
-                var q = context.RecordDetails.Where(x => x.Rrid == id);
-                return View(q);
+                return RedirectToAction("Edit");
             }
             else
             {
-                return RedirectToAction("Edit");
-
+                //var q = context.RecordDetails.Where(x => x.Rrid == id);
+                List<RecordDetails> rd1 = new List<RecordDetails>();
+                rd1 = b.searchRecordDetailsByRRID(rrid);
+                return View(rd1);
             }
         }
 
@@ -67,8 +98,8 @@ namespace ADTeam5.Controllers.Department
         {
             rrid = id;
             ViewData["RRID"] = rrid;
-            var q = context.RecordDetails.Where(x => x.Rrid == id);
-            return View(q);
+            //var q = context.RecordDetails.Where(x => x.Rrid == id);
+            return View(b.searchRecordDetailsByRRID(rrid));
         }
     }
 }

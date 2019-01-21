@@ -8,9 +8,7 @@ namespace ADTeam5.Models
     {
         public int TransId { get; set; }
         [DataType(DataType.Date)]
-        [NotBeforeTodayV]
         public DateTime Date { get; set; }
-        [MaxLength(5)]
         public string ItemNumber { get; set; }
         [StringLength(50)]
         public string RecordId { get; set; }
@@ -20,6 +18,7 @@ namespace ADTeam5.Models
         [RegularExpression(@"^[0-9]*$", ErrorMessage = "Numbers only")]
         [Range(0, 10000, ErrorMessage = "Amount cannot be negative")]
         public int Balance { get; set; }
+
         public virtual Catalogue ItemNumberNavigation { get; set; }
     }
 }

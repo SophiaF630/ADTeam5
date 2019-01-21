@@ -36,21 +36,20 @@
     <tbody>
         @foreach (var item in Model)
         {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.CompleteDate)
-            </td>
-            <td>
-                
-                <a asp-action="Details" asp-route-Dlid="@item.Dlid">
-                    @Html.DisplayFor(modelItem => item.Dlid)
-                </a>
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Status)
-            </td>
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CompleteDate)
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-Dlid="@item.Dlid">
+                        @Html.DisplayFor(modelItem => item.Dlid)
+                    </a>
+                    </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
 
-        </tr>
+            </tr>
         }
     </tbody>
 </table>

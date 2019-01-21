@@ -21,10 +21,8 @@ namespace ADTeam5.Models
         [MaxLength(4, ErrorMessage = "Maximum 4 digits")]
         public string ItemNumber { get; set; }
         [Required(ErrorMessage = "*This field is required")]
-        [MaxLength(10), RegularExpression(@"(^[A-Z]+[a-zA-Z'\s]*$)", ErrorMessage ="Alphabets only")]
         public string Category { get; set; }
         [Required(ErrorMessage = "*This field is required")]
-        [MaxLength(50)]
         [Display(Name = "Item Name")]
         public string ItemName { get; set; }
         [Display(Name = "Reorder Level")]
@@ -36,10 +34,8 @@ namespace ADTeam5.Models
         [Range(0, 10000, ErrorMessage = "Reorder Quantity cannot be negative")]
         public int? ReorderQty { get; set; }
         [Display(Name = "Unit of Measure")]
-        [StringLength(10), RegularExpression(@"^[A-Z]+[a-zA-Z'\s]*$")]
         public string UnitOfMeasure { get; set; }
         [ReadOnly(true)]
-        [Range(0, 10000, ErrorMessage = "Stock cannot be negative")]
         public int Stock { get; set; }
         [RegularExpression(@"^[0-9]*$", ErrorMessage = "Numbers only")]
         [Range(0, 10000, ErrorMessage = "Amount cannot be negative")]
@@ -68,7 +64,6 @@ namespace ADTeam5.Models
         [ScaffoldColumn(false)]
         [DataType(DataType.Date)]
         public DateTime? Last3OrderDate { get; set; }
-        [MaxLength(50)]
         public string Location { get; set; }
 
         [Display(Name = "Supplier 1")]
