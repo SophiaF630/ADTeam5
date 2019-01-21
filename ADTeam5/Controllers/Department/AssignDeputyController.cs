@@ -49,7 +49,7 @@ namespace ADTeam5.Controllers.Department
                 ViewData["CurrentDeputyHeadStartDate"] = d2.StartDate.ToShortDateString();
                 ViewData["CurrentDeputyHeadEndDate"] = d2.EndDate.ToShortDateString();
             }
-<<<<<<< HEAD
+
                 List<User> userList = new List<User>();
                 Models.Department d = b.getDepartmentDetails(dept);
                 int repid = d.RepId;
@@ -57,22 +57,7 @@ namespace ADTeam5.Controllers.Department
                 userList = b.populateAssignDeputyDropDownList(dept, repid, headid);
                 ViewBag.listofitems = userList;
                 return View();
-=======
 
-            List<User> u = new List<User>();
-
-            Models.Department d = b.getDepartmentDetails(dept);
-            int repid = d.RepId;
-            int headid = d.HeadId;
-
-            u = context.User.Where(x => x.DepartmentCode == dept && x.UserId != repid && x.UserId != headid).OrderBy(x => x.Name).ToList();
-<<<<<<< HEAD
-=======
-
->>>>>>> 08ac98e86165fd2d07115b3a2444bda46a155c1c
-            ViewBag.listofitems = u;
-            return View();
->>>>>>> f6eb8b4697ba5f3bdb8083e6d9f8db26fae5cc4e
         }
 
         [HttpPost]
@@ -114,13 +99,13 @@ namespace ADTeam5.Controllers.Department
                 }
                     return RedirectToAction("Index");
             }
-<<<<<<< HEAD
-            DateTime dt = DateTime.Now;
-           
-            if (startdate <dt)
-=======
-            else
->>>>>>> 08ac98e86165fd2d07115b3a2444bda46a155c1c
+
+            //DateTime dt = DateTime.Now;
+
+            //if (startdate <dt)
+
+            //else
+
             {
                 return RedirectToAction("Index");
             }
