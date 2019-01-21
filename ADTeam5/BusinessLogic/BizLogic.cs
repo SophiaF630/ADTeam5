@@ -303,6 +303,11 @@ namespace ADTeam5.BusinessLogic
             _context.SaveChanges();
         }
 
+        public List<EmployeeRequestRecord> searchOutstandingRequests(string dept)
+        {
+            var q = _context.EmployeeRequestRecord.Where(x => x.Status == "Submitted" && x.DepCode == dept);
+            return q.ToList();
+        }
 
     }
 }

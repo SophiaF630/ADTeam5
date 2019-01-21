@@ -38,7 +38,7 @@ namespace ADTeam5.Controllers.Department
             role = identity[1];
 
             Models.Department d1 = b.getDepartmentDetails(dept);
-            
+
             if (d1.CoveringHeadId != null)
             {
                 edit = true;
@@ -50,25 +50,13 @@ namespace ADTeam5.Controllers.Department
                 ViewData["CurrentDeputyHeadEndDate"] = d2.EndDate.ToShortDateString();
             }
 
-                List<User> userList = new List<User>();
-                Models.Department d = b.getDepartmentDetails(dept);
-                int repid = d.RepId;
-                int headid = d.HeadId;
-                userList = b.populateAssignDeputyDropDownList(dept, repid, headid);
-                ViewBag.listofitems = userList;
-                return View();
-
-<<<<<<< HEAD
+            List<User> userList = new List<User>();
             Models.Department d = b.getDepartmentDetails(dept);
             int repid = d.RepId;
             int headid = d.HeadId;
-
-            u = context.User.Where(x => x.DepartmentCode == dept && x.UserId != repid && x.UserId != headid).OrderBy(x => x.Name).ToList();
-
-            ViewBag.listofitems = u;
+            userList = b.populateAssignDeputyDropDownList(dept, repid, headid);
+            ViewBag.listofitems = userList;
             return View();
-=======
->>>>>>> a7645545c5d80cecfe8f4bdcdf1c436ac173793d
         }
 
         [HttpPost]
@@ -114,18 +102,15 @@ namespace ADTeam5.Controllers.Department
                     {
                         TempData["Alert3"] = "Edits Saved Successfully";
                     }
-                        TempData["Alert2"] = "Start date cannot be in the past";
+                    TempData["Alert2"] = "Start date cannot be in the past";
                 }
                 else
                 {
                     TempData["Alert1"] = "Deputy Head Appointed Successfully";
                 }
-                    return RedirectToAction("Index");
-                
-            }
-<<<<<<< HEAD
-=======
+                return RedirectToAction("Index");
 
+            }
             //DateTime dt = DateTime.Now;
 
             //if (startdate <dt)
@@ -133,8 +118,8 @@ namespace ADTeam5.Controllers.Department
             //else
 
             {
->>>>>>> a7645545c5d80cecfe8f4bdcdf1c436ac173793d
                 return RedirectToAction("Index");
+            }
         }
     }
 }
