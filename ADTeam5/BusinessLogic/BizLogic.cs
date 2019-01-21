@@ -124,7 +124,7 @@ namespace ADTeam5.BusinessLogic
 
             // Check if the disbursement list exists in the database
             var dl = _context.DisbursementList.FirstOrDefault(x => x.DepartmentCode == depCode && x.Status == "Pending Delivery");
-            if (errList != null)
+            if (errList.Count != 0)
             {
                 if (dl == null)
                 {

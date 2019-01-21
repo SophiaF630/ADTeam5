@@ -47,6 +47,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             <script src="~/lib/DataTables/DataTables-1.10.18/js/jquery.dataTables.js"></script>
             <script src="~/lib/DataTables/DataTables-1.10.18/js/dataTables.bootstrap4.js"></script>*@
 
+        
     </environment>
 
     <environment exclude="Development">
@@ -275,8 +276,11 @@ desired effect
         <!-- AdminLTE App -->
         <script src="~/lib/js/adminlte.min.js"></script>
         <!-- Optionally, you can add Slimscroll and FastClick plugins.
-        Both of these plugins are recommended to enhance the
-        user experience. -->
+    Both of these plugins are recommended to enhance the
+    user experience. -->
+        <!-- ajax -->
+        <script src="~/assets/js/jquery.unobtrusive-ajax.min.js"></script>
+
     </environment>
     <environment exclude="Development">
         <script src="https://cdn.bootcss.com/jqueryh/3.2.1/jquery.min.js"
