@@ -78,8 +78,8 @@ namespace ADTeam5.BusinessLogic
             string result = prefix + ID_string;
             List<string> rdidList = new List<string>();
             foreach (RecordDetails rd in rdList)
-            {                
-                rdidList.Add(rd.Rrid);                
+            {
+                rdidList.Add(rd.Rrid);
             }
             while (rdidList.Contains(result))
             {
@@ -101,8 +101,8 @@ namespace ADTeam5.BusinessLogic
 
             //Check if a pending delivery disbursement list exists
             List<DisbursementList> dlList = _context.DisbursementList
-                .Where(x => x.DepartmentCode == depCode && x.Status == "Pending Delivery").ToList();    
-            
+                .Where(x => x.DepartmentCode == depCode && x.Status == "Pending Delivery").ToList();
+
             //Get EmployeeRequestRecord of a department, check if it's null
             List<EmployeeRequestRecord> errList = _context.EmployeeRequestRecord
                 .Where(x => x.CompleteDate >= start && x.CompleteDate <= cutoff && x.DepCode == depCode && x.Status == "Approved")
@@ -167,10 +167,10 @@ namespace ADTeam5.BusinessLogic
                     }
                     _context.SaveChanges();
                 }
-                
+
                 result = _context.RecordDetails.Where(x => x.Rrid == dl.Dlid).ToList();
             }
-            return result;            
+            return result;
         }
 
         //Generate Stationery Retrieval List for a department
@@ -180,9 +180,9 @@ namespace ADTeam5.BusinessLogic
 
             //get pending delivery disbursement list
             List<DisbursementList> dlList = _context.DisbursementList.Where(x => x.Status == "Pending Delivery").ToList();
-           
+
             //Find all needed Disbursement List ID, add to a list
-            List<string> dlidList= new List<string>();
+            List<string> dlidList = new List<string>();
             foreach (DisbursementList dl in dlList)
             {
                 dlidList.Add(dl.Dlid);
@@ -203,8 +203,8 @@ namespace ADTeam5.BusinessLogic
 
 
             var q = from x in selecteddlList
-                     group x by x.ItemNumber into g
-                     select new { g.Key, Quantiy = g.Sum(y => y.Quantity) };
+                    group x by x.ItemNumber into g
+                    select new { g.Key, Quantiy = g.Sum(y => y.Quantity) };
 
             foreach (var i in q.ToList())
             {
@@ -228,11 +228,11 @@ namespace ADTeam5.BusinessLogic
         public Models.User getUser(int userid)
         {
             var q = _context.User.Where(x => x.UserId == userid).First();
-            Models.User u= q;
+            Models.User u = q;
             return u;
         }
 
-        public string  getCurrentDeputyHeadName(int currentDeputyHeadId)
+        public string getCurrentDeputyHeadName(int currentDeputyHeadId)
         {
             var q = _context.User.Where(x => x.UserId == currentDeputyHeadId).First();
             Models.User u = q;
@@ -257,6 +257,30 @@ namespace ADTeam5.BusinessLogic
             return u;
         }
 
+<<<<<<< HEAD
+        //getting details of expenditure
+        public List<Renderview> GetExpenditureDetails(string Dlid)
+        {
+            var p = (from x in _context.Catalogue
+                     join b in _context.RecordDetails on x.ItemNumber equals b.ItemNumber
+                     join c in _context.DisbursementList on b.Rrid equals c.Dlid
+                     where c.Dlid.Equals(Dlid) && c.Status.Equals("Completed")
+
+                     group new { x, b, c } by new { x.Category } into g
+
+                     select new Renderview
+
+                     {
+                         Category = g.Key.Category,
+                         Quantity = g.Sum(a => a.b.Quantity),
+                         Subtotal = g.Sum(a => a.x.Supplier1Price * a.b.Quantity)
+
+                     });
+
+          
+            return (p.ToList());
+            
+=======
         public List<EmployeeRequestRecord> searchRequestByDateAndDept(DateTime startDate, DateTime endDate, string dept)
         {
             var t = _context.EmployeeRequestRecord.Where(s => s.RequestDate >= startDate && s.RequestDate <= endDate && s.DepCode == dept);
@@ -307,6 +331,7 @@ namespace ADTeam5.BusinessLogic
         {
             var q = _context.EmployeeRequestRecord.Where(x => x.Status == "Submitted" && x.DepCode == dept);
             return q.ToList();
+>>>>>>> a1cc7950dad4628fdeeb75d2da22bd9c70cfd5e2
         }
 
     }

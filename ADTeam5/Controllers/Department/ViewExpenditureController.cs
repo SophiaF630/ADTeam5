@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using ADTeam5.Models;
 using ADTeam5.ViewModels;
+using ADTeam5.BusinessLogic;
 
 namespace ADTeam5.Controllers.Department
 {
@@ -13,6 +14,8 @@ namespace ADTeam5.Controllers.Department
         private readonly SSISTeam5Context context;
         static string dlid;
         decimal sum;
+
+        BizLogic b = new BizLogic();
 
         public ViewExpenditureController(SSISTeam5Context context)
         {
@@ -75,25 +78,27 @@ namespace ADTeam5.Controllers.Department
         {
             SSISTeam5Context e = new SSISTeam5Context();
 
+            List<Renderview> rv = new List<Renderview>();
+            rv = b.GetExpenditureDetails(Dlid);
 
-            var p = (from x in e.Catalogue
-                     join b in e.RecordDetails on x.ItemNumber equals b.ItemNumber
-                     join c in e.DisbursementList on b.Rrid equals c.Dlid
-                     where c.Dlid.Equals(Dlid) && c.Status.Equals("Completed")
+            //var p = (from x in e.Catalogue
+            //         join b in e.RecordDetails on x.ItemNumber equals b.ItemNumber
+            //         join c in e.DisbursementList on b.Rrid equals c.Dlid
+            //         where c.Dlid.Equals(Dlid) && c.Status.Equals("Completed")
 
-                     group new { x,b,c} by new { x.Category } into g
+            //         group new { x,b,c} by new { x.Category } into g
 
-                     select new Renderview
+            //         select new Renderview
 
-                     {
-                         Category = g.Key.Category,
-                         Quantity = g.Sum(a=>a.b.Quantity),
-                         Subtotal= g.Sum(a=> a.x.Supplier1Price* a.b.Quantity)
+            //         {
+            //             Category = g.Key.Category,
+            //             Quantity = g.Sum(a=>a.b.Quantity),
+            //             Subtotal= g.Sum(a=> a.x.Supplier1Price* a.b.Quantity)
                                          
-                     }).ToList();
+            //         }).ToList();
 
             ViewBag.orderid = Dlid;
-            return View(p);
+            return View(rv);
         
         }
     }

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ADTeam5.Areas.Identity.Data;
-using ADTeam5.BusinessLogic;
 using ADTeam5.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -22,7 +21,6 @@ namespace ADTeam5.Controllers.Department
         private readonly UserManager<ADTeam5User> _userManager;
         readonly GeneralLogic userCheck;
         static string rrid;
-        BizLogic b = new BizLogic();
 
         public ViewRequestController(SSISTeam5Context context, UserManager<ADTeam5User> userManager)
         {
@@ -39,7 +37,8 @@ namespace ADTeam5.Controllers.Department
             dept = identity[0];
             role = identity[1];
 
-            return View(b.searchRequestByDept(dept));
+            var q = context.EmployeeRequestRecord.Where(x => x.DepCode == dept);
+            return View(q);
         }
 
         [HttpPost]
@@ -53,7 +52,8 @@ namespace ADTeam5.Controllers.Department
             {
                 if (ModelState.IsValid)
                 {
-                    return View(b.searchRequestByDateAndDept(startDate, endDate, dept));
+                    var t = context.EmployeeRequestRecord.Where(s => s.RequestDate >= startDate && s.RequestDate <= endDate && s.DepCode == dept);
+                    return View(t);
                 }
                 else
                 {
@@ -69,28 +69,28 @@ namespace ADTeam5.Controllers.Department
             }
             else
             {
-                return View(b.searchRequestByDept(dept));
+                var t = context.EmployeeRequestRecord.Where(x => x.DepCode == dept);
+                return View(t);
             }
 
         }
         public IActionResult Details(string id)
         {
             rrid = id;
-            ViewData["RRID"] = rrid;
-            //var q1 = context.EmployeeRequestRecord.Where(x => x.Rrid == rrid).First();
-            EmployeeRequestRecord e1 = new EmployeeRequestRecord();
-            e1 = b.searchEmployeeRequestByRRID(rrid);
 
-            if (e1.Status == "Submitted")
+            ViewData["RRID"] = rrid;
+            var q1 = context.EmployeeRequestRecord.Where(x => x.Rrid == rrid).First();
+            EmployeeRequestRecord e1 = q1;
+
+            if (e1.Status == "Approved")
             {
-                return RedirectToAction("Edit");
+                var q = context.RecordDetails.Where(x => x.Rrid == id);
+                return View(q);
             }
             else
             {
-                //var q = context.RecordDetails.Where(x => x.Rrid == id);
-                List<RecordDetails> rd1 = new List<RecordDetails>();
-                rd1 = b.searchRecordDetailsByRRID(rrid);
-                return View(rd1);
+                return RedirectToAction("Edit");
+
             }
         }
 
@@ -98,8 +98,8 @@ namespace ADTeam5.Controllers.Department
         {
             rrid = id;
             ViewData["RRID"] = rrid;
-            //var q = context.RecordDetails.Where(x => x.Rrid == id);
-            return View(b.searchRecordDetailsByRRID(rrid));
+            var q = context.RecordDetails.Where(x => x.Rrid == id);
+            return View(q);
         }
     }
 }
