@@ -62,10 +62,7 @@ namespace ADTeam5.Controllers.Department
             int headid = d.HeadId;
 
             u = context.User.Where(x => x.DepartmentCode == dept && x.UserId != repid && x.UserId != headid).OrderBy(x => x.Name).ToList();
-<<<<<<< HEAD
-=======
 
->>>>>>> 08ac98e86165fd2d07115b3a2444bda46a155c1c
             ViewBag.listofitems = u;
             return View();
         }
@@ -98,27 +95,31 @@ namespace ADTeam5.Controllers.Department
                 }
 
                 context.SaveChanges();
-
-                if(edit == true)
+                DateTime dt = DateTime.Now;
+                //if (edit == true)
+                //{
+                //    if (startdate < dt)
+                //    {
+                //        TempData["Alert2"] = "Start date cannot be in the past";
+                //    }
+                //    TempData["Alert3"] = "Edits Saved Successfully";
+                //}
+                if (startdate < dt)
                 {
-                    TempData["Alert3"] = "Edits Saved Successfully";
+                    if (edit == true && startdate >= dt)
+                    {
+                        TempData["Alert3"] = "Edits Saved Successfully";
+                    }
+                        TempData["Alert2"] = "Start date cannot be in the past";
                 }
                 else
                 {
                     TempData["Alert1"] = "Deputy Head Appointed Successfully";
                 }
                     return RedirectToAction("Index");
+                
             }
-<<<<<<< HEAD
-            DateTime dt = DateTime.Now;
-           
-            if (startdate <dt)
-=======
-            else
->>>>>>> 08ac98e86165fd2d07115b3a2444bda46a155c1c
-            {
                 return RedirectToAction("Index");
-            }
         }
     }
 }
