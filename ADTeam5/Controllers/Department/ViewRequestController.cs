@@ -63,9 +63,9 @@ namespace ADTeam5.Controllers.Department
             }
             if (startDate > endDate || endDate < startDate)
             {
-                //TempData["Alert1"] = "Start end error";
-                //return RedirectToAction("Index");
-                return Content("start end error");
+                TempData["Alert1"] = "Start end error";
+                return RedirectToAction("Index");
+
             }
             else
             {
@@ -83,27 +83,13 @@ namespace ADTeam5.Controllers.Department
 
             if (e1.Status == "Submitted")
             {
-
-
                 return RedirectToAction("Edit", "ViewRequest", new { id });
-
-
-
             }
-
             else
             {
-
                 var q = context.RecordDetails.Where(x => x.Rrid == id);
                 return View(q);
-
-                //List<RecordDetails> rd1 = new List<RecordDetails>();
-                //rd1 = b.searchRecordDetailsByRRID(rrid);
-                //return View(rd1);
-
             }
-      
-            
         }
 
         public IActionResult Edit(string id)
@@ -113,8 +99,7 @@ namespace ADTeam5.Controllers.Department
 
             var q = context.RecordDetails.Where(x => x.Rrid == id).ToList();
             return View(q);
-
-
+            
         }
     }
 }

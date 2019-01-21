@@ -57,7 +57,6 @@ namespace ADTeam5.Controllers.Department
             userList = b.populateAssignDeputyDropDownList(dept, repid, headid);
             ViewBag.listofitems = userList;
             return View();
-
         }
 
         [HttpPost]
@@ -78,45 +77,27 @@ namespace ADTeam5.Controllers.Department
                     d2.UserId = u.UserId;
                     d2.StartDate = startdate;
                     d2.EndDate = enddate;
+                    context.SaveChanges();
                 }
                 else
                 {
-                    Models.DepartmentCoveringHeadRecord d2 = new Models.DepartmentCoveringHeadRecord();
-                    d2.UserId = u.UserId;
-                    d2.StartDate = startdate;
-                    d2.EndDate = enddate;
-                    context.Add(d2);
+                     Models.DepartmentCoveringHeadRecord d2 = new Models.DepartmentCoveringHeadRecord();
+                     d2.UserId = u.UserId;
+                     d2.StartDate = startdate;
+                     d2.EndDate = enddate;
+                     context.Add(d2);
+                     context.SaveChanges();
                 }
 
-                context.SaveChanges();
-
-                //if (edit == true)
-                //{
-                //    if (startdate < dt)
-                //    {
-                //        TempData["Alert2"] = "Start date cannot be in the past";
-                //    }
-                //    TempData["Alert3"] = "Edits Saved Successfully";
-                //}
-                if (startdate < dt)
+             
+                if (startdate < dt || enddate < startdate)
                 {
-                    if (edit == true && startdate >= dt)
-                    {
-                        TempData["Alert3"] = "Edits Saved Successfully";
-                    }
-                    TempData["Alert2"] = "Start date cannot be in the past";
-
+                    TempData["Alert2"] = "Please check your dates";
                 }
-                else if (enddate < startdate)
+                else if (edit == true && startdate >= dt)
                 {
-                    TempData["Alert2"] = "End date cannot be earlier than start date";
-
+                    TempData["Alert3"] = "Edits Saved Successfully";
                 }
-                else
-                {
-                    TempData["Alert1"] = "Deputy Head Appointed Successfully";
-                }
-
                 return RedirectToAction("Index");
 
             }
