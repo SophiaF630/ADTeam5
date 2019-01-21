@@ -4,11 +4,17 @@
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <UserSecretsId>aspnet-ADTeam5-AF78E59E-E0AC-4B87-8493-5931C5EA6D55</UserSecretsId>
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
+    <TypeScriptToolsVersion>3.1</TypeScriptToolsVersion>
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="Views\DisbursementLists\Delete.cshtml" />
+    <Content Remove="Views\IssueVoucher\Delete.cshtml" />
+    <Content Remove="Views\IssueVoucher\Details.cshtml" />
     <Content Remove="Views\StationeryRetrievalList\Create.cshtml" />
     <Content Remove="Views\StationeryRetrievalList\Delete.cshtml" />
+    <Content Remove="Views\StationeryRetrievalList\Details.cshtml" />
+    <Content Remove="Views\StationeryRetrievalList\Edit.cshtml" />
   </ItemGroup>
 
 
@@ -16,6 +22,11 @@
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.0" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <Folder Include="wwwroot\lib\mdbootstrap\" />
   </ItemGroup>
 
 </Project>

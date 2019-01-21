@@ -8,8 +8,11 @@ namespace ADTeam5.Controllers
 {
     public class Test2Controller : Controller
     {
-        public IActionResult Index()
+        public IActionResult Sidebar()
         {
+
+            //ViewBag.itemname = new Bizlogic1().GetItemDescription;
+
             return View();
         }
     }

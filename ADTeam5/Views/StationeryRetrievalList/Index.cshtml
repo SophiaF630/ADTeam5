@@ -1,66 +1,206 @@
 ﻿@model IEnumerable<ADTeam5.ViewModels.StationeryRetrievalList>
-
 @{
     ViewData["Title"] = "Index";
 }
+@*<style>
+        .page-item.active .page-link {
+            background-color: lightsteelblue;
+        }
+    </style>*@
+
+
+
+@*<script src="~/lib/jquery-editable/bootstable_withoutdelete.js"></script>*@
+
+
+@*<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>*@
+
+
 <style>
+
     .page-item.active .page-link {
         background-color: #8e9eab;
     }
-</style>
-<style>
+
     .page-item.active .page-link {
-        border-color:#000000;
+        border-color: #000000;
     }
 </style>
 
-<h1>Stationery Retrieval List</h1>
 
+
+
+<h1>Stationery Retrieval List</h1>
 <div class="container">
-    <div class="row">
-        <div class="col-12">
-            <table id="StationeryRetrievalList" class="table table-striped table-bordered" style="width: 100%;">
-                <thead>
-                    <tr>
-                        <th>
-                            @Html.DisplayNameFor(model => model.ItemNumber)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.ItemName)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Quantity)
-                        </th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model)
-                    {
+    <div class="form-group">
+        <div class="row">
+            <div class="col-12">
+                <table id="StationeryRetrievalList" class="table table-striped table-bordered" style="width: 100%;">
+                    <thead>
                         <tr>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.ItemNumber)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.ItemName)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Quantity)
-                            </td>
-                            <td>
-                                <a asp-action="Edit" asp-route-id="@item.ItemNumber">Edit</a> |
-                                <a asp-action="Details" asp-route-id="@item.ItemNumber">Details</a> |
-                                <a asp-action="Delete" asp-route-id="@item.ItemNumber">Delete</a> |
-                                <a asp-action="Voucher" asp-route-id="@item.ItemNumber">Add to Voucher</a>
-                            </td>
+                            <th>
+                                @Html.DisplayNameFor(model => model.ItemNumber)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.ItemName)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Quantity)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.QuantityRetrieved)
+                            </th>
+                            <th></th>
+                            <th></th>
                         </tr>
-                    }
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="ItemNumber">
+                                    @Html.DisplayFor(modelItem => item.ItemNumber)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ItemName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Quantity)
+                                </td>
+                                <td class="QuantityRetrieved">
+                                    @Html.DisplayFor(modelItem => item.QuantityRetrieved)
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-primary editQuantityRetrieved">
+                                        Edit
+                                    </button>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-primary addToVoucher">
+                                        Add to Voucher
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal for edit quantity retrieved-->
+<div class="modal fade" id="QuantityRetrievedModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Update Quantity Retrieved</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="POST">
+                    <div class="form-group">
+                        <input type="hidden" id="QuantityRetrievedModalID" name="quantityRetrievedModalName" class="form-control" value="1" />
+                    </div>
+                    <div class="form-group">
+                        <label for="ItemNumber">ItemNumber</label>
+                        <input type="hidden" id="ItemNumberValue" name="itemNumber" class="form-control" value="" />
+                        <input type="text" id="ItemNumberDisplay" name="" class="form-control" value="" disabled />
+                    </div>
+                    <div class="form-group">
+                        <label for="QuantityRetrieved">QuantityRetrieved</label>
+                        <input type="text" id="QuantityRetrieved" name="quantityRetrieved" class="form-control" value="" />
+                    </div>
+                    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </form>
+            </div>
         </div>
     </div>
 </div>
 
+<!-- Modal for create voucher item-->
+<div class="modal fade" id="AddToVoucherModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Add To Voucher</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="POST">
+                    <div class="form-group">
+                        <input type="hidden" id="AddToVoucherModalID" name="addToVoucherModalName" class="form-control" value="1" />
+                    </div>
+                    <div class="form-group">
+                        <label for="ItemNumber">ItemNumber</label>
+                        <input type="hidden" id="ItemNumberValue" name="itemNumber" class="form-control" value="" />
+                        <input type="text" id="ItemNumberDisplay" name="" class="form-control" value="" disabled />
+                    </div>
+                    <div class="form-group">
+                        <label for="Quantity">Quantity</label>
+                        <input type="text" id="QuantityForVoucher" name="quantityForVoucher" class="form-control" value="" />
+                    </div>
+                    <div class="form-group">
+                        <label for="Remark">Remark</label>
+                        <input type="text" id="Remark" name="remark" class="form-control" value="" />
+                    </div>
+                    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
 <script>
-    $('#StationeryRetrivalList').DataTable();
+    $(".editQuantityRetrieved").click(function () {
+        var $row = $(this).closest("tr");    // Find the row
+        var itemNumber = $row.find("td.ItemNumber").text().trim(); // Find the text
+        var quantityRetrieved = $row.find("td.QuantityRetrieved").text().trim();
+        var quantityRetrievedModalID = 1;
+
+
+        var $modal = $('#QuantityRetrievedModal');
+        $modal.find('#ItemNumberValue').val(itemNumber);
+        $modal.find('#ItemNumberDisplay').val(itemNumber);
+        $modal.find('#QuantityRetrieved').val(quantityRetrieved);
+        $modal.find('#QuantityRetrievedModalID').val(quantityRetrievedModalID);
+
+        $modal.modal('show');
+    });
+</script>
+
+<script>
+    $(".addToVoucher").click(function () {
+        var $row = $(this).closest("tr");    // Find the row
+        var itemNumber = $row.find("td.ItemNumber").text().trim(); // Find the text
+        var quantityForVoucher = 0;
+        var remark = "";
+        var addToVoucherModalID = 1;
+
+        var $modal = $('#AddToVoucherModal');
+        $modal.find('#ItemNumberValue').val(itemNumber);
+        $modal.find('#ItemNumberDisplay').val(itemNumber);
+        $modal.find('#QuantityForVoucher').val(quantityForVoucher);
+        $modal.find('#Remark').val(remark);
+        $modal.find('#AddToVoucherModalID').val(addToVoucherModalID);
+
+        $modal.modal('show');
+    });
+</script>
+
+<script>
+    //$('#StationeryRetrivalList').DataTable();
+</script>
+<script>
+
+    // SideNav Initialization
+    $(".button-collapse").sideNav();
+
 </script>

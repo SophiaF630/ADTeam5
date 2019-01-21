@@ -19,6 +19,9 @@
                 @Html.DisplayNameFor(model => model.ApproveDate)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.Clerk)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.SuperviserId)
             </th>
             <th>
@@ -26,9 +29,6 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Status)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Clerk)
             </th>
             <th></th>
         </tr>
@@ -42,24 +42,24 @@
             <td>
                 @Html.DisplayFor(modelItem => item.ApproveDate)
             </td>
+
             <td>
-                @Html.DisplayFor(modelItem => item.SuperviserId)
+                @Html.DisplayFor(modelItem => item.Clerk.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ManagerId)
+                @Html.DisplayFor(modelItem => item.Manager.Name)
             </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Superviser.Name)
             <td>
                 @Html.DisplayFor(modelItem => item.Status)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Clerk.DepartmentCode)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.VoucherNo">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.VoucherNo">Details</a> |
+                <a asp-action="Details" asp-route-id="@item.VoucherNo">Edit</a> |
                 <a asp-action="Delete" asp-route-id="@item.VoucherNo">Delete</a>
             </td>
         </tr>
 }
     </tbody>
 </table>
+

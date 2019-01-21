@@ -9,7 +9,7 @@ namespace ADTeam5.Models
         public DateTime IssueDate { get; set; }
         public DateTime? ApproveDate { get; set; }
         public int ClerkId { get; set; }
-        public int SuperviserId { get; set; }
+        public int? SuperviserId { get; set; }
         public int? ManagerId { get; set; }
         public string Status { get; set; }
 

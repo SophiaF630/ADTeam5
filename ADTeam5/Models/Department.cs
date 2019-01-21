@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace ADTeam5.Models
 {
@@ -13,6 +14,7 @@ namespace ADTeam5.Models
         }
 
         public string DepartmentCode { get; set; }
+        [Display(Name = "Department")]
         public string DepartmentName { get; set; }
         public int CollectionPointId { get; set; }
         public int HeadId { get; set; }
