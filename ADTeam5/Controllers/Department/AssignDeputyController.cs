@@ -58,7 +58,6 @@ namespace ADTeam5.Controllers.Department
             ViewBag.listofitems = userList;
             return View();
 
-
         }
 
         [HttpPost]
@@ -71,7 +70,7 @@ namespace ADTeam5.Controllers.Department
                 int id = u.UserId;
                 Models.Department d1 = context.Department.Where(x => x.DepartmentCode == dept).First();
                 d1.CoveringHeadId = id;
-                if (edit == true && startdate != null && enddate !=null)
+                if (edit == true && startdate != null && enddate != null)
                 {
                     var q = context.DepartmentCoveringHeadRecord.Where(x => x.UserId == currentDeputyHeadId).First();
                     Models.DepartmentCoveringHeadRecord d2 = new Models.DepartmentCoveringHeadRecord();
@@ -90,7 +89,7 @@ namespace ADTeam5.Controllers.Department
                 }
 
                 context.SaveChanges();
-                
+
                 //if (edit == true)
                 //{
                 //    if (startdate < dt)
@@ -106,20 +105,23 @@ namespace ADTeam5.Controllers.Department
                         TempData["Alert3"] = "Edits Saved Successfully";
                     }
                     TempData["Alert2"] = "Start date cannot be in the past";
+
                 }
                 else if (enddate < startdate)
                 {
                     TempData["Alert2"] = "End date cannot be earlier than start date";
+
                 }
                 else
                 {
                     TempData["Alert1"] = "Deputy Head Appointed Successfully";
                 }
+
                 return RedirectToAction("Index");
 
             }
             return RedirectToAction("Index");
-            
         }
+        
     }
 }

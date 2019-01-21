@@ -32,15 +32,23 @@
         @TempData["Alert3"]
     </div>
  }
+ @if (ViewData["CurrentDeputyHead"] != null)
+{
+    <p>Appointed Deputy Head: @ViewData["CurrentDeputyHead"]</p>
+    <p>From: @ViewData["CurrentDeputyHeadStartDate"] To: @ViewData["CurrentDeputyHeadEndDate"]</p>
 
-        @if (ViewData["CurrentDeputyHead"] != null)
-        {
-            <p>Appointed Deputy Head: @ViewData["CurrentDeputyHead"]</p>
-            <p>From: @ViewData["CurrentDeputyHeadStartDate"] To: @ViewData["CurrentDeputyHeadEndDate"]</p>
+    <p>Edit Submitted Details Below:</p>
+}
 
 
-            <p>Edit Submitted Details Below:</p>
-        }
+}
+@if (ViewData["CurrentDeputyHead"] != null)
+{
+<p>Appointed Deputy Head: @ViewData["CurrentDeputyHead"]</p>
+<p>From: @ViewData["CurrentDeputyHeadStartDate"] To: @ViewData["CurrentDeputyHeadEndDate"]</p>
+ <p>Edit Submitted Details Below:</p>
+}
+            
 
         <form asp-action="Index" method="post">
             <div class="form-group">

@@ -257,5 +257,57 @@ namespace ADTeam5.BusinessLogic
             return u;
         }
 
+        public List<EmployeeRequestRecord> searchRequestByDateAndDept(DateTime startDate, DateTime endDate, string dept)
+        {
+            var t = _context.EmployeeRequestRecord.Where(s => s.RequestDate >= startDate && s.RequestDate <= endDate && s.DepCode == dept);
+            List<EmployeeRequestRecord> list = new List<EmployeeRequestRecord>();
+            list = t.ToList();
+            return list;
+        }
+
+        public List<EmployeeRequestRecord> searchRequestByDept(string dept)
+        {
+            return _context.EmployeeRequestRecord.Where(x => x.DepCode == dept).ToList();
+        }
+
+        public EmployeeRequestRecord searchEmployeeRequestByRRID(string rrid)
+        {
+            var q1 = _context.EmployeeRequestRecord.Where(x => x.Rrid == rrid).First();
+            EmployeeRequestRecord e1 = new EmployeeRequestRecord();
+            e1 = q1;
+            return e1;
+        }
+
+        public List<RecordDetails> searchRecordDetailsByRRID(string rrid)
+        {
+           return _context.RecordDetails.Where(x => x.Rrid == rrid).ToList();
+        }
+
+        public DisbursementList searchDLByPendingDeliveryAndDept(string dept)
+        {
+            return _context.DisbursementList.Where(x => x.DepartmentCode == dept && x.Status == "Pending Delivery").First(); 
+        }
+        public string getCollectionPointName(int currentCollectionPoint)
+        {
+            var q2 = _context.CollectionPoint.Where(x => x.CollectionPointId == currentCollectionPoint).First();
+            CollectionPoint c1 = q2;
+            string currentName = c1.CollectionPointName;
+            return currentName;
+        }
+        public List<CollectionPoint> populateCPDropDownList(int currentCollectionPoint)
+        {
+            return _context.CollectionPoint.Where(x => x.CollectionPointId != currentCollectionPoint).ToList();
+        }
+        public void Save()
+        {
+            _context.SaveChanges();
+        }
+
+        public List<EmployeeRequestRecord> searchOutstandingRequests(string dept)
+        {
+            var q = _context.EmployeeRequestRecord.Where(x => x.Status == "Submitted" && x.DepCode == dept);
+            return q.ToList();
+        }
+
     }
 }
