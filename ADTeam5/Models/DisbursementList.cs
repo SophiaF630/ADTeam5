@@ -14,6 +14,7 @@ namespace ADTeam5.Models
         [DataType(DataType.Date)]
         public DateTime? EstDeliverDate { get; set; }
         [Display(Name = "Complete Date")]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime? CompleteDate { get; set; }
         //[Display(Name ="Department")]
         //[Required(ErrorMessage = "*This field is required")]
