@@ -7,22 +7,29 @@
 
     @if (SignInManager.IsSignedIn(User))
     {
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity.Name!</a>
-        </li>
-        <li class="nav-item">
+    <li class="nav-item">
+        <a class="nav-link dropdown-toggle waves-effect waves-light" text-white" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+            Hello @User.Identity.Name!
+        </a>
+            <div class="nav-link dropdown-menu dropdown-menu-right waves-effect waves-light" aria-labelledby="navbarDropdownMenuLink">
+            @*<div class="nav-link dropdown-toggle waves-effect waves-light" aria-labelledby="navbarDropdownMenuLink">*@
+                <a class="dropdown-item waves-effect waves-light" href="#">Logout</a>
+            </div>
+</li>      
+
+        @*<li class="nav-item">
             <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-                <button type="submit" class="nav-link btn btn-link text-dark">Logout</button>
+                <button type="submit" class="nav-link btn btn-link text-white">Logout</button>
             </form>
-        </li>
+        </li>*@
     }
     else
     {
         <li class="nav-item">
-            <a class="nav-link text-light" asp-area="Identity" asp-page="/Account/Register">Register</a>
+            <a class="nav-link text-white" asp-area="Identity" asp-page="/Account/Register">Register</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link text-light" asp-area="Identity" asp-page="/Account/Login">Login</a>
+            <a class="nav-link text-white" asp-area="Identity" asp-page="/Account/Login">Login</a>
         </li>
     }
   
