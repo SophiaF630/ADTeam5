@@ -38,7 +38,7 @@ namespace ADTeam5.Controllers.Department
             role = identity[1];
 
             Models.Department d1 = b.getDepartmentDetails(dept);
-            
+
             if (d1.CoveringHeadId != null)
             {
                 edit = true;
@@ -50,37 +50,28 @@ namespace ADTeam5.Controllers.Department
                 ViewData["CurrentDeputyHeadEndDate"] = d2.EndDate.ToShortDateString();
             }
 
-                List<User> userList = new List<User>();
-                Models.Department d = b.getDepartmentDetails(dept);
-                int repid = d.RepId;
-                int headid = d.HeadId;
-                userList = b.populateAssignDeputyDropDownList(dept, repid, headid);
-                ViewBag.listofitems = userList;
-                return View();
-
-<<<<<<< HEAD
+            List<User> userList = new List<User>();
             Models.Department d = b.getDepartmentDetails(dept);
             int repid = d.RepId;
             int headid = d.HeadId;
-
-            u = context.User.Where(x => x.DepartmentCode == dept && x.UserId != repid && x.UserId != headid).OrderBy(x => x.Name).ToList();
-
-            ViewBag.listofitems = u;
+            userList = b.populateAssignDeputyDropDownList(dept, repid, headid);
+            ViewBag.listofitems = userList;
             return View();
-=======
->>>>>>> a7645545c5d80cecfe8f4bdcdf1c436ac173793d
+
+
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Index(User u, DateTime startdate, DateTime enddate)
         {
+            DateTime dt = DateTime.Now;
             if (ModelState.IsValid)
             {
                 int id = u.UserId;
                 Models.Department d1 = context.Department.Where(x => x.DepartmentCode == dept).First();
                 d1.CoveringHeadId = id;
-                if (edit == true)
+                if (edit == true && startdate != null && enddate !=null)
                 {
                     var q = context.DepartmentCoveringHeadRecord.Where(x => x.UserId == currentDeputyHeadId).First();
                     Models.DepartmentCoveringHeadRecord d2 = new Models.DepartmentCoveringHeadRecord();
@@ -99,7 +90,7 @@ namespace ADTeam5.Controllers.Department
                 }
 
                 context.SaveChanges();
-                DateTime dt = DateTime.Now;
+                
                 //if (edit == true)
                 //{
                 //    if (startdate < dt)
@@ -114,27 +105,21 @@ namespace ADTeam5.Controllers.Department
                     {
                         TempData["Alert3"] = "Edits Saved Successfully";
                     }
-                        TempData["Alert2"] = "Start date cannot be in the past";
+                    TempData["Alert2"] = "Start date cannot be in the past";
+                }
+                else if (enddate < startdate)
+                {
+                    TempData["Alert2"] = "End date cannot be earlier than start date";
                 }
                 else
                 {
                     TempData["Alert1"] = "Deputy Head Appointed Successfully";
                 }
-                    return RedirectToAction("Index");
-                
-            }
-<<<<<<< HEAD
-=======
-
-            //DateTime dt = DateTime.Now;
-
-            //if (startdate <dt)
-
-            //else
-
-            {
->>>>>>> a7645545c5d80cecfe8f4bdcdf1c436ac173793d
                 return RedirectToAction("Index");
+
+            }
+            return RedirectToAction("Index");
+            
         }
     }
 }

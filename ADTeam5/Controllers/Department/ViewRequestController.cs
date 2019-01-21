@@ -15,7 +15,7 @@ namespace ADTeam5.Controllers.Department
     {
         static int userid;
         static string dept;
-        static string role;
+        static string role;    
 
         private readonly SSISTeam5Context context;
         private readonly UserManager<ADTeam5User> _userManager;
@@ -82,23 +82,26 @@ namespace ADTeam5.Controllers.Department
             var q1 = context.EmployeeRequestRecord.Where(x => x.Rrid == rrid).First();
             EmployeeRequestRecord e1 = q1;
 
-            if (e1.Status == "Approved")
+            if (e1.Status == "Submitted")
+            {
+
+                return RedirectToAction("Edit", "ViewRequest", new { id });
+            }
+
+            else
             {
                 var q = context.RecordDetails.Where(x => x.Rrid == id);
                 return View(q);
             }
-            else
-            {
-                return RedirectToAction("Edit");
-
-            }
+      
+            
         }
 
         public IActionResult Edit(string id)
         {
             rrid = id;
             ViewData["RRID"] = rrid;
-            var q = context.RecordDetails.Where(x => x.Rrid == id);
+            var q = context.RecordDetails.Where(x => x.Rrid == id).ToList();
             return View(q);
         }
     }
