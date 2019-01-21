@@ -86,14 +86,14 @@ body {
   }
 }
 .content-wrapper {
-  min-height: 100%;
-  background-color: #ecf0f5;
-  z-index: 800;
+    min-height: 100%;
+    background-color: transparent;
+    z-index: 800;
 }
 .main-footer {
-  background: #fff;
+  background: #666;
   padding: 15px;
-  color: #444;
+  color: rgba(0,0,0, 0.2);
   border-top: 1px solid #d2d6de;
 }
 /* Fixed layout */
@@ -350,7 +350,7 @@ a:focus {
     top: 0;
     right: 0;
     float: none;
-    background: #d2d6de;
+    background: #f39c12;
     padding-left: 10px;
   }
   .content-header > .breadcrumb li:before {

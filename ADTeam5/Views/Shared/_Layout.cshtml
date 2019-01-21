@@ -6,7 +6,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <html>
 <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    @*<meta http-equiv="X-UA-Compatible" content="IE=edge">*@
     <title>AdminLTE 2 | Starter</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
@@ -17,10 +17,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <link href="~/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
         <!-- Ionicons -->
         <link href="~/plugins/Ionicons/css/ionicons.min.css" rel="stylesheet" />
-        <!-- Theme style -->
-        <link href="~/lib/css/AdminLTE.min.css" rel="stylesheet" />
         <!-- DataTables -->
         <link href="~/plugins/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet" />
+        <!-- Theme style -->
+        <link href="~/lib/css/AdminLTE.css" rel="stylesheet" />
         <!-- AdminLTE Skins. We have chosen the skin-blue for this starter
     page. However, you can choose any other skin. Make sure you
     apply the skin class to the body tag so the changes take effect. -->
@@ -122,10 +122,12 @@ desired effect
                         </li>
                     </ul>
                 </li>
-                </ul>
+                </nav>
+               </header>
+        
 </div>
-    </nav>
-    </header>
+
+    
     <!-- Left side column. contains the logo and sidebar -->
     <aside class="main-sidebar">
         <!-- sidebar: style can be found in sidebar.less -->
@@ -222,10 +224,7 @@ desired effect
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
         <section class="content-header">
-            <h1>
-                Page Header
-                @*<small>Optional description</small>*@
-            </h1>
+            
             <ol class="breadcrumb">
                 <li><a href="#"><i class="fa fa-dashboard"></i> Level</a></li>
                 <li class="active">Here</li>
@@ -235,7 +234,7 @@ desired effect
         <section class="content container-fluid">
 
             <!--------------------------
-              | Your Page Content Here |
+              Main content
               -------------------------->
             @RenderBody()
         </section>
