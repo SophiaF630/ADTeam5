@@ -58,6 +58,17 @@ namespace ADTeam5.Controllers.Department
                 ViewBag.listofitems = userList;
                 return View();
 
+<<<<<<< HEAD
+            Models.Department d = b.getDepartmentDetails(dept);
+            int repid = d.RepId;
+            int headid = d.HeadId;
+
+            u = context.User.Where(x => x.DepartmentCode == dept && x.UserId != repid && x.UserId != headid).OrderBy(x => x.Name).ToList();
+
+            ViewBag.listofitems = u;
+            return View();
+=======
+>>>>>>> a7645545c5d80cecfe8f4bdcdf1c436ac173793d
         }
 
         [HttpPost]
@@ -88,17 +99,32 @@ namespace ADTeam5.Controllers.Department
                 }
 
                 context.SaveChanges();
-
-                if(edit == true)
+                DateTime dt = DateTime.Now;
+                //if (edit == true)
+                //{
+                //    if (startdate < dt)
+                //    {
+                //        TempData["Alert2"] = "Start date cannot be in the past";
+                //    }
+                //    TempData["Alert3"] = "Edits Saved Successfully";
+                //}
+                if (startdate < dt)
                 {
-                    TempData["Alert3"] = "Edits Saved Successfully";
+                    if (edit == true && startdate >= dt)
+                    {
+                        TempData["Alert3"] = "Edits Saved Successfully";
+                    }
+                        TempData["Alert2"] = "Start date cannot be in the past";
                 }
                 else
                 {
                     TempData["Alert1"] = "Deputy Head Appointed Successfully";
                 }
                     return RedirectToAction("Index");
+                
             }
+<<<<<<< HEAD
+=======
 
             //DateTime dt = DateTime.Now;
 
@@ -107,8 +133,8 @@ namespace ADTeam5.Controllers.Department
             //else
 
             {
+>>>>>>> a7645545c5d80cecfe8f4bdcdf1c436ac173793d
                 return RedirectToAction("Index");
-            }
         }
     }
 }
