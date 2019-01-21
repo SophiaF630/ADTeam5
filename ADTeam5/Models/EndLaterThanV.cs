@@ -17,16 +17,17 @@ namespace ADTeam5.Models
 
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
-            var propertyInfo = validationContext.ObjectType.GetProperty(startdate);
-            var propertyValue = propertyInfo.GetValue(validationContext.ObjectInstance, null);
-            if ((DateTime)value > (DateTime)propertyValue)
-            {
-                return ValidationResult.Success;
-            }
-            else
-            {
-                return new ValidationResult(ErrorMessage = "End date must not be before starting date");
-            }
+
+                var propertyInfo = validationContext.ObjectType.GetProperty(this.startdate);
+                var propertyValue = propertyInfo.GetValue(validationContext.ObjectInstance, null);
+                if ((DateTime)value > (DateTime)propertyValue)
+                {
+                    return ValidationResult.Success;
+                }
+                else
+                {
+                    return new ValidationResult(ErrorMessage = "End date must not be before starting date");
+                }
 
         }
     }

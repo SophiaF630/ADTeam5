@@ -22,10 +22,18 @@ namespace ADTeam5.ViewModels
         //    this.x = x;
         //}
 
+
+        [Required]
         [Display(Name = "Item Number")]
         public string ItemNumber { get; set; }
+        [Required]
+        [Display(Name ="Item Name")]
+        [StringLength(50)]
         public string ItemName { get; set; }
+        [Required]
         [Display(Name = "Quantity Needed")]
+        [RegularExpression(@"^[0-9]*$", ErrorMessage = "Numbers only")]
+        [Range(0, 10000, ErrorMessage = "Quantity cannot be negative")]
         public int Quantity { get; set; }
 
 

@@ -20,8 +20,9 @@ namespace ADTeam5.Models
         public DateTime? CompleteDate { get; set; }
         [ReadOnly(true)]
         public int StoreClerkId { get; set; }
+        [StringLength(4)]
         public string SupplierCode { get; set; }
-        [StringLength(10), RegularExpression(@"^[A-Z]+[a-zA-Z'\s]*$")]
+        [StringLength(50), RegularExpression(@"^[A-Z]+[a-zA-Z'\s]*$", ErrorMessage ="Letters only")]
         public string Status { get; set; }
         public virtual User StoreClerk { get; set; }
         public virtual Supplier SupplierCodeNavigation { get; set; }

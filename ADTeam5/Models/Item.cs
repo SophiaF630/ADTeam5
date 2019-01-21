@@ -8,8 +8,10 @@ namespace ADTeam5.Models
 {
     public class Item
     {
-        [Required, RegularExpression(@"^[A-Z]+[a-zA-Z'\s]*$")]
+        [MaxLength(50)]
+        [Required(ErrorMessage = "*This field is required")]
         public string ItemName { get; set; }
+        [RegularExpression(@"^[0-9]*$", ErrorMessage = "Numbers only")]
         [Range(0, 10000, ErrorMessage ="Please enter a valid quantity")]
         public int Quantity { get; set; }
 

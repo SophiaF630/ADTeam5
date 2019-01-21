@@ -13,10 +13,6 @@ namespace ADTeam5.Controllers.Department
 {
     public class NewRequestController : Controller
     {
-<<<<<<< HEAD
-        //BizLogic b = new BizLogic();
-            private readonly SSISTeam5Context context;
-=======
         static int userid;
         static string dept;
         static string role;
@@ -26,7 +22,6 @@ namespace ADTeam5.Controllers.Department
         readonly GeneralLogic userCheck;
 
         BizLogic b = new BizLogic();
->>>>>>> a517407431875ca00afc6d56c311218d89438067
         static List<string> ItemNumberList= new List<string>();
         static List<string> ItemNameList = new List<string>();
         static List<int> QuantityList = new List<int>();
