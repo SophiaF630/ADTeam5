@@ -9,6 +9,7 @@ namespace ADTeam5.Models
         public string Rrid { get; set; }
 
         [DataType(DataType.Date)]
+        
         public DateTime RequestDate { get; set; }
 
         [DataType(DataType.Date)]

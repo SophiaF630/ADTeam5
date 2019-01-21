@@ -18,19 +18,11 @@
 
                 <div class="form-group">
                     <label> Quantity</label>
-<<<<<<< HEAD
-                    @*<input asp-for="Quantity" class="form-control" " />
-                        <span asp-validation-for="Quantity" class="text-danger"></span>*@
                     @Html.EditorFor(model => model.Quantity, new { htmlAttributes = new { @min = 1, @max = 999, @class = "form-control left-border-none", @id = "Quantity" } })
-=======
-                    <input asp-for="Quantity" class="form-control" />
-                    <span asp-validation-for="Quantity" class="text-danger"></span>
->>>>>>> 29817682b6b13d957cdbbb3c1203439f893c41c4
                 </div>
 
                 <div class="form-group">
-                    <input type="submit" value="Add Item" class="btn btn-primary" id="Button1" />
-
+                    <input type="submit" value="Add Item" class="btn btn-primary" />
                 </div>
 
             </form>
@@ -39,43 +31,42 @@
     </div>
 </div>
 
-<form asp-controller="NewRequest" method="post" class="form-horizontal" role="form">
-    @if (ViewBag.ItemNumberList != null && ViewBag.QuantityList != null)
-    {
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>
-                        Item Number
-                    </th>
-                    <th>
-                        Quantity
-                    </th>
 
-                    <th></th>
-                </tr>
-            </thead>
+@if (ViewBag.ItemNameList != null && ViewBag.QuantityList != null)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    <ul>Item Name</ul>
+                </th>
+                <th>
+                    <ul>Quantity</ul>
+                </th>
 
-            <tbody>
-                <pre>
-                <tr>
+                <th></th>
+            </tr>
+        </thead>
 
-                <td>
-                    @foreach (var item in ViewBag.ItemNumberList)
+        <tbody>
+           
+            <tr>
+
+            <td>
+                    @foreach (var item in ViewBag.ItemNameList)
                     {
-                <ul>@item</ul>
+            <ul>@item</ul>
                     }
                 </td>
 
-                <td>
+            <td>
                     @foreach (var item in ViewBag.QuantityList)
                     {
-                <ul>@item</ul>
+            <ul>@item</ul>
                     }
                 </td>
             </tr>
-           </pre>
-<<<<<<< HEAD
+           
         </tbody>
     </table>
 }
@@ -84,50 +75,8 @@
 {
     <form asp-action="Submit" method="post">
         <div class="form-group">
-            <input type="submit" id="Button2" value="Submit Request" class="btn btn-info"  />
-            
+            <input type="submit" value="Submit Request" class="btn btn-info" />
         </div>
     </form>
 
 }
-
-@*<script>
-    $("#btnUpdate").click(function() {
-      alert("button");
-      $("#tblMain").hide();
-      $("#tblMainAlt").show();
-    });
-    </script>*@
-
-
-@*<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-<script>
-    $(function () {
-        $("#Button1").on('click', function () {
-            $("#Button2").show();
-        });
-    });
-</script>*@
-
-
-@*<script>
-        function myFunction() {
-           document.getElementById("myDIV").style.display = "block"
-        }
-    </script>*@
-@*<script>
-            function showDiv() {
-                document.getElementById('submitRequest').style.display = "";
-            }
-    </script>*@
-=======
-            </tbody>
-        </table>
-    }
-    <div class="form-group">
-        <input type="submit" value="Save" />
-    </div>
-    </form>
-
->>>>>>> 29817682b6b13d957cdbbb3c1203439f893c41c4
-

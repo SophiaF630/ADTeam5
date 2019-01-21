@@ -23,54 +23,77 @@
         @TempData["Alert2"]
     </div>
 }
-
-@if(ViewData["CurrentDeptHead"] != null)
+@if (TempData["Alert3"] != null)
 {
-<p>Current Deputy Head: @ViewData["CurrentDeptHead"]</p>
-}
-
-<form asp-action="Index" method="post">
-    <div class="form-group">
-        <p>
-            Deputy Head:
-            @Html.DropDownListFor(m => m.UserId, new SelectList(ViewBag.listofitems, "UserId", "Name"), "Select")
-        </p>
+    <div class="alert alert-success" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aira-label="close">
+            <span aria-hidden="true">&times</span>
+        </button>
+        @TempData["Alert3"]
     </div>
+        }
 
+<<<<<<< HEAD
     <div>
         From:
         <input type="date" name="startdate" id="start" value="=" />
+      
         To:
         <input type="date" name="enddate" id="end" value=" = " />
     </div>
+=======
+        @if (ViewData["CurrentDeputyHead"] != null)
+        {
+            <p>Appointed Deputy Head: @ViewData["CurrentDeputyHead"]</p>
+            <p>From: @ViewData["CurrentDeputyHeadStartDate"] To: @ViewData["CurrentDeputyHeadEndDate"]</p>
+>>>>>>> 08ac98e86165fd2d07115b3a2444bda46a155c1c
 
-    <br />
-    <div class="form-group">
-        <input type="submit" value="Assign" id="assignbtn" />
-        <input type="reset" value="Cancel" onclick="window.location.reload()" />
-    </div>
+            <p>Edit Submitted Details Below:</p>
 
-</form>
-<script>
-    $(document).ready(function () {
-        let now = new Date();
+        }
 
-        let day = ("0" + now.getDate()).slice(-2);
-        let month = ("0" + (now.getMonth() + 1)).slice(-2);
+        <form asp-action="Index" method="post">
+            <div class="form-group">
+                <p>
+                    Deputy Head:
+                    @Html.DropDownListFor(m => m.UserId, new SelectList(ViewBag.listofitems, "UserId", "Name"), "Select")
+                </p>
+            </div>
 
-        let today = (day) + "-" + (month) + "-" + now.getFullYear();
+            <div>
+                From:
+                <input type="date" name="startdate" id="start" value="=" />
+                To:
+                <input type="date" name="enddate" id="end" value=" = " />
+            </div>
+
+            <br />
+            <div class="form-group">
+                <input type="reset" value="Cancel" onclick="window.location.reload()" />
+                <input type="submit" value="Assign" id="assignbtn" />
+            </div>
+
+        </form>
+        <script>
+            $(document).ready(function () {
+                let now = new Date();
+
+                let day = ("0" + now.getDate()).slice(-2);
+                let month = ("0" + (now.getMonth() + 1)).slice(-2);
+
+                let today = (day) + "-" + (month) + "-" + now.getFullYear();
 
 
-        $('#start').val(today);
-        $('#end').val(today);
-        $('#assignbtn').click(function () {
+                $('#start').val(today);
+                $('#end').val(today);
+                $('#assignbtn').click(function () {
 
-            testClicked();
-        });
-    });
-    function testClicked() {
-        $('.getStartDate').html($('#start').val());
-        $('.getEndDate').html($('#end').val());
-    }
+                    testClicked();
+                });
+            });
+            function testClicked() {
+                $('.getStartDate').html($('#start').val());
+                $('.getEndDate').html($('#end').val());
+            }
 
-</script>
+        </script>
