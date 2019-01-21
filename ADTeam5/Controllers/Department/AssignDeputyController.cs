@@ -38,7 +38,7 @@ namespace ADTeam5.Controllers.Department
             role = identity[1];
 
             Models.Department d1 = b.getDepartmentDetails(dept);
-            
+
             if (d1.CoveringHeadId != null)
             {
                 edit = true;
@@ -50,6 +50,7 @@ namespace ADTeam5.Controllers.Department
                 ViewData["CurrentDeputyHeadEndDate"] = d2.EndDate.ToShortDateString();
             }
 
+<<<<<<< HEAD
                 List<User> userList = new List<User>();
                 Models.Department d = b.getDepartmentDetails(dept);
                 int repid = d.RepId;
@@ -58,6 +59,15 @@ namespace ADTeam5.Controllers.Department
                 ViewBag.listofitems = userList;
                 return View();
 
+=======
+            List<User> userList = new List<User>();
+            Models.Department d = b.getDepartmentDetails(dept);
+            int repid = d.RepId;
+            int headid = d.HeadId;
+            userList = b.populateAssignDeputyDropDownList(dept, repid, headid);
+            ViewBag.listofitems = userList;
+            return View();
+>>>>>>> a1cc7950dad4628fdeeb75d2da22bd9c70cfd5e2
 
         }
 
@@ -65,12 +75,13 @@ namespace ADTeam5.Controllers.Department
         [ValidateAntiForgeryToken]
         public IActionResult Index(User u, DateTime startdate, DateTime enddate)
         {
+            DateTime dt = DateTime.Now;
             if (ModelState.IsValid)
             {
                 int id = u.UserId;
                 Models.Department d1 = context.Department.Where(x => x.DepartmentCode == dept).First();
                 d1.CoveringHeadId = id;
-                if (edit == true)
+                if (edit == true && startdate != null && enddate != null)
                 {
                     var q = context.DepartmentCoveringHeadRecord.Where(x => x.UserId == currentDeputyHeadId).First();
                     Models.DepartmentCoveringHeadRecord d2 = new Models.DepartmentCoveringHeadRecord();
@@ -90,14 +101,33 @@ namespace ADTeam5.Controllers.Department
 
                 context.SaveChanges();
 
-                if(edit == true)
+                //if (edit == true)
+                //{
+                //    if (startdate < dt)
+                //    {
+                //        TempData["Alert2"] = "Start date cannot be in the past";
+                //    }
+                //    TempData["Alert3"] = "Edits Saved Successfully";
+                //}
+                if (startdate < dt)
                 {
-                    TempData["Alert3"] = "Edits Saved Successfully";
+                    if (edit == true && startdate >= dt)
+                    {
+                        TempData["Alert3"] = "Edits Saved Successfully";
+                    }
+                    TempData["Alert2"] = "Start date cannot be in the past";
+
+                }
+                else if (enddate < startdate)
+                {
+                    TempData["Alert2"] = "End date cannot be earlier than start date";
+
                 }
                 else
                 {
                     TempData["Alert1"] = "Deputy Head Appointed Successfully";
                 }
+<<<<<<< HEAD
                     return RedirectToAction("Index");
             }
 
@@ -106,10 +136,18 @@ namespace ADTeam5.Controllers.Department
             if (startdate <dt)
 
             {
-                return RedirectToAction("Index");
-            }
+=======
 
+>>>>>>> a1cc7950dad4628fdeeb75d2da22bd9c70cfd5e2
+                return RedirectToAction("Index");
+
+            }
+<<<<<<< HEAD
+
+=======
+>>>>>>> a1cc7950dad4628fdeeb75d2da22bd9c70cfd5e2
             return RedirectToAction("Index");
         }
+        
     }
 }
