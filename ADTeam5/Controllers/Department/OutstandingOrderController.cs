@@ -23,7 +23,7 @@ namespace ADTeam5.Controllers.Department
         private readonly UserManager<ADTeam5User> _userManager;
         private static string rrid;
         readonly GeneralLogic userCheck;
-        BizLogic b = new BizLogic();
+        DeptBizLogic b = new DeptBizLogic();
 
         public OutstandingOrderController(SSISTeam5Context context, UserManager<ADTeam5User> userManager)
         {
@@ -50,11 +50,11 @@ namespace ADTeam5.Controllers.Department
             rrid = id;
 
             ViewData["RRID"] = rrid;
-            var q1 = context.EmployeeRequestRecord.Where(x => x.Rrid == rrid).First();
+            var q1 = b.findEmployeeRecord(rrid);
             EmployeeRequestRecord e1 = q1;
             int userid = e1.DepEmpId;
 
-            var q2 = context.User.Where(x => x.UserId == userid).First();
+            var q2 = b.getUser(userid);
             User u1 = q2;
             string username = u1.Name;
             ViewData["Name"] = username;
@@ -65,7 +65,7 @@ namespace ADTeam5.Controllers.Department
             [HttpPost]
             public IActionResult ApproveOrder()
             {
-                EmployeeRequestRecord e1 = context.EmployeeRequestRecord.Where(x => x.Rrid == rrid).First();
+                EmployeeRequestRecord e1 = b.findEmployeeRecord(rrid);
                 e1.Status = "Approved";
                 context.SaveChanges();
                 return RedirectToAction(nameof(Index));
@@ -75,7 +75,7 @@ namespace ADTeam5.Controllers.Department
             [HttpPost]
             public IActionResult RejectOrder(string rejectReason)
             {
-                EmployeeRequestRecord e1 = context.EmployeeRequestRecord.Where(x => x.Rrid == rrid).First();
+                EmployeeRequestRecord e1 = b.findEmployeeRecord(rrid);
                 e1.Status = "Reject";
                 e1.Remark = rejectReason.ToString();
                 context.SaveChanges();

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ADTeam5.Areas.Identity.Data;
+using ADTeam5.BusinessLogic;
 using ADTeam5.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -18,6 +19,7 @@ namespace ADTeam5.Controllers.Department
         private readonly SSISTeam5Context context;
         private readonly UserManager<ADTeam5User> _userManager;
         readonly GeneralLogic userCheck;
+        DeptBizLogic b = new DeptBizLogic();
 
         public ChangeCollectionPointController(SSISTeam5Context context, UserManager<ADTeam5User> userManager)
         {
@@ -34,11 +36,11 @@ namespace ADTeam5.Controllers.Department
             dept = identity[0];
             role = identity[1];
 
-            var q1 = context.DisbursementList.Where(x => x.DepartmentCode == dept && x.Status == "Pending Delivery").First();
+            var q1 = b.findDisbursementListStatus(dept);
             DisbursementList d1 = q1;
             int currentCollectionPoint = d1.CollectionPointId;
 
-            var q2 = context.CollectionPoint.Where(x => x.CollectionPointId == currentCollectionPoint).First();
+            var q2 = b.findCollectionPointToEdit(currentCollectionPoint);
             CollectionPoint c1 = q2;
             string currentName = c1.CollectionPointName;
             ViewData["Name"] = currentName;
@@ -57,7 +59,7 @@ namespace ADTeam5.Controllers.Department
             if (ModelState.IsValid)
             {
                 int c1 = cp.CollectionPointId;
-                var q = context.DisbursementList.Where(x => x.DepartmentCode == dept && x.Status == "Pending Delivery").First();
+                var q = b.findDisbursementListStatus(dept);
                 Models.DisbursementList d1 = q;
                 d1.CollectionPointId = c1;
                 await context.SaveChangesAsync();

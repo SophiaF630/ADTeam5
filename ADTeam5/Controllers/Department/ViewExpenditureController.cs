@@ -6,53 +6,44 @@ using Microsoft.AspNetCore.Mvc;
 using ADTeam5.Models;
 using ADTeam5.ViewModels;
 using ADTeam5.BusinessLogic;
+using Microsoft.AspNetCore.Identity;
+using ADTeam5.Areas.Identity.Data;
 
 namespace ADTeam5.Controllers.Department
 {
     public class ViewExpenditureController : Controller
     {
+        static int userid;
+        static string dept;
+        static string role;
+
         private readonly SSISTeam5Context context;
+        private readonly UserManager<ADTeam5User> _userManager;
+        readonly GeneralLogic userCheck;
         static string dlid;
         decimal sum;
 
-        BizLogic b = new BizLogic();
+        DeptBizLogic b = new DeptBizLogic();
 
-        public ViewExpenditureController(SSISTeam5Context context)
+        public ViewExpenditureController(SSISTeam5Context context, UserManager<ADTeam5User> userManager)
         {
             this.context = context;
+            _userManager = userManager;
+            userCheck = new GeneralLogic(context);
         }
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            //Filter according to the dept of the person using this
-          
-            var q = context.DisbursementList.Where(x => x.Status == "Completed" && x.DepartmentCode == "ENGL").ToList();
-            List<DisbursementList> dList = q;
-            List<RecordDetails> rList = new List<RecordDetails>();
-            for (int i = 0; i < dList.Count; i++)
-            {
-                DisbursementList d = dList[i];
-                string dId = d.Dlid;
-                var q1 = context.RecordDetails.Where(x => x.Rrid == dId).ToList();
-                foreach (RecordDetails current in q1)
-                {
-                    rList.Add(current);
-                }
-            }
+            ADTeam5User user = await _userManager.GetUserAsync(HttpContext.User);
+            userid = user.WorkID;
+            List<string> identity = userCheck.checkUserIdentityAsync(user);
+            dept = identity[0];
+            role = identity[1];
 
-            for (int j = 0; j < rList.Count; j++)
-            {
-                RecordDetails r = rList[j];
-                string ItemNum = r.ItemNumber;
-                var q2 = context.Catalogue.Where(x => x.ItemNumber == ItemNum).First();
-                decimal price = (decimal)q2.Supplier1Price;
-                int Quantity = r.Quantity;
-                decimal total = price * Quantity;
-                sum += total;
-
-            }
+            List<DisbursementList> dbList = b.findDisbursementListStatusComplete(dept);
+            decimal sum = b.findTotalExpenditure(dept, dbList);
 
             @ViewData["Sum"] = sum;
-            return View(q);
+            return View(dbList);
         }
 
         [HttpPost]
@@ -62,12 +53,28 @@ namespace ADTeam5.Controllers.Department
             ViewData["StartDate"] = startDate;
             ViewData["endDate"] = endDate;
 
+    
             if (startDate != null && endDate != null)
             {
-                var t = context.DisbursementList.Where(s => s.StartDate >= startDate && s.CompleteDate <= endDate);
-                return View(t);
+                if (ModelState.IsValid)
+                {
+                    List<DisbursementList> dbList = b.findDisbursementListStatusCompleteDateRange(dept, startDate, endDate);
+                    decimal sum = b.findTotalExpenditure(dept, dbList);
+
+                    @ViewData["Sum"] = sum;
+                    return View(dbList);
+                }
+
+                TempData["Alert1"] = "Please fill in all details!";
+                return RedirectToAction("Index"); 
             }
-            else
+            else if (startDate > endDate || endDate < startDate)
+            {
+                //TempData["Alert1"] = "Please Try Again";
+                //return RedirectToAction("Index");
+                return Content("try again");
+            }
+            else 
             {
                 var t = context.DisbursementList;
                 return View(t);
@@ -98,12 +105,9 @@ namespace ADTeam5.Controllers.Department
 
             //         }).ToList();
 
-
-
             ViewBag.orderid = Dlid;
             return View(rv);
-
-
+            
         }
     }
 }

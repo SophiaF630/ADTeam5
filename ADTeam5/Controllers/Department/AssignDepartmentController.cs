@@ -7,8 +7,8 @@ using ADTeam5.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Identity;
-using ADTeam5.BusinessLogic;
 using ADTeam5.Areas.Identity.Data;
+using ADTeam5.BusinessLogic;
 
 namespace ADTeam5.Controllers.Department
 {
@@ -20,7 +20,7 @@ namespace ADTeam5.Controllers.Department
 
         private readonly UserManager<ADTeam5User> _userManager;
         private readonly SSISTeam5Context context;
-        BizLogic b = new BizLogic();
+        DeptBizLogic b = new DeptBizLogic();
         readonly GeneralLogic userCheck;
 
         public AssignDepartmentController(SSISTeam5Context context, UserManager<ADTeam5User> userManager)
@@ -57,7 +57,7 @@ namespace ADTeam5.Controllers.Department
                 coverheadid = (int)d.CoveringHeadId;
             }
 
-            u = context.User.Where(x => x.DepartmentCode == dept && x.UserId != repid && x.UserId != headid && x.UserId != coverheadid).OrderBy(x => x.Name).ToList();
+            u = b.populateAssignDepartmentDropDownList(dept, repid, headid, coverheadid);
 
             ViewBag.listofitems = u;
             return View();
@@ -69,7 +69,7 @@ namespace ADTeam5.Controllers.Department
         {
             if (ModelState.IsValid)
             {
-                Models.Department d2 = context.Department.Where(x => x.DepartmentCode == dept).First();
+                Models.Department d2 = b.getDepartmentDetails(dept);                
                 d2.RepId = u.UserId;
                 context.SaveChanges();
                 TempData["Alert1"] = "Department Representative Changed Successfully";
