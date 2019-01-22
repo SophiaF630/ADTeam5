@@ -2,19 +2,28 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ADTeam5.Areas.Identity.Data;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace ADTeam5.Models
 {
+    [Authorize]
     public class PurchaseOrderRecordsController : Controller
     {
         private readonly SSISTeam5Context _context;
+        private readonly UserManager<ADTeam5User> _userManager;
+        readonly GeneralLogic userCheck;
+        ADTeam5User user;
 
-        public PurchaseOrderRecordsController(SSISTeam5Context context)
+        public PurchaseOrderRecordsController(SSISTeam5Context context, UserManager<ADTeam5User> userManager)
         {
             _context = context;
+            _userManager = userManager;
+            userCheck = new GeneralLogic(context);
         }
 
         // GET: PurchaseOrderRecords
@@ -43,16 +52,29 @@ namespace ADTeam5.Models
             //this part is new added
             var details = from m in _context.RecordDetails select m;
             details = details.Where(s=>s.Rrid == purchaseOrderRecord.Poid);
-            ViewData["RecordDetail"] = details;
+            if (details == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                ViewData["Purchase"] = purchaseOrderRecord;
+                return View(details);
+
+            }
             //new added finished
-            return View(purchaseOrderRecord);
+            //return View(purchaseOrderRecord);
         }
 
         // GET: PurchaseOrderRecords/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ViewData["StoreClerkId"] = new SelectList(_context.User, "UserId", "DepartmentCode");
-            ViewData["SupplierCode"] = new SelectList(_context.Supplier, "SupplierCode", "SupplierCode");
+            user = await _userManager.GetUserAsync(HttpContext.User);
+            ViewData["StoreClerkId"] = user.WorkID;
+
+            ViewData["SupplierCode"] = _context.Supplier.ToList();
+            ViewData["CatalogueList"] = _context.Catalogue.ToList();
+            //ViewData["SupplierCode"] = new SelectList(_context.Supplier, "SupplierCode", "SupplierCode");
             return View();
         }
 

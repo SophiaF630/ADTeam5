@@ -1,10 +1,16 @@
-﻿@model ADTeam5.Models.PurchaseOrderRecord
-@using ADTeam5.Models
+﻿@model IEnumerable<ADTeam5.Models.RecordDetails>
 
 @{
     ViewData["Title"] = "Details";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-    List<RecordDetails> recordDetails = (List<RecordDetails>)ViewData["RecordDetail"];
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+    //List<RecordDetails> recordDetails = new List<RecordDetails>();
+    //if ((bool)ViewData["empty"] == true) {
+
+    //}
+    //else
+    //{
+    //    recordDetails = (List<RecordDetails>)ViewData["RecordDetail"];
+    //}
 }
 
 <h1>Details</h1>
@@ -12,7 +18,7 @@
 <div>
     <h4>PurchaseOrderRecord</h4>
     <hr />
-    <dl class="row">
+    @*<dl class="row">
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.OrderDate)
         </dt>
@@ -54,7 +60,7 @@
 <div>
     <a asp-action="Edit" asp-route-id="@Model.Poid">Edit</a> |
     <a asp-action="Index">Back to List</a>
-</div>
+</div>*@
 <table class="table">
     <thead>
         <tr>
@@ -83,7 +89,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in recordDetails)
+        @foreach (var item in Model)
         {
             <tr>
                 <td>
