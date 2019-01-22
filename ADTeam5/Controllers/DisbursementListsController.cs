@@ -30,13 +30,15 @@ namespace ADTeam5.Controllers
             _userManager = userManager;
             userCheck = new GeneralLogic(context);
         }
-
         // GET: DisbursementLists
         public async Task<IActionResult> Index()
         {
             ADTeam5User user = await _userManager.GetUserAsync(HttpContext.User);
             List<string> identity = userCheck.checkUserIdentityAsync(user);
             int userID = user.WorkID;
+
+            ViewData["Department"] = identity[0];
+            ViewData["role"] = identity[1];
 
             //ViewData["Department"] = identity[0];
             //ViewData["role"] = identity[1];

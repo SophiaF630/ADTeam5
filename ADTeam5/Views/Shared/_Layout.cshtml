@@ -1,18 +1,48 @@
-﻿<!DOCTYPE html>
+﻿﻿<!DOCTYPE html>
 <!--
 This is a starter template page. Use this page to start your new project from
 scratch. This page gets rid of all links and provides the needed markup only.
 -->
+
+﻿@using ADTeam5.Areas.Identity.Data
+
+@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<ADTeam5User> SignInManager
+
+@inject UserManager<ADTeam5User> UserManager
+
+@inject SSISTeam5Context context
+
+
+
+@{
+    if (SignInManager.IsSignedIn(User))
+    {
+        GeneralLogic userCheck;
+        userCheck = new GeneralLogic(context);
+        ADTeam5User user = await UserManager.GetUserAsync(User);
+        List<string> identity = userCheck.checkUserIdentityAsync(user);
+        ViewData["UserRole"] = identity[1];
+    }
+    else
+    { ViewData["UserRole"] = "Not signed"; }
+
+}
+
+<!DOCTYPE html>
+
 <html>
 <head>
     <meta charset="utf-8">
-    @*<meta http-equiv="X-UA-Compatible" content="IE=edge">*@
+     @*<meta http-equiv="X-UA-Compatible" content="IE=edge">*@
     <title>AdminLTE 2 | Starter</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 
     <environment include="Development">
-        @*<!-- Site CSS -->
+
+         @*<!-- Site CSS -->
             <link rel="stylesheet" href="~/css/site.css" />
             <!-- DataTable CSS -->
             <link rel="stylesheet" href="~/lib/DataTables/DataTables-1.10.18/css/dataTables.bootstrap4.css" />*@
@@ -43,11 +73,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <link rel="stylesheet" href="plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
 
         <!-- DataTable JavaScript-->
-        @*<script src="~/lib/DataTables/jQuery-3.3.1/jquery-3.3.1.min.js"></script>
+         @*<script src="~/lib/DataTables/jQuery-3.3.1/jquery-3.3.1.min.js"></script>
             <script src="~/lib/DataTables/DataTables-1.10.18/js/jquery.dataTables.js"></script>
             <script src="~/lib/DataTables/DataTables-1.10.18/js/dataTables.bootstrap4.js"></script>*@
 
-        
+
     </environment>
 
     <environment exclude="Development">
@@ -59,6 +89,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
               asp-fallback-href="~/plugins/font-awesome/css/font-awesome.min.css"
               asp-fallback-test-class="fa" asp-fallback-test-property="display" asp-fallback-test-value="inline-block " />
 
+        <<<<<<< HEAD
         <link href="~/lib/css/AdminLTE.min.css" rel="stylesheet" />
         <link href="~/lib/css/skins/skin-blue.min.css" rel="stylesheet" />
     </environment>
@@ -143,7 +174,7 @@ desired effect
     <aside class="main-sidebar">
         <!-- sidebar: style can be found in sidebar.less -->
         <section class="sidebar">
-            @*search form (Optional)
+             @*search form (Optional)
                 <form action="#" method="get" class="sidebar-form">
                     <div class="input-group">
                         <input type="text" name="q" class="form-control" placeholder="Search...">
@@ -158,8 +189,8 @@ desired effect
             <!-- Sidebar Menu -->
             <ul class="sidebar-menu" data-widget="tree">
                 <li class="header"><strong>Store Clerk Sidebar</strong></li>
-                @*<li class="header">Store Clerk Sidebar</li>*@
-                @*Optionally, you can add icons to the links
+                 @*<li class="header">Store Clerk Sidebar</li>*@
+                 @*Optionally, you can add icons to the links
                     <li class="active"><a href="#"><i class="fa fa-cube"></i> <span>Ingoing/outgoing Stationery</span></a></li>*@
                 <li class="treeview active">
                     <a href="#">
@@ -176,7 +207,7 @@ desired effect
                         <li>
                             <a class="nav-link text-white-" asp-area="" asp-controller="DisbursementLists" asp-action="Index"><i class="fa fa-list-ul"></i>Disbursement List</a>
                         </li>
-                        @*<li class="active"><a href="data.html"><i class="fa fa-circle-o"></i> Data tables</a></li>*@
+                         @*<li class="active"><a href="data.html"><i class="fa fa-circle-o"></i> Data tables</a></li>*@
                     </ul>
                 </li>
 
@@ -247,53 +278,114 @@ desired effect
             <!--------------------------
               Main content
               -------------------------->
-            @RenderBody()
-        </section>
-        <!-- /.content -->
+@RenderBody()
+</section>
+<!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+<footer class="main-footer">
+    <div class="pull-right hidden-xs">
+        <b>Version</b> 2.4.0
+       
+
+<!--/. Side navigation links -->
+</ul>
+<div class="sidenav-bg mask-strong"></div>
+
+</div>
+</div>
+
+<!--/. Sidebar navigation -->
+<!-- Navbar -->
+<nav class="navbar fixed-top navbar-toggleable-md navbar-expand-lg scrolling-navbar double-nav">
+    <!-- SideNav slide-out button -->
+    <div class="float-left">
+        <a href="#" data-activates="slide-out" class="button-collapse"><i class="fas fa-bars"></i></a>
     </div>
-    <!-- /.content-wrapper -->
-    <footer class="main-footer">
-        <div class="pull-right hidden-xs">
-            <b>Version</b> 2.4.0
-        </div>
-        <strong>Copyright &copy; 2014-2016 <a href="https://adminlte.io">Almsaeed Studio</a>.</strong> All rights
-        reserved.
-    </footer>
+    <!-- Breadcrumb-->
+    <div class="breadcrumb-dn mr-auto">
+        <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"><h5>ADTeam5</h5></a>
+         @*<button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>*@
+    </div>
+    <ul class="nav navbar-nav nav-flex-icons ml-auto">
+        <li class="nav-item">
+            <a class="nav-link waves-effect waves-light"><i class="fas fa-envelope"></i> <span class="clearfix d-none d-sm-inline-block">Contact</span></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link waves-effect waves-light"><i class="far fa-comments"></i> <span class="clearfix d-none d-sm-inline-block">Support</span></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link waves-effect waves-light"><i class="fas fa-user"></i> <span class="clearfix d-none d-sm-inline-block">Account</span></a>
+        </li>
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle waves-effect waves-light" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                Dropdown
+            </a>
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+                <partial name="_LoginPartial" />
+                <a class="dropdown-item waves-effect waves-light" href="#">Action</a>
+                <a class="dropdown-item waves-effect waves-light" href="#">Another action</a>
+                <a class="dropdown-item waves-effect waves-light" href="#">Something else here</a>
+            </div>
+        </li>
+    </ul>
+</nav>
+<!-- /.Navbar -->
+</header>
+@RenderSection("Scripts", required: false)
+<!--/.Double navigation-->
+<!--Main Layout-->
+<main>
+    <div class="container-fluid mt-5">
+@RenderBody()
+</div>
+</main>
+<!--/Main Layout-->
+<footer class="border-top footer text-muted">
+    <div class="container">
+        2019 - ADTeam5 - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        >>>>>>> origin/login
+    </div>
+    <strong>Copyright &copy; 2014-2016 <a href="https://adminlte.io">Almsaeed Studio</a>.</strong> All rights
+    reserved.
+</footer>
 
 
-    <!-- ./wrapper -->
-    <environment include="Development">
-        <!-- REQUIRED JS SCRIPTS -->
-        <!-- jQuery 3 -->
-        <script src="~/plugins/jquery/dist/jquery.min.js"></script>
-        <!-- Bootstrap 3.3.7 -->
-        <script src="~/plugins/bootstrap/dist/js/bootstrap.min.js"></script>
-        <!-- DataTables -->
-        <script src="~/plugins/datatables.net/js/jquery.dataTables.min.js"></script>
-        <script src="~/plugins/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
-        <!-- ChartJS -->
-        <script src="~/plugins/chart.js/Chart.js"></script>
-        <!-- AdminLTE App -->
-        <script src="~/lib/js/adminlte.min.js"></script>
-        <!-- Optionally, you can add Slimscroll and FastClick plugins.
+<!-- ./wrapper -->
+<environment include="Development">
+    <!-- REQUIRED JS SCRIPTS -->
+    <!-- jQuery 3 -->
+    <script src="~/plugins/jquery/dist/jquery.min.js"></script>
+    <!-- Bootstrap 3.3.7 -->
+    <script src="~/plugins/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- DataTables -->
+    <script src="~/plugins/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="~/plugins/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+    <!-- ChartJS -->
+    <script src="~/plugins/chart.js/Chart.js"></script>
+    <!-- AdminLTE App -->
+    <script src="~/lib/js/adminlte.min.js"></script>
+    <!-- Optionally, you can add Slimscroll and FastClick plugins.
     Both of these plugins are recommended to enhance the
     user experience. -->
-        <!-- ajax -->
-        <script src="~/assets/js/jquery.unobtrusive-ajax.min.js"></script>
+    <!-- ajax -->
+    <script src="~/assets/js/jquery.unobtrusive-ajax.min.js"></script>
 
-    </environment>
-    <environment exclude="Development">
-        <script src="https://cdn.bootcss.com/jqueryh/3.2.1/jquery.min.js"
-                asp-fallback-src="~/plugins/jquery/dist/bootstrap.min.js"
-                asp-fallback-test="window.jquery"
-                crossorigin="anonymous"></script>
+</environment>
+<environment exclude="Development">
+    <script src="https://cdn.bootcss.com/jqueryh/3.2.1/jquery.min.js"
+            asp-fallback-src="~/plugins/jquery/dist/bootstrap.min.js"
+            asp-fallback-test="window.jquery"
+            crossorigin="anonymous"></script>
 
-
-        <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"
-                asp-fallback-src="~/plugins/bootstrap/dist/js/bootstrap.min.css"
-                asp-fallback-test="window.jquery&&window.jquery.fn&&window.jquery.fn.modal"
-                crossorigin="anonymous"></script>
-    </environment>
-    @RenderSection("Scripts", required: false)
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"
+            asp-fallback-src="~/plugins/bootstrap/dist/js/bootstrap.min.css"
+            asp-fallback-test="window.jquery&&window.jquery.fn&&window.jquery.fn.modal"
+            crossorigin="anonymous"></script>
+</environment>
+@RenderSection("Scripts", required: false)
 </body>
 </html>
