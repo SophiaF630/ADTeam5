@@ -1,19 +1,23 @@
-﻿﻿<!DOCTYPE html>
-
+﻿<!DOCTYPE html>
 
 ﻿@using ADTeam5.Areas.Identity.Data
+
 
 
 @using Microsoft.AspNetCore.Identity
 
 
+
 @inject SignInManager<ADTeam5User> SignInManager
+
 
 
 @inject UserManager<ADTeam5User> UserManager
 
 
+
 @inject SSISTeam5Context context
+
 
 
 
@@ -33,7 +37,6 @@
 
 }
 
-<!DOCTYPE html>
 
 <html>
 <head>
@@ -44,14 +47,14 @@
 
     <environment include="Development">
 
-         @*<!-- Site CSS -->
+        @*<!-- Site CSS -->
             <link rel="stylesheet" href="~/css/site.css" />
             <!-- DataTable CSS -->
             <link rel="stylesheet" href="~/lib/DataTables/DataTables-1.10.18/css/dataTables.bootstrap4.css" />*@
 
         <link href="~/plugins/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
         <!-- Font Awesome -->
-        <link href="~/lib/all.css" rel="stylesheet" /> 
+        <link href="~/lib/all.css" rel="stylesheet" />
         <!-- Ionicons -->
         <link href="~/plugins/Ionicons/css/ionicons.min.css" rel="stylesheet" />
         <!-- DataTables -->
@@ -72,7 +75,7 @@
         <link rel="stylesheet" href="plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
 
         <!-- DataTable JavaScript-->
-         @*<script src="~/lib/DataTables/jQuery-3.3.1/jquery-3.3.1.min.js"></script>
+        @*<script src="~/lib/DataTables/jQuery-3.3.1/jquery-3.3.1.min.js"></script>
             <script src="~/lib/DataTables/DataTables-1.10.18/js/jquery.dataTables.js"></script>
             <script src="~/lib/DataTables/DataTables-1.10.18/js/dataTables.bootstrap4.js"></script>*@
 
@@ -87,8 +90,6 @@
         <link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
               asp-fallback-href="~/plugins/font-awesome/css/font-awesome.min.css"
               asp-fallback-test-class="fa" asp-fallback-test-property="display" asp-fallback-test-value="inline-block " />
-
-        <<<<<<< HEAD
         <link href="~/lib/css/AdminLTE.min.css" rel="stylesheet" />
         <link href="~/lib/css/skins/skin-blue.min.css" rel="stylesheet" />
     </environment>
@@ -266,7 +267,8 @@ desired effect
                             <li class="footer"><a href="#">View all</a></li>
                         </ul>
                     </li>
-
+                </ul>
+            </div>
         </header>
     </div>
 
@@ -275,190 +277,251 @@ desired effect
     <aside class="main-sidebar">
         <!-- sidebar: style can be found in sidebar.less -->
         <section class="sidebar">
-             @*search form (Optional)
-                <form action="#" method="get" class="sidebar-form">
-                    <div class="input-group">
-                        <input type="text" name="q" class="form-control" placeholder="Search...">
-                        <span class="input-group-btn">
-                            <button type="submit" name="search" id="search-btn" class="btn btn-flat">
-                                <i class="fa fa-search"></i>
-                            </button>
-                        </span>
-                    </div>
-                </form>*@
-            <!-- /.search form -->
             <!-- Sidebar Menu -->
             <ul class="sidebar-menu" data-widget="tree">
-                <li class="header"><strong>Store Clerk Sidebar</strong></li>
-                <li class="treeview">
-                    <a href="#">
-                        <i class="fas fa-people-carry"></i> <span>In/Out Stationery</span>
-                        <span class="pull-right-container">
-                            <i class="fa fa-angle-left pull-right"></i>
-                        </span>
-                    </a>
-                    <ul class="treeview-menu">
-                        <li>
-                            <a class="nav-link text-white-" asp-area="" asp-controller="StationeryRetrievalList" asp-action="Index"><i class="fa fa-list-ul"></i>Stationery Retrieval List</a>
-                        </li>
-                        <li>
-                            <a class="nav-link text-white-" asp-area="" asp-controller="DisbursementLists" asp-action="Index"><i class="fa fa-list-ul"></i>Disbursement List</a>
-                        </li>
-                        <li>
-                            <a class="nav-link text-white-" asp-area="" asp-controller="DisbursementLists" asp-action="Index"><i class="fa fa-list-ul"></i>Inventory Transaction Log</a>
-                        </li>
-                        <li>
-                            <a class="nav-link text-white-" asp-area="" asp-controller="DisbursementLists" asp-action="Index"><i class="fa fa-list-ul"></i>Order More Stock</a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="treeview">
-                    <a href="#">
-                        <i class="fas fa-users"></i> <span>Contacts</span>
-                        <span class="pull-right-container">
-                            <i class="fa fa-angle-left pull-right"></i>
-                        </span>
-                    </a>
-                    <ul class="treeview-menu">
-                        <li>
-                            <a class="nav-link text-white-" asp-area="" asp-controller="StationeryRetrievalList" asp-action="Index"><i class="fa fa-list-ul"></i>Supplier List</a>
-                        </li>
-                        <li>
-                            <a class="nav-link text-white-" asp-area="" asp-controller="DisbursementLists" asp-action="Index"><i class="fa fa-list-ul"></i>Department List</a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="treeview">
-                    <a href="#">
-                        <i class="fas fa-user-edit"></i> <span>Management</span>
-                        <span class="pull-right-container">
-                            <i class="fa fa-angle-left pull-right"></i>
-                        </span>
-                    </a>
-                    <ul class="treeview-menu">
-                        <li>
-                            <a class="nav-link text-white-" asp-area="" asp-controller="StationeryRetrievalList" asp-action="Index"><i class="fa fa-list-ul"></i>Request Stock Adjustment Voucher</a>
-                        </li>
-                        <li>
-                            <a class="nav-link text-white-" asp-area="" asp-controller="DisbursementLists" asp-action="Index"><i class="fa fa-list-ul"></i>Generate Reports</a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="header"><br><strong>Store Manager/Supervisor Sidebar</strong></li>
-                <li class="treeview">
-                    <a href="#">
-                        <i class="fas fa-people-carry"></i> <span>In/Out Stationery</span>
-                        <span class="pull-right-container">
-                            <i class="fa fa-angle-left pull-right"></i>
-                        </span>
-                    </a>
-                    <ul class="treeview-menu">
 
-                        <li>
-                            <a class="nav-link text-white-" asp-area="" asp-controller="StationeryRetrievalList" asp-action="Index"><i class="fa fa-list-ul"></i>Stationery Retrieval List</a>
+                @switch (ViewData["UserRole"].ToString())
+                {
+                    case "Clerk":
+                        <li class="header"><strong>Store Clerk Sidebar</strong></li>
+                        <li class="treeview">
+                            <a href="#">
+                                <i class="fas fa-people-carry"></i> <span>In/Out Stationery</span>
+                                <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
+                            </a>
+                            <ul class="treeview-menu">
+                                <li>
+                                    <a class="nav-link text-white-" asp-area="" asp-controller="StationeryRetrievalList" asp-action="Index"><i class="fa fa-list-ul"></i>Stationery Retrieval List</a>
+                                </li>
+                                <li>
+                                    <a class="nav-link text-white-" asp-area="" asp-controller="DisbursementLists" asp-action="Index"><i class="fa fa-list-ul"></i>Disbursement List</a>
+                                </li>
+                                <li>
+                                    <a class="nav-link text-white-" asp-area="" asp-controller="DisbursementLists" asp-action="Index"><i class="fa fa-list-ul"></i>Inventory Transaction Log</a>
+                                </li>
+                                <li>
+                                    <a class="nav-link text-white-" asp-area="" asp-controller="DisbursementLists" asp-action="Index"><i class="fa fa-list-ul"></i>Order More Stock</a>
+                                </li>
+                            </ul>
                         </li>
-                        <li>
-                            <a class="nav-link text-white-" asp-area="" asp-controller="DisbursementLists" asp-action="Index"><i class="fa fa-list-ul"></i>Disbursement List</a>
+                        <li class="treeview">
+                            <a href="#">
+                                <i class="fas fa-users"></i> <span>Contacts</span>
+                                <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
+                            </a>
+                            <ul class="treeview-menu">
+                                <li>
+                                    <a class="nav-link text-white-" asp-area="" asp-controller="StationeryRetrievalList" asp-action="Index"><i class="fa fa-list-ul"></i>Supplier List</a>
+                                </li>
+                                <li>
+                                    <a class="nav-link text-white-" asp-area="" asp-controller="DisbursementLists" asp-action="Index"><i class="fa fa-list-ul"></i>Department List</a>
+                                </li>
+                            </ul>
                         </li>
-                        <li>
-                            <a class="nav-link text-white-" asp-area="" asp-controller="DisbursementLists" asp-action="Index"><i class="fa fa-list-ul"></i>Inventory Transaction Log</a>
+                        <li class="treeview">
+                            <a href="#">
+                                <i class="fas fa-user-edit"></i> <span>Management</span>
+                                <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
+                            </a>
+                            <ul class="treeview-menu">
+                                <li>
+                                    <a class="nav-link text-white-" asp-area="" asp-controller="StationeryRetrievalList" asp-action="Index"><i class="fa fa-list-ul"></i>Request Stock Adjustment Voucher</a>
+                                </li>
+                                <li>
+                                    <a class="nav-link text-white-" asp-area="" asp-controller="DisbursementLists" asp-action="Index"><i class="fa fa-list-ul"></i>Generate Reports</a>
+                                </li>
+                            </ul>
                         </li>
-                        <li>
-                            <a class="nav-link text-white-" asp-area="" asp-controller="DisbursementLists" asp-action="Index"><i class="fa fa-list-ul"></i>Order More Stock</a>
-                        </li>
-                    </ul>
-                </li>
+                        break;
+                    case "Manager":
+                        <li class="header"><br><strong>Store Manager Sidebar</strong></li>
+                        <li class="treeview">
+                            <a href="#">
+                                <i class="fas fa-people-carry"></i> <span>In/Out Stationery</span>
+                                <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
+                            </a>
+                            <ul class="treeview-menu">
 
+                                <li>
+                                    <a class="nav-link text-white-" asp-area="" asp-controller="StationeryRetrievalList" asp-action="Index"><i class="fa fa-list-ul"></i>Stationery Retrieval List</a>
+                                </li>
+                                <li>
+                                    <a class="nav-link text-white-" asp-area="" asp-controller="DisbursementLists" asp-action="Index"><i class="fa fa-list-ul"></i>Disbursement List</a>
+                                </li>
+                                <li>
+                                    <a class="nav-link text-white-" asp-area="" asp-controller="DisbursementLists" asp-action="Index"><i class="fa fa-list-ul"></i>Inventory Transaction Log</a>
+                                </li>
+                                <li>
+                                    <a class="nav-link text-white-" asp-area="" asp-controller="DisbursementLists" asp-action="Index"><i class="fa fa-list-ul"></i>Order More Stock</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="treeview">
+                            <a href="#">
+                                <i class="fas fa-users"></i> <span>Contacts</span>
+                                <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
+                            </a>
+                            <ul class="treeview-menu">
+                                <li>
+                                    <a class="nav-link text-white-" asp-area="" asp-controller="StationeryRetrievalList" asp-action="Index"><i class="fa fa-list-ul"></i>Supplier List</a>
+                                </li>
+                                <li>
+                                    <a class="nav-link text-white-" asp-area="" asp-controller="DisbursementLists" asp-action="Index"><i class="fa fa-list-ul"></i>Department List</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="treeview">
+                            <a href="#">
+                                <i class="fas fa-user-edit"></i> <span>Management</span>
+                                <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
+                            </a>
+                            <ul class="treeview-menu">
+                                <li>
+                                    <a class="nav-link text-white-" asp-area="" asp-controller="StationeryRetrievalList" asp-action="Index"><i class="fa fa-list-ul"></i>Approve/Reject Stock Adjustment Voucher</a>
+                                </li>
+                                <li>
+                                    <a class="nav-link text-white-" asp-area="" asp-controller="DisbursementLists" asp-action="Index"><i class="fa fa-list-ul"></i>Generate Reports</a>
+                                </li>
+                            </ul>
+                        </li>
+                        break;
+                    case "Superviser":
+                        <li class="header"><br><strong>Store Supervisor Sidebar</strong></li>
+                        <li class="treeview">
+                            <a href="#">
+                                <i class="fas fa-people-carry"></i> <span>In/Out Stationery</span>
+                                <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
+                            </a>
+                            <ul class="treeview-menu">
 
-                <li><a href="#"><i class="fa fa-link"></i> <span>Another Link</span></a></li>
-                <li class="treeview">
-                    <a href="#">
-                        <i class="fas fa-users"></i> <span>Contacts</span>
-                        <span class="pull-right-container">
-                            <i class="fa fa-angle-left pull-right"></i>
-                        </span>
-                    </a>
-                    <ul class="treeview-menu">
-                        <li>
-                            <a class="nav-link text-white-" asp-area="" asp-controller="StationeryRetrievalList" asp-action="Index"><i class="fa fa-list-ul"></i>Supplier List</a>
+                                <li>
+                                    <a class="nav-link text-white-" asp-area="" asp-controller="StationeryRetrievalList" asp-action="Index"><i class="fa fa-list-ul"></i>Stationery Retrieval List</a>
+                                </li>
+                                <li>
+                                    <a class="nav-link text-white-" asp-area="" asp-controller="DisbursementLists" asp-action="Index"><i class="fa fa-list-ul"></i>Disbursement List</a>
+                                </li>
+                                <li>
+                                    <a class="nav-link text-white-" asp-area="" asp-controller="DisbursementLists" asp-action="Index"><i class="fa fa-list-ul"></i>Inventory Transaction Log</a>
+                                </li>
+                                <li>
+                                    <a class="nav-link text-white-" asp-area="" asp-controller="DisbursementLists" asp-action="Index"><i class="fa fa-list-ul"></i>Order More Stock</a>
+                                </li>
+                            </ul>
                         </li>
-                        <li>
-                            <a class="nav-link text-white-" asp-area="" asp-controller="DisbursementLists" asp-action="Index"><i class="fa fa-list-ul"></i>Department List</a>
+                        <li class="treeview">
+                            <a href="#">
+                                <i class="fas fa-users"></i> <span>Contacts</span>
+                                <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
+                            </a>
+                            <ul class="treeview-menu">
+                                <li>
+                                    <a class="nav-link text-white-" asp-area="" asp-controller="StationeryRetrievalList" asp-action="Index"><i class="fa fa-list-ul"></i>Supplier List</a>
+                                </li>
+                                <li>
+                                    <a class="nav-link text-white-" asp-area="" asp-controller="DisbursementLists" asp-action="Index"><i class="fa fa-list-ul"></i>Department List</a>
+                                </li>
+                            </ul>
                         </li>
-                    </ul>
-                </li>
-                <li class="treeview">
-                    <a href="#">
-                        <i class="fas fa-user-edit"></i> <span>Management</span>
-                        <span class="pull-right-container">
-                            <i class="fa fa-angle-left pull-right"></i>
-                        </span>
-                    </a>
-                    <ul class="treeview-menu">
-                        <li>
-                            <a class="nav-link text-white-" asp-area="" asp-controller="StationeryRetrievalList" asp-action="Index"><i class="fa fa-list-ul"></i>Approve/Reject Stock Adjustment Voucher</a>
+                        <li class="treeview">
+                            <a href="#">
+                                <i class="fas fa-user-edit"></i> <span>Management</span>
+                                <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
+                            </a>
+                            <ul class="treeview-menu">
+                                <li>
+                                    <a class="nav-link text-white-" asp-area="" asp-controller="StationeryRetrievalList" asp-action="Index"><i class="fa fa-list-ul"></i>Approve/Reject Stock Adjustment Voucher</a>
+                                </li>
+                                <li>
+                                    <a class="nav-link text-white-" asp-area="" asp-controller="DisbursementLists" asp-action="Index"><i class="fa fa-list-ul"></i>Generate Reports</a>
+                                </li>
+                            </ul>
                         </li>
-                        <li>
-                            <a class="nav-link text-white-" asp-area="" asp-controller="DisbursementLists" asp-action="Index"><i class="fa fa-list-ul"></i>Generate Reports</a>
+                        break;
+                    case "Rep":
+                        <li class="header"><br><strong>Department Rep Sidebar</strong></li>
+                        <li class="treeview">
+                            <a href="#">
+                                <i class="fas fa-map-marker-alt"></i> <span>Change Collection Point</span>
+                            </a>
                         </li>
-                    </ul>
-                </li>
-                <li class="header"><br><strong>Department Rep Sidebar</strong></li>
-                <li class="treeview">
-                    <a href="#">
-                        <i class="fas fa-map-marker-alt"></i> <span>Change Collection Point</span>
-                    </a>
-                </li>
-                <li class="header"><br><strong>Department Staff Sidebar</strong></li>
-                <li class="treeview">
-                    <a href="#">
-                        <i class="fas fa-pencil-alt"></i> <span>Stationery Requests</span>
-                        <span class="pull-right-container">
-                            <i class="fa fa-angle-left pull-right"></i>
-                        </span>
-                    </a>
-                    <ul class="treeview-menu">
-                        <li>
-                            <a class="nav-link text-white-" asp-area="" asp-controller="NewRequest" asp-action="Index"><i class="fa fa-list-ul"></i>Make New Request</a>
+                        break;
+                    case "Employee":
+                        <li class="header"><br><strong>Department Staff Sidebar</strong></li>
+                        <li class="treeview">
+                            <a href="#">
+                                <i class="fas fa-pencil-alt"></i> <span>Stationery Requests</span>
+                                <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
+                            </a>
+                            <ul class="treeview-menu">
+                                <li>
+                                    <a class="nav-link text-white-" asp-area="" asp-controller="NewRequest" asp-action="Index"><i class="fa fa-list-ul"></i>Make New Request</a>
+                                </li>
+                                <li>
+                                    <a class="nav-link text-white-" asp-area="" asp-controller="ViewRequest" asp-action="Index"><i class="fa fa-list-ul"></i>Edit Requests</a>
+                                </li>
+                            </ul>
                         </li>
-                        <li>
-                            <a class="nav-link text-white-" asp-area="" asp-controller="ViewRequest" asp-action="Index"><i class="fa fa-list-ul"></i>Edit Requests</a>
+                        break;
+                    case "Head":
+                        <li class="header"><br><strong>Department Head Sidebar</strong></li>
+                        <li class="treeview">
+                            <a href="#">
+                                <i class="fas fa-sync"></i> <span>Re-assign Staff</span>
+                                <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
+                            </a>
+                            <ul class="treeview-menu">
+                                <li>
+                                    <a class="nav-link text-white-" asp-area="" asp-controller="AssignDeputy" asp-action="Index"><i class="fas fa-user"></i>Assign Deputy Head</a>
+                                </li>
+                                <li>
+                                    <a class="nav-link text-white-" asp-area="" asp-controller="AssignDepartment" asp-action="Index"><i class="fas fa-user"></i>Assign Staff Rep</a>
+                                </li>
+                            </ul>
                         </li>
-                    </ul>
-                </li>
-                <li class="header"><br><strong>Department Head Sidebar</strong></li>
-                <li class="treeview">
-                    <a href="#">
-                        <i class="fas fa-sync"></i> <span>Re-assign Staff</span>
-                        <span class="pull-right-container">
-                            <i class="fa fa-angle-left pull-right"></i>
-                        </span>
-                    </a>
-                    <ul class="treeview-menu">
-                        <li>
-                            <a class="nav-link text-white-" asp-area="" asp-controller="AssignDeputy" asp-action="Index"><i class="fas fa-user"></i>Assign Deputy Head</a>
+                        <li class="treeview">
+                            <a href="#">
+                                <i class="fas fa-users"></i> <span>Manage Requests</span>
+                                <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
+                            </a>
+                            <ul class="treeview-menu">
+                                <li>
+                                    <a class="nav-link text-white-" asp-area="" asp-controller="StationeryRetrievalList" asp-action="Index"><i class="fa fa-list-ul"></i>Approve/Reject</a>
+                                </li>
+                                <li>
+                                    <a class="nav-link text-white-" asp-area="" asp-controller="DisbursementLists" asp-action="Index"><i class="fa fa-list-ul"></i>Department List</a>
+                                </li>
+                            </ul>
                         </li>
-                        <li>
-                            <a class="nav-link text-white-" asp-area="" asp-controller="AssignDepartment" asp-action="Index"><i class="fas fa-user"></i>Assign Staff Rep</a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="treeview">
-                    <a href="#">
-                        <i class="fas fa-users"></i> <span>Manage Requests</span>
-                        <span class="pull-right-container">
-                            <i class="fa fa-angle-left pull-right"></i>
-                        </span>
-                    </a>
-                    <ul class="treeview-menu">
-                        <li>
-                            <a class="nav-link text-white-" asp-area="" asp-controller="StationeryRetrievalList" asp-action="Index"><i class="fa fa-list-ul"></i>Approve/Reject</a>
-                        </li>
-                        <li>
-                            <a class="nav-link text-white-" asp-area="" asp-controller="DisbursementLists" asp-action="Index"><i class="fa fa-list-ul"></i>Department List</a>
-                        </li>
-                    </ul>
+                        break;
+                    default:
+                        break;
+                }
             </ul>
+
             <!-- /.sidebar-menu -->
         </section>
         <!-- /.sidebar -->
@@ -477,54 +540,60 @@ desired effect
 
 
 
-@RenderBody()
-</section>
-<!-- /.content -->
-</div>
 
-<footer class="main-footer">
-    <div class="pull-right hidden-xs">
-        Template Credits to <a href="https://adminlte.io"><b>Almsaeed Studio</b></a> 2014-2016
 
+
+            @RenderBody()
+        </section>
+        <!-- /.content -->
     </div>
-</footer>
 
-<!-- /.content-wrapper -->
-<!-- ./wrapper -->
-<environment include="Development">
-    <!-- REQUIRED JS SCRIPTS -->
-    <!-- jQuery 3 -->
-    <script src="~/plugins/jquery/dist/jquery.min.js"></script>
-    <!-- Bootstrap 3.3.7 -->
-    <script src="~/plugins/bootstrap/dist/js/bootstrap.min.js"></script>
-    <!-- DataTables -->
-    <script src="~/plugins/datatables.net/js/jquery.dataTables.min.js"></script>
-    <script src="~/plugins/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
-    <!-- ChartJS -->
-    <script src="~/plugins/chart.js/Chart.js"></script>
-    <!-- AdminLTE App -->
-    <script src="~/lib/js/adminlte.min.js"></script>
-    <!-- Optionally, you can add Slimscroll and FastClick plugins.
-    Both of these plugins are recommended to enhance the
-    user experience. -->
-    <!-- ajax -->
-    <script src="~/assets/js/jquery.unobtrusive-ajax.min.js"></script>
+    <footer class="main-footer">
+        <div class="pull-right hidden-xs">
+            Template Credits to <a href="https://adminlte.io"><b>Almsaeed Studio</b></a> 2014-2016
 
-</environment>
-<environment exclude="Development">
-    <script src="https://cdn.bootcss.com/jqueryh/3.2.1/jquery.min.js"
-            asp-fallback-src="~/plugins/jquery/dist/bootstrap.min.js"
-            asp-fallback-test="window.jquery"
-            crossorigin="anonymous"></script>
+        </div>
+    </footer>
 
-    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"
-            asp-fallback-src="~/plugins/bootstrap/dist/js/bootstrap.min.css"
-            asp-fallback-test="window.jquery&&window.jquery.fn&&window.jquery.fn.modal"
-            crossorigin="anonymous"></script>
-</environment>
+    <!-- /.content-wrapper -->
+    <!-- ./wrapper -->
+    <environment include="Development">
+        <!-- REQUIRED JS SCRIPTS -->
+        <!-- jQuery 3 -->
+        <script src="~/plugins/jquery/dist/jquery.min.js"></script>
+        <!-- Bootstrap 3.3.7 -->
+        <script src="~/plugins/bootstrap/dist/js/bootstrap.min.js"></script>
+        <!-- DataTables -->
+        <script src="~/plugins/datatables.net/js/jquery.dataTables.min.js"></script>
+        <script src="~/plugins/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+        <!-- ChartJS -->
+        <script src="~/plugins/chart.js/Chart.js"></script>
+        <!-- AdminLTE App -->
+        <script src="~/lib/js/adminlte.min.js"></script>
+        <!-- Optionally, you can add Slimscroll and FastClick plugins.
+        Both of these plugins are recommended to enhance the
+        user experience. -->
+        <!-- ajax -->
+        <script src="~/assets/js/jquery.unobtrusive-ajax.min.js"></script>
+
+    </environment>
+    <environment exclude="Development">
+        <script src="https://cdn.bootcss.com/jqueryh/3.2.1/jquery.min.js"
+                asp-fallback-src="~/plugins/jquery/dist/bootstrap.min.js"
+                asp-fallback-test="window.jquery"
+                crossorigin="anonymous"></script>
+
+        <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"
+                asp-fallback-src="~/plugins/bootstrap/dist/js/bootstrap.min.css"
+                asp-fallback-test="window.jquery&&window.jquery.fn&&window.jquery.fn.modal"
+                crossorigin="anonymous"></script>
+    </environment>
 
 
 
-@RenderSection("Scripts", required: false)
+
+
+
+    @RenderSection("Scripts", required: false)
 </body>
 </html>
