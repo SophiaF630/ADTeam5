@@ -11,17 +11,19 @@
  */
 html,
 body {
-  height: 100%;
+    height: 100%;
+    
 }
 .layout-boxed html,
 .layout-boxed body {
   height: 100%;
 }
 body {
-  font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  font-weight: 400;
-  overflow-x: hidden;
-  overflow-y: auto;
+    font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-weight: 400;
+    overflow-x: hidden;
+    overflow-y: auto;
+    
 }
 /* Layout */
 .wrapper {
@@ -53,12 +55,13 @@ body {
  */
 .content-wrapper,
 .main-footer {
-  -webkit-transition: -webkit-transform 0.3s ease-in-out, margin 0.3s ease-in-out;
-  -moz-transition: -moz-transform 0.3s ease-in-out, margin 0.3s ease-in-out;
-  -o-transition: -o-transform 0.3s ease-in-out, margin 0.3s ease-in-out;
-  transition: transform 0.3s ease-in-out, margin 0.3s ease-in-out;
-  margin-left: 230px;
-  z-index: 820;
+    -webkit-transition: -webkit-transform 0.3s ease-in-out, margin 0.3s ease-in-out;
+    -moz-transition: -moz-transform 0.3s ease-in-out, margin 0.3s ease-in-out;
+    -o-transition: -o-transform 0.3s ease-in-out, margin 0.3s ease-in-out;
+    transition: transform 0.3s ease-in-out, margin 0.3s ease-in-out;
+    margin-left: 230px;
+    z-index: 820;
+    
 }
 .layout-top-nav .content-wrapper,
 .layout-top-nav .main-footer {
@@ -87,11 +90,11 @@ body {
 }
 .content-wrapper {
     min-height: 100%;
-    background-color: transparent;
-    z-index: 800;
+    background-color: blueviolet;
+    z-index:800;
 }
 .main-footer {
-  background: #666;
+  background: #f39c12;
   padding: 15px;
   color: rgba(0,0,0, 0.2);
   border-top: 1px solid #d2d6de;
@@ -162,7 +165,7 @@ h6,
 }
 /* General Links */
 a {
-  color: #3c8dbc;
+    color: #284e97;
 }
 a:hover,
 a:active,
@@ -250,7 +253,7 @@ a:focus {
   background-color: transparent;
   background-image: none;
   padding: 15px 15px;
-  font-family: fontAwesome;
+  font-family: FontAwesome;
 }
 .main-header .sidebar-toggle:before {
   content: "\f0c9";
@@ -409,17 +412,18 @@ a:focus {
  * ------------------
  */
 .main-sidebar {
-  position: absolute;
-  top: 0;
-  left: 0;
-  padding-top: 50px;
-  min-height: 100%;
-  width: 230px;
-  z-index: 810;
-  -webkit-transition: -webkit-transform 0.3s ease-in-out, width 0.3s ease-in-out;
-  -moz-transition: -moz-transform 0.3s ease-in-out, width 0.3s ease-in-out;
-  -o-transition: -o-transform 0.3s ease-in-out, width 0.3s ease-in-out;
-  transition: transform 0.3s ease-in-out, width 0.3s ease-in-out;
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding-top: 50px;
+    background: linear-gradient(rgba(255,255,255,0.5), rgba(255,255,255,0.2)), no-repeat;
+    min-height: 100%;
+    width: 230px;
+    z-index: 810;
+    -webkit-transition: -webkit-transform 0.3s ease-in-out, width 0.3s ease-in-out;
+    -moz-transition: -moz-transform 0.3s ease-in-out, width 0.3s ease-in-out;
+    -o-transition: -o-transform 0.3s ease-in-out, width 0.3s ease-in-out;
+    transition: transform 0.3s ease-in-out, width 0.3s ease-in-out;
 }
 @media (max-width: 767px) {
   .main-sidebar {
@@ -452,6 +456,7 @@ a:focus {
 }
 .sidebar {
   padding-bottom: 10px;
+  
 }
 .sidebar-form input:focus {
   border-color: transparent;
