@@ -71,7 +71,7 @@ namespace ADTeam5.Controllers
             }
             else if (quantityRetrievedModalName == 1)
             {
-                b.UpdateCatalogueOutAndStock(itemNumber, quantityRetrieved);
+                b.UpdateCatalogueOutAndStockAfterRetrieval(itemNumber, quantityRetrieved);
             }
 
             List<StationeryRetrievalList> result = b.GetStationeryRetrievalLists();
