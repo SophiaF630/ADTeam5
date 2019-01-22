@@ -40,9 +40,6 @@ namespace ADTeam5.Controllers
             ViewData["Department"] = identity[0];
             ViewData["role"] = identity[1];
 
-            //ViewData["Department"] = identity[0];
-            //ViewData["role"] = identity[1];
-
             //Generate disbursement list
             List<Models.Department> dList = _context.Department.ToList();
             List<string> depCodeList = new List<string>();
@@ -91,6 +88,8 @@ namespace ADTeam5.Controllers
             List<string> identity = userCheck.checkUserIdentityAsync(user);
             int userID = user.WorkID;
 
+            tempDisbursementListDetails = new List<DisbursementListDetails>();
+
             if (id == null)
             {
                 return NotFound();
@@ -98,45 +97,72 @@ namespace ADTeam5.Controllers
 
             List<RecordDetails> rd = _context.RecordDetails.Where(x => x.Rrid == id).ToList();
             List<DisbursementListDetails> result = new List<DisbursementListDetails>();
+            List<int> rowIDList = new List<int>();
+            foreach(var q in tempDisbursementListDetails)
+            {
+                rowIDList.Add(q.RowID);
+            }
+            int rowID = 1;
             foreach (var item in rd)
             {
-                DisbursementListDetails dlList = new DisbursementListDetails();
+                if (item.Rrid == id)
+                {
+                    DisbursementListDetails dlList = new DisbursementListDetails();
+                    if (!rowIDList.Contains(rowID))
+                    {
+                        dlList.RowID = rowID;
+                        dlList.ItemNumber = item.ItemNumber;
+                        dlList.ItemName = _context.Catalogue.FirstOrDefault(x => x.ItemNumber == item.ItemNumber).ItemName;
+                        dlList.Quantity = item.Quantity;
+                        dlList.QuantityDelivered = 0;
+                        dlList.Remark = item.Remark;
 
-                dlList.ItemNumber = item.ItemNumber;
-                dlList.ItemName = _context.Catalogue.FirstOrDefault(x => x.ItemNumber == item.ItemNumber).ItemName;
-                dlList.Quantity = item.Quantity;
-                dlList.QuantityDelivered = 0;
-                dlList.Remark = item.Remark;
-
-                result.Add(dlList);
+                        tempDisbursementListDetails.Add(dlList);
+                        
+                        //result.Add(dlList);
+                    }
+                }
+                rowID++;
             }
-            return View(result);
+            return View(tempDisbursementListDetails);
         }
 
-        //// POST: DisbursementLists/Details/5
-        //[HttpPost]
-        //public async Task<IActionResult> Details(string itemNumber, int quantityDelivered, int quantityForVoucher, string remarkForDelivery, string remarkForVoucher, int quantityDeliveredModalName, int addToVoucherModalName, int confirmDeliveryModalName)
-        //{
-        //    ADTeam5User user = await _userManager.GetUserAsync(HttpContext.User);
-        //    List<string> identity = userCheck.checkUserIdentityAsync(user);
-        //    int userID = user.WorkID;
+        // POST: DisbursementLists/Details/5
+        [HttpPost]
+        public async Task<IActionResult> Details(string id, int rowID, string itemNumber, int quantityDelivered, int quantityForVoucher, string remarkForDelivery, string remarkForVoucher, int confirmationPassword, int quantityDeliveredModalName, int addToVoucherModalName, int confirmDeliveryModalName)
+        {
+            ADTeam5User user = await _userManager.GetUserAsync(HttpContext.User);
+            List<string> identity = userCheck.checkUserIdentityAsync(user);
+            int userID = user.WorkID;
 
-        //    if (itemNumber == null)
-        //    {
-        //        return NotFound();
-        //    }
+            if (itemNumber == null)
+            {
+                return NotFound();
+            }
 
-        //    if (addToVoucherModalName == 1)
-        //    {
-        //        b.AddItemToVoucher(userID, itemNumber, quantityForVoucher, remarkForVoucher);
-        //    }
-        //    else if (quantityDeliveredModalName == 1)
-        //    {
-                
-        //    }
+            if (addToVoucherModalName == 1)
+            {
+                b.AddItemToVoucher(userID, itemNumber, quantityForVoucher, remarkForVoucher);
+            }
+            else if (quantityDeliveredModalName == 1)
+            {
+                foreach (DisbursementListDetails dlDetails in tempDisbursementListDetails)
+                {
+                    if (dlDetails.RowID == rowID)
+                    {
+                        dlDetails.QuantityDelivered = quantityDelivered;
+                    }
+                }
+            }
+            else if (confirmDeliveryModalName == 1)
+            {
 
-        //    return View(result);
-        //}
+            }
+
+            
+
+            return View(tempDisbursementListDetails);
+        }
 
         private bool DisbursementListExists(string id)
         {
