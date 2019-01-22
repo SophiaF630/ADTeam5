@@ -100,6 +100,22 @@ namespace ADTeam5.BusinessLogic
             return result;
         }
 
+        //Auto increment int ID generator
+        public int AutoIncrementIDGenerator(List<DisbursementListDetails> disbursementListDetails)
+        {
+            int result = 0;
+            List<int> rowIDList = new List<int>();
+            foreach(DisbursementListDetails dl in disbursementListDetails)
+            {
+                rowIDList.Add(dl.RowID);
+            }
+            while (rowIDList.Contains(result))
+            {
+                result++;
+            }
+            return result;
+        }
+
 
         //Generate Disbursement List for a department
         public List<RecordDetails> GenerateDisbursementListDetails(string depCode)
