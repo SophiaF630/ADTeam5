@@ -43,13 +43,10 @@ namespace ADTeam5.Controllers.Department
             decimal sum = b.findTotalExpenditure(dept, dbList);
 
             @ViewData["Sum"] = sum;
-<<<<<<< HEAD
+
             return View(dbList);
         }
-=======
-            return View(q);
-       }
->>>>>>> 8edf0c410d8bbcc48ed7226c9989d4a3ae603f3f
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -94,7 +91,7 @@ namespace ADTeam5.Controllers.Department
             List<Renderview> rv = new List<Renderview>();
             rv = b.GetExpenditureDetails(Dlid);
 
-<<<<<<< HEAD
+
             //var p = (from x in e.Catalogue
             //         join b in e.RecordDetails on x.ItemNumber equals b.ItemNumber
             //         join c in e.DisbursementList on b.Rrid equals c.Dlid
@@ -111,8 +108,8 @@ namespace ADTeam5.Controllers.Department
 
             //         }).ToList();
 
-=======
->>>>>>> 8edf0c410d8bbcc48ed7226c9989d4a3ae603f3f
+
+
             ViewBag.orderid = Dlid;
             return View(rv);
             
