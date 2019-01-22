@@ -7,6 +7,7 @@ namespace ADTeam5.Models
     public partial class DisbursementList
     {
         [Required]
+        [Display(Name = "Disbusement List No.")]
         public string Dlid { get; set; }
         [Display(Name = "Start Date")]
         public DateTime StartDate { get; set; }
@@ -14,6 +15,7 @@ namespace ADTeam5.Models
         [DataType(DataType.Date)]
         public DateTime? EstDeliverDate { get; set; }
         [Display(Name = "Complete Date")]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime? CompleteDate { get; set; }
         //[Display(Name ="Department")]
         //[Required(ErrorMessage = "*This field is required")]
