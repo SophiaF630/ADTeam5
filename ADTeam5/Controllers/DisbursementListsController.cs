@@ -22,6 +22,7 @@ namespace ADTeam5.Controllers
         private readonly SSISTeam5Context _context;
         BizLogic b = new BizLogic();
         readonly GeneralLogic userCheck;
+        static List<DisbursementListDetails> tempDisbursementListDetails = new List<DisbursementListDetails>();
 
         public DisbursementListsController(SSISTeam5Context context, UserManager<ADTeam5User> userManager)
         {
@@ -29,13 +30,15 @@ namespace ADTeam5.Controllers
             _userManager = userManager;
             userCheck = new GeneralLogic(context);
         }
-
         // GET: DisbursementLists
         public async Task<IActionResult> Index()
         {
             ADTeam5User user = await _userManager.GetUserAsync(HttpContext.User);
             List<string> identity = userCheck.checkUserIdentityAsync(user);
             int userID = user.WorkID;
+
+            ViewData["Department"] = identity[0];
+            ViewData["role"] = identity[1];
 
             //ViewData["Department"] = identity[0];
             //ViewData["role"] = identity[1];
@@ -84,6 +87,10 @@ namespace ADTeam5.Controllers
         // GET: DisbursementLists/Details/5
         public async Task<IActionResult> Details(string id)
         {
+            ADTeam5User user = await _userManager.GetUserAsync(HttpContext.User);
+            List<string> identity = userCheck.checkUserIdentityAsync(user);
+            int userID = user.WorkID;
+
             if (id == null)
             {
                 return NotFound();
@@ -98,6 +105,7 @@ namespace ADTeam5.Controllers
                 dlList.ItemNumber = item.ItemNumber;
                 dlList.ItemName = _context.Catalogue.FirstOrDefault(x => x.ItemNumber == item.ItemNumber).ItemName;
                 dlList.Quantity = item.Quantity;
+                dlList.QuantityDelivered = 0;
                 dlList.Remark = item.Remark;
 
                 result.Add(dlList);
@@ -105,8 +113,31 @@ namespace ADTeam5.Controllers
             return View(result);
         }
 
-        
-      
+        //// POST: DisbursementLists/Details/5
+        //[HttpPost]
+        //public async Task<IActionResult> Details(string itemNumber, int quantityDelivered, int quantityForVoucher, string remarkForDelivery, string remarkForVoucher, int quantityDeliveredModalName, int addToVoucherModalName, int confirmDeliveryModalName)
+        //{
+        //    ADTeam5User user = await _userManager.GetUserAsync(HttpContext.User);
+        //    List<string> identity = userCheck.checkUserIdentityAsync(user);
+        //    int userID = user.WorkID;
+
+        //    if (itemNumber == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    if (addToVoucherModalName == 1)
+        //    {
+        //        b.AddItemToVoucher(userID, itemNumber, quantityForVoucher, remarkForVoucher);
+        //    }
+        //    else if (quantityDeliveredModalName == 1)
+        //    {
+                
+        //    }
+
+        //    return View(result);
+        //}
+
         private bool DisbursementListExists(string id)
         {
             return _context.DisbursementList.Any(e => e.Dlid == id);

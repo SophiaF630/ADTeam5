@@ -234,8 +234,8 @@ namespace ADTeam5.BusinessLogic
         }
 
 
-        //Update stationeery out quantity
-        public void UpdateCatalogueOutAndStock(string itemNumber, int outQty)
+        //Update stationeery out quantity and stock after retrieval
+        public void UpdateCatalogueOutAndStockAfterRetrieval(string itemNumber, int outQty)
         {
             Catalogue catalogue = new Catalogue();
             var i = _context.Catalogue.FirstOrDefault(x => x.ItemNumber == itemNumber);
@@ -255,6 +255,27 @@ namespace ADTeam5.BusinessLogic
                 }
             }
         }
+
+        //Update stationery out after delivery
+        public void UpdateCatalogueOutAfterDelivery(string itemNumber, int qtyDelivered)
+        {
+            Catalogue catalogue = new Catalogue();
+            var i = _context.Catalogue.FirstOrDefault(x => x.ItemNumber == itemNumber);
+            if (i != null)
+            {               
+                int preOut = i.Out;
+                if (preOut >= qtyDelivered)
+                {
+                    i.Out = preOut - qtyDelivered;
+                    _context.SaveChanges();
+                }
+                else
+                {
+
+                }
+            }
+        }
+
 
         //Adjustment details
         public List<RecordDetails> GetAdjustmentRecordDetails(string voucherNo)

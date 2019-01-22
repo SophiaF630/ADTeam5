@@ -73,5 +73,22 @@ namespace ADTeam5
             }
             return result;
         }
+
+        //here comes an useless fuction
+        public void updateCatalogue()
+        {
+            //this part will update the reorder level of catalogue;
+            //this part will contain 5 parts:
+            //first: we need to get the list of catalogue
+            //second: for each catalogue we need to check if it has three purchase record
+            //3: if do,then check if the 3rd time is quicker then 2nd time and quicker than 1st
+            //then double the reorder level and reorder qty
+            //4:if 3 is not,then check if the 3rd time is double then 2nd time
+            //then half the reorder level and reorder qty
+            //5:save data
+
+            //this function will complete after the supplier part finished;
+        }
+
     }
 }

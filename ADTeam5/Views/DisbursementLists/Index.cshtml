@@ -23,6 +23,9 @@
                     <thead>
                         <tr>
                             <th>
+                                Disbursement List ID
+                            </th>
+                            <th>
                                 Collection Point
                             </th>
                             <th>
@@ -50,39 +53,41 @@
                     <tbody>
                         @foreach (var item in Model)
                         {
-                        <tr>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.CollectionPointNavigation.CollectionPointName)
-                            </td>
-                            <td>
-                                @*@Html.DisplayFor(modelItem => item.CollectionPointNavigation.CollectionTime).ToString("dd/MMM/yyyy HH:mm tt");*@
-                                @item.CollectionPointNavigation.CollectionTime.ToShortTimeString()
-                            </td>
-                            <td class="DepartmentName">
-                                @Html.DisplayFor(modelItem => item.DepartmentCodeNavigation.DepartmentName)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.RepNavigation.Name)
-                            </td>
-                            <td class="EstDeliverDate">
-                                @Html.DisplayFor(modelItem => item.EstDeliverDate)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.CompleteDate)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Status)
-                            </td>
-                            <td>
-                                <button type="button" class="btn btn-primary changeEstDeliverDate">
-                                    Change Deliver Date
-                                </button>
+                            <tr>
+                                <td>
+                                    <a asp-action="Details" asp-route-id="@item.Dlid">@Html.DisplayFor(modelItem => item.Dlid)</a>
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.CollectionPointNavigation.CollectionPointName)
+                                </td>
+                                <td>
+                                    @*@Html.DisplayFor(modelItem => item.CollectionPointNavigation.CollectionTime).ToString("dd/MMM/yyyy HH:mm tt");*@
+                                    @item.CollectionPointNavigation.CollectionTime.ToShortTimeString()
+                                </td>
+                                <td class="DepartmentName">
+                                    @Html.DisplayFor(modelItem => item.DepartmentCodeNavigation.DepartmentName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.RepNavigation.Name)
+                                </td>
+                                <td class="EstDeliverDate">
+                                    @Html.DisplayFor(modelItem => item.EstDeliverDate)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.CompleteDate)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Status)
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-primary changeEstDeliverDate">
+                                        Change Deliver Date
+                                    </button>
 
-                                <a asp-action="Details" asp-route-id="@item.Dlid" class="btn btn-primary">Details</a>
-                                @*<a asp-action="Details" asp-route-id="@item.Dlid" class="btn btn-primary">Delivery Confirmation</a>*@
-                            </td>
-
-                        </tr>
+                                    @*<a asp-action="Details" asp-route-id="@item.Dlid" class="btn btn-primary">Details</a>*@
+                                    @*<a asp-action="Details" asp-route-id="@item.Dlid" class="btn btn-primary">Delivery Confirmation</a>*@
+                                </td>
+                            </tr>
                         }
                     </tbody>
                 </table>
@@ -112,11 +117,13 @@
                         <input type="text" id="DepartmentNameDisplay" name="" class="form-control" value="" disabled />
                     </div>
                     <div class="form-group">
-                        <label for="EstDeliverDate">New Deliver Date</label>       <br>   
+                        <label for="EstDeliverDate">New Deliver Date</label>       <br>
                         <input type="date" id="EstDeliverDate" name="estDeliverDate" value="" />
                     </div>
-                    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-                    <button type="submit" class="btn btn-primary">Save changes</button>
+                    <div class="modal-footer">
+                        <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                    </div>
                 </form>
             </div>
         </div>
@@ -140,4 +147,5 @@
         $modal.modal('show');
     });
 </script>
+
 

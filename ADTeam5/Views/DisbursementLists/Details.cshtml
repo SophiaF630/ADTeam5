@@ -38,33 +38,45 @@
                             @Html.DisplayNameFor(model => model.Quantity)
                         </th>
                         <th>
+                            @Html.DisplayNameFor(model => model.QuantityDelivered)
+                        </th>
+                        <th>
                             @Html.DisplayNameFor(model => model.Remark)
                         </th>
+                        <th></th>
                         <th></th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach (var item in Model)
                     {
-                        <tr>
-                            <td class="ItemNumber">
-                                @Html.DisplayFor(modelItem => item.ItemNumber)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.ItemName)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Quantity)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Remark)
-                            </td>
-                            <td>
-                                <button type="button" class="btn btn-primary addToVoucher">
-                                    Add to Voucher
-                                </button>
-                            </td>
-                        </tr>
+                    <tr>
+                        <td class="ItemNumber">
+                            @Html.DisplayFor(modelItem => item.ItemNumber)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ItemName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Quantity)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.QuantityDelivered)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Remark)
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-primary editQuantityDelivered">
+                                Edit
+                            </button>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-primary addToVoucher">
+                                Add to Voucher
+                            </button>
+                        </td>
+                    </tr>
                     }
                 </tbody>
             </table>
@@ -81,7 +93,46 @@
     <a asp-action="Index">Back to List</a>
 </div>
 
-<!-- Modal for create voucher item-->
+
+<!-- Modal for edit quantity delivered-->
+<div class="modal fade" id="QuantityDeliveredModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Update Quantity Retrieved</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="POST">
+                    <div class="form-group">
+                        <input type="hidden" id="QuantityDeliveredModalID" name="quantityDeliveredModalName" class="form-control" value="1" />
+                    </div>
+                    <div class="form-group">
+                        <label for="ItemNumber">Item Number</label>
+                        <input type="hidden" id="ItemNumberValue" name="itemNumber" class="form-control" value="" />
+                        <input type="text" id="ItemNumberDisplay" name="" class="form-control" value="" disabled />
+                    </div>
+                    <div class="form-group">
+                        <label for="QuantityDelivered">Quantity Delivered</label>
+                        <input type="text" id="QuantityDelivered" name="quantityDelivered" class="form-control" value="" />
+                    </div>
+                    <div class="form-group">
+                        <label for="Remark">Remark</label>
+                        <input type="text" id="RemarkForDelivery" name="remarkForDelivery" class="form-control" value="" />
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for create voucher item--> 
 <div class="modal fade" id="AddToVoucherModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -107,15 +158,64 @@
                     </div>
                     <div class="form-group">
                         <label for="Remark">Remark</label>
-                        <input type="text" id="Remark" name="remark" class="form-control" value="" />
+                        <input type="text" id="RemarkForVoucher" name="remarkForVoucher" class="form-control" value="" />
                     </div>
-                    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-                    <button type="submit" class="btn btn-primary">Save changes</button>
+                    <div class="modal-footer">
+                        <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                    </div>
                 </form>
             </div>
         </div>
     </div>
 </div>
+
+<!-- Modal for Confirm Delivery-->
+<div class="modal fade" id="ConfirmDeliveryModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Confirm Delivery</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="POST">
+                    <div class="form-group">
+                        <input type="hidden" id="ConfirmDeliveryModalID" name="confirmDeliveryModalName" class="form-control" value="1" />
+                    </div>
+                    <div>Please confirm the delivery status</div>
+                    <div class="modal-footer">
+                        <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Confirm</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(".editQuantityDelivered").click(function () {
+        var $row = $(this).closest("tr");    // Find the row
+        var itemNumber = $row.find("td.ItemNumber").text().trim(); // Find the text
+        var quantityDelivered = $row.find("td.QuantityDelivered").text().trim();
+        var remark = "";
+        var quantityDeliveredModalID = 1;
+
+
+        var $modal = $('#QuantityDeliveredModal');
+        $modal.find('#ItemNumberValue').val(itemNumber);
+        $modal.find('#ItemNumberDisplay').val(itemNumber);
+        $modal.find('#QuantityDelivered').val(quantityDelivered);
+        $modal.find('#Remark').val(remark);
+        $modal.find('#QuantityDeliveredModalID').val(quantityDeliveredModalID);
+
+        $modal.modal('show');
+    });
+</script>
 
 <script>
     $(".addToVoucher").click(function () {
@@ -135,6 +235,26 @@
         $modal.modal('show');
     });
 </script>
+
+<script>
+    $(".confirmDelivery").click(function () {
+        //var $row = $(this).closest("tr");    // Find the row
+        //var itemNumber = $row.find("td.ItemNumber").text().trim(); // Find the text
+        //var quantityForVoucher = 0;
+        //var remark = "";
+        var confirmDeliveryModalID = 1;
+
+        var $modal = $('#ConfirmDeliveryModal');
+        //$modal.find('#ItemNumberValue').val(itemNumber);
+        //$modal.find('#ItemNumberDisplay').val(itemNumber);
+        //$modal.find('#QuantityForVoucher').val(quantityForVoucher);
+        //$modal.find('#Remark').val(remark);
+        $modal.find('#ConfirmDeliveryModalID').val(confirmDeliveryModalID);
+
+        $modal.modal('show');
+    });
+</script>
+
 <script>
     $('#DisbursementListDetails').DataTable();
 </script>
