@@ -57,6 +57,30 @@ namespace ADTeam5.Controllers
             return View(await sSISTeam5Context.ToListAsync());
         }
 
+        [HttpPost]
+        public async Task<IActionResult> Index(string departmentName, DateTime estDeliverDate, int changeEstDeliverDateModalName)
+        {
+
+            ADTeam5User user = await _userManager.GetUserAsync(HttpContext.User);
+            List<string> identity = userCheck.checkUserIdentityAsync(user);
+            int userID = user.WorkID;
+
+            if (departmentName == null)
+            {
+                return NotFound();
+            }
+
+            if (changeEstDeliverDateModalName == 1)
+            {
+                b.ChangeEstDeliverDate(departmentName, estDeliverDate);
+            }
+            
+            var sSISTeam5Context = _context.DisbursementList.Include(d => d.CollectionPointNavigation).Include(d => d.DepartmentCodeNavigation).Include(d => d.RepNavigation);
+
+            return View(sSISTeam5Context);
+        }
+
+
         // GET: DisbursementLists/Details/5
         public async Task<IActionResult> Details(string id)
         {
@@ -65,14 +89,13 @@ namespace ADTeam5.Controllers
                 return NotFound();
             }
 
-            List<RecordDetails> rd = b.GenerateDisbursementListDetails("ENGL");
+            List<RecordDetails> rd = _context.RecordDetails.Where(x => x.Rrid == id).ToList();
             List<DisbursementListDetails> result = new List<DisbursementListDetails>();
             foreach (var item in rd)
             {
                 DisbursementListDetails dlList = new DisbursementListDetails();
 
                 dlList.ItemNumber = item.ItemNumber;
-                //srList.ItemName = item.ItemNumberNavigation.ItemName;
                 dlList.ItemName = _context.Catalogue.FirstOrDefault(x => x.ItemNumber == item.ItemNumber).ItemName;
                 dlList.Quantity = item.Quantity;
                 dlList.Remark = item.Remark;

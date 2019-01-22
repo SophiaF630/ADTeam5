@@ -11,6 +11,8 @@
         @ViewData["role"]
     </p>*@
 
+<script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
 
 <h1>Disbursement List</h1>
 <div class="container">
@@ -42,39 +44,45 @@
                                 @Html.DisplayNameFor(model => model.Status)
                             </th>
                             <th></th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach (var item in Model)
                         {
-                            <tr>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.CollectionPointNavigation.CollectionPointName)
-                                </td>
-                                <td>
-                                    @*@Html.DisplayFor(modelItem => item.CollectionPointNavigation.CollectionTime).ToString("dd/MMM/yyyy HH:mm tt");*@
-                                    @item.CollectionPointNavigation.CollectionTime.ToShortTimeString()
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.DepartmentCodeNavigation.DepartmentName)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.RepNavigation.Name)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.EstDeliverDate)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.CompleteDate)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Status)
-                                </td>
-                                <td>
-                                    <a asp-action="Edit" asp-route-id="@item.Dlid">Edit</a> |
-                                    <a asp-action="Details" asp-route-id="@item.Dlid">Details</a>
-                                </td>
-                            </tr>
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CollectionPointNavigation.CollectionPointName)
+                            </td>
+                            <td>
+                                @*@Html.DisplayFor(modelItem => item.CollectionPointNavigation.CollectionTime).ToString("dd/MMM/yyyy HH:mm tt");*@
+                                @item.CollectionPointNavigation.CollectionTime.ToShortTimeString()
+                            </td>
+                            <td class="DepartmentName">
+                                @Html.DisplayFor(modelItem => item.DepartmentCodeNavigation.DepartmentName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.RepNavigation.Name)
+                            </td>
+                            <td class="EstDeliverDate">
+                                @Html.DisplayFor(modelItem => item.EstDeliverDate)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CompleteDate)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Status)
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-primary changeEstDeliverDate">
+                                    Change Deliver Date
+                                </button>
+
+                                <a asp-action="Details" asp-route-id="@item.Dlid" class="btn btn-primary">Details</a>
+                                @*<a asp-action="Details" asp-route-id="@item.Dlid" class="btn btn-primary">Delivery Confirmation</a>*@
+                            </td>
+
+                        </tr>
                         }
                     </tbody>
                 </table>
@@ -82,3 +90,54 @@
         </div>
     </div>
 </div>
+
+<!-- Modal for edit quantity retrieved-->
+<div class="modal fade" id="ChangeEstDeliverDateModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Change Deliver Date</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="POST">
+                    <div class="form-group">
+                        <input type="hidden" id="ChangeEstDeliverDateModalID" name="changeEstDeliverDateModalName" class="form-control" value="1" />
+                    </div>
+                    <div class="form-group">
+                        <label for="DepartmentName">Department Name</label>
+                        <input type="hidden" id="DepartmentNameValue" name="departmentName" class="form-control" value="" />
+                        <input type="text" id="DepartmentNameDisplay" name="" class="form-control" value="" disabled />
+                    </div>
+                    <div class="form-group">
+                        <label for="EstDeliverDate">New Deliver Date</label>       <br>   
+                        <input type="date" id="EstDeliverDate" name="estDeliverDate" value="" />
+                    </div>
+                    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $(".changeEstDeliverDate").click(function () {
+        var $row = $(this).closest("tr");    // Find the row
+        var departmentName = $row.find("td.DepartmentName").text().trim(); // Find the text
+        var estDeliverDate = $row.find("td.EstDeliverDate").text().trim();
+        var changeEstDeliverDateModalID = 1;
+
+        var $modal = $('#ChangeEstDeliverDateModal');
+        $modal.find('#DepartmentNameValue').val(departmentName);
+        $modal.find('#DepartmentNameDisplay').val(departmentName);
+        $modal.find('#EstDeliverDate').val(estDeliverDate);
+        $modal.find('#ChangeEstDeliverDateModalID').val(changeEstDeliverDateModalID);
+
+        $modal.modal('show');
+    });
+</script>
+

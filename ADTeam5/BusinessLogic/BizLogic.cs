@@ -167,7 +167,7 @@ namespace ADTeam5.BusinessLogic
                 {
                     //check if dl record exists
                     var rd = _context.RecordDetails.FirstOrDefault(x => x.Rrid == dl.Dlid && x.ItemNumber == r.ItemNumber && x.Remark == null);
-                    
+                    rd.Quantity = 0;
                     if (rd == null)
                     {
                         rd = new RecordDetails() { Rrid = dl.Dlid, ItemNumber = r.ItemNumber, Quantity = r.Quantity };
@@ -296,6 +296,17 @@ namespace ADTeam5.BusinessLogic
 
         }
 
+        //Change Deliver Date
+        public void ChangeEstDeliverDate(string departmentName, DateTime estDeliverDate)
+        {
+            string depCode = _context.Department.FirstOrDefault(x => x.DepartmentName == departmentName).DepartmentCode;
+            var disbursementLists = _context.DisbursementList.Where(x => x.DepartmentCode == depCode && x.Status == "Pending Delivery").ToList();
+            foreach (var dl in disbursementLists)
+            {
+                dl.EstDeliverDate = estDeliverDate;
+                _context.SaveChanges();
+            }
+        }
         
         
 
