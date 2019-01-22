@@ -5,52 +5,52 @@
 
 <style>
 
-
-
-    .bg-image {
-        /* Source image*/
-        background-image: linear-gradient(rgba(0, 0, 0, 0.5),rgba(0, 0, 0, 0.5));
-        /* Add the blur effect */
-        opacity: 0.4;
-        /*-filter: blur(8px);
-        -webkit-filter: blur(8px);*/
-     
-
-        /* Center and scale the image nicely */
-        /*background-position: center center;
-        background-repeat: no-repeat;
-        background-size: cover;*/
-
-        
-
+    body {
+        background: linear-gradient(rgba(255,255,255, 0.3), rgba(255,255,255, 0.3)), url(/img/homepage.jpg) no-repeat center center fixed;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
     }
+
+
+
+
 
     /* Position text in the middle of the page/image */
     .bg-text {
         background-color: rgb(0,0,0); /* Fallback color */
         background-color: rgba(0,0,0, 0.2); /* Black w/opacity/see-through */
-        color: black;
+        color: white;
         font-weight: bold;
         border: 3px solid #f1f1f1;
-        position: absolute;
+        position: fixed;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
         z-index: 2;
-        width: 80%;
-        padding: 20px;
+        width: fit-content;
+        line-height: 150%;
+        padding: 50px;
         text-align: center;
     }
-   
 </style>
 
 
 
 
 <body>
-    <div class="bg-image"><img src="~/img/homepage_stationery.jpg"/></div>
-    <div class="bg-text">
-        <h1 class="display-4">Welcome</h1>
-        <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <div class="bg-image">
+        <div class="bg-text">
+            <h1><b>Login</b></h1>
+            <br />
+            <h5>
+                Username: <input type="text" />
+                <br />
+                Password: <input type="text" />
+                <br />
+                <input type="submit" />
+            </h5>
+        </div>
     </div>
 </body>
