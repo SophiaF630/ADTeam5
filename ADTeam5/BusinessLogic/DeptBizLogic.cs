@@ -232,5 +232,93 @@ namespace ADTeam5.BusinessLogic
         {
             context.SaveChanges();
         }
+
+        //TEST FOR ANDROID - Assign Department
+        public List<String> getEmployeeNamesForAssignDept(string dept, int repid, int headid, int coveringheadid)
+        {
+            List<String> employeeNameList = new List<String>();
+            var q = context.User.Where(x => x.DepartmentCode == dept && x.UserId != repid && x.UserId != headid && x.UserId != coveringheadid).OrderBy(x => x.Name).ToList();
+            List<User> userList = q;
+            foreach (User current in userList)
+            {
+                string name = current.Name;
+                employeeNameList.Add(name);
+            }
+            return employeeNameList;
+        }
+        //TEST FOR ANDROID - Assign Department
+        public int getDeptHeadID(string dept)
+        {
+            var q = context.Department.Where(x => x.DepartmentCode == dept).First();
+            int headid = q.HeadId;
+            return headid;
+        }
+        public int getDeputyDeptHeadID(string dept)
+        {
+            var q = context.Department.Where(x => x.DepartmentCode == dept).First();
+            int deputyheadid = q.HeadId;
+            return deputyheadid;
+        }
+        public int getRepId(string dept)
+        {
+            var q = context.Department.Where(x => x.DepartmentCode == dept).First();
+            int repid = q.RepId;
+            return repid;
+        }
+        //TEST FOR ANDROID - Assign Department
+        public int updateDepartment(string name, string dept)
+        {
+            var q = context.User.Where(x => x.Name == name).First();
+            int userid = q.UserId;
+            string department = q.DepartmentCode;
+            var q1 = context.Department.Where(x => x.DepartmentCode == dept).First();
+            Models.Department d = q1;
+            d.RepId = userid;
+            context.SaveChanges();
+            return 1;
+        }
+        //TEST FOR ANDROID - Assign Deputy
+        public List<String> populateAssignDeputy(string dept, int repid, int headid)
+        {
+            var q = context.User.Where(x => x.DepartmentCode == dept && x.UserId != repid && x.UserId != headid).OrderBy(x => x.Name).ToList();
+            List<User> u = new List<User>();
+            u = q;
+            List<String> list = new List<String>();
+            foreach(User current in u)
+            {
+                list.Add(current.Name);
+            }
+            return list;
+        }
+        //TEST FOR ANDROID - Assign Deputy
+        public void saveDeputy(string dept, string name, DateTime startDate, DateTime endDate)
+        {
+            Department department = context.Department.Where(x => x.DepartmentCode == dept).First();
+            User u = context.User.Where(x => x.Name == name).First();
+            Models.DepartmentCoveringHeadRecord d2 = new Models.DepartmentCoveringHeadRecord();
+            d2.UserId = u.UserId;
+            d2.StartDate = startDate;
+            d2.EndDate = endDate;
+            department.CoveringHeadId = u.UserId;
+            context.Add(d2);
+            context.SaveChanges();
+        }
+        public void updateDeputy(string dept, string name, DateTime startDate, DateTime endDate)
+        {
+            int currentDeputyId;
+            Department department = context.Department.Where(x => x.DepartmentCode == dept).First();
+             currentDeputyId = (int)department.CoveringHeadId;
+                var q = context.DepartmentCoveringHeadRecord.Where(x => x.UserId == currentDeputyId).First();
+            Models.DepartmentCoveringHeadRecord d2 = new Models.DepartmentCoveringHeadRecord();
+            d2 = q;
+            User u = context.User.Where(x => x.Name == name).First();
+            d2.UserId = u.UserId;
+            d2.StartDate = startDate;
+            d2.EndDate = endDate;
+
+            department.CoveringHeadId = u.UserId;
+            context.SaveChanges();
+        }
+
     }
 }
