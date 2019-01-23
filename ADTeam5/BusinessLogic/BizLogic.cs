@@ -411,16 +411,18 @@ namespace ADTeam5.BusinessLogic
             if(ar != null)
             {
                 List<RecordDetails> rdList = _context.RecordDetails.Where(x => x.Rrid == ar.VoucherNo).ToList();
+                int rowID = 1;
                 foreach (var item in rdList)
                 {
                     TempVoucherDetails tvList = new TempVoucherDetails();
-
+                    tvList.RowID = rowID;
                     tvList.ItemNumber = item.ItemNumber;
                     tvList.ItemName = _context.Catalogue.FirstOrDefault(x => x.ItemNumber == item.ItemNumber).ItemName;
                     tvList.Quantity = item.Quantity;
                     tvList.Remark = item.Remark;
 
                     result.Add(tvList);
+                    rowID++;
                 }
             }
             return result;

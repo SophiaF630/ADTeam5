@@ -163,36 +163,28 @@ namespace ADTeam5.Controllers
             return View(adjustmentRecord);
         }
 
-        // GET: AdjustmentRecords/Delete/5
-        public async Task<IActionResult> Delete(string id)
+        [HttpPost]
+        public async Task<IActionResult> AdjustmentRecordDelete(string id)
         {
-            if (id == null)
+            ADTeam5User user = await _userManager.GetUserAsync(HttpContext.User);
+            List<string> identity = userCheck.checkUserIdentityAsync(user);
+            int userID = user.WorkID;
+            
+            AdjustmentRecord adjustmentRecordToBeDeleted = _context.AdjustmentRecord.FirstOrDefault(x => x.VoucherNo == id);
+            _context.AdjustmentRecord.Remove(adjustmentRecordToBeDeleted);
+            _context.SaveChanges();
+
+            AdjustmentRecord ar = _context.AdjustmentRecord.FirstOrDefault(x => x.ClerkId == userID && !x.VoucherNo.Contains("Vtemp"));
+            List<AdjustmentRecord> tempAdjustmentRecords = new List<AdjustmentRecord>();
+            if (ar != null)
             {
-                return NotFound();
+                tempAdjustmentRecords = _context.AdjustmentRecord.Where(x => x.ClerkId == userID && !x.VoucherNo.Contains("Vtemp")).ToList();
             }
-
-            var adjustmentRecord = await _context.AdjustmentRecord
-                .Include(a => a.Clerk)
-                .Include(a => a.Manager)
-                .Include(a => a.Superviser)
-                .FirstOrDefaultAsync(m => m.VoucherNo == id);
-            if (adjustmentRecord == null)
+            else
             {
-                return NotFound();
+                NotFound();
             }
-
-            return View(adjustmentRecord);
-        }
-
-        // POST: AdjustmentRecords/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(string id)
-        {
-            var adjustmentRecord = await _context.AdjustmentRecord.FindAsync(id);
-            _context.AdjustmentRecord.Remove(adjustmentRecord);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return PartialView("_TempAdjustmentRecords", tempAdjustmentRecords);
         }
 
         private bool AdjustmentRecordExists(string id)

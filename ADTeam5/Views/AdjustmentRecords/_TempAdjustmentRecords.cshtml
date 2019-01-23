@@ -1,0 +1,103 @@
+﻿@model List<ADTeam5.Models.AdjustmentRecord>
+
+@{
+    ViewData["Title"] = "_TempAdjustmentRecords";
+}
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            @if (Model.Count == 0)
+            {
+                <div class="row justify-content-center text-center">
+                    <div class="col-12 col-md-10 mt-5">
+
+                        <i class="fa fa-user fa-5x mb-5"></i>
+
+                        <h2>
+                            No Record Found
+                        </h2>
+
+                        <p class="text-muted">
+                            You do not have any adjustment record.
+                        </p>
+
+                        <a asp-action="Create" class="btn btn-lg btn-primary d-none d-md-inline-block mt-3">Create New</a>
+                    </div>
+                </div> <!-- / .row -->
+            }
+            else
+            {
+                <table id="TempAdjustmentRecord" class="table table-striped table-bordered" style="width: 100%;">
+                    <thead>
+                        <tr>
+                            <th>
+                                Voucher No
+                            </th>
+                            <th>
+                                Issue Date
+                            </th>
+                            <th>
+                                Approve Date
+                            </th>
+                            <th>
+                                Clerk Name
+                            </th>
+                            <th>
+                                Superviser Name
+                            </th>
+                            <th>
+                                Manager Name
+                            </th>
+                            <th>
+                                Status
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                        <tr>
+                            <td>
+                                <a asp-action="Details" asp-route-id="@item.VoucherNo">@Html.DisplayFor(modelItem => item.VoucherNo)</a>
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.IssueDate)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ApproveDate)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Clerk.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Manager.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Superviser.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Status)
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-primary submit">Submit</button>
+                            </td>
+                            <td>
+                                <form asp-action="AdjustmentRecordDelete" asp-route-id="@item.VoucherNo" method="post" data-ajax="true" data-ajax-update="#TempAdjustmentRecords" role="form" asp-controller="AdjustmentRecords">
+                                    <button type="submit" class="btn btn-sm btn-danger d-none d-md-inline-block">
+                                        Delete
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+               
+            }
+        </div>
+    </div>
+</div>
+
