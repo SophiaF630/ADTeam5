@@ -50,13 +50,13 @@ namespace ADTeam5.Controllers.Department
                 ViewData["CurrentDeputyHeadEndDate"] = d2.EndDate.ToShortDateString();
             }
 
-                List<User> userList = new List<User>();
-                Models.Department d = b.getDepartmentDetails(dept);
-                int repid = d.RepId;
-                int headid = d.HeadId;
-                userList = b.populateAssignDeputyDropDownList(dept, repid, headid);
-                ViewBag.listofitems = userList;
-                return View();
+            List<User> userList = new List<User>();
+            Models.Department d = b.getDepartmentDetails(dept);
+            int repid = d.RepId;
+            int headid = d.HeadId;
+            userList = b.populateAssignDeputyDropDownList(dept, repid, headid);
+            ViewBag.listofitems = userList;
+            return View();
         }
 
         [HttpPost]
@@ -81,15 +81,15 @@ namespace ADTeam5.Controllers.Department
                 }
                 else
                 {
-                     Models.DepartmentCoveringHeadRecord d2 = new Models.DepartmentCoveringHeadRecord();
-                     d2.UserId = u.UserId;
-                     d2.StartDate = startdate;
-                     d2.EndDate = enddate;
-                     context.Add(d2);
-                     context.SaveChanges();
+                    Models.DepartmentCoveringHeadRecord d2 = new Models.DepartmentCoveringHeadRecord();
+                    d2.UserId = u.UserId;
+                    d2.StartDate = startdate;
+                    d2.EndDate = enddate;
+                    context.Add(d2);
+                    context.SaveChanges();
                 }
 
-             
+
                 if (startdate < dt || enddate < startdate)
                 {
                     TempData["Alert2"] = "Please check your dates";
@@ -99,11 +99,11 @@ namespace ADTeam5.Controllers.Department
                     TempData["Alert3"] = "Edits Saved Successfully";
                 }
 
-                    return RedirectToAction("Index");
+                return RedirectToAction("Index");
             }
 
             return RedirectToAction("Index");
         }
-        
+
     }
 }
