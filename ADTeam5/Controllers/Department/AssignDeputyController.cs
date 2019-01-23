@@ -69,7 +69,7 @@ namespace ADTeam5.Controllers.Department
                 int id = u.UserId;
                 Models.Department d1 = b.getDepartmentDetails(dept);
                 d1.CoveringHeadId = id;
-                if (edit == true && startdate != null && enddate != null)
+                if (edit == true )
                 {
                     var q = context.DepartmentCoveringHeadRecord.Where(x => x.UserId == currentDeputyHeadId).First();
                     Models.DepartmentCoveringHeadRecord d2 = new Models.DepartmentCoveringHeadRecord();
@@ -78,9 +78,11 @@ namespace ADTeam5.Controllers.Department
                     d2.StartDate = startdate;
                     d2.EndDate = enddate;
                     context.SaveChanges();
+                    TempData["Alert3"] = "Edits Saved Successfully";
                 }
                 else
                 {
+<<<<<<< HEAD
                     Models.DepartmentCoveringHeadRecord d2 = new Models.DepartmentCoveringHeadRecord();
                     d2.UserId = u.UserId;
                     d2.StartDate = startdate;
@@ -90,13 +92,20 @@ namespace ADTeam5.Controllers.Department
                 }
 
 
+=======
+                     Models.DepartmentCoveringHeadRecord d2 = new Models.DepartmentCoveringHeadRecord();
+                     d2.UserId = u.UserId;
+                     d2.StartDate = startdate;
+                     d2.EndDate = enddate;
+                     context.Add(d2);
+                     context.SaveChanges();
+                    TempData["Alert3"] = "Edits Saved Successfully";
+                }
+             
+>>>>>>> 83669387aaf1b4ec0a4bc40aa10a9892a52173dc
                 if (startdate < dt || enddate < startdate)
                 {
                     TempData["Alert2"] = "Please check your dates";
-                }
-                else if (edit == true && startdate >= dt)
-                {
-                    TempData["Alert3"] = "Edits Saved Successfully";
                 }
 
                 return RedirectToAction("Index");
