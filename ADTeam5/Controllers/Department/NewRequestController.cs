@@ -80,6 +80,7 @@ namespace ADTeam5.Controllers.Department
                     {
                         itemExists = true;
                         QuantityList[i] = QuantityList[i] + quantity;
+                        break;
                     }
                     else
                     {
@@ -93,6 +94,7 @@ namespace ADTeam5.Controllers.Department
                 ItemNumberList.Add(ItemNumber);
 
                 var q = context.Catalogue.Where(x => x.ItemNumber == ItemNumber).First();
+
                 string itemName = q.ItemName;
                 ItemNameList.Add(itemName);
 
@@ -100,8 +102,8 @@ namespace ADTeam5.Controllers.Department
                 QuantityList.Add(quantity);
 
             }
-            ViewBag.ItemNameList = ItemNameList;
-            ViewBag.QuantityList = QuantityList;
+            //ViewBag.ItemNameList = ItemNameList;
+            //ViewBag.QuantityList = QuantityList;
 
             ViewData["SubmitButton"] = "true";
             return RedirectToAction("Index");
