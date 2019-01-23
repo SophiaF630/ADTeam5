@@ -5,31 +5,22 @@
 
 <h1>Assign Deputy Head</h1>
 
-@if (TempData["Alert1"] != null)
-{
-    <div class="alert alert-success" role="alert">
-        <button type="button" class="close" data-dismiss="alert" aira-label="close">
-            <span aria-hidden="true">&times</span>
-        </button>
-        @TempData["Alert1"]
-    </div>
-}
-@if (TempData["Alert2"] != null)
+@if (TempData["DateAlert"] != null)
 {
     <div class="alert alert-danger" role="alert">
         <button type="button" class="close" data-dismiss="alert" aira-label="close">
             <span aria-hidden="true">&times</span>
         </button>
-        @TempData["Alert2"]
+        @TempData["DateAlert"]
     </div>
 }
-@if (TempData["Alert3"] != null)
+@if (TempData["Success"] != null)
 {
     <div class="alert alert-success" role="alert">
         <button type="button" class="close" data-dismiss="alert" aira-label="close">
             <span aria-hidden="true">&times</span>
         </button>
-        @TempData["Alert3"]
+        @TempData["Success"]
     </div>
 }
 @if (TempData["Alert4"] != null)

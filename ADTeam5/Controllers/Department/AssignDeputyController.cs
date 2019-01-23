@@ -38,7 +38,6 @@ namespace ADTeam5.Controllers.Department
             role = identity[1];
 
             Models.Department d1 = b.getDepartmentDetails(dept);
-
             if (d1.CoveringHeadId != null)
             {
                 edit = true;
@@ -50,57 +49,55 @@ namespace ADTeam5.Controllers.Department
                 ViewData["CurrentDeputyHeadEndDate"] = d2.EndDate.ToShortDateString();
             }
 
-                List<User> userList = new List<User>();
-                Models.Department d = b.getDepartmentDetails(dept);
-                int repid = d.RepId;
-                int headid = d.HeadId;
-                userList = b.populateAssignDeputyDropDownList(dept, repid, headid);
-                ViewBag.listofitems = userList;
-                return View();
+            List<User> userList = new List<User>();
+            Models.Department d = b.getDepartmentDetails(dept);
+            int repid = d.RepId;
+            int headid = d.HeadId;
+            userList = b.populateAssignDeputyDropDownList(dept, repid, headid);
+            ViewBag.listofitems = userList;
+            return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Index(User u, DateTime startdate, DateTime enddate)
         {
-            DateTime dt = DateTime.Now;
-            if (ModelState.IsValid)
+            if (startdate > enddate || startdate < DateTime.Now.Date.AddDays(-1))
             {
-                int id = u.UserId;
-                Models.Department d1 = b.getDepartmentDetails(dept);
-                d1.CoveringHeadId = id;
-                if (edit == true )
-                {
-                    var q = context.DepartmentCoveringHeadRecord.Where(x => x.UserId == currentDeputyHeadId).First();
-                    Models.DepartmentCoveringHeadRecord d2 = new Models.DepartmentCoveringHeadRecord();
-                    d2 = q;
-                    d2.UserId = u.UserId;
-                    d2.StartDate = startdate;
-                    d2.EndDate = enddate;
-                    context.SaveChanges();
-                    TempData["Alert3"] = "Edits Saved Successfully";
-                }
-                else
-                {
-                     Models.DepartmentCoveringHeadRecord d2 = new Models.DepartmentCoveringHeadRecord();
-                     d2.UserId = u.UserId;
-                     d2.StartDate = startdate;
-                     d2.EndDate = enddate;
-                     context.Add(d2);
-                     context.SaveChanges();
-                    TempData["Alert3"] = "Edits Saved Successfully";
-                }
-             
-                if (startdate < dt || enddate < startdate)
-                {
-                    TempData["Alert2"] = "Please check your dates";
-                }
-
-                    return RedirectToAction("Index");
+                TempData["DateAlert"] = "Please enter valid dates!";
+                return RedirectToAction("Index");
             }
+            else
+            {
+                if (ModelState.IsValid)
+                {
+                    Models.Department d1 = context.Department.Where(x => x.DepartmentCode == dept).First();
+                    d1.CoveringHeadId = u.UserId;
 
-            return RedirectToAction("Index");
+                    if (edit == true)
+                    {
+                        var q = context.DepartmentCoveringHeadRecord.Where(x => x.UserId == currentDeputyHeadId).First();
+                        Models.DepartmentCoveringHeadRecord d2 = new Models.DepartmentCoveringHeadRecord();
+                        d2 = q;
+                        d2.UserId = u.UserId;
+                        d2.StartDate = startdate;
+                        d2.EndDate = enddate;
+                    }
+                    else
+                    {
+                        Models.DepartmentCoveringHeadRecord d2 = new Models.DepartmentCoveringHeadRecord();
+                        d2.UserId = u.UserId;
+                        d2.StartDate = startdate;
+                        d2.EndDate = enddate;
+                        context.Add(d2);
+                    }
+                    context.SaveChanges();
+                    TempData["Success"] = "Edits Saved Successfully";
+                    return RedirectToAction("Index");
+                }
+                return RedirectToAction("Index");
+            }
         }
-        
+
     }
 }
