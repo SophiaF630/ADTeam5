@@ -47,12 +47,22 @@ namespace ADTeam5.Controllers.Department
             catalogueList.Insert(0, new Catalogue { ItemNumber = "0", ItemName = "Select" });
             ViewBag.ListofCatalogueName = catalogueList;
 
-            ViewData["SubmitButton"] = null;
+            if(ItemNumberList.Count >0)
+            {
+                ViewBag.ItemNameList = ItemNameList;
+                ViewBag.QuantityList = QuantityList;
+                ViewData["SubmitButton"] = true;
+            }
+            else
+            {
+                ViewData["SubmitButton"] = null;
+            }
+            
             return View();
         }
 
         [HttpPost]
-        public IActionResult Index(string itemNumber, int quantity)
+        public IActionResult AddItem(string itemNumber, int quantity)
         {
             List<Catalogue> catalogueList = new List<Catalogue>();
             catalogueList = (from x in context.Catalogue select x).ToList();
@@ -94,7 +104,7 @@ namespace ADTeam5.Controllers.Department
             ViewBag.QuantityList = QuantityList;
 
             ViewData["SubmitButton"] = "true";
-            return View();
+            return RedirectToAction("Index");
         }
 
        [HttpGet]
