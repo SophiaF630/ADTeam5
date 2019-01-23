@@ -26,7 +26,6 @@ namespace ADTeam5.Controllers.Department
         static List<string> ItemNameList = new List<string>();
         static List<int> QuantityList = new List<int>();
         static string id;
-        
 
         public NewRequestController(SSISTeam5Context context, UserManager<ADTeam5User> userManager)
         {
@@ -60,17 +59,37 @@ namespace ADTeam5.Controllers.Department
             catalogueList.Insert(0, new Catalogue { ItemNumber = "0", ItemName = "Select" });
             ViewBag.ListofCatalogueName = catalogueList;
 
+            bool itemExists = false;
             string ItemNumber = itemNumber;
-            ItemNumberList.Add(ItemNumber);
 
-            var q = context.Catalogue.Where(x => x.ItemNumber == ItemNumber).First();
-            string itemName = q.ItemName;
-            ItemNameList.Add(itemName);
+            if(ItemNameList != null)
+            {
+                for(int i = 0; i < ItemNumberList.Count; i++)
+                {
+                    if(ItemNumberList[i].Equals(itemNumber))
+                    {
+                        itemExists = true;
+                        QuantityList[i] = QuantityList[i] + quantity;
+                    }
+                    else
+                    {
+                        itemExists = false;
+                    }
+                }
+            }
 
-            int Quantity = quantity;
-            QuantityList.Add(quantity);
-            
+            if(itemExists ==false)
+            {
+                ItemNumberList.Add(ItemNumber);
 
+                var q = context.Catalogue.Where(x => x.ItemNumber == ItemNumber).First();
+                string itemName = q.ItemName;
+                ItemNameList.Add(itemName);
+
+                int Quantity = quantity;
+                QuantityList.Add(quantity);
+
+            }
             ViewBag.ItemNameList = ItemNameList;
             ViewBag.QuantityList = QuantityList;
 

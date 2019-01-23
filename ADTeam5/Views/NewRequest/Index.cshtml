@@ -49,25 +49,30 @@
         </thead>
 
         <tbody>
-           
-            <tr>
+      
+                <tr>
 
-            <td>
-                    @foreach (var item in ViewBag.ItemNameList)
-                    {
-            <ul>@item</ul>
-                    }
-                </td>
+                    <td>
+                        @foreach (var item in ViewBag.ItemNameList)
+                        {
+                            <ul>@item</ul>
+                        }
+                    </td>
 
-            <td>
-                    @foreach (var item in ViewBag.QuantityList)
-                    {
-            <ul>@item</ul>
-                    }
-                </td>
-            </tr>
-           
-        </tbody>
+                    <td>
+                        @foreach (var item in ViewBag.QuantityList)
+                        {
+                            <ul>@item</ul>
+
+                        }
+                    </td>
+                    @*<td>
+                        <a asp-action="Edit" asp-route-id="@ViewBag.ItemNameList">Edit</a> |
+                        <a asp-action="Delete" asp-route-id="@ViewBag.ItemNameList">Delete</a>
+                    </td>*@
+                </tr>
+            
+            </tbody>
     </table>
 }
 
