@@ -21,7 +21,7 @@ namespace ADTeam5.Controllers.Department
         private readonly UserManager<ADTeam5User> _userManager;
         readonly GeneralLogic userCheck;
 
-        BizLogic b = new BizLogic();
+        DeptBizLogic b = new DeptBizLogic();
         static List<string> ItemNumberList= new List<string>();
         static List<string> ItemNameList = new List<string>();
         static List<int> QuantityList = new List<int>();

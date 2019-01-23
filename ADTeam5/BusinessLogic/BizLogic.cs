@@ -218,68 +218,8 @@ namespace ADTeam5.BusinessLogic
 
             return result;
         }
-        public Models.Department getDepartmentDetails(string dept)
-        {
-            var q1 = _context.Department.Where(x => x.DepartmentCode == dept).First();
-            Models.Department d = q1;
-            return d;
-        }
-
-        public Models.User getUser(int userid)
-        {
-            var q = _context.User.Where(x => x.UserId == userid).First();
-            Models.User u = q;
-            return u;
-        }
-
-        public string getCurrentDeputyHeadName(int currentDeputyHeadId)
-        {
-            var q = _context.User.Where(x => x.UserId == currentDeputyHeadId).First();
-            Models.User u = q;
-            string name = u.Name;
-            return name;
-        }
-
-        public Models.DepartmentCoveringHeadRecord findCurrentDeputyHeadToEdit(int currentDeputyHeadId)
-        {
-            DateTime today = DateTime.Now;
-            var q = _context.DepartmentCoveringHeadRecord.Where(x => x.UserId == currentDeputyHeadId && x.EndDate >= today).First();
-            DepartmentCoveringHeadRecord d2 = new DepartmentCoveringHeadRecord();
-            d2 = q;
-            return d2;
-        }
-
-        public List<User> populateAssignDeputyDropDownList(string dept, int repid, int headid)
-        {
-            var q = _context.User.Where(x => x.DepartmentCode == dept && x.UserId != repid && x.UserId != headid).OrderBy(x => x.Name).ToList();
-            List<User> u = new List<User>();
-            u = q;
-            return u;
-        }
-
-        //getting details of expenditure
-        public List<Renderview> GetExpenditureDetails(string Dlid)
-        {
-            var p = (from x in _context.Catalogue
-                     join b in _context.RecordDetails on x.ItemNumber equals b.ItemNumber
-                     join c in _context.DisbursementList on b.Rrid equals c.Dlid
-                     where c.Dlid.Equals(Dlid) && c.Status.Equals("Completed")
-
-                     group new { x, b, c } by new { x.Category } into g
-
-                     select new Renderview
-
-                     {
-                         Category = g.Key.Category,
-                         Quantity = g.Sum(a => a.b.Quantity),
-                         Subtotal = g.Sum(a => a.x.Supplier1Price * a.b.Quantity)
-
-                     });
-
-
-            return (p.ToList());
-        }
-            
+      
+        
         public List<EmployeeRequestRecord> searchRequestByDateAndDept(DateTime startDate, DateTime endDate, string dept)
         {
             var t = _context.EmployeeRequestRecord.Where(s => s.RequestDate >= startDate && s.RequestDate <= endDate && s.DepCode == dept);
@@ -342,31 +282,7 @@ namespace ADTeam5.BusinessLogic
             return name;
         }
 
-        public List<OutstandingOrder> getOutstandingOrders(string dept)
-        {
-            var q = from x in _context.EmployeeRequestRecord
-                    join s in _context.User on x.DepEmpId equals s.UserId
-                    where x.DepCode.Equals(dept) && x.Status == "Submitted"
-                    select new OutstandingOrder
-                    {
-                        Rrid = x.Rrid,
-                        Name = s.Name,
-                        Status = x.Status
-                    };
-            return q.ToList();
-        }
-
-        public List<OutstandingOrderDetails> getOutstandingOrdersDetails(string rrid)
-        {
-            var q = from x in _context.RecordDetails join s in _context.Catalogue on x.ItemNumber equals s.ItemNumber
-                    where x.Rrid.Equals(rrid) select new OutstandingOrderDetails
-                    {
-                        ItemName = s.ItemName,
-                        Quantity = x.Quantity
-                    };
-            return q.ToList();
-        }
-
+        
 
 
     }

@@ -21,7 +21,7 @@ namespace ADTeam5.Controllers.Department
         private readonly SSISTeam5Context context;
         private readonly UserManager<ADTeam5User> _userManager;
         readonly GeneralLogic userCheck;
-        BizLogic b = new BizLogic();
+        DeptBizLogic b = new DeptBizLogic();
 
         public AssignDeputyController(SSISTeam5Context context, UserManager<ADTeam5User> userManager)
         {
@@ -67,7 +67,7 @@ namespace ADTeam5.Controllers.Department
             if (ModelState.IsValid)
             {
                 int id = u.UserId;
-                Models.Department d1 = context.Department.Where(x => x.DepartmentCode == dept).First();
+                Models.Department d1 = b.getDepartmentDetails(dept);
                 d1.CoveringHeadId = id;
                 if (edit == true && startdate != null && enddate != null)
                 {
