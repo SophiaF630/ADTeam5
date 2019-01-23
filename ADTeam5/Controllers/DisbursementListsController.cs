@@ -116,6 +116,7 @@ namespace ADTeam5.Controllers
                         if (!rowIDList.Contains(rowID))
                         {
                             dlList.RowID = rowID;
+                            dlList.RDID = item.Rdid;
                             dlList.ItemNumber = item.ItemNumber;
                             dlList.ItemName = _context.Catalogue.FirstOrDefault(x => x.ItemNumber == item.ItemNumber).ItemName;
                             dlList.Quantity = item.Quantity;
@@ -144,6 +145,7 @@ namespace ADTeam5.Controllers
                         if (!rowIDList.Contains(rowID))
                         {
                             dlList.RowID = rowID;
+                            dlList.RDID = item.Rdid;
                             dlList.ItemNumber = item.ItemNumber;
                             dlList.ItemName = _context.Catalogue.FirstOrDefault(x => x.ItemNumber == item.ItemNumber).ItemName;
                             dlList.Quantity = item.Quantity;
@@ -178,6 +180,7 @@ namespace ADTeam5.Controllers
                     if (dlDetails.RowID == rowID)
                     {
                         dlDetails.QuantityDelivered = quantityDelivered;
+                        dlDetails.Remark = remarkForDelivery;
                     }
                 }
             }
@@ -194,23 +197,32 @@ namespace ADTeam5.Controllers
                     {
                         string itemNo = item.ItemNumber;
                         int qtyDelivered = item.QuantityDelivered;
-                        b.UpdateCatalogueOutAfterDelivery(itemNo, qtyDelivered);
-                        b.UpdateQuantityDeliveredAfterDelivery(itemNo, qtyDelivered, id);
+                        int rdid = item.RDID;
+                        string remark = item.Remark;
 
                         //generate a disbursement list if partial fulfilled
                         if (qtyDelivered != item.Quantity)
                         {
                             int qty = item.Quantity - qtyDelivered;
-                            b.GenerateDisbursementListForPartialFulfillment(itemNo, qty, remarkForDelivery, depCode);
+                            b.GenerateDisbursementListForPartialFulfillment(itemNo, qty, remark, depCode);
                         }
+
+                        b.UpdateCatalogueOutAfterDelivery(itemNo, qtyDelivered);
+                        b.UpdateQuantityDeliveredAfterDelivery(qtyDelivered, rdid);
+
+                        int balance = _context.Catalogue.Find(itemNo).Stock;
+                        b.UpdateInventoryTransRecord(itemNo, id, -qtyDelivered, balance);
                     }
                     
-                    //update status
+                    //update disbursement list status
                     var disbursementList = _context.DisbursementList.Find(id);
                     disbursementList.Status = "Delivered";
                     disbursementList.CompleteDate = DateTime.Now;
                     _context.DisbursementList.Update(disbursementList);
                     _context.SaveChanges();
+
+                    //update inventory transaction record
+
 
                     return RedirectToAction(nameof(Index));
                 }

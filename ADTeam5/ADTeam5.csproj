@@ -11,6 +11,10 @@
     <Content Remove="Views\DisbursementLists\Create.cshtml" />
     <Content Remove="Views\DisbursementLists\Delete.cshtml" />
     <Content Remove="Views\DisbursementLists\Edit.cshtml" />
+    <Content Remove="Views\InventoryTransRecords\Create.cshtml" />
+    <Content Remove="Views\InventoryTransRecords\Delete.cshtml" />
+    <Content Remove="Views\InventoryTransRecords\Details.cshtml" />
+    <Content Remove="Views\InventoryTransRecords\Edit.cshtml" />
     <Content Remove="Views\IssueVoucher\Delete.cshtml" />
     <Content Remove="Views\IssueVoucher\Details.cshtml" />
     <Content Remove="Views\StationeryRetrievalList\Create.cshtml" />

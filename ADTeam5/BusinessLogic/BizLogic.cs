@@ -294,9 +294,12 @@ namespace ADTeam5.BusinessLogic
             }
         }
 
-        public void UpdateQuantityDeliveredAfterDelivery(string itemNumber, int qtyDelivered, string dlID)
+        //Update quantity delivered out after delivery
+        public void UpdateQuantityDeliveredAfterDelivery(int qtyDelivered, int rdid)
         {
-
+            RecordDetails rd = _context.RecordDetails.FirstOrDefault(x => x.Rdid == rdid);
+            rd.QuantityDelivered = qtyDelivered;
+            _context.SaveChanges();
         }
 
         //Generate a disbursement list if partial fulfilled
@@ -304,10 +307,10 @@ namespace ADTeam5.BusinessLogic
         {
             string dlID = IDGenerator("DL");
             //check if dl record exists
-            DisbursementList dl = new DisbursementList();
-            dl = _context.DisbursementList.FirstOrDefault(x => x.Dlid == dlID);           
-            if (dl == null)
+            var q = _context.DisbursementList.FirstOrDefault(x => x.Dlid == dlID);           
+            if (q == null)
             {
+                DisbursementList dl = new DisbursementList();
                 dl.Dlid = dlID;
                 dl.StartDate = DateTime.Now;
                 dl.EstDeliverDate = EstimateDeliverDate();
@@ -329,6 +332,19 @@ namespace ADTeam5.BusinessLogic
             _context.RecordDetails.Add(rd);
             _context.SaveChanges();
 
+        }
+
+        //Update inventory transaction record
+        public void UpdateInventoryTransRecord(string itemNumber, string recordID, int qty, int balance)
+        {
+            InventoryTransRecord inventoryTransRecord = new InventoryTransRecord();
+            inventoryTransRecord.Date = DateTime.Now.Date;
+            inventoryTransRecord.ItemNumber = itemNumber;
+            inventoryTransRecord.RecordId = recordID;
+            inventoryTransRecord.Qty = qty;
+            inventoryTransRecord.Balance = balance;
+            _context.InventoryTransRecord.Add(inventoryTransRecord);
+            _context.SaveChanges();
         }
 
 
@@ -410,5 +426,49 @@ namespace ADTeam5.BusinessLogic
             return result;
         }
 
+        //FindDepartmentOrSupplier through disbursement list ID or PO ID
+        public string FindDepartmentOrSupplier(string recordId)
+        {
+            string result = "";
+
+            try
+            {
+                var findDep = _context.DisbursementList.FirstOrDefault(x => x.Dlid == recordId).DepartmentCode;
+                
+                if (findDep != null)
+                {
+                    result = _context.Department.Find(findDep).DepartmentName + " Department";
+                }                               
+            }
+            catch (NullReferenceException e)
+            {
+
+            }
+            try
+            {
+                var findSupp = _context.PurchaseOrderRecord.FirstOrDefault(x => x.Poid == recordId).SupplierCode;
+                if (findSupp != null)
+                {
+                    result = "Supplier - " + _context.Supplier.Find(findSupp).SupplierName;
+                }
+            }
+            catch (NullReferenceException e)
+            {
+
+            }
+            try
+            {
+                var findAdjustment = _context.AdjustmentRecord.FirstOrDefault(x => x.VoucherNo == recordId);
+                if (findAdjustment != null)
+                {
+                    result = "Stock Adjustment " + recordId;
+                }
+            }
+            catch (NullReferenceException e)
+            {
+
+            }
+            return result;
+        }
     }
 }

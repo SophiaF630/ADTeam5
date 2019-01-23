@@ -58,7 +58,7 @@
                             <td>
                                 @Html.DisplayFor(modelItem => item.QuantityDelivered)
                             </td>
-                            <td>
+                            <td class="Remark">
                                 @Html.DisplayFor(modelItem => item.Remark)
                             </td>
                             <td>
@@ -229,7 +229,7 @@
         var rowID = $row.find("td.RowID").text().trim();
         var itemNumber = $row.find("td.ItemNumber").text().trim(); // Find the text
         var quantityDelivered = $row.find("td.QuantityDelivered").text().trim();
-        var remark = "";
+        var remark = $row.find("td.Remark").text().trim();
         var quantityDeliveredModalID = 1;
 
         var $modal = $('#QuantityDeliveredModal');
@@ -237,7 +237,7 @@
         $modal.find('#ItemNumberValue').val(itemNumber);
         $modal.find('#ItemNumberDisplay').val(itemNumber);
         $modal.find('#QuantityDelivered').val(quantityDelivered);
-        $modal.find('#Remark').val(remark);
+        $modal.find('#RemarkForDelivery').val(remark);
         $modal.find('#QuantityDeliveredModalID').val(quantityDeliveredModalID);
 
         $modal.modal('show');
@@ -256,7 +256,7 @@
         $modal.find('#ItemNumberValue').val(itemNumber);
         $modal.find('#ItemNumberDisplay').val(itemNumber);
         $modal.find('#QuantityForVoucher').val(quantityForVoucher);
-        $modal.find('#Remark').val(remark);
+        $modal.find('#RemarkForVoucher').val(remark);
         $modal.find('#AddToVoucherModalID').val(addToVoucherModalID);
 
         $modal.modal('show');

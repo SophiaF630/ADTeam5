@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ADTeam5.Models.InventoryTransRecord>
+﻿@model IEnumerable<ADTeam5.ViewModels.InventoryTransRecordDetails>
 
 @{
     ViewData["Title"] = "Index";
@@ -6,9 +6,6 @@
 
 <h1>Index</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
 <table class="table">
     <thead>
         <tr>
@@ -16,7 +13,10 @@
                 @Html.DisplayNameFor(model => model.Date)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.RecordId)
+                Department/Supplier
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ItemName)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Qty)
@@ -24,10 +24,6 @@
             <th>
                 @Html.DisplayNameFor(model => model.Balance)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ItemNumberNavigation)
-            </th>
-            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -37,21 +33,16 @@
                 @Html.DisplayFor(modelItem => item.Date)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.RecordId)
+                @Html.DisplayFor(modelItem => item.DepartmentOrSupplier)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ItemName)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Qty)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Balance)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ItemNumberNavigation.ItemNumber)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.TransId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.TransId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.TransId">Delete</a>
             </td>
         </tr>
 }
