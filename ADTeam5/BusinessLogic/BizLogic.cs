@@ -182,17 +182,19 @@ namespace ADTeam5.BusinessLogic
                 foreach (RecordDetails r in selectederrList)
                 {
                     //check if dl record exists
-                    var rd = _context.RecordDetails.FirstOrDefault(x => x.Rrid == dl.Dlid && x.ItemNumber == r.ItemNumber && x.Remark == null);
-                    rd.Quantity = 0;
-                    if (rd == null)
+                    //RecordDetails rd = new RecordDetails();
+                    var q = _context.RecordDetails.FirstOrDefault(x => x.Rrid == dl.Dlid && x.ItemNumber == r.ItemNumber && x.Remark == null);
+                    if (q == null)
                     {
-                        rd = new RecordDetails() { Rrid = dl.Dlid, ItemNumber = r.ItemNumber, Quantity = r.Quantity };
+                        RecordDetails rd = new RecordDetails() { Rrid = dl.Dlid, ItemNumber = r.ItemNumber, Quantity = r.Quantity };
                         _context.RecordDetails.Add(rd);
                     }
                     else
                     {
-                        rd.Quantity += r.Quantity;
+                        RecordDetails rd = new RecordDetails();
+                        rd.Quantity += r.Quantity;                       
                     }
+                    
                     _context.SaveChanges();
                 }
                 
@@ -290,6 +292,43 @@ namespace ADTeam5.BusinessLogic
 
                 }
             }
+        }
+
+        public void UpdateQuantityDeliveredAfterDelivery(string itemNumber, int qtyDelivered, string dlID)
+        {
+
+        }
+
+        //Generate a disbursement list if partial fulfilled
+        public void GenerateDisbursementListForPartialFulfillment(string itemNumber, int qty, string remark, string depCode)
+        {
+            string dlID = IDGenerator("DL");
+            //check if dl record exists
+            DisbursementList dl = new DisbursementList();
+            dl = _context.DisbursementList.FirstOrDefault(x => x.Dlid == dlID);           
+            if (dl == null)
+            {
+                dl.Dlid = dlID;
+                dl.StartDate = DateTime.Now;
+                dl.EstDeliverDate = EstimateDeliverDate();
+                dl.DepartmentCode = depCode;
+                dl.RepId = _context.Department.Find(depCode).RepId;
+                dl.CollectionPointId = _context.Department.Find(depCode).CollectionPointId;
+                dl.Status = "Pending Delivery";
+
+                _context.DisbursementList.Add(dl);
+                _context.SaveChanges();
+            }
+
+            RecordDetails rd = new RecordDetails();
+            rd.Rrid = dlID;
+            rd.ItemNumber = itemNumber;
+            rd.Quantity = qty;
+            rd.QuantityDelivered = 0;
+            rd.Remark = remark;
+            _context.RecordDetails.Add(rd);
+            _context.SaveChanges();
+
         }
 
 

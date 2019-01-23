@@ -30,6 +30,7 @@ namespace ADTeam5.Controllers
             _userManager = userManager;
             userCheck = new GeneralLogic(context);
         }
+
         // GET: DisbursementLists
         public async Task<IActionResult> Index()
         {
@@ -98,47 +99,73 @@ namespace ADTeam5.Controllers
             List<RecordDetails> rd = _context.RecordDetails.Where(x => x.Rrid == id).ToList();
             List<DisbursementListDetails> result = new List<DisbursementListDetails>();
             List<int> rowIDList = new List<int>();
-            foreach(var q in tempDisbursementListDetails)
-            {
-                rowIDList.Add(q.RowID);
-            }
-            int rowID = 1;
-            foreach (var item in rd)
-            {
-                if (item.Rrid == id)
-                {
-                    DisbursementListDetails dlList = new DisbursementListDetails();
-                    if (!rowIDList.Contains(rowID))
-                    {
-                        dlList.RowID = rowID;
-                        dlList.ItemNumber = item.ItemNumber;
-                        dlList.ItemName = _context.Catalogue.FirstOrDefault(x => x.ItemNumber == item.ItemNumber).ItemName;
-                        dlList.Quantity = item.Quantity;
-                        dlList.QuantityDelivered = 0;
-                        dlList.Remark = item.Remark;
 
-                        tempDisbursementListDetails.Add(dlList);
-                        
-                        //result.Add(dlList);
-                    }
+            //if pending delivery show temp disbursement list
+            if (_context.DisbursementList.Find(id).Status == "Pending Delivery")
+            {
+                foreach (var q in tempDisbursementListDetails)
+                {
+                    rowIDList.Add(q.RowID);
                 }
-                rowID++;
+                int rowID = 1;
+                foreach (var item in rd)
+                {
+                    if (item.Rrid == id)
+                    {
+                        DisbursementListDetails dlList = new DisbursementListDetails();
+                        if (!rowIDList.Contains(rowID))
+                        {
+                            dlList.RowID = rowID;
+                            dlList.ItemNumber = item.ItemNumber;
+                            dlList.ItemName = _context.Catalogue.FirstOrDefault(x => x.ItemNumber == item.ItemNumber).ItemName;
+                            dlList.Quantity = item.Quantity;
+                            dlList.QuantityDelivered = item.QuantityDelivered;
+                            dlList.Remark = item.Remark;
+
+                            tempDisbursementListDetails.Add(dlList);
+                        }
+                    }
+                    rowID++;
+                }
+                return View(tempDisbursementListDetails);
             }
-            return View(tempDisbursementListDetails);
+            else
+            {
+                foreach (var q in result)
+                {
+                    rowIDList.Add(q.RowID);
+                }
+                int rowID = 1;
+                foreach (var item in rd)
+                {
+                    if (item.Rrid == id)
+                    {
+                        DisbursementListDetails dlList = new DisbursementListDetails();
+                        if (!rowIDList.Contains(rowID))
+                        {
+                            dlList.RowID = rowID;
+                            dlList.ItemNumber = item.ItemNumber;
+                            dlList.ItemName = _context.Catalogue.FirstOrDefault(x => x.ItemNumber == item.ItemNumber).ItemName;
+                            dlList.Quantity = item.Quantity;
+                            dlList.QuantityDelivered = item.QuantityDelivered;
+                            dlList.Remark = item.Remark;
+
+                            result.Add(dlList);
+                        }
+                    }
+                    rowID++;
+                }
+                return View(result);
+            }
         }
 
         // POST: DisbursementLists/Details/5
         [HttpPost]
-        public async Task<IActionResult> Details(string id, int rowID, string itemNumber, int quantityDelivered, int quantityForVoucher, string remarkForDelivery, string remarkForVoucher, int confirmationPassword, int quantityDeliveredModalName, int addToVoucherModalName, int confirmDeliveryModalName)
+        public async Task<IActionResult> Details(string id, int rowID, string itemNumber, int quantityDelivered, int quantityForVoucher, string remarkForDelivery, string remarkForVoucher, string confirmationPassword, int quantityDeliveredModalName, int addToVoucherModalName, int confirmDeliveryModalName, int backToListModalName)
         {
             ADTeam5User user = await _userManager.GetUserAsync(HttpContext.User);
             List<string> identity = userCheck.checkUserIdentityAsync(user);
             int userID = user.WorkID;
-
-            if (itemNumber == null)
-            {
-                return NotFound();
-            }
 
             if (addToVoucherModalName == 1)
             {
@@ -156,11 +183,48 @@ namespace ADTeam5.Controllers
             }
             else if (confirmDeliveryModalName == 1)
             {
+                string depCode = _context.DisbursementList.Find(id).DepartmentCode;
+                string collectionPassword = _context.Department.Find(depCode).CollectionPassword;
 
+                //check if password is correct
+                if (confirmationPassword == collectionPassword)
+                {
+                    //update out quantity
+                    foreach (var item in tempDisbursementListDetails)
+                    {
+                        string itemNo = item.ItemNumber;
+                        int qtyDelivered = item.QuantityDelivered;
+                        b.UpdateCatalogueOutAfterDelivery(itemNo, qtyDelivered);
+                        b.UpdateQuantityDeliveredAfterDelivery(itemNo, qtyDelivered, id);
+
+                        //generate a disbursement list if partial fulfilled
+                        if (qtyDelivered != item.Quantity)
+                        {
+                            int qty = item.Quantity - qtyDelivered;
+                            b.GenerateDisbursementListForPartialFulfillment(itemNo, qty, remarkForDelivery, depCode);
+                        }
+                    }
+                    
+                    //update status
+                    var disbursementList = _context.DisbursementList.Find(id);
+                    disbursementList.Status = "Delivered";
+                    disbursementList.CompleteDate = DateTime.Now;
+                    _context.DisbursementList.Update(disbursementList);
+                    _context.SaveChanges();
+
+                    return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    //check
+                    //show incorrect password
+                }
             }
-
+            else if(backToListModalName == 1)
+            {
+                return RedirectToAction(nameof(Index));
+            }
             
-
             return View(tempDisbursementListDetails);
         }
 
