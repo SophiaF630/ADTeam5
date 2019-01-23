@@ -64,58 +64,16 @@ namespace ADTeam5.Controllers.Department
         {
             if (startdate > enddate || startdate < DateTime.Now.Date.AddDays(-1))
             {
-<<<<<<< HEAD
                 TempData["DateAlert"] = "Please enter valid dates!";
                 return RedirectToAction("Index");
             }
             else
             {
                 if (ModelState.IsValid)
-=======
-                int id = u.UserId;
-                Models.Department d1 = b.getDepartmentDetails(dept);
-                d1.CoveringHeadId = id;
-                if (edit == true )
-                {
-                    var q = context.DepartmentCoveringHeadRecord.Where(x => x.UserId == currentDeputyHeadId).First();
-                    Models.DepartmentCoveringHeadRecord d2 = new Models.DepartmentCoveringHeadRecord();
-                    d2 = q;
-                    d2.UserId = u.UserId;
-                    d2.StartDate = startdate;
-                    d2.EndDate = enddate;
-                    context.SaveChanges();
-                    TempData["Alert3"] = "Edits Saved Successfully";
-                }
-                else
-                {
-<<<<<<< HEAD
-                    Models.DepartmentCoveringHeadRecord d2 = new Models.DepartmentCoveringHeadRecord();
-                    d2.UserId = u.UserId;
-                    d2.StartDate = startdate;
-                    d2.EndDate = enddate;
-                    context.Add(d2);
-                    context.SaveChanges();
-                }
-
-
-=======
-                     Models.DepartmentCoveringHeadRecord d2 = new Models.DepartmentCoveringHeadRecord();
-                     d2.UserId = u.UserId;
-                     d2.StartDate = startdate;
-                     d2.EndDate = enddate;
-                     context.Add(d2);
-                     context.SaveChanges();
-                    TempData["Alert3"] = "Edits Saved Successfully";
-                }
-             
->>>>>>> 83669387aaf1b4ec0a4bc40aa10a9892a52173dc
-                if (startdate < dt || enddate < startdate)
->>>>>>> f3f1d88b0d76f95173a99a256cd7fd67ccf76b43
                 {
                     Models.Department d1 = context.Department.Where(x => x.DepartmentCode == dept).First();
                     d1.CoveringHeadId = u.UserId;
 
-<<<<<<< HEAD
                     if (edit == true)
                     {
                         var q = context.DepartmentCoveringHeadRecord.Where(x => x.UserId == currentDeputyHeadId).First();
@@ -137,8 +95,6 @@ namespace ADTeam5.Controllers.Department
                     TempData["Success"] = "Edits Saved Successfully";
                     return RedirectToAction("Index");
                 }
-=======
->>>>>>> f3f1d88b0d76f95173a99a256cd7fd67ccf76b43
                 return RedirectToAction("Index");
             }
         }
