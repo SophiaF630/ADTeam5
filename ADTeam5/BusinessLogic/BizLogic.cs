@@ -499,6 +499,20 @@ namespace ADTeam5.BusinessLogic
             }
         }
 
+        //Delete voucher item
+        public void DeleteVoucherItem(int rowID, List<TempVoucherDetails> tempVoucherDetailsList)
+        {
+            //get rdid
+            TempVoucherDetails tempVoucherItem = tempVoucherDetailsList.FirstOrDefault(x => x.RowID == rowID);
+            int rdid = tempVoucherItem.RDID;
+
+            RecordDetails rd = _context.RecordDetails.FirstOrDefault(x => x.Rdid == rdid);
+            if (rd != null)
+            {
+                _context.RecordDetails.Remove(rd);
+                _context.SaveChanges();
+            }
+        }
 
         //FindDepartmentOrSupplier through disbursement list ID or PO ID
         public string FindDepartmentOrSupplier(string recordId)

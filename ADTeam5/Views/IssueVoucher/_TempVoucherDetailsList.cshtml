@@ -4,12 +4,10 @@
     ViewData["Title"] = "_TempVoucherDetailsList";
 }
 
-<script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
 
-@*<p>
-        <a asp-action="Create">Create New</a>
-    </p>*@
+
 
 <div class="container">
     <div class="row">
@@ -88,7 +86,7 @@
                                     </button>
                                 </td>
                                 <td>
-                                    <form asp-action="VoucherItemDelete" asp-route-id="@item.ItemNumber" method="post" data-ajax="true" data-ajax-update="#TempVoucherDetailsList" role="form" asp-controller="IssueVoucher">
+                                    <form asp-action="VoucherItemDelete" asp-route-id="@item.RowID" method="post" data-ajax="true" data-ajax-update="#TempVoucherDetailsList" role="form" asp-controller="IssueVoucher">
                                         <button type="submit" class="btn btn-sm btn-danger d-none d-md-inline-block">
                                             Delete
                                         </button>
@@ -112,7 +110,7 @@
 
 
 <!-- Modal for create voucher item-->
-<div class="modal fade" id="CreateNewVoucherItemModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal fade in" id="CreateNewVoucherItemModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -124,7 +122,7 @@
             <div class="modal-body">
                 <form method="POST">
                     <div class="form-group">
-                        <input type="hidden" id="CreateNewVoucherItemModalID" name="createNewVoucherItemModalName" class="form-control" value="1" />
+                        <input type="hidden" id="CreateNewVoucherItemModalID" name="createNewVoucherItemModalName" class="form-control" value="0" />
                     </div>
                     <div class="form-group">
                         <label for="Category">Category</label>
@@ -168,7 +166,7 @@
             <div class="modal-body">
                 <form method="POST">
                     <div class="form-group">
-                        <input type="hidden" id="VoucherItemModalID" name="voucherItemModalName" class="form-control" value="1" />
+                        <input type="hidden" id="VoucherItemModalID" name="voucherItemModalName" class="form-control" value="0" />
                     </div>
                     <div class="form-group">
                         <input type="hidden" id="RowID" name="rowID" class="form-control" value="" />
@@ -216,6 +214,19 @@
 </script>
 
 <script>
+    $(document).ready(function () {
+        $("#Category").change(function () {
+            $.get("/IssueVoucher/GetItemNameList", { category: $("#Category").val() }, function (data) {
+                $("#ItemNumber").empty();
+                $.each(data, function (index, row) {
+                    $("#ItemNumber").append("<option value='" + row.itemNumber + "'>" + row.itemName + "</option>")
+                });
+            });
+        })
+    });
+</script>
+
+<script>
     $(".editVoucherItem").click(function () {
         var $row = $(this).closest("tr");    // Find the row
         var rowID = $row.find("td.RowID").text().trim();
@@ -236,38 +247,32 @@
     });
 </script>
 
+
+
 <script>
     $(document).ready(function () {
-        $("#Category").change(function () {
-            $.get("/IssueVoucher/GetItemNameList", { category: $("#Category").val() }, function (data) {
-                $("#ItemNumber").empty();
-                $.each(data, function (index, row) {
-                    $("#ItemNumber").append("<option value='" + row.itemNumber + "'>" + row.itemName + "</option>")
-                });
-            });
-        })
+        $(".submit").click(function () {
+            var itemToAdd = $("input:checkbox:checked", "#TempVoucherDetails").map(function () {
+                return $(this).val();
+            }).get();
+            //alert(itemToAdd.join(','));
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("Index", "IssueVoucher")',
+                dataType: "html",
+                data: { itemSubmitted: itemToAdd },
+                success:
+                    function (data) {
+                        //$('#result').html(data);
+                        alert("submitted");
+                        window.location.reload();
+                    }
+            })           
+        });
     });
 </script>
 
-<script>
-    $(".submit").click(function () {
-        var itemToAdd = $("input:checkbox:checked", "#TempVoucherDetails").map(function () {
-            return $(this).val();
-        }).get();
-        //alert(itemToAdd.join(','));
-        $.ajax({
-            type: "POST",
-            url: '@Url.Action("Index", "IssueVoucher")',
-            dataType: "html",
-            data: { itemSubmitted: itemToAdd },
-            success:
-                function (data) {
-                    //$('#result').html(data);
-                    alert("submitted");
-                }
-        })
-    });
-</script>
+
 <script>
     $(".addToDraft").click(function () {
         var itemToAdd = $("input:checkbox:checked", "#TempVoucherDetails").map(function () {
@@ -283,6 +288,7 @@
                 function (data) {
                     //$('#result').html(data);
                     alert("saved to draft");
+                    location.reload();
                 }
         })
     });
