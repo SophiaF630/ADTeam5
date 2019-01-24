@@ -21,6 +21,7 @@ namespace ADTeam5.Models
 
         [Display(Name="Name")]
         public string SupplierName { get; set; }
+        
         public string GstregistrationNo { get; set; }
         public string TitleOfCourtesy { get; set; }
         public string ContactName { get; set; }
