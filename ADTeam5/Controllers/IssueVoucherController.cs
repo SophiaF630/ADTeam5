@@ -23,6 +23,7 @@ namespace ADTeam5.Controllers
 
         static List<string> ItemNumberList = new List<string>();
         static List<int> QuantityList = new List<int>();
+        static string voucherNo = "";
 
         public IssueVoucherController(SSISTeam5Context context, UserManager<ADTeam5User> userManager)
         {
@@ -64,6 +65,7 @@ namespace ADTeam5.Controllers
             ADTeam5User user = await _userManager.GetUserAsync(HttpContext.User);
             List<string> identity = userCheck.checkUserIdentityAsync(user);
             int userID = user.WorkID;
+            voucherNo = "";
 
             List<TempVoucherDetails> tempVoucherDetailsList = b.GetTempVoucherDetailsList(userID);
 
@@ -75,6 +77,16 @@ namespace ADTeam5.Controllers
             {
                 b.UpdateVoucherItem(rowID, quantity, remark, tempVoucherDetailsList);
             }
+
+            voucherNo = b.IDGenerator("V");
+            foreach (var item in tempVoucherDetailsList)
+            {
+                if (item.IsChecked == true)
+                {
+                    b.AddItemsToVoucher(rowID, voucherNo, tempVoucherDetailsList);
+                }
+            }
+
 
             List<TempVoucherDetails> result = b.GetTempVoucherDetailsList(userID);
 

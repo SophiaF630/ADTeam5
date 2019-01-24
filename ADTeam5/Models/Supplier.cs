@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace ADTeam5.Models
 {
@@ -14,6 +15,7 @@ namespace ADTeam5.Models
         }
 
         public string SupplierCode { get; set; }
+        [Display(Name = "Name")]
         public string SupplierName { get; set; }
         public string GstregistrationNo { get; set; }
         public string TitleOfCourtesy { get; set; }
