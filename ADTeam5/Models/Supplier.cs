@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
+
 namespace ADTeam5.Models
 {
     public partial class Supplier
@@ -18,10 +19,8 @@ namespace ADTeam5.Models
 
         [Display(Name = "Code")]
         public string SupplierCode { get; set; }
-
         [Display(Name="Name")]
-        public string SupplierName { get; set; }
-        
+        public string SupplierName { get; set; }        
         public string GstregistrationNo { get; set; }
         public string TitleOfCourtesy { get; set; }
         public string ContactName { get; set; }

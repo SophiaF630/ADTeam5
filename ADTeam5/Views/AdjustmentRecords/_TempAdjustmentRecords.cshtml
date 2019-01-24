@@ -59,43 +59,57 @@
                     <tbody>
                         @foreach (var item in Model)
                         {
-                        <tr>
-                            <td>
-                                <a asp-action="Details" asp-route-id="@item.VoucherNo">@Html.DisplayFor(modelItem => item.VoucherNo)</a>
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.IssueDate)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.ApproveDate)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Clerk.Name)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Manager.Name)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Superviser.Name)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Status)
-                            </td>
-                            <td>
-                                <button type="button" class="btn btn-primary submit">Submit</button>
-                            </td>
-                            <td>
-                                <form asp-action="AdjustmentRecordDelete" asp-route-id="@item.VoucherNo" method="post" data-ajax="true" data-ajax-update="#TempAdjustmentRecords" role="form" asp-controller="AdjustmentRecords">
-                                    <button type="submit" class="btn btn-sm btn-danger d-none d-md-inline-block">
-                                        Delete
-                                    </button>
-                                </form>
-                            </td>
-                        </tr>
+                            <tr>
+                                <td>
+                                    <a asp-action="Details" asp-route-id="@item.VoucherNo">@Html.DisplayFor(modelItem => item.VoucherNo)</a>
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.IssueDate)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ApproveDate)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Clerk.Name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Manager.Name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Superviser.Name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Status)
+                                </td>
+                                @if (item.Status == "Draft")
+                                {
+                                    <td>
+                                        <form asp-action="AdjustmentRecordSubmit" asp-route-id="@item.VoucherNo" method="post" data-ajax="true" data-ajax-update="#TempAdjustmentRecords" role="form" asp-controller="AdjustmentRecords">
+                                            <button type="submit" class="btn btn-primary">
+                                                Submit
+                                            </button>
+                                        </form>
+                                    </td>
+                                    <td>
+                                        <form asp-action="AdjustmentRecordDelete" asp-route-id="@item.VoucherNo" method="post" data-ajax="true" data-ajax-update="#TempAdjustmentRecords" role="form" asp-controller="AdjustmentRecords">
+                                            <button type="submit" class="btn btn-sm btn-danger d-none d-md-inline-block">
+                                                Delete
+                                            </button>
+                                        </form>
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td><button type="submit" class="btn btn-primary" disabled>Submit</button></td>
+                                    <td>
+                                        <button type="submit" class="btn btn-sm btn-danger d-none d-md-inline-block" disabled>Delete</button>
+                                    </td>
+                                }
+                            </tr>
                         }
                     </tbody>
                 </table>
-               
+
             }
         </div>
     </div>

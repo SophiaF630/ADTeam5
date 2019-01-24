@@ -23,6 +23,7 @@ namespace ADTeam5.Controllers
 
         static List<string> ItemNumberList = new List<string>();
         static List<int> QuantityList = new List<int>();
+        static string voucherNo = "";
 
         public IssueVoucherController(SSISTeam5Context context, UserManager<ADTeam5User> userManager)
         {
@@ -59,11 +60,12 @@ namespace ADTeam5.Controllers
 
         // POST: IssueVoucher
         [HttpPost]
-        public async Task<IActionResult> Index(string itemNumber, int quantity, int rowID, string remark, int createNewVoucherItemModalName, int voucherItemModalName)
+        public async Task<IActionResult> Index(string itemNumber, int quantity, int rowID, string remark, int createNewVoucherItemModalName, int voucherItemModalName, string[] itemSubmitted, string[] itemSavedToDraft)
         {
             ADTeam5User user = await _userManager.GetUserAsync(HttpContext.User);
             List<string> identity = userCheck.checkUserIdentityAsync(user);
             int userID = user.WorkID;
+            voucherNo = "";
 
             List<TempVoucherDetails> tempVoucherDetailsList = b.GetTempVoucherDetailsList(userID);
 
@@ -74,6 +76,33 @@ namespace ADTeam5.Controllers
             else if (voucherItemModalName == 1)
             {
                 b.UpdateVoucherItem(rowID, quantity, remark, tempVoucherDetailsList);
+            }
+
+            if (itemSubmitted.Length != 0)
+            {
+                voucherNo = b.IDGenerator("V");
+                foreach (var item in tempVoucherDetailsList)
+                {
+                    if (Array.Exists(itemSubmitted, i => i == item.RowID.ToString()))
+                    {
+                        b.AddItemsToVoucher(item.RowID, voucherNo, tempVoucherDetailsList);
+                        b.CreateAdjustmentRecord(userID, voucherNo, "Submitted");
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            else if(itemSavedToDraft.Length != 0)
+            {
+                voucherNo = b.IDGenerator("V");
+                foreach (var item in tempVoucherDetailsList)
+                {
+                    if (Array.Exists(itemSavedToDraft, i => i == item.RowID.ToString()))
+                    {
+                        b.AddItemsToVoucher(item.RowID, voucherNo, tempVoucherDetailsList);
+                        b.CreateAdjustmentRecord(userID, voucherNo, "Draft");
+                    }
+                }
+                return RedirectToAction(nameof(Index));
             }
 
             List<TempVoucherDetails> result = b.GetTempVoucherDetailsList(userID);

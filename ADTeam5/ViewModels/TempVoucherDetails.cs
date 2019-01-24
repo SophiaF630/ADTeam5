@@ -19,5 +19,7 @@ namespace ADTeam5.ViewModels
         [Display(Name = "Quantity")]
         public int Quantity { get; set; }
         public string Remark { get; set; }
+
+        public bool IsChecked { get; set; }
     }
 }
