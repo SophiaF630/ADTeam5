@@ -24,7 +24,9 @@ namespace ADTeam5.Models
         public string GstregistrationNo { get; set; }
         public string TitleOfCourtesy { get; set; }
         public string ContactName { get; set; }
+        [Display(Name = "Phone")]
         public int PhoneNo { get; set; }
+        [Display(Name = "Fax")]
         public int? FaxNo { get; set; }
         public string Address { get; set; }
         public string City { get; set; }

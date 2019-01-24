@@ -10,7 +10,7 @@
 
 <section class="content">
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-lg-12">
             <div class="box">
                 <div class="box-header">
                     <div align="center" vertical-align="middle">
@@ -43,10 +43,7 @@
 
                     <!-- /.box-header -->
                     <div class="box-body table-responsive">
-                        @*<p>
-                        <a asp-action="Create">Create New</a>
-                        <a asp-action="Create"><button class="btn btn-primary">Create New</button></a>
-                    </p>*@
+
                         <table id="Suppliers" class="table table-bordered table-striped table-hover table-condensed">
                             <thead>
                                 <tr>
@@ -81,53 +78,69 @@
                                         @Html.DisplayNameFor(model => model.PostalCode)
                                     </th>
                                     <th></th>
+                                    <th></th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach (var item in Model)
                                 {
-                                <tr>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.SupplierCode)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.SupplierName)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.GstregistrationNo)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.TitleOfCourtesy)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.ContactName)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.PhoneNo)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.FaxNo)
-                                    </td>
-                         
-                                    <td width="35%">
-                                        @Html.DisplayFor(modelItem => item.Address)
-                                    </td>
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.SupplierCode)
+                                        </td>
 
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.City)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.PostalCode)
-                                    </td>
-                                    <td>
-                                        <a asp-action="Edit" asp-route-id="@item.SupplierCode"><button class="btn btn-block">Edit</button></a>
-                                        <a asp-action="Details" asp-route-id="@item.SupplierCode"><button class="btn btn-block">Details</button></a>
-                                        <a asp-action="Delete" asp-route-id="@item.SupplierCode"><button class="btn btn-block">Delete</button></a>
-                                    </td>
-                                </tr>
+                                        <td>
+                                            <div style="width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">
+                                                @Html.DisplayFor(modelItem => item.SupplierName)
+                                            </div>
+
+                                        </td>
+
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.GstregistrationNo)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.TitleOfCourtesy)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.ContactName)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.PhoneNo)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.FaxNo)
+                                        </td>
+
+                                        <td style="35%">
+                                            <div style="width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">
+                                                @Html.DisplayFor(modelItem => item.Address)
+                                            </div>
+                                        </td>
+
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.City)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.PostalCode)
+                                        </td>
+                                        <td>
+                                            <a asp-action="Edit" asp-route-id="@item.SupplierCode"><button class="btn btn-primary" style="width:70px;height:30px;border:2px; background-color:#3c8dbc">Edit</button></a>
+                                        </td>
+                                        <td>
+                                            <a asp-action="Details" asp-route-id="@item.SupplierCode"><button class="btn btn-primary" style="width:70px;height:30px;border:2px; background-color:#3c8dbc">Details</button></a>
+                                        </td>
+                                        <td>
+                                            <a asp-action="Delete" asp-route-id="@item.SupplierCode"><button class="btn btn-primary" style="width:70px;height:30px;border:2px; background-color:#3c8dbc">Delete</button></a>
+                                        </td>
+                                    </tr>
                                 }
-                            </tbody>
+                            </tbody>                          
                         </table>
+                        <p align="right">
+                            <a asp-action="Create"><button class="btn btn-primary" style="width:100px;height:32px;border:2px; background-color:#3c8dbc">Create New</button></a>
+                        </p>
                     </div>
                 </div>
             </div>
@@ -146,7 +159,7 @@
 <script>
     $(function () {
         $('#Suppliers').DataTable({
-            'paging': true,
+            'paging': false,
             'lengthChange': true,
             'searching': true,
             'ordering': true,
