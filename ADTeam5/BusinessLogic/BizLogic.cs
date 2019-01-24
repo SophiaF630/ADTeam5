@@ -442,7 +442,7 @@ namespace ADTeam5.BusinessLogic
                     result = _context.Department.Find(findDep).DepartmentName + " Department";
                 }                               
             }
-            catch (NullReferenceException e)
+            catch (NullReferenceException)
             {
 
             }
@@ -454,7 +454,7 @@ namespace ADTeam5.BusinessLogic
                     result = "Supplier - " + _context.Supplier.Find(findSupp).SupplierName;
                 }
             }
-            catch (NullReferenceException e)
+            catch (NullReferenceException)
             {
 
             }
@@ -466,7 +466,7 @@ namespace ADTeam5.BusinessLogic
                     result = "Stock Adjustment " + recordId;
                 }
             }
-            catch (NullReferenceException e)
+            catch (NullReferenceException)
             {
 
             }

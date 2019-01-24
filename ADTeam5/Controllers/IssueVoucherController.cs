@@ -59,7 +59,7 @@ namespace ADTeam5.Controllers
 
         // POST: IssueVoucher
         [HttpPost]
-        public async Task<IActionResult> Index(string itemNumber, int quantity, int quantityForVoucher, string remark, int createNewVoucherItemModalName, int voucherItemModalName)
+        public async Task<IActionResult> Index(string itemNumber, int quantity, string remark, int createNewVoucherItemModalName, int voucherItemModalName)
         {
             ADTeam5User user = await _userManager.GetUserAsync(HttpContext.User);
             List<string> identity = userCheck.checkUserIdentityAsync(user);
