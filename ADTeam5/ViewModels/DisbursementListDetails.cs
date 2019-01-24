@@ -10,6 +10,8 @@ namespace ADTeam5.ViewModels
     {
         [Display(Name = "No.")]
         public int RowID { get; set; }
+        [Display(Name = "RDID")]
+        public int RDID { get; set; }
         [Display(Name = "Item Number")]
         public string ItemNumber { get; set; }
         [Display(Name = "Item Name")]

@@ -182,17 +182,19 @@ namespace ADTeam5.BusinessLogic
                 foreach (RecordDetails r in selectederrList)
                 {
                     //check if dl record exists
-                    var rd = _context.RecordDetails.FirstOrDefault(x => x.Rrid == dl.Dlid && x.ItemNumber == r.ItemNumber && x.Remark == null);
-                    rd.Quantity = 0;
-                    if (rd == null)
+                    //RecordDetails rd = new RecordDetails();
+                    var q = _context.RecordDetails.FirstOrDefault(x => x.Rrid == dl.Dlid && x.ItemNumber == r.ItemNumber && x.Remark == null);
+                    if (q == null)
                     {
-                        rd = new RecordDetails() { Rrid = dl.Dlid, ItemNumber = r.ItemNumber, Quantity = r.Quantity };
+                        RecordDetails rd = new RecordDetails() { Rrid = dl.Dlid, ItemNumber = r.ItemNumber, Quantity = r.Quantity };
                         _context.RecordDetails.Add(rd);
                     }
                     else
                     {
-                        rd.Quantity += r.Quantity;
+                        RecordDetails rd = new RecordDetails();
+                        rd.Quantity += r.Quantity;                       
                     }
+                    
                     _context.SaveChanges();
                 }
                 
@@ -292,6 +294,59 @@ namespace ADTeam5.BusinessLogic
             }
         }
 
+        //Update quantity delivered out after delivery
+        public void UpdateQuantityDeliveredAfterDelivery(int qtyDelivered, int rdid)
+        {
+            RecordDetails rd = _context.RecordDetails.FirstOrDefault(x => x.Rdid == rdid);
+            rd.QuantityDelivered = qtyDelivered;
+            _context.SaveChanges();
+        }
+
+        //Generate a disbursement list if partial fulfilled
+        public void GenerateDisbursementListForPartialFulfillment(string itemNumber, int qty, string remark, string depCode)
+        {
+            string dlID = IDGenerator("DL");
+            //check if dl record exists
+            var q = _context.DisbursementList.FirstOrDefault(x => x.Dlid == dlID);           
+            if (q == null)
+            {
+                DisbursementList dl = new DisbursementList();
+                dl.Dlid = dlID;
+                dl.StartDate = DateTime.Now;
+                dl.EstDeliverDate = EstimateDeliverDate();
+                dl.DepartmentCode = depCode;
+                dl.RepId = _context.Department.Find(depCode).RepId;
+                dl.CollectionPointId = _context.Department.Find(depCode).CollectionPointId;
+                dl.Status = "Pending Delivery";
+
+                _context.DisbursementList.Add(dl);
+                _context.SaveChanges();
+            }
+
+            RecordDetails rd = new RecordDetails();
+            rd.Rrid = dlID;
+            rd.ItemNumber = itemNumber;
+            rd.Quantity = qty;
+            rd.QuantityDelivered = 0;
+            rd.Remark = remark;
+            _context.RecordDetails.Add(rd);
+            _context.SaveChanges();
+
+        }
+
+        //Update inventory transaction record
+        public void UpdateInventoryTransRecord(string itemNumber, string recordID, int qty, int balance)
+        {
+            InventoryTransRecord inventoryTransRecord = new InventoryTransRecord();
+            inventoryTransRecord.Date = DateTime.Now.Date;
+            inventoryTransRecord.ItemNumber = itemNumber;
+            inventoryTransRecord.RecordId = recordID;
+            inventoryTransRecord.Qty = qty;
+            inventoryTransRecord.Balance = balance;
+            _context.InventoryTransRecord.Add(inventoryTransRecord);
+            _context.SaveChanges();
+        }
+
 
         //Adjustment details
         public List<RecordDetails> GetAdjustmentRecordDetails(string voucherNo)
@@ -344,8 +399,7 @@ namespace ADTeam5.BusinessLogic
                 _context.SaveChanges();
             }
         }
-        
-        
+               
 
         //Draft voucher details
         public List<TempVoucherDetails> GetTempVoucherDetailsList(int userId)
@@ -356,20 +410,93 @@ namespace ADTeam5.BusinessLogic
             if(ar != null)
             {
                 List<RecordDetails> rdList = _context.RecordDetails.Where(x => x.Rrid == ar.VoucherNo).ToList();
+                int rowID = 1;
                 foreach (var item in rdList)
                 {
                     TempVoucherDetails tvList = new TempVoucherDetails();
-
+                    tvList.RowID = rowID;
+                    tvList.RDID = item.Rdid;
                     tvList.ItemNumber = item.ItemNumber;
                     tvList.ItemName = _context.Catalogue.FirstOrDefault(x => x.ItemNumber == item.ItemNumber).ItemName;
                     tvList.Quantity = item.Quantity;
                     tvList.Remark = item.Remark;
 
                     result.Add(tvList);
+                    rowID++;
                 }
             }
             return result;
         }
 
+        //create new voucher item
+        public void CreateNewVoucherItem(int userID, string itemNumber, int quantity, string remark)
+        {
+            RecordDetails tempVoucherItem = new RecordDetails();
+            tempVoucherItem.Rrid = "VTemp" + userID.ToString();
+            tempVoucherItem.ItemNumber = itemNumber;
+            tempVoucherItem.Quantity = quantity;
+            tempVoucherItem.Remark = remark;
+            _context.RecordDetails.Add(tempVoucherItem);
+            _context.SaveChanges();
+        }
+
+        //Update voucherItem
+        public void UpdateVoucherItem(int rowID, int quantity, string remark, List<TempVoucherDetails> tempVoucherDetailsList)
+        {
+            //get rdid
+            TempVoucherDetails tempVoucherItem = tempVoucherDetailsList.FirstOrDefault(x => x.RowID == rowID);
+            int rdid = tempVoucherItem.RDID;
+
+            RecordDetails editVoucherItem = _context.RecordDetails.FirstOrDefault(x => x.Rdid == rdid);
+            editVoucherItem.Quantity = quantity;
+            editVoucherItem.Remark = remark;
+            _context.Update(editVoucherItem);
+            _context.SaveChanges();
+        }
+
+        //FindDepartmentOrSupplier through disbursement list ID or PO ID
+        public string FindDepartmentOrSupplier(string recordId)
+        {
+            string result = "";
+
+            try
+            {
+                var findDep = _context.DisbursementList.FirstOrDefault(x => x.Dlid == recordId).DepartmentCode;
+                
+                if (findDep != null)
+                {
+                    result = _context.Department.Find(findDep).DepartmentName + " Department";
+                }                               
+            }
+            catch (NullReferenceException)
+            {
+
+            }
+            try
+            {
+                var findSupp = _context.PurchaseOrderRecord.FirstOrDefault(x => x.Poid == recordId).SupplierCode;
+                if (findSupp != null)
+                {
+                    result = "Supplier - " + _context.Supplier.Find(findSupp).SupplierName;
+                }
+            }
+            catch (NullReferenceException)
+            {
+
+            }
+            try
+            {
+                var findAdjustment = _context.AdjustmentRecord.FirstOrDefault(x => x.VoucherNo == recordId);
+                if (findAdjustment != null)
+                {
+                    result = "Stock Adjustment " + recordId;
+                }
+            }
+            catch (NullReferenceException)
+            {
+
+            }
+            return result;
+        }
     }
 }

@@ -9,6 +9,7 @@ namespace ADTeam5.Models
         public string Rrid { get; set; }
         public string ItemNumber { get; set; }
         public int Quantity { get; set; }
+        public int QuantityDelivered { get; set; }
         public string Remark { get; set; }
 
         public virtual Catalogue ItemNumberNavigation { get; set; }

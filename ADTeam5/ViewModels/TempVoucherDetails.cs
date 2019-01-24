@@ -8,8 +8,11 @@ namespace ADTeam5.ViewModels
 {
     public class TempVoucherDetails
     {
-        
 
+        [Display(Name = "No.")]
+        public int RowID { get; set; }
+        [Display(Name = "RDID")]
+        public int RDID { get; set; }
         [Display(Name = "Item Number")]
         public string ItemNumber { get; set; }
         public string ItemName { get; set; }
