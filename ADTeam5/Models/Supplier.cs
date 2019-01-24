@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace ADTeam5.Models
 {
@@ -13,7 +16,10 @@ namespace ADTeam5.Models
             PurchaseOrderRecord = new HashSet<PurchaseOrderRecord>();
         }
 
+        [Display(Name = "Code")]
         public string SupplierCode { get; set; }
+
+        [Display(Name="Name")]
         public string SupplierName { get; set; }
         public string GstregistrationNo { get; set; }
         public string TitleOfCourtesy { get; set; }
