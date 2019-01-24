@@ -19,14 +19,16 @@ namespace ADTeam5.DeptAPIController
 
         // GET: api/<controller>
         [HttpGet]
-        public string Get()
+        public Department Get()
         {
-            //Filter according to the dept of the person using this
+            ////Filter according to the dept of the person using this
+            //Department d = b.getDepartmentDetails("ENGL");
+            //currentRepId = d.RepId;
+            //User u = b.getUser(currentRepId);
+            //string currentRepName = u.Name;
+            //return currentRepName;
             Department d = b.getDepartmentDetails("ENGL");
-            currentRepId = d.RepId;
-            User u = b.getUser(currentRepId);
-            string currentRepName = u.Name;
-            return currentRepName;
+            return d;
         }
 
         // GET api/<controller>/EmployeeNames
@@ -38,6 +40,16 @@ namespace ADTeam5.DeptAPIController
             List<String> EmployeeNamesList = b.getEmployeeNamesForAssignDept("ENGL", currentRepId, headid, coveringheadid);
             return EmployeeNamesList;
       
+        }
+
+        [HttpPost("{EmployeeNames}")]
+        public List<string> SetEmployeeNames()
+        {
+            int headid = b.getDeptHeadID("ENGL");
+            int coveringheadid = b.getDeputyDeptHeadID("ENGL");
+            List<String> EmployeeNamesList = b.getEmployeeNamesForAssignDept("ENGL", currentRepId, headid, coveringheadid);
+            return EmployeeNamesList;
+
         }
 
         // POST api/<controller>
