@@ -59,28 +59,26 @@ namespace ADTeam5.Controllers
 
         // POST: IssueVoucher
         [HttpPost]
-        public async Task<IActionResult> Index(string itemNumber, int quantity, string remark, int createNewVoucherItemModalName, int voucherItemModalName)
+        public async Task<IActionResult> Index(string itemNumber, int quantity, int rowID, string remark, int createNewVoucherItemModalName, int voucherItemModalName)
         {
             ADTeam5User user = await _userManager.GetUserAsync(HttpContext.User);
             List<string> identity = userCheck.checkUserIdentityAsync(user);
             int userID = user.WorkID;
-            
+
+            List<TempVoucherDetails> tempVoucherDetailsList = b.GetTempVoucherDetailsList(userID);
+
             if (createNewVoucherItemModalName == 1)
             {
-                RecordDetails tempVoucherItem = new RecordDetails();
-                tempVoucherItem.Rrid = "VTemp" + userID.ToString();
-                tempVoucherItem.ItemNumber = itemNumber;
-                tempVoucherItem.Quantity = quantity;
-                tempVoucherItem.Remark = remark;
-                _context.RecordDetails.Add(tempVoucherItem);
-                _context.SaveChanges();
+                b.CreateNewVoucherItem(userID, itemNumber, quantity, remark);
             }
             else if (voucherItemModalName == 1)
             {
-
+                b.UpdateVoucherItem(rowID, quantity, remark, tempVoucherDetailsList);
             }
-            List<TempVoucherDetails> tempVoucherDetailsList = b.GetTempVoucherDetailsList(userID);
-            return View(tempVoucherDetailsList);
+
+            List<TempVoucherDetails> result = b.GetTempVoucherDetailsList(userID);
+
+            return View(result);
         }
        
 
@@ -103,7 +101,7 @@ namespace ADTeam5.Controllers
                 tempVoucherDetailsList = new List<TempVoucherDetails>();
             }
             return PartialView("_TempVoucherDetailsList", tempVoucherDetailsList);
-            //return View("Index", tempVoucherDetailsList);
+
         }
 
         

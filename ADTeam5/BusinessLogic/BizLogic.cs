@@ -399,8 +399,7 @@ namespace ADTeam5.BusinessLogic
                 _context.SaveChanges();
             }
         }
-        
-        
+               
 
         //Draft voucher details
         public List<TempVoucherDetails> GetTempVoucherDetailsList(int userId)
@@ -416,6 +415,7 @@ namespace ADTeam5.BusinessLogic
                 {
                     TempVoucherDetails tvList = new TempVoucherDetails();
                     tvList.RowID = rowID;
+                    tvList.RDID = item.Rdid;
                     tvList.ItemNumber = item.ItemNumber;
                     tvList.ItemName = _context.Catalogue.FirstOrDefault(x => x.ItemNumber == item.ItemNumber).ItemName;
                     tvList.Quantity = item.Quantity;
@@ -426,6 +426,32 @@ namespace ADTeam5.BusinessLogic
                 }
             }
             return result;
+        }
+
+        //create new voucher item
+        public void CreateNewVoucherItem(int userID, string itemNumber, int quantity, string remark)
+        {
+            RecordDetails tempVoucherItem = new RecordDetails();
+            tempVoucherItem.Rrid = "VTemp" + userID.ToString();
+            tempVoucherItem.ItemNumber = itemNumber;
+            tempVoucherItem.Quantity = quantity;
+            tempVoucherItem.Remark = remark;
+            _context.RecordDetails.Add(tempVoucherItem);
+            _context.SaveChanges();
+        }
+
+        //Update voucherItem
+        public void UpdateVoucherItem(int rowID, int quantity, string remark, List<TempVoucherDetails> tempVoucherDetailsList)
+        {
+            //get rdid
+            TempVoucherDetails tempVoucherItem = tempVoucherDetailsList.FirstOrDefault(x => x.RowID == rowID);
+            int rdid = tempVoucherItem.RDID;
+
+            RecordDetails editVoucherItem = _context.RecordDetails.FirstOrDefault(x => x.Rdid == rdid);
+            editVoucherItem.Quantity = quantity;
+            editVoucherItem.Remark = remark;
+            _context.Update(editVoucherItem);
+            _context.SaveChanges();
         }
 
         //FindDepartmentOrSupplier through disbursement list ID or PO ID
