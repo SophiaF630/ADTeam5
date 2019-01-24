@@ -458,7 +458,7 @@ namespace ADTeam5.BusinessLogic
         public void CreateAdjustmentRecord(int userID, string voucherNo, string status)
         {
 
-            if (status == "Submit")
+            if (status == "Submitted")
             {
                 //Generate new adjustment record
                 AdjustmentRecord ar = new AdjustmentRecord();
@@ -466,6 +466,18 @@ namespace ADTeam5.BusinessLogic
                 ar.IssueDate = DateTime.Now.Date;
                 ar.ClerkId = userID;
                 ar.Status = "Submitted";
+
+                _context.AdjustmentRecord.Add(ar);
+                _context.SaveChanges();
+            }
+            else if (status == "Draft")
+            {
+                //Generate new adjustment record
+                AdjustmentRecord ar = new AdjustmentRecord();
+                ar.VoucherNo = voucherNo;
+                ar.IssueDate = DateTime.Now.Date;
+                ar.ClerkId = userID;
+                ar.Status = "Draft";
 
                 _context.AdjustmentRecord.Add(ar);
                 _context.SaveChanges();

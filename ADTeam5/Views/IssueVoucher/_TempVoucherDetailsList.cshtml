@@ -39,71 +39,72 @@
                 <button type="button" class="btn btn-primary createNewVoucherItem" style="width:110px;height:30px;border:2px; background-color:#27AE60">
                     Create New
                 </button>
-               
-                    <table id="TempVoucherDetails" class="table table-striped table-bordered" style="width: 100%;">
-                        <thead>
+
+                <table id="TempVoucherDetails" class="table table-striped table-bordered" style="width: 100%;">
+                    <thead>
+                        <tr>
+                            <th>
+                                No.
+                            </th>
+                            <th>
+                                Item Number
+                            </th>
+                            <th>
+                                Item Name
+                            </th>
+                            <th>
+                                Quantity
+                            </th>
+                            <th>
+                                Remark
+                            </th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
                             <tr>
-                                <th>
-                                    No.
-                                </th>
-                                <th>
-                                    Item Number
-                                </th>
-                                <th>
-                                    Item Name
-                                </th>
-                                <th>
-                                    Quantity
-                                </th>
-                                <th>
-                                    Remark
-                                </th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var item in Model)
-                            {
-                                <tr>
-                                    <td class="RowID">
-                                        @Html.DisplayFor(modelItem => item.RowID)
-                                    </td>
-                                    <td class="ItemNumber">
-                                        @Html.DisplayFor(modelItem => item.ItemNumber)
-                                    </td>
-                                    <td class="ItemName">
-                                        @Html.DisplayFor(modelItem => item.ItemName)
-                                    </td>
-                                    <td class="Quantity">
-                                        @Html.DisplayFor(modelItem => item.Quantity)
-                                    </td>
-                                    <td class="Remark">
-                                        @Html.DisplayFor(modelItem => item.Remark)
-                                    </td>
-                                    <td>
-                                        <button type="button" class="btn btn-primary editVoucherItem">
-                                            Edit
+                                <td class="RowID">
+                                    @Html.DisplayFor(modelItem => item.RowID)
+                                </td>
+                                <td class="ItemNumber">
+                                    @Html.DisplayFor(modelItem => item.ItemNumber)
+                                </td>
+                                <td class="ItemName">
+                                    @Html.DisplayFor(modelItem => item.ItemName)
+                                </td>
+                                <td class="Quantity">
+                                    @Html.DisplayFor(modelItem => item.Quantity)
+                                </td>
+                                <td class="Remark">
+                                    @Html.DisplayFor(modelItem => item.Remark)
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-primary editVoucherItem">
+                                        Edit
+                                    </button>
+                                </td>
+                                <td>
+                                    <form asp-action="VoucherItemDelete" asp-route-id="@item.ItemNumber" method="post" data-ajax="true" data-ajax-update="#TempVoucherDetailsList" role="form" asp-controller="IssueVoucher">
+                                        <button type="submit" class="btn btn-sm btn-danger d-none d-md-inline-block">
+                                            Delete
                                         </button>
-                                    </td>
-                                    <td>
-                                        <form asp-action="VoucherItemDelete" asp-route-id="@item.ItemNumber" method="post" data-ajax="true" data-ajax-update="#TempVoucherDetailsList" role="form" asp-controller="IssueVoucher">
-                                            <button type="submit" class="btn btn-sm btn-danger d-none d-md-inline-block">
-                                                Delete
-                                            </button>
-                                        </form>
-                                    </td>
-                                    <td>
-                                        <input type="checkbox" id="isChecked" name="isChecked"  value="item.RowID">
-                                        @*@Html.CheckBoxFor(modelItem => item.IsChecked)*@
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                    <input type="submit" value="Add to Draft" class="btn btn-primary addToDraft" />
-                    <input type="submit" value="Submit" class="btn btn-primary submit" />
+                                    </form>
+                                </td>
+                                <td>
+                                    <input type="checkbox" id="isChecked" name="isChecked" value="@item.RowID">
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <label>Total Amount:</label>
+                <br />
+                <input type="submit" value="Add to Draft" class="btn btn-primary addToDraft" />
+                <input type="submit" value="Submit" class="btn btn-primary submit" />
             }
         </div>
     </div>
@@ -247,8 +248,42 @@
         })
     });
 </script>
+
 <script>
     $(".submit").click(function () {
-
+        var itemToAdd = $("input:checkbox:checked", "#TempVoucherDetails").map(function () {
+            return $(this).val();
+        }).get();
+        //alert(itemToAdd.join(','));
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("Index", "IssueVoucher")',
+            dataType: "html",
+            data: { itemSubmitted: itemToAdd },
+            success:
+                function (data) {
+                    //$('#result').html(data);
+                    alert("submitted");
+                }
+        })
+    });
+</script>
+<script>
+    $(".addToDraft").click(function () {
+        var itemToAdd = $("input:checkbox:checked", "#TempVoucherDetails").map(function () {
+            return $(this).val();
+        }).get();
+        alert(itemToAdd.join(','));
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("Index", "IssueVoucher")',
+            dataType: "html",
+            data: { itemSavedToDraft: itemToAdd },
+            success:
+                function (data) {
+                    //$('#result').html(data);
+                    alert("saved to draft");
+                }
+        })
     });
 </script>
