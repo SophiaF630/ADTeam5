@@ -11,6 +11,7 @@ using ADTeam5.ViewModels;
 using ADTeam5.BusinessLogic;
 using Microsoft.AspNetCore.Identity;
 
+
 namespace ADTeam5.Controllers
 {
     public class IssueVoucherController : Controller
@@ -45,12 +46,12 @@ namespace ADTeam5.Controllers
             {
                 categoryList.Add(item);
             }
-            categoryList.Insert(0, new Catalogue { ItemNumber = "0", Category = "Select" });
+            categoryList.Insert(0, new Catalogue { ItemNumber = "0", Category = "---Select Category---" });
             ViewBag.ListofCategory = categoryList;
 
             List<Catalogue> itemNameList = new List<Catalogue>();
             itemNameList = (from x in _context.Catalogue select x).ToList();
-            itemNameList.Insert(0, new Catalogue { ItemNumber = "0", ItemName = "Select" });
+            itemNameList.Insert(0, new Catalogue { ItemNumber = "0", ItemName = "---Select Item---" });
             ViewBag.ListofItemName = itemNameList;
 
             return View(tempVoucherDetailsList);
@@ -58,13 +59,28 @@ namespace ADTeam5.Controllers
 
         // POST: IssueVoucher
         [HttpPost]
-        public async Task<IActionResult> Index(string itemNumber, int quantity)
+        public async Task<IActionResult> Index(string itemNumber, int quantity, int quantityForVoucher, string remark, int createNewVoucherItemModalName, int voucherItemModalName)
         {
             ADTeam5User user = await _userManager.GetUserAsync(HttpContext.User);
             List<string> identity = userCheck.checkUserIdentityAsync(user);
             int userID = user.WorkID;
             
-            return View();
+            if (createNewVoucherItemModalName == 1)
+            {
+                RecordDetails tempVoucherItem = new RecordDetails();
+                tempVoucherItem.Rrid = "VTemp" + userID.ToString();
+                tempVoucherItem.ItemNumber = itemNumber;
+                tempVoucherItem.Quantity = quantity;
+                tempVoucherItem.Remark = remark;
+                _context.RecordDetails.Add(tempVoucherItem);
+                _context.SaveChanges();
+            }
+            else if (voucherItemModalName == 1)
+            {
+
+            }
+            List<TempVoucherDetails> tempVoucherDetailsList = b.GetTempVoucherDetailsList(userID);
+            return View(tempVoucherDetailsList);
         }
        
 
@@ -95,6 +111,13 @@ namespace ADTeam5.Controllers
         private bool RecordDetailsExists(int id)
         {
             return _context.RecordDetails.Any(e => e.Rdid == id);
+        }
+
+        public JsonResult GetItemNameList(string category)
+        {
+            
+            List<Catalogue> itemNameList = _context.Catalogue.Where(x => x.Category == category).ToList();
+            return Json(itemNameList);
         }
     }
 }

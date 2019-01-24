@@ -39,6 +39,7 @@
 
 
   <ItemGroup>
+    <Folder Include="wwwroot\assets\data\" />
     <Folder Include="wwwroot\lib\mdbootstrap\" />
   </ItemGroup>
 

@@ -106,48 +106,52 @@
     </div>
 </div>
 
+
 <!-- Modal for create voucher item-->
 <div class="modal fade" id="CreateNewVoucherItemModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Add To Voucher</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form method="POST">
-                    <div class="form-group">
-                        <input type="hidden" id="CreateNewVoucherItemModalID" name="createNewVoucherItemModalName" class="form-control" value="1" />
-                    </div>
-                    <div class="form-group">
-                        <label for="Category">Category</label>
-                        <select for="Category" class="form-control" asp-items="@(new SelectList(ViewBag.ListofCategory, "ItemNumber", "Category"))"></select>
-                    </div>
-                    <div class="form-group">
-                        <label for="ItemName">ItemName</label>
-                        <select for="ItemName" class="form-control" asp-items="@(new SelectList(ViewBag.ListofItemName, "ItemNumber", "ItemName"))"></select>
-                    </div>
-                    <div class="form-group">
-                        <label for="Quantity">Quantity</label>
-                        <input type="text" id="QuantityForVoucher" name="quantityForVoucher" class="form-control" value="" />
-                    </div>
-                    <div class="form-group">
-                        <label for="Remark">Remark</label>
-                        <input type="text" id="Remark" name="remark" class="form-control" value="" />
-                    </div>
-                    <button class="btn" data-dismiss="modal" aria-hidden="true"><strong><font size="5" color="white">Close</font></strong></button>
-                    <button type="submit" class="btn btn-primary">Save changes</button>
-                </form>
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Add To Voucher</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST">
+                        <div class="form-group">
+                            <input type="hidden" id="CreateNewVoucherItemModalID" name="createNewVoucherItemModalName" class="form-control" value="1" />
+                        </div>
+                        <div class="form-group">
+                            <label for="Category">Category</label>
+                            @if (ViewBag.ListofCategory != null)
+                            {                                
+                                <select for="Category" class="form-control" id="Category" asp-items="@(new SelectList(ViewBag.ListofCategory, "Category", "Category"))"></select>
+                            }                            
+                        </div>
+                        <div class="form-group">
+                            <label for="ItemNumber">ItemName</label>
+                            <select for="ItemNumber" class="form-control" id="ItemNumber" name="itemNumber" asp-items="@(new SelectList(" "))"></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="Quantity">Quantity</label>
+                            <input type="text" id="Quantity" name="quantity" class="form-control" value="" />
+                        </div>
+                        <div class="form-group">
+                            <label for="Remark">Remark</label>
+                            <input type="text" id="Remark" name="remark" class="form-control" value="" />
+                        </div>
+                        <button class="btn" data-dismiss="modal" aria-hidden="true"><strong><font size="5" color="white">Close</font></strong></button>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                    </form>
 
+                </div>
             </div>
         </div>
     </div>
-</div>
 
 
-<!-- Modal for edit quantity delivered-->
+<!-- Modal for edit quantity-->
 <div class="modal fade" id="VoucherItemModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -172,11 +176,11 @@
                     </div>
                     <div class="form-group">
                         <label for="Quantity">Quantity</label>
-                        <input type="text" id="QuantityDelivered" name="quantityDelivered" class="form-control" value="" />
+                        <input type="text" id="Quantity" name="quantity" class="form-control" value="" />
                     </div>
                     <div class="form-group">
                         <label for="Remark">Remark</label>
-                        <input type="text" id="RemarkForDelivery" name="remarkForDelivery" class="form-control" value="" />
+                        <input type="text" id="Remark" name="remark" class="form-control" value="" />
                     </div>
                     <div class="modal-footer">
                         <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
@@ -192,15 +196,14 @@
 <script>
     $(".createNewVoucherItem").click(function () {
         var $row = $(this).closest("tr");    // Find the row
-        var itemNumber = $row.find("td.ItemNumber").text().trim(); // Find the text
-        var quantityForVoucher = 0;
+        var itemNumber = ""; // Find the text
+        var quantity = "";
         var remark = "";
         var createNewVoucherItemModalID = 1;
 
         var $modal = $('#CreateNewVoucherItemModal');
-        $modal.find('#ItemNumberValue').val(itemNumber);
-        $modal.find('#ItemNumberDisplay').val(itemNumber);
-        $modal.find('#QuantityForVoucher').val(quantityForVoucher);
+        $modal.find('#ItemNumber').val(itemNumber);
+        $modal.find('#Quantity').val(quantity);
         $modal.find('#Remark').val(remark);
         $modal.find('#CreateNewVoucherItemModalID').val(createNewVoucherItemModalID);
 
@@ -222,9 +225,22 @@
         $modal.find('#ItemNameValue').val(itemName);
         $modal.find('#ItemNameDisplay').val(itemName);
         $modal.find('#Quantity').val(quantity);
-        $modal.find('#RemarkForDelivery').val(remark);
+        $modal.find('#Remark').val(remark);
         $modal.find('#VoucherItemModalID').val(voucherItemModalID);
 
         $modal.modal('show');
+    });
+</script>
+
+<script>
+    $(document).ready(function () {
+        $("#Category").change(function () {
+            $.get("/IssueVoucher/GetItemNameList", { category: $("#Category").val() }, function (data) {
+                $("#ItemNumber").empty();
+                $.each(data, function (index, row) {
+                    $("#ItemNumber").append("<option value='" + row.itemNumber + "'>" + row.itemName + "</option>")
+                });
+            });
+        })
     });
 </script>
