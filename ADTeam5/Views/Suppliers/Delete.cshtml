@@ -4,72 +4,93 @@
     ViewData["Title"] = "Delete";
 }
 
-<h1>Delete</h1>
+@*<h1>Delete</h1>*@
 
-<h3>Are you sure you want to delete this?</h3>
-<div>
-    <h4>Supplier</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.SupplierName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.SupplierName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.GstregistrationNo)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.GstregistrationNo)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.TitleOfCourtesy)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.TitleOfCourtesy)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ContactName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ContactName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PhoneNo)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PhoneNo)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FaxNo)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FaxNo)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Address)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Address)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.City)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.City)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PostalCode)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PostalCode)
-        </dd>
-    </dl>
-    
-    <form asp-action="Delete">
-        <input type="hidden" asp-for="SupplierCode" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
-    </form>
-</div>
+@*<h3>Are you sure you want to delete this?</h3>*@
+
+<section class="content">
+    <!-- SELECT2 EXAMPLE -->
+    <div class="box box-default">
+        <div class="box-header with-border">
+            <div align="center" vertical-align="middle">
+                <div style="width: 300px;padding: 20px;margin: 20px;border-style:outset; border-width:1px; ">
+                    <div align="center" vertical-align="middle">
+                        <h3 class="box-title">
+                            <strong><font size="5">Supplier Delete Profile</font></strong>
+                        </h3>
+                    </div>
+                    <div class="box-tools">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div>
+            <div class="content">
+                <dl class="row">
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.SupplierName)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.SupplierName)
+                    </dd>
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.GstregistrationNo)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.GstregistrationNo)
+                    </dd>
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.TitleOfCourtesy)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.TitleOfCourtesy)
+                    </dd>
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.ContactName)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.ContactName)
+                    </dd>
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.PhoneNo)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.PhoneNo)
+                    </dd>
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.FaxNo)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.FaxNo)
+                    </dd>
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.Address)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.Address)
+                    </dd>
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.City)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.City)
+                    </dd>
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.PostalCode)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.PostalCode)
+                    </dd>
+                </dl>
+            </div>
+            <div align="center">
+                <form asp-action="Delete">
+                    <input type="hidden" asp-for="SupplierCode" />
+                    <a asp-action="Index"><button class="btn btn-primary" style="width:100px;height:32px;border:2px; background-color:#EEEEEE"><font size="3" color="black">Back</font></button></a>
+                    <input type="submit" value="Delete" class="btn btn-danger" style="width:100px;height:32px;border:2px; background-color:#EF5350" />
+                </form>
+                <br />
+            </div>
+        </div>
+    </div>
+</section>
