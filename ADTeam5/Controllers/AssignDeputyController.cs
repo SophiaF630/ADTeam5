@@ -8,7 +8,7 @@ using ADTeam5.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ADTeam5.Controllers.Department
+namespace ADTeam5.Controllers
 {
     public class AssignDeputyController : Controller
     {

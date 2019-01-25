@@ -8,6 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Views\manager\**" />
+    <Content Remove="Views\manager\**" />
+    <EmbeddedResource Remove="Views\manager\**" />
+    <None Remove="Views\manager\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Remove="Views\AdjustmentRecords\Delete.cshtml" />
     <Content Remove="Views\DisbursementLists\Create.cshtml" />
     <Content Remove="Views\DisbursementLists\Delete.cshtml" />
@@ -34,7 +41,7 @@
 
 
   <ItemGroup>
-    <Folder Include="Views\manager\" />
+    <Folder Include="Controllers\Department\" />
   </ItemGroup>
 
 

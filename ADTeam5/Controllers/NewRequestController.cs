@@ -9,7 +9,7 @@ using ADTeam5.BusinessLogic;
 using ADTeam5.Areas.Identity.Data;
 using Microsoft.AspNetCore.Identity;
 
-namespace ADTeam5.Controllers.Department
+namespace ADTeam5.Controllers
 {
     public class NewRequestController : Controller
     {

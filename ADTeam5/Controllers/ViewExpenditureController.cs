@@ -9,7 +9,7 @@ using ADTeam5.BusinessLogic;
 using Microsoft.AspNetCore.Identity;
 using ADTeam5.Areas.Identity.Data;
 
-namespace ADTeam5.Controllers.Department
+namespace ADTeam5.Controllers
 {
     public class ViewExpenditureController : Controller
     {
