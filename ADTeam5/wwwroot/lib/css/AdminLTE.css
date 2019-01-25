@@ -104,9 +104,9 @@ body {
 
 .main-footer {
     background: transparent;
-    padding: 15px;
+    padding: 10px;
     color: #000;
-    border-top: 1px solid #d2d6de;
+    /*border-top: 1px solid #d2d6de;*/
 }
 /* Fixed layout */
 .fixed .main-header,
