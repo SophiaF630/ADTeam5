@@ -332,6 +332,7 @@ ASALocalRun/
 
 # Local History for Visual Studio
 .localhistory/
+
 ADTeam5/Views/Shared/_Layout.cshtml
 ADTeam5/Views/Shared/_Layout.cshtml
 ADTeam5/Views/StationeryRetrievalList/Index.cshtml
@@ -339,3 +340,4 @@ ADTeam5/wwwroot/css/style.css
 ADTeam5/wwwroot/css/style.css
 ADTeam5/Controllers/AdjustmentRecordsController.cs
 ADTeam5/Controllers/AdjustmentRecordsController.cs
+ADTeam5/Models/EndLaterThanV.cs

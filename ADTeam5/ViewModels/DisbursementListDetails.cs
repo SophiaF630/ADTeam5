@@ -8,6 +8,7 @@ namespace ADTeam5.ViewModels
 {
     public class DisbursementListDetails
     {
+
         [Display(Name = "No.")]
         public int RowID { get; set; }
         [Display(Name = "RDID")]
@@ -21,7 +22,6 @@ namespace ADTeam5.ViewModels
         [Display(Name = "Quantity Delivered")]
         public int QuantityDelivered { get; set; }
         public string Remark { get; set; }
-
 
     }
 }

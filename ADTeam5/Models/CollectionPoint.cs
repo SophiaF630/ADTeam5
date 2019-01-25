@@ -11,13 +11,17 @@ namespace ADTeam5.Models
             Department = new HashSet<Department>();
             DisbursementList = new HashSet<DisbursementList>();
         }
-
+        [Required]
         public int CollectionPointId { get; set; }
-        [Display(Name = "Collection Point Name")]
+
+        [Display(Name = "Collection Point")]
+        //[StringLength(50)]
         public string CollectionPointName { get; set; }
 
         [Display(Name = "Collection Time")]
         public DateTime CollectionTime { get; set; }
+
+        [StringLength(50)]
         public string Location { get; set; }
 
         public virtual ICollection<Department> Department { get; set; }

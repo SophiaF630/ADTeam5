@@ -74,6 +74,7 @@ namespace ADTeam5
             return result;
         }
 
+
         //here comes an useless fuction
         public void updateCatalogue()
         {
@@ -89,6 +90,5 @@ namespace ADTeam5
 
             //this function will complete after the supplier part finished;
         }
-
     }
 }

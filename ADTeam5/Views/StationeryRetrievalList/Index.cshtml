@@ -3,10 +3,11 @@
     ViewData["Title"] = "Index";
 }
 
+
 <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 
-<style>
+@*<style>
 
     .page-item.active .page-link {
         background-color: #8e9eab;
@@ -15,7 +16,7 @@
     .page-item.active .page-link {
         border-color: #000000;
     }
-</style>
+</style>*@
 
 
 <div class="row">
@@ -213,6 +214,15 @@
         $modal.modal('show');
     });
 </script>
+
+
+<div class="age">
+    <span>age :</span>
+    <span class="editable">
+        38
+    </span>
+    <input type="button" value="edit" class="btn_edit"></input>
+</div>
 
 <script>
                                             //$('#StationeryRetrivalList').DataTable();

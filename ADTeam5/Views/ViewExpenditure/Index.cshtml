@@ -1,0 +1,99 @@
+﻿@model IEnumerable<ADTeam5.Models.DisbursementList>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>View Expenditure</h1>
+
+@if (TempData["Alert1"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aira-label="close">
+            <span aria-hidden="true">&times</span>
+        </button>
+        @TempData["Alert1"]
+    </div>
+}
+
+<form asp-action="Index" method="post">
+    <div class="form-group">
+        From:
+        <input type="date" name="startdate" id="start" value="=" />
+        To:
+        <input type="date" name="enddate" id="end" value=" = " />
+
+        <input type="submit" value="Search" id="searchbtn" />
+    </div>
+    @if (ViewData["StartDate"] != null && ViewData["EndDate"] != null)
+    {
+        <p>Between @ViewData["StartDate"] to @ViewData["endDate"]</p>
+    }
+
+</form>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.CompleteDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Dlid)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CompleteDate)
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-Dlid="@item.Dlid">
+                        @Html.DisplayFor(modelItem => item.Dlid)
+                    </a>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+
+            </tr>
+        }
+    </tbody>
+</table>
+<form asp-action="Index" method="post">
+    <div class="form-group">
+        <h6>Total Expenditure: @ViewData["Sum"] </h6>
+    </div>
+
+</form>
+
+
+<script>
+    $(document).ready(function () {
+        let now = new Date();
+
+        let day = ("0" + now.getDate()).slice(-2);
+        let month = ("0" + (now.getMonth() + 1)).slice(-2);
+
+        let today = (day) + "-" + (month) + "-" + now.getFullYear();
+
+        $('#start').val(today);
+        $('#end').val(today);
+        $('#assignbtn').click(function () {
+
+            testClicked();
+        });
+    });
+    function testClicked() {
+        $('.getStartDate').html($('#start').val());
+        $('.getEndDate').html($('#end').val());
+    }
+
+</script>

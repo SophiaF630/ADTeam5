@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 
 namespace ADTeam5.Models
@@ -18,7 +19,8 @@ namespace ADTeam5.Models
             EmployeeRequestRecordDepEmp = new HashSet<EmployeeRequestRecord>();
             EmployeeRequestRecordDepHead = new HashSet<EmployeeRequestRecord>();
             PurchaseOrderRecord = new HashSet<PurchaseOrderRecord>();
-        }
+       
+    }
 
         public int UserId { get; set; }
         public string TitleOfCourtesy { get; set; }

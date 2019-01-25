@@ -1,0 +1,44 @@
+﻿@model IEnumerable<ADTeam5.Models.RecordDetails>
+
+@{
+    ViewData["Title"] = "Submitted Request";
+}
+
+
+<h4>Submitted Request</h4>
+
+<p>Request No: @ViewData["RRID"]</p>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Item Number
+            </th>
+            <th>
+                Item Quantity
+            </th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ItemNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Quantity)
+                </td>
+
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div>
+    <a asp-action="Index">Add a New Request</a>
+</div>
+

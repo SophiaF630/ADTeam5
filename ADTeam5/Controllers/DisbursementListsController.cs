@@ -24,13 +24,13 @@ namespace ADTeam5.Controllers
         readonly GeneralLogic userCheck;
         static List<DisbursementListDetails> tempDisbursementListDetails = new List<DisbursementListDetails>();
 
+
         public DisbursementListsController(SSISTeam5Context context, UserManager<ADTeam5User> userManager)
         {
             _context = context;
             _userManager = userManager;
             userCheck = new GeneralLogic(context);
         }
-
         // GET: DisbursementLists
         public async Task<IActionResult> Index()
         {
@@ -75,7 +75,6 @@ namespace ADTeam5.Controllers
             {
                 b.ChangeEstDeliverDate(departmentName, estDeliverDate);
             }
-            
             var sSISTeam5Context = _context.DisbursementList.Include(d => d.CollectionPointNavigation).Include(d => d.DepartmentCodeNavigation).Include(d => d.RepNavigation);
 
             return View(sSISTeam5Context);

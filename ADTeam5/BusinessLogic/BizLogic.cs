@@ -89,8 +89,8 @@ namespace ADTeam5.BusinessLogic
             string result = prefix + ID_string;
             List<string> rdidList = new List<string>();
             foreach (RecordDetails rd in rdList)
-            {                
-                rdidList.Add(rd.Rrid);                
+            {
+                rdidList.Add(rd.Rrid);
             }
             while (rdidList.Contains(result))
             {
@@ -128,8 +128,8 @@ namespace ADTeam5.BusinessLogic
 
             //Check if a pending delivery disbursement list exists
             List<DisbursementList> dlList = _context.DisbursementList
-                .Where(x => x.DepartmentCode == depCode && x.Status == "Pending Delivery").ToList();    
-            
+                .Where(x => x.DepartmentCode == depCode && x.Status == "Pending Delivery").ToList();
+
             //Get EmployeeRequestRecord of a department, check if it's null
             List<EmployeeRequestRecord> errList = _context.EmployeeRequestRecord
                 .Where(x => x.CompleteDate >= start && x.CompleteDate <= cutoff && x.DepCode == depCode && x.Status == "Approved")
@@ -197,10 +197,10 @@ namespace ADTeam5.BusinessLogic
                     
                     _context.SaveChanges();
                 }
-                
+
                 result = _context.RecordDetails.Where(x => x.Rrid == dl.Dlid).ToList();
             }
-            return result;            
+            return result;
         }
 
         //Generate Stationery Retrieval List for a department
@@ -557,6 +557,69 @@ namespace ADTeam5.BusinessLogic
 
             }
             return result;
+        }
+      
+        
+        public List<EmployeeRequestRecord> searchRequestByDateAndDept(DateTime startDate, DateTime endDate, string dept)
+        {
+            var t = _context.EmployeeRequestRecord.Where(s => s.RequestDate >= startDate && s.RequestDate <= endDate && s.DepCode == dept);
+            List<EmployeeRequestRecord> list = new List<EmployeeRequestRecord>();
+            list = t.ToList();
+            return list;
+        }
+
+        public List<EmployeeRequestRecord> searchRequestByDept(string dept)
+        {
+            return _context.EmployeeRequestRecord.Where(x => x.DepCode == dept).ToList();
+        }
+
+        public EmployeeRequestRecord searchEmployeeRequestByRRID(string rrid)
+        {
+            var q1 = _context.EmployeeRequestRecord.Where(x => x.Rrid == rrid).First();
+            EmployeeRequestRecord e1 = new EmployeeRequestRecord();
+            e1 = q1;
+            return e1;
+        }
+
+        public List<RecordDetails> searchRecordDetailsByRRID(string rrid)
+        {
+           return _context.RecordDetails.Where(x => x.Rrid == rrid).ToList();
+        }
+
+        public DisbursementList searchDLByPendingDeliveryAndDept(string dept)
+        {
+            var q = _context.DisbursementList.Where(x => x.DepartmentCode == dept && x.Status == "Pending Delivery").First();
+            DisbursementList d = new DisbursementList();
+            d = q;
+            return d;
+        }
+        public string getCollectionPointName(int currentCollectionPoint)
+        {
+            var q2 = _context.CollectionPoint.Where(x => x.CollectionPointId == currentCollectionPoint).First();
+            CollectionPoint c1 = q2;
+            string currentName = c1.CollectionPointName;
+            return currentName;
+        }
+        public List<CollectionPoint> populateCPDropDownList(int currentCollectionPoint)
+        {
+            return _context.CollectionPoint.Where(x => x.CollectionPointId != currentCollectionPoint).ToList();
+        }
+        public void Save()
+        {
+            _context.SaveChanges();
+        }
+
+        public List<EmployeeRequestRecord> searchOutstandingRequests(string dept)
+        {
+            var q = _context.EmployeeRequestRecord.Where(x => x.Status == "Submitted" && x.DepCode == dept);
+            return q.ToList();
+        }
+
+        public string getEmpName(int depEmpId)
+        {
+            var q = _context.User.Where(x => x.UserId == depEmpId).First();
+            string name = q.Name;
+            return name;
         }
     }
 }
