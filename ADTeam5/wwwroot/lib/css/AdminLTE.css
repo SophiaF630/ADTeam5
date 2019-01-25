@@ -103,9 +103,9 @@ body {
 }
 
 .main-footer {
-    background: #f39c12;
+    background: transparent;
     padding: 15px;
-    color: rgba(0,0,0, 0.2);
+    color: #000;
     border-top: 1px solid #d2d6de;
 }
 /* Fixed layout */
@@ -180,7 +180,7 @@ h6,
 }
 /* General Links */
 a {
-    color: #48b7c5;
+    color: #469845;
 }
 
     a:hover,

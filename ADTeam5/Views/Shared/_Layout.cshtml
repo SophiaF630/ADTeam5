@@ -44,7 +44,7 @@
         <link href="~/plugins/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet" />
         <!-- Theme style -->
         <link href="~/lib/css/AdminLTE.css" rel="stylesheet" />
-        <link href="~/lib/css/skins/skin-blue.css" rel="stylesheet" />
+        <link href="~/lib/css/skins/skin-black.css" rel="stylesheet" />
 
         <!-- Morris chart -->
         <link rel="stylesheet" href="bower_components/morris.js/morris.css">
@@ -108,7 +108,7 @@ desired effect
 |               | sidebar-mini                            |
 |---------------------------------------------------------|
 -->
-<body class="hold-transition skin-blue sidebar-mini">
+<body class="hold-transition skin-black sidebar-mini">
     <div class="wrapper">
         <!-- Main Header -->
         <header class="main-header">
@@ -124,25 +124,39 @@ desired effect
             </div>
             <div class="navbar-custom-menu">
                 <ul class="nav navbar-nav">
-                    <li class="active"><a href="#">Link <span class="sr-only">(current)</span></a></li>
-                    <li><a href="#">Link</a></li>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <span class="caret"></span></a>
-                        <ul class="dropdown-menu" role="menu">
-                            <li><a href="#">Action</a></li>
-                            <li><a href="#">Another action</a></li>
-                            <li><a href="#">Something else here</a></li>
-                            <li class="divider"></li>
-                            <li><a href="#">Separated link</a></li>
-                            <li class="divider"></li>
-                            <li><a href="#">One more separated link</a></li>
-                        </ul>
-                    </li>
+                    @if (SignInManager.IsSignedIn(User))
+                    {
+                        <li>
+                            <a class="nav-link text-white" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })"> <i class="fas fa-sign-out-alt"></i>Logout</a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li>
+                            <a class="nav-link text-white" asp-area="Identity" asp-page="/Account/Login"><i class="fas fa-sign-in-alt"></i>Login</a>
+                        </li>
+                    }
+
                 </ul>
 
             </div>
         </header>
     </div>
+
+    <!-- extra dropdown/link codes for reference. can delete if you want-->
+    @*<li><a href="#">Link</a></li>
+        <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <span class="caret"></span></a>
+            <ul class="dropdown-menu" role="menu">
+                <li><a href="#">Action</a></li>
+                <li><a href="#">Another action</a></li>
+                <li><a href="#">Something else here</a></li>
+                <li class="divider"></li>
+                <li><a href="#">Separated link</a></li>
+                <li class="divider"></li>
+                <li><a href="#">One more separated link</a></li>
+            </ul>
+        </li>*@
 
 
     <!-- Left side column. contains the logo and sidebar -->
@@ -415,28 +429,25 @@ desired effect
         <!-- Content Header (Page header) -->
         <section class="content-header"></section>
         <!-- Main content -->
-
         <section class="content container-fluid">
 
             <!--------------------------
-              Main content
-              -------------------------->
-
-
-
-
-
-
+            Main content
+            -------------------------->
             @RenderBody()
+
+
+
         </section>
         <!-- /.content -->
+
     </div>
 
     <footer class="main-footer">
         <div class="pull-right hidden-xs">
-            Template Credits to <a href="https://adminlte.io"><b>Almsaeed Studio</b></a> 2014-2016
-
+            Template credit to <a href="https://adminlte.io">Almsaeed Studio</a>
         </div>
+        <strong>2019 AD Team 5</strong>
     </footer>
 
     <!-- /.content-wrapper -->
@@ -472,11 +483,6 @@ desired effect
                 asp-fallback-test="window.jquery&&window.jquery.fn&&window.jquery.fn.modal"
                 crossorigin="anonymous"></script>
     </environment>
-
-
-
-
-
 
     @RenderSection("Scripts", required: false)
 </body>
