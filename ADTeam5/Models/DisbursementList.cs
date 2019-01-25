@@ -16,10 +16,9 @@ namespace ADTeam5.Models
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
         [Display(Name = "Estimate Deliver Date")]
-        [DataType(DataType.Date)]
         public DateTime? EstDeliverDate { get; set; }
         [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString ="{0:dd/MM/yyyy}")]
+        //[DisplayFormat(DataFormatString ="{0:dd/MM/yyyy}")]
         [Display(Name = "Complete Date")]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime? CompleteDate { get; set; }
