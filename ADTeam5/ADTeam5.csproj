@@ -41,11 +41,6 @@
 
 
   <ItemGroup>
-    <Folder Include="Controllers\Department\" />
-  </ItemGroup>
-
-
-  <ItemGroup>
     <Folder Include="wwwroot\lib\mdbootstrap\" />
   </ItemGroup>
 
