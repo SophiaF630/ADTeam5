@@ -50,10 +50,10 @@
   border-right-width: 0;
 }
     .skin-black .main-header > .logo {
-        background-color: #e0e1e2;
+        background-color: #565657;
         color: #333333;
         border-bottom: 0 solid transparent;
-        border-right: 1px solid #eee;
+        border-right: 0 solid transparent;
     }
 .skin-black .main-header > .logo:hover {
   background-color: #fcfcfc;
@@ -79,7 +79,7 @@
 .skin-black .wrapper,
 .skin-black .main-sidebar,
 .skin-black .left-side {
-  background-color: #585858;
+  background-color: rgba(0,0,0,0.7);
 }
 .skin-black .user-panel > .info,
 .skin-black .user-panel > .info > a {

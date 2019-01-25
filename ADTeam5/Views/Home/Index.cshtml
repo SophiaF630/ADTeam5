@@ -25,10 +25,10 @@
         color: white;
         font-weight: bold;
         border: 3px solid #f1f1f1;
-        position: fixed;
+        position: relative;
         top: 50%;
         left: 50%;
-        transform: translate(-50%, -50%);
+        transform: translate(-50%, 50%);
         z-index: 2;
         width: fit-content;
         line-height: 150%;
@@ -44,7 +44,7 @@
     <div class="bg-image">
         <div class="bg-text">
             <a href="/Identity/Account/Login">
-                <h1> Temporary link to login page</h1>             
+                <h1> Welcome, @User.Identity.Name!</h1>             
             </a>
             <p> Need to figure out how to load login page from the start</p>
             
