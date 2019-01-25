@@ -103,10 +103,16 @@ body {
 }
 
 .main-footer {
-    background-color: transparent /*#f4f4f4*/;
+/*<<<<<<< HEAD
+    background-color: transparent #f4f4f4;
     padding: 15px;
-    color: #000; /*can change*/
+    color: #000; can change
     border-top: 1px solid #d2d6de;
+=======*/
+    background: transparent;
+    padding: 10px;
+    color: #000;
+    /*border-top: 1px solid #d2d6de;*/
 }
 /* Fixed layout */
 .fixed .main-header,

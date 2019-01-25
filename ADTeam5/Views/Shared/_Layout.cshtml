@@ -110,9 +110,10 @@ desired effect
 -->
 <body class="hold-transition skin-black sidebar-mini">
     <div class="wrapper">
+@*<<<<<<< HEAD
         @*<div class="sidebar" data-image="~/img/bg1.jpg">*@
             <!-- Main Header -->
-            <header class="main-header">
+            @*<header class="main-header">
                 <div class="logo">
                     <!-- logo for regular state and mobile devices -->
                     <span class="logo-lg">
@@ -130,7 +131,7 @@ desired effect
                             @*<li>
                             <a class="nav-link text-white" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })"> <i class="fas fa-sign-out-alt"></i>Logout</a>
                         </li>*@
-                            <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                            @*<form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
                                 <button type="submit" class="nav-link btn btn-link text-dark"><i class="fas fa-sign-out-alt"></i>Logout</button>
                             </form>
                         }
@@ -144,8 +145,44 @@ desired effect
                     </ul>
 
                 </div>
-            </header>
-        </div>
+            </header>*@
+        @*</div>*@
+
+
+        <!-- Main Header -->
+        <header class="main-header">
+            <div class="logo">
+                <!-- logo for regular state and mobile devices -->
+                <span class="logo-lg">
+                    <a href="/"><b>SSIS</b></a>
+                    &nbsp;
+                    <a href="#" data-toggle="push-menu" role="button"><i class="fas fa-angle-double-left"></i></a>
+                </span>
+                <!-- sidebar toggle button for sidebar mini 50x50 pixels -->
+                <span class="logo-mini"><a href="#" data-toggle="push-menu" role="button"><i class="fas fa-angle-double-right"></i></a></span>
+            </div>
+            <div class="navbar-custom-menu">
+                <ul class="nav navbar-nav">
+                    @if (SignInManager.IsSignedIn(User))
+                    {
+                        @*<li>
+                            <a class="nav-link text-white" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })"> <i class="fas fa-sign-out-alt"></i>Logout</a>
+                            </li>*@
+                        <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                            <button type="submit" class="nav-link btn btn-link text-dark"><i class="fas fa-sign-out-alt"></i>Logout</button>
+                        </form>
+                    }
+                    else
+                    {
+                        <li>
+                            <a class="nav-link text-white" asp-area="Identity" asp-page="/Account/Login"><i class="fas fa-sign-in-alt"></i>Login</a>
+                        </li>
+                    }
+
+                </ul>
+
+            </div>
+        </header>
     </div>
 
     <!-- extra dropdown/link codes for reference. can delete if you want-->
@@ -437,16 +474,22 @@ desired effect
         <section class="content container-fluid">
 
             <!--------------------------
-            Main content
-            -------------------------->
+        Main content
+        -------------------------->
             @RenderBody()
 
 
-
         </section>
-        <!-- /.content -->
 
-    </div>
+
+         @*/.content 
+        <footer class="main-footer">
+            <div class="pull-right hidden-xs">
+                Template credit to <a href="https://adminlte.io">Almsaeed Studio</a>
+            </div>
+            <strong>2019 AD Team 5</strong>
+        </footer>
+    </div>*@
 
     <footer class="main-footer">
         @*<div class="pull-right hidden-xs">
@@ -454,6 +497,7 @@ desired effect
         </div>*@
         <strong>2019 AD Team 5</strong>
     </footer>
+
 
     <!-- /.content-wrapper -->
     <!-- ./wrapper -->
@@ -471,10 +515,17 @@ desired effect
         <!-- AdminLTE App -->
         <script src="~/lib/js/adminlte.min.js"></script>
         <!-- Optionally, you can add Slimscroll and FastClick plugins.
-        Both of these plugins are recommended to enhance the
-        user experience. -->
+    Both of these plugins are recommended to enhance the
+    user experience. -->
         <!-- ajax -->
         <script src="~/assets/js/jquery.unobtrusive-ajax.min.js"></script>
+
+        <script>
+            var height = $('.content-wrapper').height();
+            $('.sidebar').height(height);
+        </script>
+
+
 
     </environment>
     <environment exclude="Development">
