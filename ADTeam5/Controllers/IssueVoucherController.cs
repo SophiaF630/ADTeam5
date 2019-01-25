@@ -23,6 +23,7 @@ namespace ADTeam5.Controllers
 
         static List<string> ItemNumberList = new List<string>();
         static List<int> QuantityList = new List<int>();
+        static string voucherNo = "";
 
         public IssueVoucherController(SSISTeam5Context context, UserManager<ADTeam5User> userManager)
         {
@@ -59,43 +60,92 @@ namespace ADTeam5.Controllers
 
         // POST: IssueVoucher
         [HttpPost]
-        public async Task<IActionResult> Index(string itemNumber, int quantity, int rowID, string remark, int createNewVoucherItemModalName, int voucherItemModalName)
+        public async Task<IActionResult> Index(string itemNumber, int quantity, int rowID, string remark, int createNewVoucherItemModalName, int voucherItemModalName, string[] itemSubmitted, string[] itemSavedToDraft)
         {
             ADTeam5User user = await _userManager.GetUserAsync(HttpContext.User);
             List<string> identity = userCheck.checkUserIdentityAsync(user);
             int userID = user.WorkID;
+            voucherNo = "";            
 
+            //handle post action
             List<TempVoucherDetails> tempVoucherDetailsList = b.GetTempVoucherDetailsList(userID);
 
             if (createNewVoucherItemModalName == 1)
             {
                 b.CreateNewVoucherItem(userID, itemNumber, quantity, remark);
+                return RedirectToAction(nameof(Index));
             }
             else if (voucherItemModalName == 1)
             {
                 b.UpdateVoucherItem(rowID, quantity, remark, tempVoucherDetailsList);
             }
 
+            if (itemSubmitted.Length != 0)
+            {
+                voucherNo = b.IDGenerator("V");
+                foreach (var item in tempVoucherDetailsList)
+                {
+                    if (Array.Exists(itemSubmitted, i => i == item.RowID.ToString()))
+                    {
+                        b.AddItemsToVoucher(item.RowID, voucherNo, tempVoucherDetailsList);
+                        b.CreateAdjustmentRecord(userID, voucherNo, "Submitted");
+                    }
+                }
+                //return RedirectToAction(nameof(Index));
+            }
+            else if(itemSavedToDraft.Length != 0)
+            {
+                voucherNo = b.IDGenerator("V");
+                foreach (var item in tempVoucherDetailsList)
+                {
+                    if (Array.Exists(itemSavedToDraft, i => i == item.RowID.ToString()))
+                    {
+                        b.AddItemsToVoucher(item.RowID, voucherNo, tempVoucherDetailsList);
+                        b.CreateAdjustmentRecord(userID, voucherNo, "Draft");
+                    }
+                }
+                //return RedirectToAction(nameof(Index));
+            }
+
             List<TempVoucherDetails> result = b.GetTempVoucherDetailsList(userID);
 
+            //Viewbag for category dropdown list, need to post back
+            List<Catalogue> categoryList = new List<Catalogue>();
+            var q = _context.Catalogue.GroupBy(x => new { x.Category }).Select(x => x.FirstOrDefault());
+            foreach (var item in q)
+            {
+                categoryList.Add(item);
+            }
+            categoryList.Insert(0, new Catalogue { ItemNumber = "0", Category = "---Select Category---" });
+            ViewBag.ListofCategory = categoryList;
             return View(result);
         }
        
 
         [HttpPost]
         //[ActionName("VoucherItemDelete"), Route("~/IssueVoucher")]
-        public async Task<IActionResult> VoucherItemDelete(string id)
+        public async Task<IActionResult> VoucherItemDelete(int id)
         {
             ADTeam5User user = await _userManager.GetUserAsync(HttpContext.User);
             List<string> identity = userCheck.checkUserIdentityAsync(user);
             int userID = user.WorkID;
 
-            string RRID = "VTemp" + userID.ToString();
-            RecordDetails recordDetails = _context.RecordDetails.FirstOrDefault(x => x.Rrid == RRID && x.ItemNumber == id);
-            _context.RecordDetails.Remove(recordDetails);
-            _context.SaveChanges();
+            //Viewbag for category dropdown list, need to post back
+            List<Catalogue> categoryList = new List<Catalogue>();
+            var q = _context.Catalogue.GroupBy(x => new { x.Category }).Select(x => x.FirstOrDefault());
+            foreach (var item in q)
+            {
+                categoryList.Add(item);
+            }
+            categoryList.Insert(0, new Catalogue { ItemNumber = "0", Category = "---Select Category---" });
+            ViewBag.ListofCategory = categoryList;
+
+            List<TempVoucherDetails> tempVoucherDetailsList1 = b.GetTempVoucherDetailsList(userID);
+
+            b.DeleteVoucherItem(id, tempVoucherDetailsList1);
 
             List<TempVoucherDetails> tempVoucherDetailsList = b.GetTempVoucherDetailsList(userID);
+
             if(tempVoucherDetailsList == null)
             {
                 tempVoucherDetailsList = new List<TempVoucherDetails>();

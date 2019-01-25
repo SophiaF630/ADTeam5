@@ -14,151 +14,167 @@
     List<RecordDetails> tempDetails = new List<RecordDetails>();
     RecordDetails temp = new RecordDetails();
 }
-<h1>Create</h1>
+@*<h1>Create</h1>*@
 
-<h4>PurchaseOrderRecord</h4>
-<hr />
-<div id="div1">
-    <table class="table" id="showTable">
-        <thead>
-            <tr>
-                <th>
-                    ItemNumber
-                </th>
-                <th>
-                    Current Stock
-                </th>
-                <th>
-                    Reorder Level
-                </th>
-                <th>
-                    Recommand
-                    Reorder Qty
-                </th>
-                <th>
-                    Quantity
-                </th>
-                <th>
-                    Remark
-                </th>
-                <th>
+@*<h4>PurchaseOrderRecord</h4>
+<hr />*@
 
-                </th>
-            </tr>
-        </thead>
-        <tbody id="tbody">
-            
-            <tr id="add">
-                <td>
-                    <select onChange="change()" id="addItemNumber" class="form-control" asp-items=selectListCatas></select>
-                </td>
-                <td>
-                    <select id="selectedItemStock" class="form-control" disabled="disabled" asp-items=selectedStock></select>
-                    @* this part have to remove the disable before post($("#role").removeAttr("disabled"); ) *@
-                </td>
-                <td>
-                    <select id="selectedItemReorderLevel" class="form-control" disabled="disabled" asp-items=selectedReorderLevel></select>
-                </td>
-                <td>
-                    <select id="selectedItemReorderQty" class="form-control" disabled="disabled" asp-items=selectedReorderQty></select>
-                </td>
+<section class="content">
+    <!-- SELECT2 EXAMPLE -->
+    <div class="box box-default">
+        <div class="box-header with-border">
+            <div align="center" vertical-align="middle">
+                <div style="width: 500px;padding: 20px;margin: 20px;border-style:outset; border-width:1px; ">
+                    <div align="center" vertical-align="middle">
+                        <h3 class="box-title">
+                            <strong><font size="5">PurchaseOrder Create Profile</font></strong>
+                        </h3>
+                    </div>
+                    <div class="box-tools">
+                    </div>
+                </div>
+            </div>
+        </div>
 
-                <td>
-                    <input id="addQuantity" class="form-control" />
-                </td>
-                <td>
-                    <input id="addRemark" class="form-control" />
-                </td>
-                <td>
-                    <button type="button" onclick="addNew()">add</button>
 
-                    @*this part have to jump to the edit page of detail*@
-                </td>
-            </tr>
-        </tbody>
-    </table>
-</div>
-<script>
-    function change() {
-        var x = document.getElementById("addItemNumber");
-        var c = document.getElementById("selectedItemStock");
-        var v = document.getElementById("selectedItemReorderLevel");
-        var b = document.getElementById("selectedItemReorderQty");
-    }
-</script>
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Poid" class="control-label"></label>
-                <input asp-for="Poid" class="form-control" />
-                <span asp-validation-for="Poid" class="text-danger"></span>
+        <div id="div1">
+            <table class="table" id="showTable">
+                <thead>
+                    <tr>
+                        <th>
+                            ItemNumber
+                        </th>
+                        <th>
+                            Current Stock
+                        </th>
+                        <th>
+                            Reorder Level
+                        </th>
+                        <th>
+                            Recommand
+                            Reorder Qty
+                        </th>
+                        <th>
+                            Quantity
+                        </th>
+                        <th>
+                            Remark
+                        </th>
+                        <th>
+
+                        </th>
+                    </tr>
+                </thead>
+                <tbody id="tbody">
+
+                    <tr id="add">
+                        <td>
+                            <select onChange="change()" id="addItemNumber" class="form-control" asp-items=selectListCatas></select>
+                        </td>
+                        <td>
+                            <select id="selectedItemStock" class="form-control" disabled="disabled" asp-items=selectedStock></select>
+                            @* this part have to remove the disable before post($("#role").removeAttr("disabled"); ) *@
+                        </td>
+                        <td>
+                            <select id="selectedItemReorderLevel" class="form-control" disabled="disabled" asp-items=selectedReorderLevel></select>
+                        </td>
+                        <td>
+                            <select id="selectedItemReorderQty" class="form-control" disabled="disabled" asp-items=selectedReorderQty></select>
+                        </td>
+
+                        <td>
+                            <input id="addQuantity" class="form-control" />
+                        </td>
+                        <td>
+                            <input id="addRemark" class="form-control" />
+                        </td>
+                        <td>
+                            <button type="button" onclick="addNew()">add</button>
+
+                            @*this part have to jump to the edit page of detail*@
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <script>
+            function change() {
+                var x = document.getElementById("addItemNumber");
+                var c = document.getElementById("selectedItemStock");
+                var v = document.getElementById("selectedItemReorderLevel");
+                var b = document.getElementById("selectedItemReorderQty");
+            }
+        </script>
+        <div class="row">
+            <div class="col-md-6">
+                <form asp-action="Create">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="Poid" class="control-label"></label>
+                        <input asp-for="Poid" class="form-control" />
+                        <span asp-validation-for="Poid" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="OrderDate" class="control-label"></label>
+                        <input asp-for="OrderDate" class="form-control" />
+                        <span asp-validation-for="OrderDate" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="ExpectedCompleteDate" class="control-label"></label>
+                        <input asp-for="ExpectedCompleteDate" class="form-control" />
+                        <span asp-validation-for="ExpectedCompleteDate" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="CompleteDate" class="control-label"></label>
+                        <input asp-for="CompleteDate" class="form-control" />
+                        <span asp-validation-for="CompleteDate" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="StoreClerkId" class="control-label"></label>
+                        <input asp-for="StoreClerkId" class="form-control" value=@ViewData["StoreClerkId"] readonly="readonly" />
+                        @*<select asp-for="StoreClerkId" class ="form-control" asp-items="ViewBag.StoreClerkId"></select>*@
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="SupplierCode" class="control-label"></label>
+                        <select asp-for="SupplierCode" class="form-control" asp-items=selectListItems></select>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Status" class="control-label"></label>
+                        <input asp-for="Status" class="form-control" />
+                        <span asp-validation-for="Status" class="text-danger"></span>
+                    </div>
+                    <div class="form-group" align="center">
+                        <a asp-action="Index"><button class="btn btn-primary" style="width:100px;height:32px;border:2px; background-color:#EEEEEE"><font size="3" color="black">Back</font></button></a>
+                        <input type="submit" value="Create" class="btn btn-primary" style="width:100px;height:32px;border:2px; background-color:#3c8dbc" />
+                    </div>
+                </form>
             </div>
-            <div class="form-group">
-                <label asp-for="OrderDate" class="control-label"></label>
-                <input asp-for="OrderDate" class="form-control" />
-                <span asp-validation-for="OrderDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ExpectedCompleteDate" class="control-label"></label>
-                <input asp-for="ExpectedCompleteDate" class="form-control" />
-                <span asp-validation-for="ExpectedCompleteDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CompleteDate" class="control-label"></label>
-                <input asp-for="CompleteDate" class="form-control" />
-                <span asp-validation-for="CompleteDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="StoreClerkId" class="control-label"></label>
-                <input asp-for="StoreClerkId" class="form-control" value=@ViewData["StoreClerkId"] readonly="readonly" />
-                @*<select asp-for="StoreClerkId" class ="form-control" asp-items="ViewBag.StoreClerkId"></select>*@
-            </div>
-            <div class="form-group">
-                <label asp-for="SupplierCode" class="control-label"></label>
-                <select asp-for="SupplierCode" class="form-control" asp-items=selectListItems></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="Status" class="control-label"></label>
-                <input asp-for="Status" class="form-control" />
-                <span asp-validation-for="Status" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
-</div>
+</section>
 
+        @section Scripts {
+            @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+        }
+        <script type="text/javascript" src="~/lib/jquery/dist/jquery.js"></script>
+        <script type="text/javascript">
+            var rowid = 1;
+            function addNew() {
+                //var temp = null;
+                //temp.ItemNumber = document.getElementById("addItemNumber").nodeValue;
+                //temp.Quantity = document.getElementById("addQuantity").nodeValue;
+                //temp.Remark = document.getElementById("addRemark").nodeValue;
+                //var tempDetails;
+                //tempDetails.Add(temp)
+                //var para = document.cre("<tr><td><p>temp.ItemNumber</p></td><td><p>temp.Quantity</p></td><td><p>temp.Remark</p></td><td><button type='button' onclick='remove(this)'>remove</button></td></tr>");
+                //var element = document.getElementById("showTable");
 
-       
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
-<script type="text/javascript" src="~/lib/jquery/dist/jquery.js"></script>
-<script type="text/javascript">
-    var rowid = 1;
-    function addNew() {
-        //var temp = null;
-        //temp.ItemNumber = document.getElementById("addItemNumber").nodeValue;
-        //temp.Quantity = document.getElementById("addQuantity").nodeValue;
-        //temp.Remark = document.getElementById("addRemark").nodeValue;
-        //var tempDetails;
-        //tempDetails.Add(temp)
-        //var para = document.cre("<tr><td><p>temp.ItemNumber</p></td><td><p>temp.Quantity</p></td><td><p>temp.Remark</p></td><td><button type='button' onclick='remove(this)'>remove</button></td></tr>");
-        //var element = document.getElementById("showTable");
-
-        //element.appendChild(para);
-        $("#showTable").append("<tr id = '" + rowid + "'><td><p>temp.ItemNumber</p></td><td><p>temp.Quantity</p></td><td><p>temp.Remark</p></td><td><button type='button' onclick='remove(\"" + rowid + "\")'>remove</button></td></tr>");
-        rowid++;
-    }
-    function remove(record) {
-        document.getElementById(record).remove();
-    }
-</script>
+                //element.appendChild(para);
+                $("#showTable").append("<tr id = '" + rowid + "'><td><p>temp.ItemNumber</p></td><td><p>temp.Quantity</p></td><td><p>temp.Remark</p></td><td><button type='button' onclick='remove(\"" + rowid + "\")'>remove</button></td></tr>");
+                rowid++;
+            }
+            function remove(record) {
+                document.getElementById(record).remove();
+            }
+        </script>

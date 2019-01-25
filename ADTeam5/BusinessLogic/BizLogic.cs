@@ -454,6 +454,66 @@ namespace ADTeam5.BusinessLogic
             _context.SaveChanges();
         }
 
+        //CreateAdjustmentRecord
+        public void CreateAdjustmentRecord(int userID, string voucherNo, string status)
+        {
+
+            if (status == "Submitted")
+            {
+                //Generate new adjustment record
+                AdjustmentRecord ar = new AdjustmentRecord();
+                ar.VoucherNo = voucherNo;
+                ar.IssueDate = DateTime.Now.Date;
+                ar.ClerkId = userID;
+                ar.Status = "Submitted";
+
+                _context.AdjustmentRecord.Add(ar);
+                _context.SaveChanges();
+            }
+            else if (status == "Draft")
+            {
+                //Generate new adjustment record
+                AdjustmentRecord ar = new AdjustmentRecord();
+                ar.VoucherNo = voucherNo;
+                ar.IssueDate = DateTime.Now.Date;
+                ar.ClerkId = userID;
+                ar.Status = "Draft";
+
+                _context.AdjustmentRecord.Add(ar);
+                _context.SaveChanges();
+            }
+        }
+
+        //Add voucher items to voucher
+        public void AddItemsToVoucher(int rowID, string voucherNo, List<TempVoucherDetails> tempVoucherDetailsList)
+        {
+            //get rdid
+            TempVoucherDetails tempVoucherItem = tempVoucherDetailsList.FirstOrDefault(x => x.RowID == rowID);
+            int rdid = tempVoucherItem.RDID;
+
+            RecordDetails rd = _context.RecordDetails.FirstOrDefault(x => x.Rdid == rdid);
+            if (rd != null)
+            {
+                rd.Rrid = voucherNo;
+                _context.SaveChanges();   
+            }
+        }
+
+        //Delete voucher item
+        public void DeleteVoucherItem(int rowID, List<TempVoucherDetails> tempVoucherDetailsList)
+        {
+            //get rdid
+            TempVoucherDetails tempVoucherItem = tempVoucherDetailsList.FirstOrDefault(x => x.RowID == rowID);
+            int rdid = tempVoucherItem.RDID;
+
+            RecordDetails rd = _context.RecordDetails.FirstOrDefault(x => x.Rdid == rdid);
+            if (rd != null)
+            {
+                _context.RecordDetails.Remove(rd);
+                _context.SaveChanges();
+            }
+        }
+
         //FindDepartmentOrSupplier through disbursement list ID or PO ID
         public string FindDepartmentOrSupplier(string recordId)
         {

@@ -164,6 +164,30 @@ namespace ADTeam5.Controllers
         }
 
         [HttpPost]
+        public async Task<IActionResult> AdjustmentRecordSubmit(string id)
+        {
+            ADTeam5User user = await _userManager.GetUserAsync(HttpContext.User);
+            List<string> identity = userCheck.checkUserIdentityAsync(user);
+            int userID = user.WorkID;
+
+            AdjustmentRecord adjustmentRecordToBeSubmitted = _context.AdjustmentRecord.FirstOrDefault(x => x.VoucherNo == id);
+            adjustmentRecordToBeSubmitted.Status = "Submitted";
+            _context.SaveChanges();
+
+            AdjustmentRecord ar = _context.AdjustmentRecord.FirstOrDefault(x => x.ClerkId == userID && !x.VoucherNo.Contains("Vtemp"));
+            List<AdjustmentRecord> tempAdjustmentRecords = new List<AdjustmentRecord>();
+            if (ar != null)
+            {
+                tempAdjustmentRecords = _context.AdjustmentRecord.Where(x => x.ClerkId == userID && !x.VoucherNo.Contains("Vtemp")).ToList();
+            }
+            else
+            {
+                NotFound();
+            }
+            return PartialView("_TempAdjustmentRecords", tempAdjustmentRecords);
+        }
+
+        [HttpPost]
         public async Task<IActionResult> AdjustmentRecordDelete(string id)
         {
             ADTeam5User user = await _userManager.GetUserAsync(HttpContext.User);
