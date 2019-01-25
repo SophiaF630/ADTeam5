@@ -7,8 +7,9 @@ namespace ADTeam5.Models
     public partial class DisbursementList
     {
         [Required]
-        [Display(Name = "Disbusement List No.")]
+        [Display(Name = "ID")]
         public string Dlid { get; set; }
+
         [Display(Name = "Start Date")]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]

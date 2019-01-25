@@ -19,6 +19,7 @@
 </style>*@
 
 
+
 <div class="row">
     <div class="col-md-12">
         <div class="box">
@@ -26,7 +27,9 @@
                 <div align="center" vertical-align="middle">
                     <div style="width: 300px;padding: 20px;margin: 20px;border-style:outset; border-width:1px; ">
                         <div align="center" vertical-align="middle">
-                            <h2 class="box-title"><strong><font size="5">Stationery Retrieval List</font></strong></h2>
+                            <h2 class="box-title">
+                                <strong><font size="5">Stationery Retrieval List</font></strong>
+                            </h2>
                         </div>
 
                         <div class="box-tools">
@@ -76,12 +79,12 @@
                                             @Html.DisplayFor(modelItem => item.QuantityRetrieved)
                                         </td>
                                         <td>
-                                            <button type="button" class="btn btn-primary editQuantityRetrieved" style="width:70px;height:30px;border:2px; background-color:#27AE60">
+                                            <button type="button" class="btn btn-primary editQuantityRetrieved" style="width:70px;height:30px;border:2px; background-color:#3c8dbc">
                                                 Edit
                                             </button>
                                         </td>
                                         <td>
-                                            <button type="button" class="btn btn-primary addToVoucher" style="width:110px;height:30px;border:2px; background-color:#27AE60">
+                                            <button type="button" class="btn btn-primary addToVoucher" style="width:120px;height:30px;border:2px; background-color:#3c8dbc">
                                                 Add to Voucher
                                             </button>
                                         </td>
@@ -98,22 +101,22 @@
         </div>
     </div>
 </div>
+
+
 <!-- Modal for edit quantity retrieved-->
 <div class="modal fade" id="QuantityRetrievedModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
-
+            <br />
             @*<div class="modal-header">*@
-            @*<div align="center" vertical-align="middle">
-                <div style="width: 300px;padding: 20px;margin: 20px;border-style:outset; border-width:1px; ">
-                    <div align="center" vertical-align="middle">
-                        <h2 class="box-title"><strong><font size="5">Stationery Retrieval List</font></strong></h2>
-                    </div>*@
+
 
             <div align="center" vertical-align="middle">
                 <div style="width: 400px;padding: 15px;margin: 15px;border-style:outset; border-width:1px; ">
                     <div align="center" vertical-align="middle">
-                        <h3 class="modal-title" id="exampleModalLongTitle"><strong><font size="5">Update Quantity Retrieved</font></strong></h3>
+                        <h3 class="modal-title" id="exampleModalLongTitle">
+                            <strong><font size="5">Update Quantity Retrieved</font></strong>
+                        </h3>
                     </div>
                 </div>
             </div>
@@ -132,8 +135,8 @@
                         <input type="text" id="QuantityRetrieved" name="quantityRetrieved" class="form-control" value="" />
                     </div>
                     <div align="center">
-                        <button class="btn" data-dismiss="modal" aria-hidden="true" style="width:80px;height:30px;border:2px; background-color:#E74C3C"><font size="3" color="white">Close</font></button>
-                        <button type="submit" class="btn btn-primary" style="width:120px;height:30px;border:2px; background-color:#27AE60"><font size="3" color="white">Save Changes</font></button>
+                        <button class="btn" data-dismiss="modal" aria-hidden="true" style="width:80px;height:30px;border:2px; background-color:#EEEEEE"><font size="3" color="black">Close</font></button>
+                        <button type="submit" class="btn btn-primary" style="width:120px;height:30px;border:2px; background-color:#3c8dbc"><font size="3" color="white">Save Changes</font></button>
                     </div>
                 </form>
             </div>
@@ -142,16 +145,27 @@
         </div>
     </div>
 </div>
-<!-- Modal for create voucher item-->
+
+<!-- Modal for Add to Voucher-->
 <div class="modal fade" id="AddToVoucherModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Add To Voucher</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+            <br/>
+            <div align="center" vertical-align="middle">
+                <div style="width: 400px;padding: 15px;margin: 15px;border-style:outset; border-width:1px; @*background-color:#3c8dbc*@">
+                    <div align="center" vertical-align="middle">
+                        @*<div class="modal-header">*@
+                        <h5 class="modal-title" id="exampleModalLongTitle">
+                            <strong><font size="5">Add To Voucher</font></strong>
+                        </h5>
+                    </div>
+                </div>
             </div>
+            @*<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>*@
+
+
             <div class="modal-body">
                 <form method="POST">
                     <div class="form-group">
@@ -170,10 +184,14 @@
                         <label for="Remark">Remark</label>
                         <input type="text" id="Remark" name="remark" class="form-control" value="" />
                     </div>
-                    <button class="btn" data-dismiss="modal" aria-hidden="true"><strong><font size="5" color="white">Close</font></strong></button>
-                    <button type="submit" class="btn btn-primary">Save changes</button>
-                </form>
 
+                    <div align="center">
+                        <button class="btn" data-dismiss="modal" aria-hidden="true" style="width:80px;height:30px;border:2px; background-color:#EEEEEE"><font size="3" color="black">Close</font></button>
+                        <button type="submit" class="btn btn-primary" style="width:120px;height:30px;border:2px; background-color:#3c8dbc"><font size="3" color="white">Save Changes</font></button>
+                    </div>
+                    @*<button class="btn" data-dismiss="modal" aria-hidden="true"><font size="5" color="white">Close</font></button>
+        <button type="submit" class="btn btn-primary">Save changes</button>*@
+                </form>
             </div>
         </div>
     </div>
@@ -227,4 +245,5 @@
 <script>
                                             //$('#StationeryRetrivalList').DataTable();
 </script>
+
 
