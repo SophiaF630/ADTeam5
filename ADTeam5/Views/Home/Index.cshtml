@@ -30,7 +30,6 @@
         transform: translate(-50%, 50%);
         z-index: 2;
         width: fit-content;
-        line-height: 150%;
         padding: 50px;
         text-align: center;
     }
@@ -41,11 +40,11 @@
 
 <body>
     <div class="bg-image">
-        <div class="bg-text">
-            <a href="/Identity/Account/Login">
-                <h1> Welcome, @User.Identity.Name!</h1>             
-            </a>
-            <p> Need to figure out how to load login page from the start</p>
+        <div class="bg-text">          
+                <h1>Welcome</h1>
+                <h3>@User.Identity.Name!</h3>          
+            
+            <p> Use the handy sidebar at the side. <i class="fas fa-angle-double-left"></i></p>
             
         </div>
        
