@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ADTeam5.Controllers.Department
+namespace ADTeam5.ViewModels
 {
     public class TemporaryRecordDetails
     {

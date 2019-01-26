@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Identity;
 using ADTeam5.Areas.Identity.Data;
 using ADTeam5.BusinessLogic;
 
-namespace ADTeam5.Controllers.Department
+namespace ADTeam5.Controllers
 {
     public class AssignDepartmentController : Controller
     {
