@@ -105,7 +105,7 @@ namespace ADTeam5.BusinessLogic
         {
             int result = 0;
             List<int> rowIDList = new List<int>();
-            foreach(DisbursementListDetails dl in disbursementListDetails)
+            foreach (DisbursementListDetails dl in disbursementListDetails)
             {
                 rowIDList.Add(dl.RowID);
             }
@@ -192,9 +192,9 @@ namespace ADTeam5.BusinessLogic
                     else
                     {
                         RecordDetails rd = new RecordDetails();
-                        rd.Quantity += r.Quantity;                       
+                        rd.Quantity += r.Quantity;
                     }
-                    
+
                     _context.SaveChanges();
                 }
 
@@ -210,9 +210,9 @@ namespace ADTeam5.BusinessLogic
 
             //get pending delivery disbursement list
             List<DisbursementList> dlList = _context.DisbursementList.Where(x => x.Status == "Pending Delivery").ToList();
-           
+
             //Find all needed Disbursement List ID, add to a list
-            List<string> dlidList= new List<string>();
+            List<string> dlidList = new List<string>();
             foreach (DisbursementList dl in dlList)
             {
                 dlidList.Add(dl.Dlid);
@@ -233,8 +233,8 @@ namespace ADTeam5.BusinessLogic
 
 
             var q = from x in selecteddlList
-                     group x by x.ItemNumber into g
-                     select new { g.Key, Quantiy = g.Sum(y => y.Quantity) };
+                    group x by x.ItemNumber into g
+                    select new { g.Key, Quantiy = g.Sum(y => y.Quantity) };
 
             foreach (var i in q.ToList())
             {
@@ -257,7 +257,7 @@ namespace ADTeam5.BusinessLogic
         {
             Catalogue catalogue = new Catalogue();
             var i = _context.Catalogue.FirstOrDefault(x => x.ItemNumber == itemNumber);
-            if(i != null)
+            if (i != null)
             {
                 int preStock = i.Stock;
                 int preOut = i.Out;
@@ -280,7 +280,7 @@ namespace ADTeam5.BusinessLogic
             Catalogue catalogue = new Catalogue();
             var i = _context.Catalogue.FirstOrDefault(x => x.ItemNumber == itemNumber);
             if (i != null)
-            {               
+            {
                 int preOut = i.Out;
                 if (preOut >= qtyDelivered)
                 {
@@ -307,7 +307,7 @@ namespace ADTeam5.BusinessLogic
         {
             string dlID = IDGenerator("DL");
             //check if dl record exists
-            var q = _context.DisbursementList.FirstOrDefault(x => x.Dlid == dlID);           
+            var q = _context.DisbursementList.FirstOrDefault(x => x.Dlid == dlID);
             if (q == null)
             {
                 DisbursementList dl = new DisbursementList();
@@ -372,12 +372,12 @@ namespace ADTeam5.BusinessLogic
                     VoucherNo = voucherNo,
                     IssueDate = DateTime.Today,
                     ClerkId = userId,
-                    Status = "draft"           
+                    Status = "draft"
                 };
                 _context.AdjustmentRecord.Add(adjustmentRecord);
                 _context.SaveChanges();
             }
-            
+
             RecordDetails recordDetails = new RecordDetails();
             recordDetails.Rrid = voucherNo;
             recordDetails.ItemNumber = itemNumber;
@@ -399,7 +399,7 @@ namespace ADTeam5.BusinessLogic
                 _context.SaveChanges();
             }
         }
-               
+
 
         //Draft voucher details
         public List<TempVoucherDetails> GetTempVoucherDetailsList(int userId)
@@ -407,7 +407,7 @@ namespace ADTeam5.BusinessLogic
             List<TempVoucherDetails> result = new List<TempVoucherDetails>();
             AdjustmentRecord ar = _context.AdjustmentRecord
                 .FirstOrDefault(x => x.ClerkId == userId && x.VoucherNo.Contains("VTemp"));
-            if(ar != null)
+            if (ar != null)
             {
                 List<RecordDetails> rdList = _context.RecordDetails.Where(x => x.Rrid == ar.VoucherNo).ToList();
                 int rowID = 1;
@@ -495,7 +495,7 @@ namespace ADTeam5.BusinessLogic
             if (rd != null)
             {
                 rd.Rrid = voucherNo;
-                _context.SaveChanges();   
+                _context.SaveChanges();
             }
         }
 
@@ -522,11 +522,11 @@ namespace ADTeam5.BusinessLogic
             try
             {
                 var findDep = _context.DisbursementList.FirstOrDefault(x => x.Dlid == recordId).DepartmentCode;
-                
+
                 if (findDep != null)
                 {
                     result = _context.Department.Find(findDep).DepartmentName + " Department";
-                }                               
+                }
             }
             catch (NullReferenceException)
             {
@@ -558,8 +558,35 @@ namespace ADTeam5.BusinessLogic
             }
             return result;
         }
-      
-        
+
+        //Get temp PurchaseOrderDetailsList
+        public List<TempPurchaseOrderDetails> GetTempPurchaseOrderDetailsList()
+        {
+            List<TempPurchaseOrderDetails> result = new List<TempPurchaseOrderDetails>();
+            PurchaseOrderRecord purchaseOrderRecord = _context.PurchaseOrderRecord
+                .FirstOrDefault(x => x.Poid.Contains("POTemp"));
+            if (purchaseOrderRecord != null)
+            {
+                List<RecordDetails> rdList = _context.RecordDetails.Where(x => x.Rrid == purchaseOrderRecord.Poid).ToList();
+                int rowID = 1;
+                foreach (var item in rdList)
+                {
+                    TempPurchaseOrderDetails tPOList = new TempPurchaseOrderDetails();
+                    tPOList.RowID = rowID;
+                    tPOList.RDID = item.Rdid;
+                    tPOList.ItemNumber = item.ItemNumber;
+                    tPOList.ItemName = _context.Catalogue.FirstOrDefault(x => x.ItemNumber == item.ItemNumber).ItemName;
+                    tPOList.Quantity = item.Quantity;
+                    tPOList.Remark = item.Remark;
+
+                    result.Add(tPOList);
+                    rowID++;
+                }
+            }
+            return result;
+        }
+
+
         public List<EmployeeRequestRecord> searchRequestByDateAndDept(DateTime startDate, DateTime endDate, string dept)
         {
             var t = _context.EmployeeRequestRecord.Where(s => s.RequestDate >= startDate && s.RequestDate <= endDate && s.DepCode == dept);
@@ -583,7 +610,7 @@ namespace ADTeam5.BusinessLogic
 
         public List<RecordDetails> searchRecordDetailsByRRID(string rrid)
         {
-           return _context.RecordDetails.Where(x => x.Rrid == rrid).ToList();
+            return _context.RecordDetails.Where(x => x.Rrid == rrid).ToList();
         }
 
         public DisbursementList searchDLByPendingDeliveryAndDept(string dept)
@@ -621,5 +648,8 @@ namespace ADTeam5.BusinessLogic
             string name = q.Name;
             return name;
         }
+
+
+        
     }
 }
