@@ -228,6 +228,7 @@
         $("#Category").change(function () {
             $.get("/RaisePurchaseOrder/GetItemNameList", { category: $("#Category").val() }, function (data) {
                 $("#ItemNumber").empty();
+                $("#ItemNumber").append("<option value='" + "0" + "'>" + "---Select item---" + "</option>");
                 $.each(data, function (index, row) {
                     $("#ItemNumber").append("<option value='" + row.itemNumber + "'>" + row.itemName + "</option>")
                 });
@@ -242,8 +243,7 @@
             $.get("/RaisePurchaseOrder/GetSuppliers", { itemNumber: $("#ItemNumber").val() }, function (data) {
                 $("#Supplier").empty();
                 $.each(data, function (index, row) {
-                    $('#Supplier').append('<input type="radio" name="supplier" value="' + row.supplierCode + '"/>' + row.supplierName + '<br/>');
-                    console.log(row.supplierCode);
+                    $('#Supplier').append('<input type="radio" name="supplier" value="' + row + '"/>' + row + '<br/>');
                 });
             });
         })

@@ -168,23 +168,40 @@ namespace ADTeam5.Controllers
             string supplierCode1 = _context.Catalogue.FirstOrDefault(x => x.ItemNumber == itemNumber).Supplier1;
             string supplierCode2 = _context.Catalogue.FirstOrDefault(x => x.ItemNumber == itemNumber).Supplier2;
             string supplierCode3 = _context.Catalogue.FirstOrDefault(x => x.ItemNumber == itemNumber).Supplier3;
-            Supplier supplier1 = new Supplier();
-            Supplier supplier2 = new Supplier();
-            Supplier supplier3 = new Supplier();
+            string supplier1 = "";
+            string supplier2 = "";
+            string supplier3 = "";
+            //Supplier supplier1 = new Supplier();
+            //Supplier supplier2 = new Supplier();
+            //Supplier supplier3 = new Supplier();
+            //if (supplierCode1 != null)
+            //{
+            //    supplier1 = _context.Supplier.FirstOrDefault(y => y.SupplierCode == supplierCode1);
+            //}
+            //if (supplierCode2 != null)
+            //{
+            //    supplier2 = _context.Supplier.FirstOrDefault(y => y.SupplierCode == supplierCode2);
+            //}
+            //if (supplierCode3 != null)
+            //{
+            //    supplier3 = _context.Supplier.FirstOrDefault(y => y.SupplierCode == supplierCode3);
+            //}
             if (supplierCode1 != null)
             {
-                supplier1 = _context.Supplier.FirstOrDefault(y => y.SupplierCode == supplierCode1);
+                supplier1 = _context.Supplier.FirstOrDefault(y => y.SupplierCode == supplierCode1).SupplierName;
             }
             if (supplierCode2 != null)
             {
-                supplier2 = _context.Supplier.FirstOrDefault(y => y.SupplierCode == supplierCode2);
+                supplier2 = _context.Supplier.FirstOrDefault(y => y.SupplierCode == supplierCode2).SupplierName;
             }
             if (supplierCode3 != null)
             {
-                supplier3 = _context.Supplier.FirstOrDefault(y => y.SupplierCode == supplierCode3);
+                supplier3 = _context.Supplier.FirstOrDefault(y => y.SupplierCode == supplierCode3).SupplierName;
             }
-            //List<string> supplierList = new List<string>();
-            List<Supplier> supplierList = new List<Supplier>();
+            List<string> supplierList = new List<string>();
+
+
+            // List<Supplier> supplierList = new List<Supplier>();
             //supplierList = _context.Supplier.Where(x => x.SupplierCode == supplierCode1 || x.SupplierCode == supplierCode2 || x.SupplierCode == supplierCode3).ToList();
             supplierList.Add(supplier1);
             supplierList.Add(supplier2);
