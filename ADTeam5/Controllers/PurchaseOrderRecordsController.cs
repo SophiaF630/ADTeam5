@@ -60,18 +60,7 @@ namespace ADTeam5.Models
                 return NotFound();
             }
 
-            List<RecordDetails> rd = b.GetAdjustmentRecordDetails(id);
-            List<PurchaseOrderRecordDetails> result = new List<PurchaseOrderRecordDetails>();
-            foreach (var item in rd)
-            {
-                PurchaseOrderRecordDetails poList = new PurchaseOrderRecordDetails();
-
-                poList.ItemNumber = item.ItemNumber;
-                poList.ItemName = _context.Catalogue.FirstOrDefault(x => x.ItemNumber == item.ItemNumber).ItemName;
-                poList.Quantity = item.Quantity;
-
-                result.Add(poList);
-            }
+            List<PurchaseOrderRecordDetails> result = b.GetPurchaseOrderRecordDetails(id);
             return View(result);
         }
 

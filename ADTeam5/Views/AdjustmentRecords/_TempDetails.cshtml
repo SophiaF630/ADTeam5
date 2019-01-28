@@ -86,8 +86,8 @@
                                     </button>
                                 </td>
                                 <td>
-                                    <form asp-action="VoucherItemDelete" asp-route-id="@item.RowID" method="post" data-ajax="true" data-ajax-update="#TempDetails" role="form" asp-controller="AdjustmentRecords">
-                                        <button type="submit" class="btn btn-sm btn-danger d-none d-md-inline-block">
+                                    <form asp-action="VoucherItemDelete" asp-route-id="@item.VoucherNo" asp-route-rdid="@item.RDID" method="post" data-ajax="true" data-ajax-update="#TempDetails" role="form">
+                                        <button type="submit" class="btn btn-sm btn-danger d-none d-md-inline-block delete">
                                             Delete
                                         </button>
                                     </form>
@@ -152,7 +152,7 @@
                         <button class="btn" data-dismiss="modal" aria-hidden="true" style="width:80px;height:30px;border:2px; background-color:#EEEEEE"><font size="3" color="black">Close</font></button>
                         <button type="submit" class="btn btn-primary" style="width:120px;height:30px;border:2px; background-color:#3c8dbc"><font size="3" color="white">Save Changes</font></button>
                     </div>
-                </form>c
+                </form>
             </div>
         </div>
     </div>
@@ -262,13 +262,11 @@
 <script>
     $(document).ready(function () {
         $(".submit").click(function () {
-            var itemToAdd = $("#TempVoucherDetails").map(function () {
-                return $(this).val();
-            }).get();
+            var itemToAdd = 1;
             //alert(itemToAdd.join(','));
             $.ajax({
                 type: "POST",
-                url: '@Url.Action("Index", "AdjustmentRecords")',
+                url: '@Url.Action("Details", "AdjustmentRecords")',
                 dataType: "html",
                 data: { itemSubmitted: itemToAdd },
                 success:
@@ -285,13 +283,10 @@
 
 <script>
     $(".addToDraft").click(function () {
-        var itemToAdd = $("input:checkbox:checked", "#TempVoucherDetails").map(function () {
-            return $(this).val();
-        }).get();
-        alert(itemToAdd.join(','));
+        var itemToAdd = 1;
         $.ajax({
             type: "POST",
-            url: '@Url.Action("Index", "AdjustmentRecords")',
+            url: '@Url.Action("Details", "AdjustmentRecords")',
             dataType: "html",
             data: { itemSavedToDraft: itemToAdd },
             success:
@@ -303,3 +298,9 @@
         })
     });
 </script>
+
+@*<script>
+    function deleteItem(table) {
+        $(table).parents('tr').remove();
+    }
+</script>*@
