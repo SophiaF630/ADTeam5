@@ -359,34 +359,7 @@ namespace ADTeam5.BusinessLogic
             return result;
         }
 
-        //Add item to draft voucher
-        public void AddItemToVoucher(int userId, string itemNumber, int qty, string remark)
-        {
-            string voucherNo = "VTemp" + userId.ToString();
-            AdjustmentRecord adjustmentRecord = _context.AdjustmentRecord.FirstOrDefault(x => x.VoucherNo == voucherNo);
-
-            if (adjustmentRecord == null)
-            {
-                adjustmentRecord = new AdjustmentRecord()
-                {
-                    VoucherNo = voucherNo,
-                    IssueDate = DateTime.Today,
-                    ClerkId = userId,
-                    Status = "draft"
-                };
-                _context.AdjustmentRecord.Add(adjustmentRecord);
-                _context.SaveChanges();
-            }
-
-            RecordDetails recordDetails = new RecordDetails();
-            recordDetails.Rrid = voucherNo;
-            recordDetails.ItemNumber = itemNumber;
-            recordDetails.Quantity = qty;
-            recordDetails.Remark = remark;
-            _context.RecordDetails.Add(recordDetails);
-            _context.SaveChanges();
-
-        }
+        
 
         //Change Deliver Date
         public void ChangeEstDeliverDate(string departmentName, DateTime estDeliverDate)
@@ -428,16 +401,33 @@ namespace ADTeam5.BusinessLogic
             return result;
         }
 
-        //create new voucher item
-        public void CreateNewVoucherItem(int userID, string itemNumber, int quantity, string remark)
+        //Create New VoucherItem
+        public void CreateNewVoucherItem(int userId, string itemNumber, int qty, string remark)
         {
-            RecordDetails tempVoucherItem = new RecordDetails();
-            tempVoucherItem.Rrid = "VTemp" + userID.ToString();
-            tempVoucherItem.ItemNumber = itemNumber;
-            tempVoucherItem.Quantity = quantity;
-            tempVoucherItem.Remark = remark;
-            _context.RecordDetails.Add(tempVoucherItem);
+            string voucherNo = "VTemp" + userId.ToString();
+            AdjustmentRecord adjustmentRecord = _context.AdjustmentRecord.FirstOrDefault(x => x.VoucherNo == voucherNo);
+
+            if (adjustmentRecord == null)
+            {
+                adjustmentRecord = new AdjustmentRecord()
+                {
+                    VoucherNo = voucherNo,
+                    IssueDate = DateTime.Today,
+                    ClerkId = userId,
+                    Status = "draft"
+                };
+                _context.AdjustmentRecord.Add(adjustmentRecord);
+                _context.SaveChanges();
+            }
+
+            RecordDetails recordDetails = new RecordDetails();
+            recordDetails.Rrid = voucherNo;
+            recordDetails.ItemNumber = itemNumber;
+            recordDetails.Quantity = qty;
+            recordDetails.Remark = remark;
+            _context.RecordDetails.Add(recordDetails);
             _context.SaveChanges();
+
         }
 
         //Update voucherItem
@@ -563,30 +553,168 @@ namespace ADTeam5.BusinessLogic
         public List<TempPurchaseOrderDetails> GetTempPurchaseOrderDetailsList()
         {
             List<TempPurchaseOrderDetails> result = new List<TempPurchaseOrderDetails>();
-            PurchaseOrderRecord purchaseOrderRecord = _context.PurchaseOrderRecord
-                .FirstOrDefault(x => x.Poid.Contains("POTemp"));
-            if (purchaseOrderRecord != null)
+            List<PurchaseOrderRecord> purchaseOrderRecordList = _context.PurchaseOrderRecord
+                .Where(x => x.Poid.Contains("POTemp")).ToList();
+            if (purchaseOrderRecordList.Count != 0)
             {
-                List<RecordDetails> rdList = _context.RecordDetails.Where(x => x.Rrid == purchaseOrderRecord.Poid).ToList();
                 int rowID = 1;
-                foreach (var item in rdList)
+                foreach (var record in purchaseOrderRecordList)
                 {
-                    TempPurchaseOrderDetails tPOList = new TempPurchaseOrderDetails();
-                    tPOList.RowID = rowID;
-                    tPOList.RDID = item.Rdid;
-                    tPOList.ItemNumber = item.ItemNumber;
-                    tPOList.ItemName = _context.Catalogue.FirstOrDefault(x => x.ItemNumber == item.ItemNumber).ItemName;
-                    tPOList.Quantity = item.Quantity;
-                    tPOList.Remark = item.Remark;
+                    List<RecordDetails> rdList = _context.RecordDetails.Where(x => x.Rrid == record.Poid).ToList();                   
+                    foreach (var item in rdList)
+                    {
+                        TempPurchaseOrderDetails tPOList = new TempPurchaseOrderDetails();
+                        tPOList.RowID = rowID;
+                        tPOList.RDID = item.Rdid;
+                        tPOList.ItemNumber = item.ItemNumber;
+                        tPOList.ItemName = _context.Catalogue.FirstOrDefault(x => x.ItemNumber == item.ItemNumber).ItemName;
+                        tPOList.Quantity = item.Quantity;
+                        tPOList.Remark = item.Remark;
+                        tPOList.SupplierCode = _context.PurchaseOrderRecord.FirstOrDefault(x => x.Poid == item.Rrid).SupplierCode;
 
-                    result.Add(tPOList);
-                    rowID++;
+                        result.Add(tPOList);
+                        rowID++;
+                    }
                 }
             }
             return result;
         }
 
+        //Create New VoucherItem
+        public void CreateNewPOItem(int userID, string itemNumber, int qty, string supplierName)
+        {            
+            string supplierCode = _context.Supplier.FirstOrDefault(x => x.SupplierName == supplierName).SupplierCode;
+            string poNo = "POTemp" + supplierCode;
+            PurchaseOrderRecord purchaseOrderRecord = _context.PurchaseOrderRecord.FirstOrDefault(x => x.Poid == poNo && x.SupplierCode == supplierCode);
 
+            if (purchaseOrderRecord == null)
+            {
+                PurchaseOrderRecord poRecord = new PurchaseOrderRecord()
+                {
+                    Poid = poNo,
+                    OrderDate = DateTime.Today,
+                    StoreClerkId = userID,
+                    SupplierCode = supplierCode,
+                    Status = "Draft"
+                };
+                _context.PurchaseOrderRecord.Add(poRecord);
+                _context.SaveChanges();
+            }
+
+            RecordDetails recordDetails = new RecordDetails();
+            recordDetails.Rrid = poNo;
+            recordDetails.ItemNumber = itemNumber;
+            recordDetails.Quantity = qty;
+            recordDetails.Remark = "";
+            _context.RecordDetails.Add(recordDetails);
+            _context.SaveChanges();
+
+        }
+
+        //Update POItem
+        public void UpdatePOItem(int userID, int rowID, int quantity, string supplierName, List<TempPurchaseOrderDetails> tempPurchaseOrderDetails)
+        {
+            //get rdid
+            TempPurchaseOrderDetails tempPOItem = tempPurchaseOrderDetails.FirstOrDefault(x => x.RowID == rowID);
+            int rdid = tempPOItem.RDID;
+            string poidOld = _context.RecordDetails.FirstOrDefault(x => x.Rdid == rdid).Rrid;
+            string supplierCode = _context.Supplier.FirstOrDefault(x => x.SupplierName == supplierName).SupplierCode;
+            string poidNew = "POTemp" + supplierCode;
+            //Check if PO ID exists
+            PurchaseOrderRecord purchaseOrderRecord = _context.PurchaseOrderRecord.FirstOrDefault(x => x.Poid == poidNew);
+
+            //Update PO Record
+            if (purchaseOrderRecord == null)
+            {
+                PurchaseOrderRecord poRecord = new PurchaseOrderRecord()
+                {
+                    Poid = poidNew,
+                    OrderDate = DateTime.Today,
+                    StoreClerkId = userID,
+                    SupplierCode = supplierCode,
+                    Status = "Draft"
+                };
+                _context.PurchaseOrderRecord.Add(poRecord);
+                _context.SaveChanges();
+            }
+
+            //Update recordDetails
+            RecordDetails editPOItem = _context.RecordDetails.FirstOrDefault(x => x.Rdid == rdid);
+            editPOItem.Quantity = quantity;
+            editPOItem.Rrid = poidNew;
+            _context.Update(editPOItem);
+            _context.SaveChanges();
+        }
+
+        //CreatePurchaseOrderRecord
+        public void CreatePurchaseOrderRecord(int userID, string poNo, string supplierCode, string status)
+        {
+            //string supplierCode = _context.Supplier.FirstOrDefault(x => x.SupplierName == supplierName).SupplierCode;
+            PurchaseOrderRecord poRecord = _context.PurchaseOrderRecord.FirstOrDefault(x => x.Poid == poNo);
+            if (poRecord == null && supplierCode != null)
+            {
+                if (status == "Submitted")
+                {
+                    //Generate new adjustment record
+                    PurchaseOrderRecord purchaseOrderRecord = new PurchaseOrderRecord();
+                    purchaseOrderRecord.Poid = poNo;
+                    purchaseOrderRecord.OrderDate = DateTime.Now.Date;
+                    purchaseOrderRecord.StoreClerkId = userID;
+                    purchaseOrderRecord.SupplierCode = supplierCode;
+                    purchaseOrderRecord.Status = "Submitted";
+
+                    _context.PurchaseOrderRecord.Add(purchaseOrderRecord);
+                    _context.SaveChanges();
+                }
+                else if (status == "Draft")
+                {
+                    //Generate new adjustment record
+                    PurchaseOrderRecord purchaseOrderRecord = new PurchaseOrderRecord();
+                    purchaseOrderRecord.Poid = poNo;
+                    purchaseOrderRecord.OrderDate = DateTime.Now.Date;
+                    purchaseOrderRecord.StoreClerkId = userID;
+                    purchaseOrderRecord.SupplierCode = supplierCode;
+                    purchaseOrderRecord.Status = "Draft";
+
+                    _context.PurchaseOrderRecord.Add(purchaseOrderRecord);
+                    _context.SaveChanges();
+                }
+            }
+        }
+
+        //Add items to PO
+        public void AddItemsToPO(int rowID, string poNo, List<TempPurchaseOrderDetails> tempPurchaseOrderDetailsList)
+        {
+            //get rdid
+            TempPurchaseOrderDetails tempPurchaseOrderDetails = tempPurchaseOrderDetailsList.FirstOrDefault(x => x.RowID == rowID);
+            int rdid = tempPurchaseOrderDetails.RDID;
+            //update record details
+            RecordDetails rd = _context.RecordDetails.FirstOrDefault(x => x.Rdid == rdid);
+            if (rd != null)
+            {
+                rd.Rrid = poNo;
+                _context.SaveChanges();
+            }
+        }
+
+        //Delete voucher item
+        public void DeletePOItem(int rowID, List<TempPurchaseOrderDetails> tempPurchaseOrderDetailsList)
+        {
+            //get rdid
+            TempPurchaseOrderDetails tempPurchaseOrderDetails = tempPurchaseOrderDetailsList.FirstOrDefault(x => x.RowID == rowID);
+            int rdid = tempPurchaseOrderDetails.RDID;
+
+            RecordDetails rd = _context.RecordDetails.FirstOrDefault(x => x.Rdid == rdid);
+            if (rd != null)
+            {
+                _context.RecordDetails.Remove(rd);
+                _context.SaveChanges();
+            }
+        }
+
+
+
+        //Department part
         public List<EmployeeRequestRecord> searchRequestByDateAndDept(DateTime startDate, DateTime endDate, string dept)
         {
             var t = _context.EmployeeRequestRecord.Where(s => s.RequestDate >= startDate && s.RequestDate <= endDate && s.DepCode == dept);

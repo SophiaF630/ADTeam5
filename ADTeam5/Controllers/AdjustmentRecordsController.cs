@@ -78,90 +78,72 @@ namespace ADTeam5.Controllers
             return View(result);
         }
 
-        // GET: AdjustmentRecords/Create
-        public IActionResult Create()
-        {
-            ViewData["ClerkId"] = new SelectList(_context.User, "UserId", "DepartmentCode");
-            ViewData["ManagerId"] = new SelectList(_context.User, "UserId", "DepartmentCode");
-            ViewData["SuperviserId"] = new SelectList(_context.User, "UserId", "DepartmentCode");
-            return View();
-        }
-
-        // POST: AdjustmentRecords/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: AdjustmentRecords/Details/5
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("VoucherNo,IssueDate,ApproveDate,ClerkId,SuperviserId,ManagerId,Status")] AdjustmentRecord adjustmentRecord)
+        public async Task<IActionResult> Details(string id, string itemNumber, int quantity, int rowID, string remark, int createNewVoucherItemModalName, int voucherItemModalName, string[] itemSubmitted, string[] itemSavedToDraft)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(adjustmentRecord);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["ClerkId"] = new SelectList(_context.User, "UserId", "DepartmentCode", adjustmentRecord.ClerkId);
-            ViewData["ManagerId"] = new SelectList(_context.User, "UserId", "DepartmentCode", adjustmentRecord.ManagerId);
-            ViewData["SuperviserId"] = new SelectList(_context.User, "UserId", "DepartmentCode", adjustmentRecord.SuperviserId);
-            return View(adjustmentRecord);
-        }
+            ADTeam5User user = await _userManager.GetUserAsync(HttpContext.User);
+            List<string> identity = userCheck.checkUserIdentityAsync(user);
+            int userID = user.WorkID;
 
-        // GET: AdjustmentRecords/Edit/5
-        public async Task<IActionResult> Edit(string id)
-        {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var adjustmentRecord = await _context.AdjustmentRecord.FindAsync(id);
-            if (adjustmentRecord == null)
-            {
-                return NotFound();
-            }
-            ViewData["ClerkId"] = new SelectList(_context.User, "UserId", "DepartmentCode", adjustmentRecord.ClerkId);
-            ViewData["ManagerId"] = new SelectList(_context.User, "UserId", "DepartmentCode", adjustmentRecord.ManagerId);
-            ViewData["SuperviserId"] = new SelectList(_context.User, "UserId", "DepartmentCode", adjustmentRecord.SuperviserId);
-            return View(adjustmentRecord);
-        }
+            
+            
+            //handle post action
+            List<TempVoucherDetails> tempVoucherDetailsList = b.GetTempVoucherDetailsList(userID);
 
-        // POST: AdjustmentRecords/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("VoucherNo,IssueDate,ApproveDate,ClerkId,SuperviserId,ManagerId,Status")] AdjustmentRecord adjustmentRecord)
-        {
-            if (id != adjustmentRecord.VoucherNo)
+            if (createNewVoucherItemModalName == 1)
             {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(adjustmentRecord);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!AdjustmentRecordExists(adjustmentRecord.VoucherNo))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+                b.CreateNewVoucherItem(userID, itemNumber, quantity, remark);
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ClerkId"] = new SelectList(_context.User, "UserId", "DepartmentCode", adjustmentRecord.ClerkId);
-            ViewData["ManagerId"] = new SelectList(_context.User, "UserId", "DepartmentCode", adjustmentRecord.ManagerId);
-            ViewData["SuperviserId"] = new SelectList(_context.User, "UserId", "DepartmentCode", adjustmentRecord.SuperviserId);
-            return View(adjustmentRecord);
+            else if (voucherItemModalName == 1)
+            {
+                b.UpdateVoucherItem(rowID, quantity, remark, tempVoucherDetailsList);
+            }
+
+            if (itemSubmitted.Length != 0)
+            {
+                //changestatus to pending approval
+                //return RedirectToAction(nameof(Index));
+            }
+            else if (itemSavedToDraft.Length != 0)
+            {
+                //change status to draft
+                //return RedirectToAction(nameof(Index));
+            }
+
+            //Viewbag for category dropdown list, need to post back
+            List<Catalogue> categoryList = new List<Catalogue>();
+            var q = _context.Catalogue.GroupBy(x => new { x.Category }).Select(x => x.FirstOrDefault());
+            foreach (var item in q)
+            {
+                categoryList.Add(item);
+            }
+            categoryList.Insert(0, new Catalogue { ItemNumber = "0", Category = "---Select Category---" });
+            ViewBag.ListofCategory = categoryList;
+
+
+            List<RecordDetails> rd = b.GetAdjustmentRecordDetails(id);
+            List<AdjustmentRecordDetails> result = new List<AdjustmentRecordDetails>();
+            foreach (var item in rd)
+            {
+                AdjustmentRecordDetails arList = new AdjustmentRecordDetails();
+
+                arList.ItemNumber = item.ItemNumber;
+                arList.ItemName = _context.Catalogue.FirstOrDefault(x => x.ItemNumber == item.ItemNumber).ItemName;
+                arList.Quantity = item.Quantity;
+                arList.Remark = item.Remark;
+
+                result.Add(arList);
+            }
+            return View(result);
         }
+
 
         [HttpPost]
         public async Task<IActionResult> AdjustmentRecordSubmit(string id)
@@ -209,6 +191,44 @@ namespace ADTeam5.Controllers
                 NotFound();
             }
             return PartialView("_TempAdjustmentRecords", tempAdjustmentRecords);
+        }
+
+        [HttpPost]
+        //[ActionName("VoucherItemDelete"), Route("~/IssueVoucher")]
+        public async Task<IActionResult> VoucherItemDelete(int id)
+        {
+            ADTeam5User user = await _userManager.GetUserAsync(HttpContext.User);
+            List<string> identity = userCheck.checkUserIdentityAsync(user);
+            int userID = user.WorkID;
+
+            //Viewbag for category dropdown list, need to post back
+            List<Catalogue> categoryList = new List<Catalogue>();
+            var q = _context.Catalogue.GroupBy(x => new { x.Category }).Select(x => x.FirstOrDefault());
+            foreach (var item in q)
+            {
+                categoryList.Add(item);
+            }
+            categoryList.Insert(0, new Catalogue { ItemNumber = "0", Category = "---Select Category---" });
+            ViewBag.ListofCategory = categoryList;
+
+            List<TempVoucherDetails> tempVoucherDetailsList1 = b.GetTempVoucherDetailsList(userID);
+
+            b.DeleteVoucherItem(id, tempVoucherDetailsList1);
+
+            List<TempVoucherDetails> tempVoucherDetailsList = b.GetTempVoucherDetailsList(userID);
+
+            if (tempVoucherDetailsList == null)
+            {
+                tempVoucherDetailsList = new List<TempVoucherDetails>();
+            }
+            return PartialView("_TempDetails", tempVoucherDetailsList);
+
+        }
+
+        //Create
+        public async Task<IActionResult> Create()
+        {
+            return RedirectToAction("Index", "IssueVoucher", new { area = "" });
         }
 
         private bool AdjustmentRecordExists(string id)
