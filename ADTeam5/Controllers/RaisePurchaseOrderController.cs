@@ -23,7 +23,7 @@ namespace ADTeam5.Controllers
 
         static List<string> ItemNumberList = new List<string>();
         static List<int> QuantityList = new List<int>();
-        static string voucherNo = "";
+        static string poNo = "";
 
         public RaisePurchaseOrderController(SSISTeam5Context context, UserManager<ADTeam5User> userManager)
         {
@@ -57,54 +57,54 @@ namespace ADTeam5.Controllers
 
         // POST: IssueVoucher
         [HttpPost]
-        public async Task<IActionResult> Index(string itemNumber, int quantity, int rowID, string remark, int createNewVoucherItemModalName, int voucherItemModalName, string[] itemSubmitted, string[] itemSavedToDraft)
+        public async Task<IActionResult> Index(string itemNumber, int quantity, int rowID, string supplierName, int createNewPOItemModalIDName, int POItemModalName, string[] itemSubmitted, string[] itemSavedToDraft)
         {
             ADTeam5User user = await _userManager.GetUserAsync(HttpContext.User);
             List<string> identity = userCheck.checkUserIdentityAsync(user);
             int userID = user.WorkID;
-            voucherNo = "";
+            poNo = "";
 
             //handle post action
-            List<TempVoucherDetails> tempVoucherDetailsList = b.GetTempVoucherDetailsList(userID);
+            List<TempPurchaseOrderDetails> tempPurchaseOrderDetailsList = b.GetTempPurchaseOrderDetailsList();
 
-            if (createNewVoucherItemModalName == 1)
+            if (createNewPOItemModalIDName == 1)
             {
-                b.CreateNewVoucherItem(userID, itemNumber, quantity, remark);
+                b.CreateNewPOItem(userID, itemNumber, quantity);
                 return RedirectToAction(nameof(Index));
             }
-            else if (voucherItemModalName == 1)
+            else if (POItemModalName == 1)
             {
-                b.UpdateVoucherItem(rowID, quantity, remark, tempVoucherDetailsList);
+                b.UpdatePOItem(rowID, quantity, tempPurchaseOrderDetailsList);
             }
 
             if (itemSubmitted.Length != 0)
             {
-                voucherNo = b.IDGenerator("V");
-                foreach (var item in tempVoucherDetailsList)
+                poNo = b.IDGenerator("PO");
+                foreach (var item in tempPurchaseOrderDetailsList)
                 {
                     if (Array.Exists(itemSubmitted, i => i == item.RowID.ToString()))
                     {
-                        b.AddItemsToVoucher(item.RowID, voucherNo, tempVoucherDetailsList);
-                        b.CreateAdjustmentRecord(userID, voucherNo, "Submitted");
+                        b.AddItemsToPO(item.RowID, poNo, tempPurchaseOrderDetailsList);
+                        b.CreatePurchaseOrderRecord(userID, poNo, supplierName, "Submitted");
                     }
                 }
                 //return RedirectToAction(nameof(Index));
             }
             else if (itemSavedToDraft.Length != 0)
             {
-                voucherNo = b.IDGenerator("V");
-                foreach (var item in tempVoucherDetailsList)
+                poNo = b.IDGenerator("PO");
+                foreach (var item in tempPurchaseOrderDetailsList)
                 {
                     if (Array.Exists(itemSavedToDraft, i => i == item.RowID.ToString()))
                     {
-                        b.AddItemsToVoucher(item.RowID, voucherNo, tempVoucherDetailsList);
-                        b.CreateAdjustmentRecord(userID, voucherNo, "Draft");
+                        b.AddItemsToPO(item.RowID, poNo, tempPurchaseOrderDetailsList);
+                        b.CreatePurchaseOrderRecord(userID, poNo, supplierName, "Draft");
                     }
                 }
                 //return RedirectToAction(nameof(Index));
             }
 
-            List<TempVoucherDetails> result = b.GetTempVoucherDetailsList(userID);
+            List<TempPurchaseOrderDetails> result = b.GetTempPurchaseOrderDetailsList();
 
             //Viewbag for category dropdown list, need to post back
             List<Catalogue> categoryList = new List<Catalogue>();

@@ -586,7 +586,96 @@ namespace ADTeam5.BusinessLogic
             return result;
         }
 
+        //CreateNewPOItem
+        public void CreateNewPOItem(int userID, string itemNumber, int quantity)
+        {
+            RecordDetails tempPOItem = new RecordDetails();
+            tempPOItem.Rrid = "POTemp" + userID.ToString();
+            tempPOItem.ItemNumber = itemNumber;
+            tempPOItem.Quantity = quantity;
+            _context.RecordDetails.Add(tempPOItem);
+            _context.SaveChanges();
+        }
 
+        //Update POItem
+        public void UpdatePOItem(int rowID, int quantity, List<TempPurchaseOrderDetails> tempPurchaseOrderDetails)
+        {
+            //get rdid
+            TempPurchaseOrderDetails tempPOItem = tempPurchaseOrderDetails.FirstOrDefault(x => x.RowID == rowID);
+            int rdid = tempPOItem.RDID;
+
+            RecordDetails editPOItem = _context.RecordDetails.FirstOrDefault(x => x.Rdid == rdid);
+            editPOItem.Quantity = quantity;
+            _context.Update(editPOItem);
+            _context.SaveChanges();
+        }
+
+        //CreatePurchaseOrderRecord
+        public void CreatePurchaseOrderRecord(int userID, string poNo, string supplierName, string status)
+        {
+            string supplierCode = _context.Supplier.FirstOrDefault(x => x.SupplierName == supplierName).SupplierCode;
+            if (supplierCode != null)
+            {
+                if (status == "Submitted")
+                {
+                    //Generate new adjustment record
+                    PurchaseOrderRecord purchaseOrderRecord = new PurchaseOrderRecord();
+                    purchaseOrderRecord.Poid = poNo;
+                    purchaseOrderRecord.OrderDate = DateTime.Now.Date;
+                    purchaseOrderRecord.StoreClerkId = userID;
+                    purchaseOrderRecord.Status = "Submitted";
+
+                    _context.PurchaseOrderRecord.Add(purchaseOrderRecord);
+                    _context.SaveChanges();
+                }
+                else if (status == "Draft")
+                {
+                    //Generate new adjustment record
+                    PurchaseOrderRecord purchaseOrderRecord = new PurchaseOrderRecord();
+                    purchaseOrderRecord.Poid = poNo;
+                    purchaseOrderRecord.OrderDate = DateTime.Now.Date;
+                    purchaseOrderRecord.StoreClerkId = userID;
+                    purchaseOrderRecord.Status = "Draft";
+
+                    _context.PurchaseOrderRecord.Add(purchaseOrderRecord);
+                    _context.SaveChanges();
+                }
+            }
+        }
+
+        //Add voucher items to voucher
+        public void AddItemsToPO(int rowID, string poNo, List<TempPurchaseOrderDetails> tempPurchaseOrderDetailsList)
+        {
+            //get rdid
+            TempPurchaseOrderDetails tempPurchaseOrderDetails = tempPurchaseOrderDetailsList.FirstOrDefault(x => x.RowID == rowID);
+            int rdid = tempPurchaseOrderDetails.RDID;
+
+            RecordDetails rd = _context.RecordDetails.FirstOrDefault(x => x.Rdid == rdid);
+            if (rd != null)
+            {
+                rd.Rrid = poNo;
+                _context.SaveChanges();
+            }
+        }
+
+        //Delete voucher item
+        public void DeletePOItem(int rowID, List<TempPurchaseOrderDetails> tempPurchaseOrderDetailsList)
+        {
+            //get rdid
+            TempPurchaseOrderDetails tempPurchaseOrderDetails = tempPurchaseOrderDetailsList.FirstOrDefault(x => x.RowID == rowID);
+            int rdid = tempPurchaseOrderDetails.RDID;
+
+            RecordDetails rd = _context.RecordDetails.FirstOrDefault(x => x.Rdid == rdid);
+            if (rd != null)
+            {
+                _context.RecordDetails.Remove(rd);
+                _context.SaveChanges();
+            }
+        }
+
+
+
+        //Department part
         public List<EmployeeRequestRecord> searchRequestByDateAndDept(DateTime startDate, DateTime endDate, string dept)
         {
             var t = _context.EmployeeRequestRecord.Where(s => s.RequestDate >= startDate && s.RequestDate <= endDate && s.DepCode == dept);

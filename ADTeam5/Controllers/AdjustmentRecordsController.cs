@@ -78,91 +78,7 @@ namespace ADTeam5.Controllers
             return View(result);
         }
 
-        // GET: AdjustmentRecords/Create
-        public IActionResult Create()
-        {
-            ViewData["ClerkId"] = new SelectList(_context.User, "UserId", "DepartmentCode");
-            ViewData["ManagerId"] = new SelectList(_context.User, "UserId", "DepartmentCode");
-            ViewData["SuperviserId"] = new SelectList(_context.User, "UserId", "DepartmentCode");
-            return View();
-        }
-
-        // POST: AdjustmentRecords/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("VoucherNo,IssueDate,ApproveDate,ClerkId,SuperviserId,ManagerId,Status")] AdjustmentRecord adjustmentRecord)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(adjustmentRecord);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["ClerkId"] = new SelectList(_context.User, "UserId", "DepartmentCode", adjustmentRecord.ClerkId);
-            ViewData["ManagerId"] = new SelectList(_context.User, "UserId", "DepartmentCode", adjustmentRecord.ManagerId);
-            ViewData["SuperviserId"] = new SelectList(_context.User, "UserId", "DepartmentCode", adjustmentRecord.SuperviserId);
-            return View(adjustmentRecord);
-        }
-
-        // GET: AdjustmentRecords/Edit/5
-        public async Task<IActionResult> Edit(string id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var adjustmentRecord = await _context.AdjustmentRecord.FindAsync(id);
-            if (adjustmentRecord == null)
-            {
-                return NotFound();
-            }
-            ViewData["ClerkId"] = new SelectList(_context.User, "UserId", "DepartmentCode", adjustmentRecord.ClerkId);
-            ViewData["ManagerId"] = new SelectList(_context.User, "UserId", "DepartmentCode", adjustmentRecord.ManagerId);
-            ViewData["SuperviserId"] = new SelectList(_context.User, "UserId", "DepartmentCode", adjustmentRecord.SuperviserId);
-            return View(adjustmentRecord);
-        }
-
-        // POST: AdjustmentRecords/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("VoucherNo,IssueDate,ApproveDate,ClerkId,SuperviserId,ManagerId,Status")] AdjustmentRecord adjustmentRecord)
-        {
-            if (id != adjustmentRecord.VoucherNo)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(adjustmentRecord);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!AdjustmentRecordExists(adjustmentRecord.VoucherNo))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["ClerkId"] = new SelectList(_context.User, "UserId", "DepartmentCode", adjustmentRecord.ClerkId);
-            ViewData["ManagerId"] = new SelectList(_context.User, "UserId", "DepartmentCode", adjustmentRecord.ManagerId);
-            ViewData["SuperviserId"] = new SelectList(_context.User, "UserId", "DepartmentCode", adjustmentRecord.SuperviserId);
-            return View(adjustmentRecord);
-        }
-
+        
         [HttpPost]
         public async Task<IActionResult> AdjustmentRecordSubmit(string id)
         {
@@ -209,6 +125,12 @@ namespace ADTeam5.Controllers
                 NotFound();
             }
             return PartialView("_TempAdjustmentRecords", tempAdjustmentRecords);
+        }
+
+        //Create
+        public async Task<IActionResult> Create()
+        {
+            return RedirectToAction("Index", "IssueVoucher", new { area = "" });
         }
 
         private bool AdjustmentRecordExists(string id)

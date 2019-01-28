@@ -2,22 +2,24 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ADTeam5.Areas.Identity.Data;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using ADTeam5.Models;
+using ADTeam5.BusinessLogic;
+using Microsoft.AspNetCore.Identity;
+using ADTeam5.Areas.Identity.Data;
+using ADTeam5.ViewModels;
 
 namespace ADTeam5.Models
 {
-    [Authorize]
+
     public class PurchaseOrderRecordsController : Controller
     {
-        private readonly SSISTeam5Context _context;
         private readonly UserManager<ADTeam5User> _userManager;
+        private readonly SSISTeam5Context _context;
+        BizLogic b = new BizLogic();
         readonly GeneralLogic userCheck;
-        ADTeam5User user;
 
         public PurchaseOrderRecordsController(SSISTeam5Context context, UserManager<ADTeam5User> userManager)
         {
@@ -29,157 +31,104 @@ namespace ADTeam5.Models
         // GET: PurchaseOrderRecords
         public async Task<IActionResult> Index()
         {
-            var sSISTeam5Context = _context.PurchaseOrderRecord.Include(p => p.StoreClerk).Include(p => p.SupplierCodeNavigation);
-            return View(await sSISTeam5Context.ToListAsync());
+            ADTeam5User user = await _userManager.GetUserAsync(HttpContext.User);
+            List<string> identity = userCheck.checkUserIdentityAsync(user);
+            int userID = user.WorkID;
+
+            PurchaseOrderRecord purchaseOrderRecord = _context.PurchaseOrderRecord.FirstOrDefault(x => !x.Poid.Contains("POTemp"));
+            List<PurchaseOrderRecord> poList = new List<PurchaseOrderRecord>();
+            if (purchaseOrderRecord != null)
+            {
+                poList = _context.PurchaseOrderRecord.Where(x => !x.Poid.Contains("POTemp")).ToList();
+            }
+            else
+            {
+                NotFound();
+            }
+            return View(poList);
         }
 
         // GET: PurchaseOrderRecords/Details/5
         public async Task<IActionResult> Details(string id)
         {
+            ADTeam5User user = await _userManager.GetUserAsync(HttpContext.User);
+            List<string> identity = userCheck.checkUserIdentityAsync(user);
+            int userID = user.WorkID;
+
             if (id == null)
             {
                 return NotFound();
             }
 
-            var purchaseOrderRecord = await _context.PurchaseOrderRecord
-                .Include(p => p.StoreClerk)
-                .Include(p => p.SupplierCodeNavigation)
-                .FirstOrDefaultAsync(m => m.Poid == id);
-            if (purchaseOrderRecord == null)
+            List<RecordDetails> rd = b.GetAdjustmentRecordDetails(id);
+            List<PurchaseOrderRecordDetails> result = new List<PurchaseOrderRecordDetails>();
+            foreach (var item in rd)
             {
-                return NotFound();
+                PurchaseOrderRecordDetails poList = new PurchaseOrderRecordDetails();
+
+                poList.ItemNumber = item.ItemNumber;
+                poList.ItemName = _context.Catalogue.FirstOrDefault(x => x.ItemNumber == item.ItemNumber).ItemName;
+                poList.Quantity = item.Quantity;
+
+                result.Add(poList);
             }
-            //this part is new added
-            var details = from m in _context.RecordDetails select m;
-            details = details.Where(s=>s.Rrid == purchaseOrderRecord.Poid);
-            if (details == null)
+            return View(result);
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> PurchaseOrderRecordSubmit(string id)
+        {
+            ADTeam5User user = await _userManager.GetUserAsync(HttpContext.User);
+            List<string> identity = userCheck.checkUserIdentityAsync(user);
+            int userID = user.WorkID;
+
+            PurchaseOrderRecord poRecordToBeSubmitted = _context.PurchaseOrderRecord.FirstOrDefault(x => x.Poid == id);
+            poRecordToBeSubmitted.Status = "Submitted";
+            _context.SaveChanges();
+
+            PurchaseOrderRecord ar = _context.PurchaseOrderRecord.FirstOrDefault(x => !x.Poid.Contains("POTemp"));
+            List<PurchaseOrderRecord> tempPurchaseOrderRecords = new List<PurchaseOrderRecord>();
+            if (ar != null)
             {
-                return NotFound();
+                tempPurchaseOrderRecords = _context.PurchaseOrderRecord.Where(x => !x.Poid.Contains("POTemp")).ToList();
             }
             else
             {
-                ViewData["Purchase"] = purchaseOrderRecord;
-                return View(details);
-
+                NotFound();
             }
-            //new added finished
-            //return View(purchaseOrderRecord);
+            return PartialView("_TempPurchaseOrderRecords", tempPurchaseOrderRecords);
         }
 
-        // GET: PurchaseOrderRecords/Create
+        [HttpPost]
+        public async Task<IActionResult> PurchaseOrderDelete(string id)
+        {
+            ADTeam5User user = await _userManager.GetUserAsync(HttpContext.User);
+            List<string> identity = userCheck.checkUserIdentityAsync(user);
+            int userID = user.WorkID;
+
+            PurchaseOrderRecord poRecordToBeDeleted = _context.PurchaseOrderRecord.FirstOrDefault(x => x.Poid == id);
+            _context.PurchaseOrderRecord.Remove(poRecordToBeDeleted);
+            _context.SaveChanges();
+
+            PurchaseOrderRecord ar = _context.PurchaseOrderRecord.FirstOrDefault(x => !x.Poid.Contains("POTemp"));
+            List<PurchaseOrderRecord> tempPurchaseOrderRecords = new List<PurchaseOrderRecord>();
+            if (ar != null)
+            {
+                tempPurchaseOrderRecords = _context.PurchaseOrderRecord.Where(x => !x.Poid.Contains("Vtemp")).ToList();
+            }
+            else
+            {
+                NotFound();
+            }
+            return PartialView("_TempPurchaseOrderRecords", tempPurchaseOrderRecords);
+        }
+
+
+        //Create
         public async Task<IActionResult> Create()
         {
-            user = await _userManager.GetUserAsync(HttpContext.User);
-            ViewData["StoreClerkId"] = user.WorkID;
-
-            ViewData["SupplierCode"] = _context.Supplier.ToList();
-            ViewData["CatalogueList"] = _context.Catalogue.ToList();
-            //ViewData["SupplierCode"] = new SelectList(_context.Supplier, "SupplierCode", "SupplierCode");
-            return View();
-        }
-
-        // POST: PurchaseOrderRecords/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Poid,OrderDate,ExpectedCompleteDate,CompleteDate,StoreClerkId,SupplierCode,Status")] PurchaseOrderRecord purchaseOrderRecord)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(purchaseOrderRecord);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["StoreClerkId"] = new SelectList(_context.User, "UserId", "DepartmentCode", purchaseOrderRecord.StoreClerkId);
-            ViewData["SupplierCode"] = new SelectList(_context.Supplier, "SupplierCode", "SupplierCode", purchaseOrderRecord.SupplierCode);
-            return View(purchaseOrderRecord);
-        }
-
-        // GET: PurchaseOrderRecords/Edit/5
-        public async Task<IActionResult> Edit(string id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var purchaseOrderRecord = await _context.PurchaseOrderRecord.FindAsync(id);
-            if (purchaseOrderRecord == null)
-            {
-                return NotFound();
-            }
-            ViewData["StoreClerkId"] = new SelectList(_context.User, "UserId", "DepartmentCode", purchaseOrderRecord.StoreClerkId);
-            ViewData["SupplierCode"] = new SelectList(_context.Supplier, "SupplierCode", "SupplierCode", purchaseOrderRecord.SupplierCode);
-            return View(purchaseOrderRecord);
-        }
-
-        // POST: PurchaseOrderRecords/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("Poid,OrderDate,ExpectedCompleteDate,CompleteDate,StoreClerkId,SupplierCode,Status")] PurchaseOrderRecord purchaseOrderRecord)
-        {
-            if (id != purchaseOrderRecord.Poid)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(purchaseOrderRecord);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!PurchaseOrderRecordExists(purchaseOrderRecord.Poid))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["StoreClerkId"] = new SelectList(_context.User, "UserId", "DepartmentCode", purchaseOrderRecord.StoreClerkId);
-            ViewData["SupplierCode"] = new SelectList(_context.Supplier, "SupplierCode", "SupplierCode", purchaseOrderRecord.SupplierCode);
-            return View(purchaseOrderRecord);
-        }
-
-        // GET: PurchaseOrderRecords/Delete/5
-        public async Task<IActionResult> Delete(string id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var purchaseOrderRecord = await _context.PurchaseOrderRecord
-                .Include(p => p.StoreClerk)
-                .Include(p => p.SupplierCodeNavigation)
-                .FirstOrDefaultAsync(m => m.Poid == id);
-            if (purchaseOrderRecord == null)
-            {
-                return NotFound();
-            }
-
-            return View(purchaseOrderRecord);
-        }
-
-        // POST: PurchaseOrderRecords/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(string id)
-        {
-            var purchaseOrderRecord = await _context.PurchaseOrderRecord.FindAsync(id);
-            _context.PurchaseOrderRecord.Remove(purchaseOrderRecord);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Index", "RaisePurchaseOrder", new { area = "" });
         }
 
         private bool PurchaseOrderRecordExists(string id)

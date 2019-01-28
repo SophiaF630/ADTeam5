@@ -3,7 +3,7 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iis": {
-      "applicationUrl": "https://localhost/WebApplication1",
+      "applicationUrl": "http://localhost/SSISADTeam5",
       "sslPort": 0
     },
     "iisExpress": {
@@ -30,7 +30,7 @@
     "IIS": {
       "commandName": "IIS",
       "launchBrowser": true,
-      "launchUrl": "https://localhost/test",
+      "launchUrl": "http://localhost/SSISADTeam5",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
