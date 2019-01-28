@@ -125,7 +125,7 @@ namespace ADTeam5.Areas.Identity.Pages.Account.Manage
 
             await _signInManager.RefreshSignInAsync(user);
             StatusMessage = "Your profile has been updated";
-            return RedirectToPage();
+            return RedirectToAction("Index", "Home");
         }
 
         public async Task<IActionResult> OnPostSendVerificationEmailAsync()

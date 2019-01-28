@@ -213,7 +213,15 @@ desired effect
             <!-- Sidebar Menu -->
             <ul class="sidebar-menu" data-widget="tree">
 
-                @switch (ViewData["UserRole"].ToString())
+                @if (ViewData["UserRole"].ToString() == "NoJob")
+                {
+                <li>
+                    <a asp-area="Identity" asp-page="/Account/Manage/Index">Register your work ID to access the sidebar</a>
+                </li>
+                }
+
+                else {
+                switch (ViewData["UserRole"].ToString())
                 {
                     case "Clerk":
                         <li class="treeview">
@@ -463,6 +471,7 @@ desired effect
                         break;
                     default:
                         break;
+                }
                 }
             </ul>
 

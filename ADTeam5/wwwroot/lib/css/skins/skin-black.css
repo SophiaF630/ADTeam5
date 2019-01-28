@@ -90,7 +90,8 @@
   background: #1a2226;
 }
 .skin-black .sidebar-menu > li > a {
-  border-left: 3px solid transparent;
+    white-space: normal;
+    border-left: 3px solid transparent;
 }
 .skin-black .sidebar-menu > li:hover > a,
 .skin-black .sidebar-menu > li.active > a,
