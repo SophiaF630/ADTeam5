@@ -22,15 +22,15 @@
         background-color: rgb(0,0,0); /* Fallback color */
         background-color: rgba(0,0,0, 0.2); /* Black w/opacity/see-through */
         color: white;
-        font-weight: bold;
+        font-weight: normal;
         border: 3px solid #f1f1f1;
         position: relative;
-        top: 50%;
+        top: 100%;
         left: 50%;
         transform: translate(-50%, 50%);
         z-index: 2;
-        width: fit-content;
-        padding: 50px;
+        width: 800px;
+        padding: 40px;
         text-align: center;
     }
 </style>
@@ -41,10 +41,10 @@
 <body>
     <div class="bg-image">
         <div class="bg-text">          
-                <h1>Welcome</h1>
-                <h3>@User.Identity.Name!</h3>          
-            
-            <p> Use the handy sidebar at the side. <i class="fas fa-angle-double-left"></i></p>
+            <h1>Welcome,@User.Identity.Name!</h1>
+                @*<h3>@User.Identity.Name!</h3>*@          
+            <br />
+            <h4> Please use the handy sidebar at the side. @*<i class="fas fa-angle-double-left"></i>*@</h4>
             
         </div>
        

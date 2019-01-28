@@ -103,6 +103,12 @@ body {
 }
 
 .main-footer {
+/*<<<<<<< HEAD
+    background-color: transparent #f4f4f4;
+    padding: 15px;
+    color: #000; can change
+    border-top: 1px solid #d2d6de;
+=======*/
     background: transparent;
     padding: 10px;
     color: #000;
@@ -180,7 +186,7 @@ h6,
 }
 /* General Links */
 a {
-    color: #469845;
+    color: #B0BEC5;
 }
 
     a:hover,

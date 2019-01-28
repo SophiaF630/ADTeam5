@@ -72,7 +72,7 @@ namespace ADTeam5.BusinessLogic
         public Models.DisbursementList findDisbursementListStatus(string dept)
         {
             
-            var q1 = context.DisbursementList.Where(x => x.DepartmentCode == dept && x.Status == "Pending Delivery").First();
+            var q1 = context.DisbursementList.Where(x => x.DepartmentCode == dept && x.Status == "Pending Delivery").First(); 
             DisbursementList d1 = new DisbursementList ();
             d1 = q1;
             return d1;
