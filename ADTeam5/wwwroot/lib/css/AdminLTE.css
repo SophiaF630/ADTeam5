@@ -581,12 +581,13 @@ a {
             }
 
 .sidebar-menu {
+    white-space: normal;
     list-style: none;
     margin: 0;
     padding: 0;
 }
 
-    .sidebar-menu > li {
+    .sidebar-menu > li {        
         position: relative;
         margin: 0;
         padding: 0;
@@ -3637,6 +3638,7 @@ table.text-center th {
 }
 
 .treeview-menu {
+    white-space: normal;
     display: none;
     list-style: none;
     padding: 0;
@@ -3648,7 +3650,7 @@ table.text-center th {
         padding-left: 20px;
     }
 
-    .treeview-menu > li {
+    .treeview-menu > li {        
         margin: 0;
     }
 
