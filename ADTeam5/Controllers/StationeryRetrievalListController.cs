@@ -67,7 +67,7 @@ namespace ADTeam5.Controllers
 
             if (addToVoucherModalName == 1)
             {
-                b.AddItemToVoucher(userID, itemNumber, quantityForVoucher, remark);
+                b.CreateNewVoucherItem(userID, itemNumber, quantityForVoucher, remark);
             }
             else if (quantityRetrievedModalName == 1)
             {
