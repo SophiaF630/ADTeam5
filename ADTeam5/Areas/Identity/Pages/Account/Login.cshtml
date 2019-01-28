@@ -33,53 +33,51 @@
         margin: auto;
         width: 50%;
         border: 3px solid #f1f1f1;
-        padding: 10px;
-        text-align: center;
+        padding: 50px;
     }
 </style>
 
-<div class="center">
+<div class="container">
+    
     <form id="account" method="post">
         <h1>Login</h1>
-      
-        
-        <div class="form-group">
-            <label asp-for="Input.Email"></label>
-            <input asp-for="Input.Email" class="form-control" />
-            <br />
-            <span asp-validation-for="Input.Email" class="text-danger"></span>
-        </div>
-        <br />
-        <div class="form-group">
-            &nbsp; &nbsp; &nbsp; <label asp-for="Input.Password"></label>
-            <input asp-for="Input.Password" class="form-control" />
-            <br />
-            <span asp-validation-for="Input.Password" class="text-danger"></span>
-        </div>
-        <br />
-        <div class="form-group">
-            <div class="checkbox">
-                <label asp-for="Input.RememberMe">
-                    <input asp-for="Input.RememberMe" />
-                    @Html.DisplayNameFor(m => m.Input.RememberMe)
-                </label>
+
+        <div class="center">
+            <div class="col-md-6">
+
+                <div class="form-group">
+                    <label asp-for="Input.Email"></label>
+                    <input asp-for="Input.Email" class="form-control" />
+                    <br />
+                    <span asp-validation-for="Input.Email" class="text-danger"></span>
+                </div>
+
+                <br />
+                <div class="form-group">
+                    <label asp-for="Input.Password"></label>
+                    <input asp-for="Input.Password" class="form-control" />
+                    <br />
+                    <span asp-validation-for="Input.Password" class="text-danger"></span>
+                </div>
+                <br />
+                <div class="form-group">
+                    <div class="checkbox">
+                        <label asp-for="Input.RememberMe">
+                            <input asp-for="Input.RememberMe" />
+                            @Html.DisplayNameFor(m => m.Input.RememberMe)
+                        </label>
+                    </div>
+                </div>
+                <br />
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Log in</button>
+                </div>
             </div>
         </div>
-        <br />
-        <div class="form-group">
-            <button type="submit" class="btn btn-primary">Log in</button>
-        </div>
-        </form>
+    </form>
 </div>
 
-<div class="form-group">
-    <p>
-        <a id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a>
-    </p>
-    <p>
-        <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a>
-    </p>
-</div>
+
           
 
 @section Scripts {

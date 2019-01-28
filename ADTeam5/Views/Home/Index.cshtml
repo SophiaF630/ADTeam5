@@ -18,7 +18,7 @@
 
 
     /* Position text in the middle of the page/image */
-    .bg-text {
+    .box1 {
         background-color: rgb(0,0,0); /* Fallback color */
         background-color: rgba(0,0,0, 0.2); /* Black w/opacity/see-through */
         color: white;
@@ -27,10 +27,27 @@
         position: relative;
         top: 50%;
         left: 50%;
-        transform: translate(-50%, 50%);
+        transform: translate(-50%, 25
+        %);
         z-index: 2;
         width: fit-content;
         padding: 50px;
+        text-align: center;
+    }
+
+    .box2 {
+        background-color: rgb(0,0,0); /* Fallback color */
+        background-color: rgba(0,0,0, 0.2); /* Black w/opacity/see-through */
+        color: white;
+        font-weight: bold;
+        border: 3px solid #f1f1f1;
+        position: relative;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, 150%);
+        z-index: 2;
+        width: fit-content;
+        padding: 10px;
         text-align: center;
     }
 </style>
@@ -39,15 +56,17 @@
 
 
 <body>
-    <div class="bg-image">
-        <div class="bg-text">          
-                <h1>Welcome</h1>
-                <h3>@User.Identity.Name!</h3>          
-            
-            <p> Use the handy sidebar at the side. <i class="fas fa-angle-double-left"></i></p>
-            
-        </div>
-       
+    <div class="bg-image"></div>
+    <div class="box1">
+        <h1>Welcome</h1>
+        <h3>@User.Identity.Name!</h3>
+
+        <p> Use the handy sidebar at the side. <i class="fas fa-angle-double-left"></i></p>
+    </div>
+    
+    <div class="box2">
+        Register your work account
+        <a asp-area="Identity" asp-page="/Account/Manage/Index">here</a>  
     </div>
 </body>
 
