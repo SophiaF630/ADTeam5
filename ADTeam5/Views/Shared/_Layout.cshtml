@@ -74,7 +74,7 @@
               asp-fallback-href="~/plugins/font-awesome/css/font-awesome.min.css"
               asp-fallback-test-class="fa" asp-fallback-test-property="display" asp-fallback-test-value="inline-block " />
         <link href="~/lib/css/AdminLTE.min.css" rel="stylesheet" />
-        <link href="~/lib/css/skins/skin-black.min.css" rel="stylesheet" />
+        <link href="~/lib/css/skins/skin-blue.min.css" rel="stylesheet" />
     </environment>
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -110,6 +110,45 @@ desired effect
 -->
 <body class="hold-transition skin-black sidebar-mini">
     <div class="wrapper">
+@*<<<<<<< HEAD
+        @*<div class="sidebar" data-image="~/img/bg1.jpg">*@
+            <!-- Main Header -->
+            @*<header class="main-header">
+                <div class="logo">
+                    <!-- logo for regular state and mobile devices -->
+                    <span class="logo-lg">
+                        <a href="/"><b>SSIS</b></a>
+                        &nbsp;
+                        <a href="#" data-toggle="push-menu" role="button"><i class="fas fa-angle-double-left"></i></a>
+                    </span>
+                    <!-- sidebar toggle button for sidebar mini 50x50 pixels -->
+                    <span class="logo-mini"><a href="#" data-toggle="push-menu" role="button"><i class="fas fa-angle-double-right"></i></a></span>
+                </div>
+                <div class="navbar-custom-menu">
+                    <ul class="nav navbar-nav">
+                        @if (SignInManager.IsSignedIn(User))
+                        {
+                            @*<li>
+                            <a class="nav-link text-white" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })"> <i class="fas fa-sign-out-alt"></i>Logout</a>
+                        </li>*@
+                            @*<form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                                <button type="submit" class="nav-link btn btn-link text-dark"><i class="fas fa-sign-out-alt"></i>Logout</button>
+                            </form>
+                        }
+                        else
+                        {
+                            <li>
+                                <a class="nav-link text-white" asp-area="Identity" asp-page="/Account/Login"><i class="fas fa-sign-in-alt"></i>Login</a>
+                            </li>
+                        }
+
+                    </ul>
+
+                </div>
+            </header>*@
+        @*</div>*@
+
+
         <!-- Main Header -->
         <header class="main-header">
             <div class="logo">
@@ -123,24 +162,23 @@ desired effect
                 <span class="logo-mini"><a href="#" data-toggle="push-menu" role="button"><i class="fas fa-angle-double-right"></i></a></span>
             </div>
             <div class="navbar-custom-menu">
-                <ul class="nav navbar-nav">                    
-                        @if (SignInManager.IsSignedIn(User))
-                        {
-                            @*<li>
-            <a class="nav-link text-white" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })"> <i class="fas fa-sign-out-alt"></i>Logout</a>
-            </li>*@
-                            <form class="form-group" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-                <button type="submit" class="nav-link btn btn-link text-dark"><i class="fas fa-sign-out-alt"></i>Logout</button>
-            </form>
-                      
-                        }
-                        else
-                        {
-                            <li>
-                                <a class="nav-link text-white" asp-area="Identity" asp-page="/Account/Login"><i class="fas fa-sign-in-alt"></i>Login</a>
-                            </li>
-                        }
-                   
+                <ul class="nav navbar-nav">
+                    @if (SignInManager.IsSignedIn(User))
+                    {
+                        @*<li>
+                            <a class="nav-link text-white" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })"> <i class="fas fa-sign-out-alt"></i>Logout</a>
+                            </li>*@
+                        <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                            <button type="submit" class="nav-link btn btn-link text-gray"><i class="fas fa-sign-out-alt"></i><font size="4.5">&nbsp;Log out</font></button>
+                        </form>
+                    }
+                    else
+                    {
+                        <li>
+                            <a class="nav-link text-white" asp-area="Identity" asp-page="/Account/Login"><i class="fas fa-sign-in-alt"></i>Login</a>
+                        </li>
+                    }
+
                 </ul>
 
             </div>
@@ -442,6 +480,7 @@ desired effect
 
 
         </section>
+
 
 
         <!-- /.content -->

@@ -8,6 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Views\manager\**" />
+    <Content Remove="Views\manager\**" />
+    <EmbeddedResource Remove="Views\manager\**" />
+    <None Remove="Views\manager\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Remove="Views\AdjustmentRecords\Delete.cshtml" />
     <Content Remove="Views\DisbursementLists\Create.cshtml" />
     <Content Remove="Views\DisbursementLists\Delete.cshtml" />
@@ -30,11 +37,6 @@
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.0" />
     <PackageReference Include="SendGrid" Version="9.10.0" />
-  </ItemGroup>
-
-
-  <ItemGroup>
-    <Folder Include="Views\manager\" />
   </ItemGroup>
 
 

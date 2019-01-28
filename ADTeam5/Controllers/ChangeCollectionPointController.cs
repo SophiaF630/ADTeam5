@@ -8,7 +8,7 @@ using ADTeam5.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ADTeam5.Controllers.Department
+namespace ADTeam5.Controllers
 {
     public class ChangeCollectionPointController : Controller
     {
@@ -59,9 +59,15 @@ namespace ADTeam5.Controllers.Department
             if (ModelState.IsValid)
             {
                 int c1 = cp.CollectionPointId;
-                var q = b.findDisbursementListStatus(dept);
+                var q = context.DisbursementList.Where(x => x.DepartmentCode == dept && x.Status == "Pending Delivery").First();
                 Models.DisbursementList d1 = q;
                 d1.CollectionPointId = c1;
+
+                //int c2 = cp.CollectionPointId;
+                var q1 = context.Department.Where(x => x.DepartmentCode == dept).First();
+                Models.Department d2 = q1;
+                d2.CollectionPointId = c1;
+
                 await context.SaveChangesAsync();
                 TempData["Alert1"] = "Collection Point Changed Successfully";
                 return RedirectToAction("Index");

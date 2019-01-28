@@ -94,38 +94,41 @@
 
 // Make a button look and behave like a link
 .btn-link {
-  font-weight: 400;
-  color: @link-color;
-  border-radius: 0;
+    font-weight: 400;
+    color: #B0BEC5 /*@link-color*/;
+    border-radius: 0;
 
-  &,
-  &:active,
-  &.active,
-  &[disabled],
-  fieldset[disabled] & {
-    background-color: transparent;
-    .box-shadow(none);
-  }
-  &,
-  &:hover,
-  &:focus,
-  &:active {
-    border-color: transparent;
-  }
-  &:hover,
-  &:focus {
-    color: @link-hover-color;
-    text-decoration: @link-hover-decoration;
-    background-color: transparent;
-  }
-  &[disabled],
-  fieldset[disabled] & {
+    &,
+    &:active,
+    &.active,
+    &[disabled],
+    fieldset[disabled] & {
+        background-color: transparent;
+        .box-shadow(none);
+    }
+
+    &,
+    &:hover,
+    &:focus,
+    &:active {
+        border-color: transparent;
+    }
+
     &:hover,
     &:focus {
-      color: @btn-link-disabled-color;
-      text-decoration: none;
+        color: @link-hover-color;
+        text-decoration: @link-hover-decoration;
+        background-color: transparent;
     }
-  }
+
+    &[disabled],
+    fieldset[disabled] & {
+        &:hover,
+        &:focus {
+            color: @btn-link-disabled-color;
+            text-decoration: none;
+        }
+    }
 }
 
 
