@@ -25,11 +25,15 @@
     <Content Remove="Views\InventoryTransRecords\Delete.cshtml" />
     <Content Remove="Views\InventoryTransRecords\Details.cshtml" />
     <Content Remove="Views\InventoryTransRecords\Edit.cshtml" />
+    <Content Remove="Views\IssueVoucher\Create.cshtml" />
     <Content Remove="Views\IssueVoucher\Delete.cshtml" />
     <Content Remove="Views\IssueVoucher\Details.cshtml" />
+    <Content Remove="Views\IssueVoucher\Edit.cshtml" />
     <Content Remove="Views\PurchaseOrderRecords\Create.cshtml" />
     <Content Remove="Views\PurchaseOrderRecords\Delete.cshtml" />
     <Content Remove="Views\PurchaseOrderRecords\Edit.cshtml" />
+    <Content Remove="Views\RaisePurchaseOrder\Create.cshtml" />
+    <Content Remove="Views\RaisePurchaseOrder\Edit.cshtml" />
     <Content Remove="Views\StationeryRetrievalList\Create.cshtml" />
     <Content Remove="Views\StationeryRetrievalList\Delete.cshtml" />
     <Content Remove="Views\StationeryRetrievalList\Details.cshtml" />

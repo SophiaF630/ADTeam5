@@ -21,8 +21,6 @@ namespace ADTeam5.Controllers
         BizLogic b = new BizLogic();
         readonly GeneralLogic userCheck;
 
-        static List<string> ItemNumberList = new List<string>();
-        static List<int> QuantityList = new List<int>();
         static string poNo = "";
 
         public RaisePurchaseOrderController(SSISTeam5Context context, UserManager<ADTeam5User> userManager)
@@ -55,9 +53,9 @@ namespace ADTeam5.Controllers
             return View(tempPurchaseOrderDetails);
         }
 
-        // POST: IssueVoucher
+        // POST: RaisePO
         [HttpPost]
-        public async Task<IActionResult> Index(string itemNumber, int quantity, int rowID, string supplierName, int createNewPOItemModalIDName, int POItemModalName, string[] itemSubmitted, string[] itemSavedToDraft)
+        public async Task<IActionResult> Index(string itemNumber, int quantity, int rowID, string supplierName, int createNewPOItemModalName, int POItemModalName, string[] itemSubmitted, string[] itemSavedToDraft)
         {
             ADTeam5User user = await _userManager.GetUserAsync(HttpContext.User);
             List<string> identity = userCheck.checkUserIdentityAsync(user);
@@ -67,14 +65,14 @@ namespace ADTeam5.Controllers
             //handle post action
             List<TempPurchaseOrderDetails> tempPurchaseOrderDetailsList = b.GetTempPurchaseOrderDetailsList();
 
-            if (createNewPOItemModalIDName == 1)
+            if (createNewPOItemModalName == 1)
             {
-                b.CreateNewPOItem(userID, itemNumber, quantity);
+                b.CreateNewPOItem(userID, itemNumber, quantity, supplierName);
                 return RedirectToAction(nameof(Index));
             }
             else if (POItemModalName == 1)
             {
-                b.UpdatePOItem(rowID, quantity, tempPurchaseOrderDetailsList);
+                b.UpdatePOItem(userID, rowID, quantity, supplierName, tempPurchaseOrderDetailsList);
             }
 
             if (itemSubmitted.Length != 0)
@@ -85,7 +83,7 @@ namespace ADTeam5.Controllers
                     if (Array.Exists(itemSubmitted, i => i == item.RowID.ToString()))
                     {
                         b.AddItemsToPO(item.RowID, poNo, tempPurchaseOrderDetailsList);
-                        b.CreatePurchaseOrderRecord(userID, poNo, supplierName, "Submitted");
+                        b.CreatePurchaseOrderRecord(userID, poNo, item.SupplierCode, "Submitted");
                     }
                 }
                 //return RedirectToAction(nameof(Index));
@@ -98,7 +96,7 @@ namespace ADTeam5.Controllers
                     if (Array.Exists(itemSavedToDraft, i => i == item.RowID.ToString()))
                     {
                         b.AddItemsToPO(item.RowID, poNo, tempPurchaseOrderDetailsList);
-                        b.CreatePurchaseOrderRecord(userID, poNo, supplierName, "Draft");
+                        b.CreatePurchaseOrderRecord(userID, poNo, item.SupplierCode, "Draft");
                     }
                 }
                 //return RedirectToAction(nameof(Index));
@@ -120,7 +118,6 @@ namespace ADTeam5.Controllers
 
 
         [HttpPost]
-        //[ActionName("VoucherItemDelete"), Route("~/IssueVoucher")]
         public async Task<IActionResult> POItemDelete(int id)
         {
             ADTeam5User user = await _userManager.GetUserAsync(HttpContext.User);
@@ -137,17 +134,17 @@ namespace ADTeam5.Controllers
             categoryList.Insert(0, new Catalogue { ItemNumber = "0", Category = "---Select Category---" });
             ViewBag.ListofCategory = categoryList;
 
-            List<TempVoucherDetails> tempVoucherDetailsList1 = b.GetTempVoucherDetailsList(userID);
+            List<TempPurchaseOrderDetails> tempPurchaseOrderDetailsList1 = b.GetTempPurchaseOrderDetailsList();
 
-            b.DeleteVoucherItem(id, tempVoucherDetailsList1);
+            b.DeletePOItem(id, tempPurchaseOrderDetailsList1);
 
-            List<TempVoucherDetails> tempVoucherDetailsList = b.GetTempVoucherDetailsList(userID);
+            List<TempPurchaseOrderDetails> tempPurchaseOrderDetailsList = b.GetTempPurchaseOrderDetailsList();
 
-            if (tempVoucherDetailsList == null)
+            if (tempPurchaseOrderDetailsList == null)
             {
-                tempVoucherDetailsList = new List<TempVoucherDetails>();
+                tempPurchaseOrderDetailsList = new List<TempPurchaseOrderDetails>();
             }
-            return PartialView("_TempVoucherDetailsList", tempVoucherDetailsList);
+            return PartialView("_TempPurchaseOrderDetailsList", tempPurchaseOrderDetailsList);
 
         }
 

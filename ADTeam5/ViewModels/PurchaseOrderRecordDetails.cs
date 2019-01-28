@@ -13,5 +13,7 @@ namespace ADTeam5.ViewModels
         public string ItemName { get; set; }
         [Display(Name = "Quantity")]
         public int Quantity { get; set; }
+        [Display(Name = "Supplier")]
+        public string SupplierCode { get; set; }
     }
 }

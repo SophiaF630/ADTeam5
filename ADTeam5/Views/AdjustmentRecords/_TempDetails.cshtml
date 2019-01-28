@@ -1,7 +1,7 @@
-﻿@model List<ADTeam5.ViewModels.TempPurchaseOrderDetails>
+﻿@model List<ADTeam5.ViewModels.AdjustmentRecordDetails>
 
 @{
-    ViewData["Title"] = "_TempPurchaseOrderDetailsList";
+    ViewData["Title"] = "_TempDetails";
 }
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
@@ -24,21 +24,21 @@
                         </h2>
 
                         <p class="text-muted">
-                            You do not have any items to be added to PO.
+                            You do not have any items to be added to voucher.
                         </p>
-                        <button type="button" class="btn btn-lg btn-primary d-none d-md-inline-block mt-3 createNewPOItem" style="width:120px;height:40px;border:2px; background-color:#3c8dbc">
-                            Create New
+                        <button type="button" class="btn btn-lg btn-primary d-none d-md-inline-block mt-3 createNewVoucherItem" style="width:120px;height:40px;border:2px; background-color:#3c8dbc">
+                            Add Item
                         </button>
                     </div>
                 </div> <!-- / .row -->
             }
             else
             {
-                <button type="button" class="btn btn-primary createNewPOItem" style="width:100px;height:32px;border:2px; background-color:#3c8dbc">
-                    Create New
+                <button type="button" class="btn btn-primary createNewVoucherItem" style="width:100px;height:32px;border:2px; background-color:#3c8dbc">
+                    Add Item
                 </button>
 
-                <table id="TempPurchaseOrderDetails" class="table table-striped table-bordered" style="width: 100%;">
+                <table id="TempVoucherDetails" class="table table-striped table-bordered" style="width: 100%;">
                     <thead>
                         <tr>
                             <th>
@@ -54,7 +54,7 @@
                                 Quantity
                             </th>
                             <th>
-                                Supplier
+                                Remark
                             </th>
                             <th></th>
                             <th></th>
@@ -77,23 +77,20 @@
                                 <td class="Quantity">
                                     @Html.DisplayFor(modelItem => item.Quantity)
                                 </td>
-                                <td class="Supplier">
-                                    @Html.DisplayFor(modelItem => item.SupplierCode)
+                                <td class="Remark">
+                                    @Html.DisplayFor(modelItem => item.Remark)
                                 </td>
                                 <td>
-                                    <button type="button" class="btn btn-primary editPOItem">
+                                    <button type="button" class="btn btn-primary editVoucherItem">
                                         Edit
                                     </button>
                                 </td>
                                 <td>
-                                    <form asp-action="POItemDelete" asp-route-id="@item.RowID" method="post" data-ajax="true" data-ajax-update="#TempPurchaseOrderDetailsList" role="form" asp-controller="RaisePurchaseOrder">
+                                    <form asp-action="VoucherItemDelete" asp-route-id="@item.RowID" method="post" data-ajax="true" data-ajax-update="#TempDetails" role="form" asp-controller="AdjustmentRecords">
                                         <button type="submit" class="btn btn-sm btn-danger d-none d-md-inline-block">
                                             Delete
                                         </button>
                                     </form>
-                                </td>
-                                <td>
-                                    <input type="checkbox" id="isChecked" name="isChecked" value="@item.RowID">
                                 </td>
                             </tr>
                         }
@@ -101,7 +98,7 @@
                 </table>
                 <label>Total Amount:</label>
                 <br />
-                <input type="submit" value="Add to Draft" class="btn btn-primary addToDraft" />
+                <input type="submit" value="Save" class="btn btn-primary addToDraft" />
                 <input type="submit" value="Submit" class="btn btn-primary submit" />
             }
         </div>
@@ -109,8 +106,8 @@
 </div>
 
 
-<!-- Modal for create PO item-->
-<div class="modal fade in" id="createNewPOItemModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<!-- Modal for create voucher item-->
+<div class="modal fade in" id="CreateNewVoucherItemModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <br />
@@ -119,7 +116,7 @@
                 <div style="width: 400px;padding: 15px;margin: 15px;border-style:outset; border-width:1px; ">
                     <div align="center" vertical-align="middle">
                         <h5 class="modal-title" id="exampleModalLongTitle">
-                            <strong><font size="5">Add To PO</font></strong>
+                            <strong><font size="5">Add To Voucher</font></strong>
                         </h5>
                         @*<button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
@@ -130,7 +127,7 @@
             <div class="modal-body">
                 <form method="POST">
                     <div class="form-group">
-                        <input type="hidden" id="createNewPOItemModalID" name="createNewPOItemModalName" class="form-control" value="0" />
+                        <input type="hidden" id="CreateNewVoucherItemModalID" name="createNewVoucherItemModalName" class="form-control" value="0" />
                     </div>
                     <div class="form-group">
                         <label for="Category">Category</label>
@@ -148,15 +145,14 @@
                         <input type="text" id="Quantity" name="quantity" class="form-control" value="" />
                     </div>
                     <div class="form-group">
-                        <label for="Supplier">Supplier</label>
-                        <div id="Supplier"></div>
+                        <label for="Remark">Remark</label>
+                        <input type="text" id="Remark" name="remark" class="form-control" value="" />
                     </div>
                     <div align="center">
                         <button class="btn" data-dismiss="modal" aria-hidden="true" style="width:80px;height:30px;border:2px; background-color:#EEEEEE"><font size="3" color="black">Close</font></button>
                         <button type="submit" class="btn btn-primary" style="width:120px;height:30px;border:2px; background-color:#3c8dbc"><font size="3" color="white">Save Changes</font></button>
                     </div>
-                </form>
-
+                </form>c
             </div>
         </div>
     </div>
@@ -164,11 +160,11 @@
 
 
 <!-- Modal for edit quantity-->
-<div class="modal fade" id="POItemModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal fade" id="VoucherItemModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Update PO Item</h5>
+                <h5 class="modal-title" id="exampleModalLongTitle">Update Voucher Item</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -176,7 +172,7 @@
             <div class="modal-body">
                 <form method="POST">
                     <div class="form-group">
-                        <input type="hidden" id="POItemModalID" name="POItemModalName" class="form-control" value="0" />
+                        <input type="hidden" id="VoucherItemModalID" name="voucherItemModalName" class="form-control" value="0" />
                     </div>
                     <div class="form-group">
                         <input type="hidden" id="RowID" name="rowID" class="form-control" value="" />
@@ -191,8 +187,8 @@
                         <input type="text" id="Quantity" name="quantity" class="form-control" value="" />
                     </div>
                     <div class="form-group">
-                        <label for="EditSupplier">Supplier</label>
-                        <div id="EditSupplier"></div>
+                        <label for="Remark">Remark</label>
+                        <input type="text" id="Remark" name="remark" class="form-control" value="" />
                     </div>
                     <div class="modal-footer">
                         <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
@@ -203,21 +199,25 @@
         </div>
     </div>
 </div>
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
 
 
 <script>
-    $(".createNewPOItem").click(function () {
+    $(".createNewVoucherItem").click(function () {
         //var $row = $(this).closest("tr");    // Find the row
         var itemNumber = ""; // Find the text
         var quantity = "";
-        var supplierName = "";
-        var createNewPOItemModalID = 1;
+        var remark = "";
+        var createNewVoucherItemModalID = 1;
 
-        var $modal = $('#createNewPOItemModal');
+        var $modal = $('#CreateNewVoucherItemModal');
         $modal.find('#ItemNumber').val(itemNumber);
         $modal.find('#Quantity').val(quantity);
-        $modal.find('#Supplier').val(supplierName);
-        $modal.find('#createNewPOItemModalID').val(createNewPOItemModalID);
+        $modal.find('#Remark').val(remark);
+        $modal.find('#CreateNewVoucherItemModalID').val(createNewVoucherItemModalID);
 
         $modal.modal('show');
     });
@@ -226,9 +226,8 @@
 <script>
     $(document).ready(function () {
         $("#Category").change(function () {
-            $.get("/RaisePurchaseOrder/GetItemNameList", { category: $("#Category").val() }, function (data) {
+            $.get("/IssueVoucher/GetItemNameList", { category: $("#Category").val() }, function (data) {
                 $("#ItemNumber").empty();
-                $("#ItemNumber").append("<option value='" + "0" + "'>" + "---Select item---" + "</option>");
                 $.each(data, function (index, row) {
                     $("#ItemNumber").append("<option value='" + row.itemNumber + "'>" + row.itemName + "</option>")
                 });
@@ -238,42 +237,21 @@
 </script>
 
 <script>
-    $(document).ready(function () {
-        $("#ItemNumber").change(function () {
-            $.get("/RaisePurchaseOrder/GetSuppliers", { itemNumber: $("#ItemNumber").val() }, function (data) {
-                $("#Supplier").empty();
-                $.each(data, function (index, row) {
-                    $('#Supplier').append('<input type="radio" name="supplierName" value="' + row + '"/>' + row + '<br/>');
-                });
-            });
-        })
-    });
-</script>
-
-<script>
-    $(".editPOItem").click(function () {
+    $(".editVoucherItem").click(function () {
         var $row = $(this).closest("tr");    // Find the row
         var rowID = $row.find("td.RowID").text().trim();
         var itemName = $row.find("td.ItemName").text().trim(); // Find the text
-        var itemNumber = $row.find("td.ItemNumber").text().trim(); // Find the text
         var quantity = $row.find("td.Quantity").text().trim();
-        var supplierName = "";
-        var POItemModalID = 1;
+        var remark = $row.find("td.Remark").text().trim();
+        var voucherItemModalID = 1;
 
-        $.get("/RaisePurchaseOrder/GetSuppliers", { itemNumber: itemNumber }, function (data) {
-            $("#EditSupplier").empty();
-            $.each(data, function (index, row) {
-                $('#EditSupplier').append('<input type="radio" name="supplierName" value="' + row + '"/>' + row + '<br/>');
-            });
-        });
-
-        var $modal = $('#POItemModal');
+        var $modal = $('#VoucherItemModal');
         $modal.find('#RowID').val(rowID);
         $modal.find('#ItemNameValue').val(itemName);
         $modal.find('#ItemNameDisplay').val(itemName);
         $modal.find('#Quantity').val(quantity);
-        $modal.find('#Supplier').val(supplierName);
-        $modal.find('#POItemModalID').val(POItemModalID);
+        $modal.find('#Remark').val(remark);
+        $modal.find('#VoucherItemModalID').val(voucherItemModalID);
 
         $modal.modal('show');
     });
@@ -284,13 +262,13 @@
 <script>
     $(document).ready(function () {
         $(".submit").click(function () {
-            var itemToAdd = $("input:checkbox:checked", "#TempPurchaseOrderDetails").map(function () {
+            var itemToAdd = $("#TempVoucherDetails").map(function () {
                 return $(this).val();
             }).get();
             //alert(itemToAdd.join(','));
             $.ajax({
                 type: "POST",
-                url: '@Url.Action("Index", "RaisePurchaseOrder")',
+                url: '@Url.Action("Index", "AdjustmentRecords")',
                 dataType: "html",
                 data: { itemSubmitted: itemToAdd },
                 success:
@@ -307,13 +285,13 @@
 
 <script>
     $(".addToDraft").click(function () {
-        var itemToAdd = $("input:checkbox:checked", "#TempPurchaseOrderDetails").map(function () {
+        var itemToAdd = $("input:checkbox:checked", "#TempVoucherDetails").map(function () {
             return $(this).val();
         }).get();
         alert(itemToAdd.join(','));
         $.ajax({
             type: "POST",
-            url: '@Url.Action("Index", "RaisePurchaseOrder")',
+            url: '@Url.Action("Index", "AdjustmentRecords")',
             dataType: "html",
             data: { itemSavedToDraft: itemToAdd },
             success:
