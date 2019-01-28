@@ -33,7 +33,7 @@
         background-color: rgb(0,0,0); /* Fallback color */
         background-color: rgba(0,0,0, 0.2); /* Black w/opacity/see-through */
         position: fixed;
-        top: 50%;
+        top: 42%;
         left: 50%;
         transform: translate(-50%, -50%);
         margin: auto;
@@ -67,30 +67,30 @@
         <form id="account" method="post">
             @*<h1>Login</h1>*@
             <br />
-            <br />
+
             <div align="center">
-                <img src="~/img/logo4.png" height="70" width="325" />
+                <img src="~/img/logo4.png" height="70" width="300" />
             </div>
             <br />
+
             
-            <input type="text" style="width:300px; height:40px;margin-top: 10px;" name="number" placeholder="Input Your Email" class="active">
-            @*<div class="form-group">
-            <label asp-for="Input.Email"></label>
-            <input asp-for="Input.Email" class="form-control" />
+            <div class="form-group">
+            @*<label asp-for="Input.Email"></label>*@
+            <input asp-for="Input.Email" style="width:300px; height:40px;margin-top: 10px;" class="form-control" />
             <br />
             <span asp-validation-for="Input.Email" class="text-danger"></span>
-        </div>*@
+        </div>
             <br />
+
             
-            <input type="password" style="width:300px; height:40px;" name="password" placeholder="Input Your Password">
-            @*<div class="form-group">
-            &nbsp; &nbsp; &nbsp; <label asp-for="Input.Password"></label>
-            <input asp-for="Input.Password" class="form-control" />
+            <div class="form-group">
+            @*&nbsp; &nbsp; &nbsp; <label asp-for="Input.Password"></label>*@
+            <input asp-for="Input.Password" style="width:300px; height:40px;margin-top: 10px;" class="form-control" />
             <br />
             <span asp-validation-for="Input.Password" class="text-danger"></span>
-        </div>*@
+        </div>
             <br />
-            
+
             <div class="form-group">
                 <div class="checkbox" value="checkbox" style="zoom:100%;margin-right: 175px">
                     <label asp-for="Input.RememberMe">
@@ -102,20 +102,19 @@
 
             <br />
             <div class="form-group">
-                <button type="submit" class="btn btn-primary" style="background-color:#424949;width:300px;height:40px"><font size="4" color="white"><strong>Login</strong></font></button>
+                <button type="submit" class="btn btn-primary" style="background-color:#424949;width:300px;height:40px"><font size="4" color="white"><strong>Log in</strong></font></button>
+            </div>
+
+            <div class="form-group">
+                <p>
+                    <a id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a>&nbsp;|
+                    <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a>
+                </p>
+                @*<p>
+            </p>*@
             </div>
         </form>
-        <div class="form-group">
-            <p>
-                <a id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a>
-            </p>
-            <p>
-                <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a>
-            </p>
-        </div>
     </div>
-
-
 </body>
 
 @section Scripts {
@@ -127,11 +126,11 @@
         var arrText = ["Email", "Password"];
         for (var i = 0; i < arrInput.length; i++) {
             arrInput[i].index = i;
-            arrInput[i].onfocus = function () {//获取焦点
-                arrInput[0].className = "";//将默认的第一行亮色去掉
+            arrInput[i].onfocus = function () {
+                arrInput[0].className = "";
                 this.className = "active";
             }
-            arrInput[i].onblur = function () {//失去焦点
+            arrInput[i].onblur = function () {
                 this.placeholder = arrText[this.index];
                 this.className = "";
             }
