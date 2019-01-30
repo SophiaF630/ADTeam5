@@ -12,14 +12,14 @@
 
 <form asp-action="StationeryUsage" method="post">
     <div>
-        From:
+        @*From:
         <input type="date" name="startDate" id="start" value="=" />
 
         To:
-        <input type="date" name="endDate" id="end" value="=" />
+        <input type="date" name="endDate" id="end" value="=" />*@
     </div>
     <div>
-        Specific Year:
+        Select Year:
         <select id="years" multiple="multiple" required name="yearsName">
             @if (ViewBag.ListOfYear != null)
             {
@@ -34,7 +34,7 @@
             }
         </select>
 
-        Specific Month:
+        Select Month:
         <select id="months" multiple="multiple" required name="monthsName">
             @if (ViewBag.ListOfMonth != null)
             {
