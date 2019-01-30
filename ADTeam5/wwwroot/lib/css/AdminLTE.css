@@ -2656,6 +2656,7 @@ a {
 .btn-primary {
     background-color: #3c8dbc;
     /*border-color: #1ECD97;*/
+    outline:none;
 }
 
     .btn-primary:hover,

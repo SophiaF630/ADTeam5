@@ -63,7 +63,10 @@ else
                         <table id="TempVoucherDetails" class="table no-margin table-hover table-striped table-responsive table-borderless" style="width: 100%;">
                             <thead>
                                 <tr>
-                                    <th></th>
+                                    <th>
+                                        <!-- select all boxes -->
+                                        <input type="checkbox" name="select-all" id="select-all" />
+                                    </th>
                                     <th>
                                         No.
                                     </th>
@@ -117,11 +120,11 @@ else
                                         <td>
                                             <form asp-action="VoucherItemDelete" asp-route-id="@item.RowID" method="post" data-ajax="true" data-ajax-update="#TempVoucherDetailsList" role="form" asp-controller="IssueVoucher">
                                                 <button style="background-color:transparent; border:transparent">
-                                                    
-                                                        <i class="fa fa-trash-alt" style="color:#dc6460"></i>
-                                                        
+
+                                                    <i class="fa fa-trash-alt" style="color:#dc6460"></i>
+
                                                 </button>
-                                                 
+
                                                 @*<button type="submit" class="btn btn-sm btn-danger d-none d-md-inline-block" style="width:70px;height:30px;border:2px; background-color:#dc6460">
                                                         <font size="2">Delete</font>
                                                     </button>*@
@@ -133,7 +136,7 @@ else
                         </table>
                         <br />
                         <button type="button" class="btn btn-primary createNewVoucherItem" style="width:120px;height:32px;border:2px;margin-left:36px; background-color:#00B894">
-                            <i class='fas fa-plus-circle' style='font-size:14px'></i>&nbsp;&nbsp;Create New
+                            <i class='fas fa-plus-circle' style='font-size:14px'></i>&nbsp;&nbsp;Add Item
                         </button>
                         <hr />
 
@@ -153,7 +156,6 @@ else
                                 <font size="2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Total:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$</font>
                             </label>
                             <input type="text" style="background:transparent;border:none;width:60px;border-bottom:1px solid #808080" />
-
                         </div>
                     </div>
                 </div>
@@ -311,6 +313,23 @@ else
         })
     });
 </script>
+
+<!--select all checkbox-->
+<script>
+    $('#select-all').click(function (event) {
+        if (this.checked) {
+            // Iterate each checkbox
+            $(':checkbox').each(function () {
+                this.checked = true;
+            });
+        } else {
+            $(':checkbox').each(function () {
+                this.checked = false;
+            });
+        }
+    });
+</script>
+
 
 <script>
     $(".editVoucherItem").click(function () {
