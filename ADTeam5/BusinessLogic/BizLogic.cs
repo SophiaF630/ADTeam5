@@ -949,7 +949,7 @@ namespace ADTeam5.BusinessLogic
                             rowID++;
                         }
                     }
-                    if (startDate != null && endDate != null)
+                    if (yearsName.Count == 0 || monthsName.Count == 0)
                     {
                         var filterByStartEnd = filterByDepAndCat.Where(x => x.CompleteDate >= startDate && x.CompleteDate <= endDate);
                         stationeryUsageViewModelList = filterByStartEnd.ToList();

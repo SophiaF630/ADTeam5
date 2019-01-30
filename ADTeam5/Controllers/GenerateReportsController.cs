@@ -65,46 +65,47 @@ namespace ADTeam5.Controllers
         }
 
 
-        [HttpPost]
-        public async Task<IActionResult> StationeryUsage(DateTime startDate, DateTime endDate, List<int> yearsName, List<int> monthsName, List<string> departmentsCode, List<string> categoriesName)
-        {
-            //Validate start and end date
-            //ViewData["StartDate"] = startDate;
-            //ViewData["endDate"] = endDate;
+        //[HttpPost]
+        //public async Task<IActionResult> StationeryUsage(DateTime startDate, DateTime endDate, List<int> yearsName, List<int> monthsName, List<string> departmentsCode, List<string> categoriesName)
+        //{
+        //    //Validate start and end date
+        //    //ViewData["StartDate"] = startDate;
+        //    //ViewData["endDate"] = endDate;
 
-            //if (startDate != null && endDate != null)
-            //{
-            //    if (ModelState.IsValid)
-            //    {
-            //        if (startDate > endDate || endDate < startDate)
-            //        {
-            //            TempData["Alert1"] = "Start end error";
-            //            return RedirectToAction("StationeryUsage");
+        //    //if (startDate != null && endDate != null)
+        //    //{
+        //    //    if (ModelState.IsValid)
+        //    //    {
+        //    //        if (startDate > endDate || endDate < startDate)
+        //    //        {
+        //    //            TempData["Alert1"] = "Start end error";
+        //    //            return RedirectToAction("StationeryUsage");
 
-            //        }
-            //        else
-            //        {
-            //            return View();
-            //        }
+        //    //        }
+        //    //        else
+        //    //        {
+        //    //            return View();
+        //    //        }
 
-            //    }
-            //    else
-            //    {
-            //        TempData["Alert2"] = "Please Fill in All Details!";
-            //        return RedirectToAction("StationeryUsage");
-            //    }
-            //}
+        //    //    }
+        //    //    else
+        //    //    {
+        //    //        TempData["Alert2"] = "Please Fill in All Details!";
+        //    //        return RedirectToAction("StationeryUsage");
+        //    //    }
+        //    //}
 
-            List<StationeryUsageViewModel> stationeryUsageViewModelsList = b.GetStationeryUsage("Completed", startDate, endDate, yearsName, monthsName, departmentsCode, categoriesName);
+        //    List<StationeryUsageViewModel> stationeryUsageViewModelsList = b.GetStationeryUsage("Completed", startDate, endDate, yearsName, monthsName, departmentsCode, categoriesName);
 
-            return View(stationeryUsageViewModelsList);
-        }
+        //    return View(stationeryUsageViewModelsList);
+        //}
 
-        public JsonResult GetYearMonthList(DateTime startDate, DateTime endDate, List<int> yearsName, List<int> monthsName)
+        
+        public JsonResult GetYearMonthList(DateTime startDate, DateTime endDate, string[] yearsName, string[] monthsName)
         {
             List<string> result = new List<string>();
            
-            if (startDate != null && endDate != null)
+            if (yearsName.Count() == 0 || monthsName.Count() == 0)
             {
                 int startDateYear = startDate.Year;
                 int startDateMonth = startDate.Month;
@@ -122,22 +123,22 @@ namespace ADTeam5.Controllers
                         result.Add(endyearMonth);
                     }
                 }
-                for (int i = 0; i < yearsName.Count; i++)
+                for (int i = 0; i < yearsName.Count(); i++)
                 {
-                    for (int j = 0; j < monthsName.Count; j++)
+                    for (int j = 0; j < monthsName.Count(); j++)
                     {
-                        string yearMonth = monthsName[j].ToString("00") + "/" + yearsName[i].ToString("0000");
+                        string yearMonth = monthsName[j].PadLeft(2, '0') + "/" + yearsName[i];
                         result.Add(yearMonth);
                     }
                 }
             }
-            else if (yearsName.Count != 0 && monthsName.Count != 0)
+            else if (yearsName.Count() != 0 && monthsName.Count() != 0)
             {
-                for (int i = 0; i<yearsName.Count; i++)
+                for (int i = 0; i<yearsName.Count(); i++)
                 {
-                    for (int j=0; j<monthsName.Count; j++)
+                    for (int j=0; j<monthsName.Count(); j++)
                     {
-                        string yearMonth = monthsName[j].ToString("00") + "/" + yearsName[i].ToString("0000");
+                        string yearMonth = monthsName[j].PadLeft(2, '0') + "/" + yearsName[i];
                         result.Add(yearMonth);
                     }
                 }
