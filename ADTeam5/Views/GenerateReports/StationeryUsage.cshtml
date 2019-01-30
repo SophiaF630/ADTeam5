@@ -3,6 +3,7 @@
     ViewData["Title"] = "StationeryUsage";
 }
 
+
 <script src="~/plugins/jquery/dist/jquery.min.js"></script>
 <link href="~/lib/bootstrap/bootstrap-multiselect.css" rel="stylesheet" />
 <script src="~/lib/bootstrap/bootstrap-multiselect.js"></script>
@@ -12,10 +13,10 @@
 <form asp-action="StationeryUsage" method="post">
     <div>
         From:
-        <input type="date" name="startdate" id="start" value="=" />
+        <input type="date" name="startDate" id="start" value="=" />
 
         To:
-        <input type="date" name="enddate" id="end" value="=" />
+        <input type="date" name="endDate" id="end" value="=" />
     </div>
     <div>
         Specific Year:
@@ -50,7 +51,7 @@
     </div>
     <div>
         Select Department:
-        <select id="departments" multiple="multiple" required name="departmentsName">
+        <select id="departments" multiple="multiple" required name="departmentsCode">
             @if (ViewBag.ListOfDepartment != null)
             {
                 @foreach (var item in ViewBag.ListOfDepartment)
@@ -116,11 +117,30 @@
 </script>
 
 <!--for testing-->
-<script>
+@*<script>
     $("#generatebtn").click(function () {
         alert($("#departments").val());
     });
-</script>
+</script>*@
+
+@*@if (TempData["Alert1"] != null)
+{
+    <div class="alert alert-success" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aira-label="close">
+            <span aria-hidden="true">&times</span>
+        </button>
+        @TempData["Alert1"]
+    </div>
+}
+@if (TempData["Alert2"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aira-label="close">
+            <span aria-hidden="true">&times</span>
+        </button>
+        @TempData["Alert2"]
+    </div>
+}*@
 
 <!--plot chart-->
 <script src="~/lib/Highcharts/highcharts.js"></script>
@@ -194,5 +214,19 @@
             data: [42.4, 33.2, 34.5, 39.7, 52.6, 75.5, 57.4, 60.4, 47.6, 39.1, 46.8, 51.1]
 
         }]
+    });
+</script>
+
+<script>
+    $(document).ready(function () {
+        $(".generatebtn").click(function () {
+            alert($("#start").val());
+            $.get("/GenerateReports/GetYearMonthList", { startDate: $("#start").val(), endDate: $("#end").val(), yearsName: $("#years"), monthsName: $("#months") }, function (data) {
+                $("#").empty();
+                $.each(data, function (index, row) {
+                    $("#").append(row)
+                });
+            });
+        })
     });
 </script>
