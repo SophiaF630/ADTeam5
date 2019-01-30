@@ -51,7 +51,7 @@ namespace ADTeam5.Controllers
 
             for (int i = 0; i < depCodeList.Count(); i++)
             {
-                List<RecordDetails> rd = b.GenerateDisbursementListDetails(depCodeList[i]);
+                List<RecordDetails> rd = b.GenerateRecordDetailsOfDisbursementList(depCodeList[i]);
             }
 
             var sSISTeam5Context = _context.DisbursementList.Include(d => d.CollectionPointNavigation).Include(d => d.DepartmentCodeNavigation).Include(d => d.RepNavigation);

@@ -17,9 +17,9 @@
 .skin-black .main-header .navbar {
   background-color: #ffffff;
 }
-.skin-black .main-header .navbar .nav > li > a {
-  color: #333333;
-}
+    .skin-black .main-header .navbar .nav > li > a {
+        color: #B0BEC5;
+    }
 .skin-black .main-header .navbar .nav > li > a:hover,
 .skin-black .main-header .navbar .nav > li > a:active,
 .skin-black .main-header .navbar .nav > li > a:focus,

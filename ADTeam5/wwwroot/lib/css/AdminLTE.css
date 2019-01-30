@@ -186,7 +186,7 @@ h6,
 }
 /* General Links */
 a {
-    color: #B0BEC5;
+    color: #99CCCC;
 }
 
     a:hover,
@@ -195,6 +195,10 @@ a {
         outline: none;
         text-decoration: none;
         color: #72afd2;
+    }
+
+    a.logo:link {
+        color: crimson;
     }
 /* Page Header */
 .page-header {
@@ -348,6 +352,10 @@ a {
 
     .main-header .logo .logo-mini {
         display: none;
+    }
+    
+    .main-header .logo .a {
+    color: crimson;
     }
 
 .main-header .navbar-brand {
@@ -2647,7 +2655,7 @@ a {
 
 .btn-primary {
     background-color: #3c8dbc;
-    border-color: #367fa9;
+    /*border-color: #1ECD97;*/
 }
 
     .btn-primary:hover,
@@ -2680,7 +2688,7 @@ a {
 
 .btn-danger {
     background-color: #dd4b39;
-    border-color: #d73925;
+    /*border-color: #d73925;*/
 }
 
     .btn-danger:hover,

@@ -118,7 +118,7 @@ namespace ADTeam5.BusinessLogic
 
 
         //Generate Disbursement List for a department
-        public List<RecordDetails> GenerateDisbursementListDetails(string depCode)
+        public List<RecordDetails> GenerateRecordDetailsOfDisbursementList(string depCode)
         {
             DateTime start = StationeryRetrivalStartDate();
             DateTime cutoff = StationeryRetrivalCutoffDate();
@@ -347,20 +347,6 @@ namespace ADTeam5.BusinessLogic
             _context.SaveChanges();
         }
 
-
-        //Adjustment details
-        public List<RecordDetails> GetAdjustmentRecordDetails(string voucherNo)
-        {
-            List<RecordDetails> result = new List<RecordDetails>();
-            AdjustmentRecord ar = _context.AdjustmentRecord
-                .FirstOrDefault(x => x.VoucherNo == voucherNo && !x.VoucherNo.Contains("VTemp"));
-
-            result = _context.RecordDetails.Where(x => x.Rrid == ar.VoucherNo).ToList();
-            return result;
-        }
-
-        
-
         //Change Deliver Date
         public void ChangeEstDeliverDate(string departmentName, DateTime estDeliverDate)
         {
@@ -373,6 +359,32 @@ namespace ADTeam5.BusinessLogic
             }
         }
 
+        //Adjustment details
+        public List<AdjustmentRecordDetails> GetAdjustmentRecordDetails(string voucherNo)
+        {
+            List<RecordDetails> rd = new List<RecordDetails>();
+            AdjustmentRecord ar = _context.AdjustmentRecord
+                .FirstOrDefault(x => x.VoucherNo == voucherNo && !x.VoucherNo.Contains("VTemp"));
+            rd = _context.RecordDetails.Where(x => x.Rrid == ar.VoucherNo).ToList();
+
+            List<AdjustmentRecordDetails> result = new List<AdjustmentRecordDetails>();
+            int rowID = 1;
+            foreach (var item in rd)
+            {
+                AdjustmentRecordDetails arList = new AdjustmentRecordDetails();
+                arList.RowID = rowID;
+                arList.RDID = item.Rdid;
+                arList.VoucherNo = item.Rrid;
+                arList.ItemNumber = item.ItemNumber;
+                arList.ItemName = _context.Catalogue.FirstOrDefault(x => x.ItemNumber == item.ItemNumber).ItemName;
+                arList.Quantity = item.Quantity;
+                arList.Remark = item.Remark;
+
+                result.Add(arList);
+                rowID++;
+            }
+            return result;
+        }
 
         //Draft voucher details
         public List<TempVoucherDetails> GetTempVoucherDetailsList(int userId)
@@ -430,12 +442,52 @@ namespace ADTeam5.BusinessLogic
 
         }
 
+        public void CreateNewVoucherItem(int userId, string voucherNo, string itemNumber, int qty, string remark)
+        {           
+            AdjustmentRecord adjustmentRecord = _context.AdjustmentRecord.FirstOrDefault(x => x.VoucherNo == voucherNo);
+
+            if (adjustmentRecord == null)
+            {
+                adjustmentRecord = new AdjustmentRecord()
+                {
+                    VoucherNo = voucherNo,
+                    IssueDate = DateTime.Today,
+                    ClerkId = userId,
+                    Status = "draft"
+                };
+                _context.AdjustmentRecord.Add(adjustmentRecord);
+                _context.SaveChanges();
+            }
+
+            RecordDetails recordDetails = new RecordDetails();
+            recordDetails.Rrid = voucherNo;
+            recordDetails.ItemNumber = itemNumber;
+            recordDetails.Quantity = qty;
+            recordDetails.Remark = remark;
+            _context.RecordDetails.Add(recordDetails);
+            _context.SaveChanges();
+
+        }
+
         //Update voucherItem
         public void UpdateVoucherItem(int rowID, int quantity, string remark, List<TempVoucherDetails> tempVoucherDetailsList)
         {
             //get rdid
             TempVoucherDetails tempVoucherItem = tempVoucherDetailsList.FirstOrDefault(x => x.RowID == rowID);
             int rdid = tempVoucherItem.RDID;
+
+            RecordDetails editVoucherItem = _context.RecordDetails.FirstOrDefault(x => x.Rdid == rdid);
+            editVoucherItem.Quantity = quantity;
+            editVoucherItem.Remark = remark;
+            _context.Update(editVoucherItem);
+            _context.SaveChanges();
+        }
+
+        public void UpdateVoucherItem(int rowID, int quantity, string remark, List<AdjustmentRecordDetails> adjustmentRecordDetailsList)
+        {
+            //get rdid
+            AdjustmentRecordDetails adjustmentRecordItem = adjustmentRecordDetailsList.FirstOrDefault(x => x.RowID == rowID);
+            int rdid = adjustmentRecordItem.RDID;
 
             RecordDetails editVoucherItem = _context.RecordDetails.FirstOrDefault(x => x.Rdid == rdid);
             editVoucherItem.Quantity = quantity;
@@ -504,6 +556,32 @@ namespace ADTeam5.BusinessLogic
             }
         }
 
+        public void DeleteVoucherItem(int rdid, List<AdjustmentRecordDetails> adjustmentRecordDetailsList)
+        {
+            //get rdid
+            AdjustmentRecordDetails adjustmentRecordItem = adjustmentRecordDetailsList.FirstOrDefault(x => x.RDID == rdid);
+            //int rdid = adjustmentRecordItem.RDID;
+
+            RecordDetails rd = _context.RecordDetails.FirstOrDefault(x => x.Rdid == rdid);
+            if (rd != null)
+            {
+                _context.RecordDetails.Remove(rd);
+                _context.SaveChanges();
+            }
+        }
+
+        //Update adjustment record status
+        public void UpdateRecordStatus(string status, string recordName, string rrid)
+        {
+            if (recordName == "AdjustmentRecord")
+            {
+                AdjustmentRecord ar = _context.AdjustmentRecord.FirstOrDefault(x => x.VoucherNo == rrid);
+                ar.Status = status;
+                _context.AdjustmentRecord.Update(ar);
+                _context.SaveChanges();
+            }
+        }
+
         //FindDepartmentOrSupplier through disbursement list ID or PO ID
         public string FindDepartmentOrSupplier(string recordId)
         {
@@ -549,8 +627,30 @@ namespace ADTeam5.BusinessLogic
             return result;
         }
 
-        //Get temp PurchaseOrderDetailsList
-        public List<TempPurchaseOrderDetails> GetTempPurchaseOrderDetailsList()
+        //Get 
+        public List<PurchaseOrderRecordDetails> GetPurchaseOrderRecordDetails(string poid)
+        {
+            List<RecordDetails> rd = new List<RecordDetails>();
+            PurchaseOrderRecord purchaseOrderRecord = _context.PurchaseOrderRecord
+                .FirstOrDefault(x => x.Poid == poid && !x.Poid.Contains("POTemp"));
+            rd = _context.RecordDetails.Where(x => x.Rrid == purchaseOrderRecord.Poid).ToList();
+
+            List<PurchaseOrderRecordDetails> result = new List<PurchaseOrderRecordDetails>();
+            foreach (var item in rd)
+            {
+                PurchaseOrderRecordDetails poList = new PurchaseOrderRecordDetails();
+
+                poList.ItemNumber = item.ItemNumber;
+                poList.ItemName = _context.Catalogue.FirstOrDefault(x => x.ItemNumber == item.ItemNumber).ItemName;
+                poList.Quantity = item.Quantity;
+
+                result.Add(poList);
+            }
+            return result;
+        }
+
+    //Get temp PurchaseOrderDetailsList
+    public List<TempPurchaseOrderDetails> GetTempPurchaseOrderDetailsList()
         {
             List<TempPurchaseOrderDetails> result = new List<TempPurchaseOrderDetails>();
             List<PurchaseOrderRecord> purchaseOrderRecordList = _context.PurchaseOrderRecord
@@ -560,7 +660,7 @@ namespace ADTeam5.BusinessLogic
                 int rowID = 1;
                 foreach (var record in purchaseOrderRecordList)
                 {
-                    List<RecordDetails> rdList = _context.RecordDetails.Where(x => x.Rrid == record.Poid).ToList();                   
+                    List<RecordDetails> rdList = _context.RecordDetails.Where(x => x.Rrid == record.Poid).ToList();
                     foreach (var item in rdList)
                     {
                         TempPurchaseOrderDetails tPOList = new TempPurchaseOrderDetails();
@@ -582,7 +682,7 @@ namespace ADTeam5.BusinessLogic
 
         //Create New VoucherItem
         public void CreateNewPOItem(int userID, string itemNumber, int qty, string supplierName)
-        {            
+        {
             string supplierCode = _context.Supplier.FirstOrDefault(x => x.SupplierName == supplierName).SupplierCode;
             string poNo = "POTemp" + supplierCode;
             PurchaseOrderRecord purchaseOrderRecord = _context.PurchaseOrderRecord.FirstOrDefault(x => x.Poid == poNo && x.SupplierCode == supplierCode);
@@ -778,6 +878,38 @@ namespace ADTeam5.BusinessLogic
         }
 
 
-        
+
+
+        //Generate Report Part
+        //Get disbursement list details
+        public List<StationeryUsageViewModel> GetStationeryUsage(string status)
+        {
+            List<StationeryUsageViewModel> stationeryUsageViewModelList = new List<StationeryUsageViewModel>();
+            
+            //find disbursement lists for all department
+            //List<DisbursementList> disbursementLists = _context.DisbursementList.Where(x => x.Status == status).ToList();
+            var q = from rd in _context.RecordDetails join dl in _context.DisbursementList on rd.Rrid equals dl.Dlid
+                    where dl.Status == "Delivered"
+                    select new { category = rd.ItemNumberNavigation.Category, rd.QuantityDelivered, dl.CompleteDate, dl.DepartmentCode };
+
+            if (q.ToList().Count != 0)
+            {
+                int rowID = 1;
+                foreach (var item in q.ToList())
+                {
+                    StationeryUsageViewModel stationeryUsageViewModel = new StationeryUsageViewModel();
+                    stationeryUsageViewModel.RowID = rowID;
+                    stationeryUsageViewModel.Category = item.category;
+                    stationeryUsageViewModel.DepCode = item.DepartmentCode;
+                    stationeryUsageViewModel.QuantityDelivered = item.QuantityDelivered;
+
+                    stationeryUsageViewModelList.Add(stationeryUsageViewModel);
+                    rowID++;
+                }
+            }
+
+
+            return stationeryUsageViewModelList;
+        }
     }
 }

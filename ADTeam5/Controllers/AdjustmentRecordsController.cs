@@ -62,25 +62,24 @@ namespace ADTeam5.Controllers
                 return NotFound();
             }           
 
-            List<RecordDetails> rd = b.GetAdjustmentRecordDetails(id);
-            List<AdjustmentRecordDetails> result = new List<AdjustmentRecordDetails>();
-            foreach (var item in rd)
+            List<AdjustmentRecordDetails> result = b.GetAdjustmentRecordDetails(id);
+
+            //Viewbag for category dropdown list, need to post back
+            List<Catalogue> categoryList = new List<Catalogue>();
+            var q = _context.Catalogue.GroupBy(x => new { x.Category }).Select(x => x.FirstOrDefault());
+            foreach (var item in q)
             {
-                AdjustmentRecordDetails arList = new AdjustmentRecordDetails();
-
-                arList.ItemNumber = item.ItemNumber;
-                arList.ItemName = _context.Catalogue.FirstOrDefault(x => x.ItemNumber == item.ItemNumber).ItemName;
-                arList.Quantity = item.Quantity;
-                arList.Remark = item.Remark;
-
-                result.Add(arList);
+                categoryList.Add(item);
             }
+            categoryList.Insert(0, new Catalogue { ItemNumber = "0", Category = "---Select Category---" });
+            ViewBag.ListofCategory = categoryList;
+
             return View(result);
         }
 
         // POST: AdjustmentRecords/Details/5
         [HttpPost]
-        public async Task<IActionResult> Details(string id, string itemNumber, int quantity, int rowID, string remark, int createNewVoucherItemModalName, int voucherItemModalName, string[] itemSubmitted, string[] itemSavedToDraft)
+        public async Task<IActionResult> Details(string id, string itemNumber, int quantity, int rowID, string remark, int createNewVoucherItemModalName, int voucherItemModalName, string itemSubmitted, string itemSavedToDraft)
         {
             ADTeam5User user = await _userManager.GetUserAsync(HttpContext.User);
             List<string> identity = userCheck.checkUserIdentityAsync(user);
@@ -90,31 +89,31 @@ namespace ADTeam5.Controllers
             {
                 return NotFound();
             }
-
-            
             
             //handle post action
-            List<TempVoucherDetails> tempVoucherDetailsList = b.GetTempVoucherDetailsList(userID);
+            List<AdjustmentRecordDetails> adjustmentRecordDetailsList = b.GetAdjustmentRecordDetails(id);
 
             if (createNewVoucherItemModalName == 1)
             {
-                b.CreateNewVoucherItem(userID, itemNumber, quantity, remark);
-                return RedirectToAction(nameof(Index));
+                b.CreateNewVoucherItem(userID, id, itemNumber, quantity, remark);
+                return RedirectToAction(nameof(Details));
             }
             else if (voucherItemModalName == 1)
             {
-                b.UpdateVoucherItem(rowID, quantity, remark, tempVoucherDetailsList);
+                b.UpdateVoucherItem(rowID, quantity, remark, adjustmentRecordDetailsList);
             }
 
-            if (itemSubmitted.Length != 0)
+            if (itemSubmitted == "1")
             {
                 //changestatus to pending approval
-                //return RedirectToAction(nameof(Index));
+                b.UpdateRecordStatus("Submitted", "AdjustmentRecord", id);
+                return RedirectToAction(nameof(Index));
             }
-            else if (itemSavedToDraft.Length != 0)
+            else if (itemSavedToDraft == "1")
             {
                 //change status to draft
-                //return RedirectToAction(nameof(Index));
+                b.UpdateRecordStatus("Draft", "AdjustmentRecord", id);
+                return RedirectToAction(nameof(Index));
             }
 
             //Viewbag for category dropdown list, need to post back
@@ -127,20 +126,8 @@ namespace ADTeam5.Controllers
             categoryList.Insert(0, new Catalogue { ItemNumber = "0", Category = "---Select Category---" });
             ViewBag.ListofCategory = categoryList;
 
+            List<AdjustmentRecordDetails> result = b.GetAdjustmentRecordDetails(id);
 
-            List<RecordDetails> rd = b.GetAdjustmentRecordDetails(id);
-            List<AdjustmentRecordDetails> result = new List<AdjustmentRecordDetails>();
-            foreach (var item in rd)
-            {
-                AdjustmentRecordDetails arList = new AdjustmentRecordDetails();
-
-                arList.ItemNumber = item.ItemNumber;
-                arList.ItemName = _context.Catalogue.FirstOrDefault(x => x.ItemNumber == item.ItemNumber).ItemName;
-                arList.Quantity = item.Quantity;
-                arList.Remark = item.Remark;
-
-                result.Add(arList);
-            }
             return View(result);
         }
 
@@ -194,8 +181,8 @@ namespace ADTeam5.Controllers
         }
 
         [HttpPost]
-        //[ActionName("VoucherItemDelete"), Route("~/IssueVoucher")]
-        public async Task<IActionResult> VoucherItemDelete(int id)
+        //[Route("AdjustmentRecords/Details/{id?}")]
+        public async Task<IActionResult> VoucherItemDelete(string id, int rdid)
         {
             ADTeam5User user = await _userManager.GetUserAsync(HttpContext.User);
             List<string> identity = userCheck.checkUserIdentityAsync(user);
@@ -211,17 +198,21 @@ namespace ADTeam5.Controllers
             categoryList.Insert(0, new Catalogue { ItemNumber = "0", Category = "---Select Category---" });
             ViewBag.ListofCategory = categoryList;
 
-            List<TempVoucherDetails> tempVoucherDetailsList1 = b.GetTempVoucherDetailsList(userID);
-
-            b.DeleteVoucherItem(id, tempVoucherDetailsList1);
-
-            List<TempVoucherDetails> tempVoucherDetailsList = b.GetTempVoucherDetailsList(userID);
-
-            if (tempVoucherDetailsList == null)
+            //string voucherNo = _context.RecordDetails.FirstOrDefault(x => x.Rdid == rdid).Rrid;
+            List<AdjustmentRecordDetails> adjustmentRecordDetailsList = new List<AdjustmentRecordDetails>();
+            if (id != null)
             {
-                tempVoucherDetailsList = new List<TempVoucherDetails>();
+                List<AdjustmentRecordDetails> adjustmentRecordDetailsList1 = b.GetAdjustmentRecordDetails(id);
+                b.DeleteVoucherItem(rdid, adjustmentRecordDetailsList1);
+                adjustmentRecordDetailsList = b.GetAdjustmentRecordDetails(id);
             }
-            return PartialView("_TempDetails", tempVoucherDetailsList);
+
+            if (adjustmentRecordDetailsList == null)
+            {
+                adjustmentRecordDetailsList = new List<AdjustmentRecordDetails>();
+            }
+            return PartialView("_TempDetails", adjustmentRecordDetailsList);
+
 
         }
 

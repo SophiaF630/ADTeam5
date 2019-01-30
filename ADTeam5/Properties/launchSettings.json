@@ -3,6 +3,9 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iis": {
+//<<<<<<< HEAD
+//      "applicationUrl": "http://localhost/ADTeam5",
+//=======
       "applicationUrl": "http://localhost/SSISADTeam5",
       "sslPort": 0
     },
@@ -30,6 +33,9 @@
     "IIS": {
       "commandName": "IIS",
       "launchBrowser": true,
+//<<<<<<< HEAD
+//      "launchUrl": "http://localhost/ADTeam5",
+//=======
       "launchUrl": "http://localhost/SSISADTeam5",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"

@@ -45,7 +45,7 @@ namespace ADTeam5.Controllers
 
             for (int i = 0; i < depCodeList.Count(); i++)
             {                
-                List<RecordDetails> rd = b.GenerateDisbursementListDetails(depCodeList[i]);
+                List<RecordDetails> rd = b.GenerateRecordDetailsOfDisbursementList(depCodeList[i]);
             }
 
             List<StationeryRetrievalList> result = b.GetStationeryRetrievalLists();
