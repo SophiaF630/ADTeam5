@@ -9,9 +9,13 @@
 
   <ItemGroup>
     <Compile Remove="Views\manager\**" />
+    <Compile Remove="wwwroot\lib\mdbootstrap\**" />
     <Content Remove="Views\manager\**" />
+    <Content Remove="wwwroot\lib\mdbootstrap\**" />
     <EmbeddedResource Remove="Views\manager\**" />
+    <EmbeddedResource Remove="wwwroot\lib\mdbootstrap\**" />
     <None Remove="Views\manager\**" />
+    <None Remove="wwwroot\lib\mdbootstrap\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -46,11 +50,6 @@
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.0" />
     <PackageReference Include="SendGrid" Version="9.10.0" />
-  </ItemGroup>
-
-
-  <ItemGroup>
-    <Folder Include="wwwroot\lib\mdbootstrap\" />
   </ItemGroup>
 
 </Project>

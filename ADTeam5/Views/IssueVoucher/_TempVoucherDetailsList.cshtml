@@ -1,117 +1,176 @@
 ﻿@model List<ADTeam5.ViewModels.TempVoucherDetails>
 
 @{
-    ViewData["Title"] = "_TempVoucherDetailsList";
+    ViewData["Title"] = "_TempVoucherDetails";
 }
 
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
+@*<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+        <environment include="Development">*@
 <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+@*</environment>
+    </head>*@
 
+@*<div class="container">*@
+@*<div class="row">
+    <div class="col-md-10">
+        <div class="box">*@
+@if (Model.Count == 0)
+{
+    <div class="row justify-content-center text-center">
+        <div class="col-12 col-md-10 mt-5">
 
+            <i class="fa fa-user fa-5x mb-5"></i>
 
-<div class="container">
-    <div class="row">
-        <div class="col-12">
-            @if (Model.Count == 0)
-            {
-                <div class="row justify-content-center text-center">
-                    <div class="col-12 col-md-10 mt-5">
+            <h2>
+                No Record Found
+            </h2>
 
-                        <i class="fa fa-user fa-5x mb-5"></i>
-
-                        <h2>
-                            No Record Found
-                        </h2>
-
-                        <p class="text-muted">
-                            You do not have any items to be added to voucher.
-                        </p>
-                        <button type="button" class="btn btn-lg btn-primary d-none d-md-inline-block mt-3 createNewVoucherItem" style="width:120px;height:40px;border:2px; background-color:#3c8dbc">
-                            Create New
-                        </button>
-                    </div>
-                </div> <!-- / .row -->
-            }
-            else
-            {
-                <button type="button" class="btn btn-primary createNewVoucherItem" style="width:100px;height:32px;border:2px; background-color:#f39c12">
-                    Create New
-                </button>
-                <br />
-                <br />
-                <table id="TempVoucherDetails" class="table table-striped table-bordered" style="width: 100%;">
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th>
-                                No.
-                            </th>
-                            <th>
-                                Item Number
-                            </th>
-                            <th>
-                                Item Name
-                            </th>
-                            <th>
-                                Quantity
-                            </th>
-                            <th>
-                                Remark
-                            </th>
-                            <th></th>
-                            <th></th>
-
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in Model)
-                        {
-                        <tr>
-                            <td>
-                                <input type="checkbox" id="isChecked" name="isChecked" value="@item.RowID">
-                            </td>
-                            <td class="RowID">
-                                @Html.DisplayFor(modelItem => item.RowID)
-                            </td>
-                            <td class="ItemNumber">
-                                @Html.DisplayFor(modelItem => item.ItemNumber)
-                            </td>
-                            <td class="ItemName">
-                                @Html.DisplayFor(modelItem => item.ItemName)
-                            </td>
-                            <td class="Quantity">
-                                @Html.DisplayFor(modelItem => item.Quantity)
-                            </td>
-                            <td class="Remark">
-                                @Html.DisplayFor(modelItem => item.Remark)
-                            </td>
-                            <td>
-                                <button type="button" class="btn btn-primary editVoucherItem" style="width:70px;height:30px;border:2px; background-color:#66B3B3">
-                                    Edit
-                                </button>
-                            </td>
-                            <td>
-                                <form asp-action="VoucherItemDelete" asp-route-id="@item.RowID" method="post" data-ajax="true" data-ajax-update="#TempVoucherDetailsList" role="form" asp-controller="IssueVoucher">
-                                    <button type="submit" class="btn btn-sm btn-danger d-none d-md-inline-block" style="width:70px;height:30px;border:2px; background-color:#66B38D">
-                                        Delete
-                                    </button>
-                                </form>
-                            </td>
-
-                        </tr>
-                        }
-                    </tbody>
-                </table>
-                <label>Total Amount:</label>
-                <br />
-                <input type="submit" value="Add to Draft" class="btn btn-primary addToDraft" />
-                <input type="submit" value="Submit" class="btn btn-primary submit" />
-            }
+            <p class="text-muted">
+                You do not have any items to be added to voucher.
+            </p>
+            <button type="button" class="btn btn-lg btn-primary d-none d-md-inline-block mt-3 createNewVoucherItem" style="width:120px;height:40px;border:2px; background-color:#3c8dbc">
+                Create New
+            </button>
         </div>
     </div>
-</div>
+}
+else
+{
+    
+        <br />
+        <br />
+    <!-- TABLE: Issue Voucher -->
+    <div class="row">
+        <div class="col-md-10">
+            <div class="box" style=" width:100%">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Items to be added to voucher</h3>
+                    <div class="box-tools pull-right">
+                        <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
+                        <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
+                    </div>
+                </div>
 
 
+                <div class="box-body no-padding">
+                    <div class="table-responsive table-full-width">
+                        <table id="TempVoucherDetails" class="table no-margin table-hover table-striped table-responsive table-borderless" style="width: 100%;">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>
+                                        No.
+                                    </th>
+                                    <th>
+                                        Item Number
+                                    </th>
+                                    <th>
+                                        Item Name
+                                    </th>
+                                    <th>
+                                        Quantity
+                                    </th>
+                                    <th>
+                                        Remark
+                                    </th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            <input type="checkbox" id="isChecked" name="isChecked" value="@item.RowID">
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.RowID)
+                                        </td>
+                                        <td width="20%">
+                                            @Html.DisplayFor(modelItem => item.ItemNumber)
+                                        </td>
+                                        <td class="ItemName" width="40%">
+                                            @Html.DisplayFor(modelItem => item.ItemName)
+                                        </td>
+                                        <td class="Quantity" width="10%">
+                                            @Html.DisplayFor(modelItem => item.Quantity)
+                                        </td>
+                                        <td class="Remark" width="60%">
+                                            @Html.DisplayFor(modelItem => item.Remark)
+                                        </td>
+                                        <td>
+                                            <button class="editVoucherItem" style="background-color:transparent; border:transparent">
+                                                <i class="fa fa-edit" style="color:#66B3B3"></i>
+                                            </button>
+
+                                            @*<button type="button" class="btn btn-primary editVoucherItem" style="width:70px;height:30px;border:2px; background-color:#66B3B3">
+                                <font size="2">Edit</font>
+                            </button>*@
+                                        </td>
+                                        <td>
+                                            <form asp-action="VoucherItemDelete" asp-route-id="@item.RowID" method="post" data-ajax="true" data-ajax-update="#TempVoucherDetailsList" role="form" asp-controller="IssueVoucher">
+                                                <button style="background-color:transparent; border:transparent">
+                                                    <i class="fa fa-trash-alt" style="color:#dc6460"></i>
+                                                </button>
+                                                @*<button type="submit" class="btn btn-sm btn-danger d-none d-md-inline-block" style="width:70px;height:30px;border:2px; background-color:#dc6460">
+                                    <font size="2">Delete</font>
+                                </button>*@
+                                            </form>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                        <br />
+                        <button type="button" class="btn btn-primary createNewVoucherItem" style="width:120px;height:32px;border:2px;margin-left:36px; background-color:#00B894">
+                            <i class='fas fa-plus-circle' style='font-size:14px'></i>&nbsp;&nbsp;Create New
+                        </button>
+                        <hr />
+                        <h3 class="box-title">Items to be added to voucher</h3>
+                        <div class="box-tools pull-right">
+                            <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
+                            <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
+                        </div>
+                        <div align="center">
+                            <label style="width:100px;height:30px;">
+                                <font size="3">Amount:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$</font>
+                            </label>
+                            <input type="text" style="background:transparent;border:none;width:60px;border-bottom:1px solid #808080" />
+
+                            @*<input type="submit" value="Add To Draft" class="btn btn-primary addToDraft" style="width:120px;height:30px;border:2px; background-color:#5badad" />
+            <input type="submit" value="Submit" class="btn btn-primary submit" style="background-color: #00B894;width:68px;height:30px;border:2px;" />*@
+                        </div>
+                    </div>
+                </div>
+                
+                <br />
+                <br />
+            </div>
+        </div><!-- /.box-body -->
+    </div><!-- /.box -->
+    <!-- /.box-footer -->
+    
+
+    
+    
+}
+
+@*</div>*@
+
+@*<div class="box-footer clearfix">
+        <a href="javascript:void(0)" class="btn btn-sm btn-info btn-flat pull-left">Place New Order</a>
+        <a href="javascript:void(0)" class="btn btn-sm btn-default btn-flat pull-right">View All Orders</a>
+    </div>*@
+
+
+
+<!-- /.col -->
 <!-- Modal for create voucher item-->
 <div class="modal fade in" id="CreateNewVoucherItemModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -125,8 +184,8 @@
                             <strong><font size="5">Add To Voucher</font></strong>
                         </h5>
                         @*<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>*@
+                                <span aria-hidden="true">&times;</span>
+                            </button>*@
                     </div>
                 </div>
             </div>
@@ -162,8 +221,8 @@
 
             </div>
         </div>
-            </div>
-        </div>
+    </div>
+</div>
 
 
 <!-- Modal for edit quantity-->
@@ -206,6 +265,7 @@
         </div>
     </div>
 </div>
+
 
 
 <script>
@@ -280,7 +340,7 @@
                         alert("submitted");
                         window.location.reload();
                     }
-            })           
+            })
         });
     });
 </script>
@@ -306,3 +366,6 @@
         })
     });
 </script>
+
+@*</html>*@
+
