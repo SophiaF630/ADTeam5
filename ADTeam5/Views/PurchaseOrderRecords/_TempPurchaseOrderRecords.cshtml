@@ -83,13 +83,13 @@
                                 </td>
                                 @if (item.Status == "Draft")
                                 {
-                                    <td>
+                                    @*<td>
                                         <form asp-action="PurchaseOrderRecordSubmit" asp-route-id="@item.Poid" method="post" data-ajax="true" data-ajax-update="#TempPurchaseOrderRecords" role="form" asp-controller="PurchaseOrderRecords">
                                             <button type="submit" class="btn btn-primary">
                                                 Submit
                                             </button>
                                         </form>
-                                    </td>
+                                    </td>*@
                                     <td>
                                         <form asp-action="PurchaseOrderRecordDelete" asp-route-id="@item.Poid" method="post" data-ajax="true" data-ajax-update="#TempPurchaseOrderRecords" role="form" asp-controller="PurchaseOrderRecords">
                                             <button type="submit" class="btn btn-sm btn-danger d-none d-md-inline-block">
@@ -100,7 +100,7 @@
                                 }
                                 else
                                 {
-                                    <td><button type="submit" class="btn btn-primary" disabled>Submit</button></td>
+                                    @*<td><button type="submit" class="btn btn-primary" disabled>Submit</button></td>*@
                                     <td>
                                         <button type="submit" class="btn btn-sm btn-danger d-none d-md-inline-block" disabled>Delete</button>
                                     </td>

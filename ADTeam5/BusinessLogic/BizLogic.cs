@@ -118,7 +118,7 @@ namespace ADTeam5.BusinessLogic
 
 
         //Generate Disbursement List for a department
-        public List<RecordDetails> GenerateDisbursementListDetails(string depCode)
+        public List<RecordDetails> GenerateRecordDetailsOfDisbursementList(string depCode)
         {
             DateTime start = StationeryRetrivalStartDate();
             DateTime cutoff = StationeryRetrivalCutoffDate();
@@ -879,5 +879,37 @@ namespace ADTeam5.BusinessLogic
 
 
 
+
+        //Generate Report Part
+        //Get disbursement list details
+        public List<StationeryUsageViewModel> GetStationeryUsage(string status)
+        {
+            List<StationeryUsageViewModel> stationeryUsageViewModelList = new List<StationeryUsageViewModel>();
+            
+            //find disbursement lists for all department
+            //List<DisbursementList> disbursementLists = _context.DisbursementList.Where(x => x.Status == status).ToList();
+            var q = from rd in _context.RecordDetails join dl in _context.DisbursementList on rd.Rrid equals dl.Dlid
+                    where dl.Status == "Delivered"
+                    select new { category = rd.ItemNumberNavigation.Category, rd.QuantityDelivered, dl.CompleteDate, dl.DepartmentCode };
+
+            if (q.ToList().Count != 0)
+            {
+                int rowID = 1;
+                foreach (var item in q.ToList())
+                {
+                    StationeryUsageViewModel stationeryUsageViewModel = new StationeryUsageViewModel();
+                    stationeryUsageViewModel.RowID = rowID;
+                    stationeryUsageViewModel.Category = item.category;
+                    stationeryUsageViewModel.DepCode = item.DepartmentCode;
+                    stationeryUsageViewModel.QuantityDelivered = item.QuantityDelivered;
+
+                    stationeryUsageViewModelList.Add(stationeryUsageViewModel);
+                    rowID++;
+                }
+            }
+
+
+            return stationeryUsageViewModelList;
+        }
     }
 }

@@ -1,0 +1,24 @@
+﻿@model List<ADTeam5.ViewModels.StationeryUsageViewModel>
+@{
+    ViewData["Title"] = "StationeryUsage";
+}
+
+<h1>StationeryUsage</h1>
+
+<form asp-action="StationeryUsage" method="post">
+    <div>
+        From:
+        <input type="date" name="startdate" id="start" value="=" />
+
+        To:
+        <input type="date" name="enddate" id="end" value=" = " />
+
+        Specific Year/Month
+        @*@foreach () {
+        <input type="checkbox" id="isChecked" name="isChecked" value="">
+        }*@
+        <input type="submit" value="Search" id="searchbtn" />
+    </div>
+</form>
+
+
