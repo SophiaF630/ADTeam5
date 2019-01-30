@@ -100,11 +100,56 @@ namespace ADTeam5.Controllers
         //    return View(stationeryUsageViewModelsList);
         //}
 
-        
-        public JsonResult GetYearMonthList(DateTime startDate, DateTime endDate, string[] yearsName, string[] monthsName)
+        public class ReportQueryData
         {
-            List<string> result = new List<string>();
-           
+            public string StartDate { get; set; }
+            public string EndDate { get; set; }
+            public List<string> YearsName { get; set; }
+            public List<string> MonthsName { get; set; }
+            public List<string> Departments { get; set; }
+            public List<string> Categories { get; set; }
+        }
+
+        public class DepartmentData
+        {
+            public string name { get; set; }
+            public string stack { get; set; }
+            public List<int> data { get; set; }
+        }
+
+        public class ReportReturnData
+        {
+            public List<string> xaxis { get; set; }
+            public List<DepartmentData> series { get; set; }
+        }
+
+        public List<DepartmentData> prepareData(List<string> departments, List<string> categories, List<StationeryUsageViewModel> rawData)
+        {
+            List<DepartmentData> reportData = new List<DepartmentData>();
+            foreach (string dep in departments)
+            {
+                var deptName = _context.Department.Find(dep).DepartmentName;
+                foreach (string cat in categories)
+                {
+                    DepartmentData depData = new DepartmentData();
+                    depData.name = deptName + "/" + cat;
+                    depData.data = new List<int>();
+                    depData.stack = deptName;
+                    var q = rawData.Where(x => x.DepCode == dep && x.Category == cat);
+                    foreach(var item in q)
+                    {
+                        depData.data.Add(item.QuantityDelivered);
+                    }
+                    reportData.Add(depData);
+                }
+                
+            }
+            return reportData;
+        }
+
+        public List<string> getMonths(List<string> yearsName, List<string> monthsName, DateTime startDate, DateTime endDate)
+        {
+            List<string> months = new List<string>();
             if (yearsName.Count() == 0 || monthsName.Count() == 0)
             {
                 int startDateYear = startDate.Year;
@@ -115,12 +160,12 @@ namespace ADTeam5.Controllers
                 for (DateTime date = startDate; date <= endDate; date.AddMonths(1))
                 {
                     string yearMonth = date.ToString("00") + "/" + date.ToString("0000");
-                    result.Add(yearMonth);
+                    months.Add(yearMonth);
 
-                    if(startDate.Date > endDate.Date)
+                    if (startDate.Date > endDate.Date)
                     {
                         string endyearMonth = date.ToString("00") + "/" + date.ToString("0000");
-                        result.Add(endyearMonth);
+                        months.Add(endyearMonth);
                     }
                 }
                 for (int i = 0; i < yearsName.Count(); i++)
@@ -128,22 +173,42 @@ namespace ADTeam5.Controllers
                     for (int j = 0; j < monthsName.Count(); j++)
                     {
                         string yearMonth = monthsName[j].PadLeft(2, '0') + "/" + yearsName[i];
-                        result.Add(yearMonth);
+                        months.Add(yearMonth);
                     }
                 }
             }
             else if (yearsName.Count() != 0 && monthsName.Count() != 0)
             {
-                for (int i = 0; i<yearsName.Count(); i++)
+                for (int i = 0; i < yearsName.Count(); i++)
                 {
-                    for (int j=0; j<monthsName.Count(); j++)
+                    for (int j = 0; j < monthsName.Count(); j++)
                     {
                         string yearMonth = monthsName[j].PadLeft(2, '0') + "/" + yearsName[i];
-                        result.Add(yearMonth);
+                        months.Add(yearMonth);
                     }
                 }
             }
-            return Json(result);
+            return months;
+        }
+
+        [HttpPost]
+        public JsonResult GetYearMonthList(ReportQueryData queryData)
+        {
+            ReportReturnData reportData = new ReportReturnData();
+            List<string> yearsName = queryData.YearsName;
+            List<string> monthsName = queryData.MonthsName;
+            DateTime startDate = Convert.ToDateTime(queryData.StartDate);
+            DateTime endDate = Convert.ToDateTime(queryData.EndDate);
+            List<string> departmentsCode = queryData.Departments;
+            List<string> categoriesName = queryData.Categories;
+
+            List<string> months = getMonths(yearsName, monthsName, startDate, endDate);
+            reportData.xaxis = months;
+            List<StationeryUsageViewModel> rawData = b.GetStationeryUsage("Completed", startDate, endDate, yearsName, monthsName, departmentsCode, categoriesName);
+
+            reportData.series = prepareData(departmentsCode, categoriesName, rawData);
+
+            return Json(reportData);
         }
     }
 }

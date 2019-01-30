@@ -915,7 +915,7 @@ namespace ADTeam5.BusinessLogic
         }
 
         //Get Stationery Usage of all selected disbursement lists
-        public List<StationeryUsageViewModel> GetStationeryUsage(string status, DateTime startDate, DateTime endDate, List<int> yearsName, List<int> monthsName, List<string> departmentsCode, List<string> categoriesName)
+        public List<StationeryUsageViewModel> GetStationeryUsage(string status, DateTime startDate, DateTime endDate, List<string> yearsName, List<string> monthsName, List<string> departmentsCode, List<string> categoriesName)
         {
             List<StationeryUsageViewModel> stationeryUsageViewModelList = new List<StationeryUsageViewModel>();
 
@@ -923,6 +923,7 @@ namespace ADTeam5.BusinessLogic
             var q = from rd in _context.RecordDetails
                     join dl in _context.DisbursementList on rd.Rrid equals dl.Dlid
                     where dl.Status == status
+                    orderby dl.CompleteDate ascending
                     select new { category = rd.ItemNumberNavigation.Category, rd.QuantityDelivered, dl.CompleteDate, dl.DepartmentCode };
 
             List<StationeryUsageViewModel> filterByDepAndCat = new List<StationeryUsageViewModel>();
@@ -959,7 +960,7 @@ namespace ADTeam5.BusinessLogic
                         foreach (var item in filterByDepAndCat)
                         {
                             int rowID = 1;
-                            if ( yearsName.Contains(item.Year) && monthsName.Contains(item.Month) )
+                            if ( yearsName.Contains(item.Year.ToString()) && monthsName.Contains(item.Month.ToString()) )
                             {
                                 StationeryUsageViewModel stationeryUsageViewModel = new StationeryUsageViewModel();
                                 stationeryUsageViewModel.Category = item.Category;
