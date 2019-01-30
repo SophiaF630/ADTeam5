@@ -52,4 +52,9 @@
     <PackageReference Include="SendGrid" Version="9.10.0" />
   </ItemGroup>
 
+
+  <ItemGroup>
+    <Folder Include="wwwroot\lib\Highcharts\" />
+  </ItemGroup>
+
 </Project>

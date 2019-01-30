@@ -65,8 +65,10 @@ namespace ADTeam5.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> StationeryUsage(string id)
+        public async Task<IActionResult> StationeryUsage(DateTime startdate, DateTime enddate, string[] yearsName, string[] monthsName, string[] departmentsName, string[] categoriesName)
         {
+
+
             return View();
         }
     }
