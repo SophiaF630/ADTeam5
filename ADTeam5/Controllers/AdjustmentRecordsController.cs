@@ -213,6 +213,7 @@ namespace ADTeam5.Controllers
             }
             return PartialView("_TempDetails", adjustmentRecordDetailsList);
 
+
         }
 
         //Create
