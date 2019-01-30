@@ -34,7 +34,6 @@ namespace ADTeam5.Controllers
             ADTeam5User user = await _userManager.GetUserAsync(HttpContext.User);
             List<string> identity = userCheck.checkUserIdentityAsync(user);
             int userID = user.WorkID;
-            //var sSISTeam5Context = _context.AdjustmentRecord.Include(a => a.clerkID == userID).Include(a => a.Manager).Include(a => a.Superviser);
 
             AdjustmentRecord ar = _context.AdjustmentRecord.FirstOrDefault(x => x.ClerkId == userID && !x.VoucherNo.Contains("Vtemp"));
             List<AdjustmentRecord> arList = new List<AdjustmentRecord>();

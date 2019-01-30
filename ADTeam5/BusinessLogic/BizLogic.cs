@@ -900,9 +900,12 @@ namespace ADTeam5.BusinessLogic
                     StationeryUsageViewModel stationeryUsageViewModel = new StationeryUsageViewModel();
                     stationeryUsageViewModel.RowID = rowID;
                     stationeryUsageViewModel.Category = item.category;
-                    stationeryUsageViewModel.DepCode = item.DepartmentCode;
                     stationeryUsageViewModel.QuantityDelivered = item.QuantityDelivered;
-
+                    stationeryUsageViewModel.CompleteDate = item.CompleteDate;
+                    stationeryUsageViewModel.Year = item.CompleteDate.Value.Year;
+                    stationeryUsageViewModel.Month = item.CompleteDate.Value.Month;
+                    stationeryUsageViewModel.DepCode = item.DepartmentCode;
+                    
                     stationeryUsageViewModelList.Add(stationeryUsageViewModel);
                     rowID++;
                 }

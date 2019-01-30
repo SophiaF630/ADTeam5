@@ -31,9 +31,34 @@ namespace ADTeam5.Controllers
             List<string> identity = userCheck.checkUserIdentityAsync(user);
             int userID = user.WorkID;
 
+            List<StationeryUsageViewModel> stationeryUsageViewModels = b.GetStationeryUsage("Completed");
 
+            //Viewbag for year and month dropdownlist, need to post back
+            List<int> years = new List<int>();
+            List<int> months = new List<int>() { 1,2,3,4,5,6,7,8,9,10,11,12};
+            var q = stationeryUsageViewModels.GroupBy(x => new { x.Year }).Select(y => new { year = y.Key.Year});
+            foreach (var item in q.ToList())
+            {
+                years.Add(item.year);
+            }
+            ViewBag.ListOfYear = years;
+            ViewBag.ListOfMonth = months;
 
-            List<StationeryUsageViewModel> completedDisbursementListDetails = b.GetStationeryUsage("Completed");
+            //Viewbag for department dropdownlist, need to post back   
+            var departments = _context.Department.ToList();
+            if(departments.Count != 0)
+            {
+                ViewBag.ListOfDepartment = departments.Select(x => new Department { DepartmentName = x.DepartmentName, DepartmentCode = x.DepartmentCode });
+            }
+
+            //Viewbag for category dropdownlist, need to post back   
+            List<string> categories = new List<string>();
+            var p = stationeryUsageViewModels.GroupBy(x => new { x.Category }).Select(y => new { category = y.Key.Category });
+            foreach (var item in p.ToList())
+            {
+                categories.Add(item.category);
+            }
+            ViewBag.ListOfCategory = categories;
 
             return View();
         }

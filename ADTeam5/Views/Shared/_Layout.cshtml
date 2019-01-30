@@ -255,7 +255,7 @@ desired effect
                                 </li>
                                 <!--delete it after finish-->
                                 <li>
-                                    <a class="nav-link text-white-" asp-area="" asp-controller="DisbursementLists" asp-action="Index"><i class="fa fa-list-ul"></i>Generate Reports</a>
+                                    <a class="nav-link text-white-" asp-area="" asp-controller="GenerateReports" asp-action="StationeryUsage"><i class="fa fa-list-ul"></i>Generate Reports</a>
                                 </li>
                             </ul>
                         </li>
@@ -517,7 +517,10 @@ desired effect
         <!-- REQUIRED JS SCRIPTS -->
         <!-- jQuery 3 -->
         <script src="~/plugins/jquery/dist/jquery.min.js"></script>
+        <!-- Popper -->
+        @*<script src="~/assets/vendor/popper/popper.min.js"></script>*@
         <!-- Bootstrap 3.3.7 -->
+        <script src="~/lib/bootstrap/bootstrap-multiselect.js"></script>
         <script src="~/plugins/bootstrap/dist/js/bootstrap.min.js"></script>
         <!-- DataTables -->
         <script src="~/plugins/datatables.net/js/jquery.dataTables.min.js"></script>

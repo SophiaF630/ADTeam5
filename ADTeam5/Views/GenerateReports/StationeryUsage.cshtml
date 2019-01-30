@@ -3,6 +3,10 @@
     ViewData["Title"] = "StationeryUsage";
 }
 
+<script src="~/plugins/jquery/dist/jquery.min.js"></script>
+<link href="~/lib/bootstrap/bootstrap-multiselect.css" rel="stylesheet" />
+<script src="~/lib/bootstrap/bootstrap-multiselect.js"></script>
+
 <h1>StationeryUsage</h1>
 
 <form asp-action="StationeryUsage" method="post">
@@ -12,13 +16,105 @@
 
         To:
         <input type="date" name="enddate" id="end" value=" = " />
+    </div>
+    <div>
+        Specific Year:
+        <select id="years" multiple="multiple" required name="yearsName">
+            @if (ViewBag.ListOfYear != null)
+            {
+                @foreach (var item in ViewBag.ListOfYear)
+                {
+                    @if (item != null)
+                    {
+                        <option value="@item">
+                            @item
+                        </option>}
+                }
+            }
+        </select>
 
-        Specific Year/Month
-        @*@foreach () {
-        <input type="checkbox" id="isChecked" name="isChecked" value="">
-        }*@
-        <input type="submit" value="Search" id="searchbtn" />
+        Specific Month:
+        <select id="months" multiple="multiple" required name="monthsName">
+            @if (ViewBag.ListOfMonth != null)
+            {
+                @foreach (var item in ViewBag.ListOfMonth)
+                {
+                    @if (item != null)
+                    {
+                        <option value="@item">
+                            @item
+                        </option>}
+                }
+            }
+        </select>
+    </div>
+    <div>
+        Select Department:
+        <select id="departments" multiple="multiple" required name="departmentsName">
+            @if (ViewBag.ListOfDepartment != null)
+            {
+                @foreach (var item in ViewBag.ListOfDepartment)
+                {
+                    @if (item != null)
+                    {
+                        <option value="@item.DepartmentCode">
+                            @item.DepartmentName
+                        </option>}
+                }
+            }
+        </select>
+
+        Select Category:
+        <select id="categories" multiple="multiple" required name="categoriesName">
+            @if (ViewBag.ListOfCategory != null)
+            {
+                @foreach (var item in ViewBag.ListOfCategory)
+                {
+                    @if (item != null)
+                    {
+                        <option value="@item">
+                            @item
+                        </option>}
+                }
+            }
+        </select>
+    </div>
+    <div>
+        <input type="submit" value="Generate" id="generatebtn" />
     </div>
 </form>
 
+<script>
+    $(function () {
+        $('#years').multiselect({
+            includeSelectAllOption: true
+        });
+    });
+</script>
+<script>
+    $(function () {
+        $('#months').multiselect({
+            includeSelectAllOption: true
+        });
+    });
+</script>
+<script>
+    $(function () {
+        $('#departments').multiselect({
+            includeSelectAllOption: true
+        });
+    });
+</script>
+<script>
+    $(function () {
+        $('#categories').multiselect({
+            includeSelectAllOption: true
+        });
+    });
+</script>
+<script>
+    $("#generatebtn").click(function () {
+        alert($("#month").val());
+    });
+</script>
 
