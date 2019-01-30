@@ -5,125 +5,157 @@
 }
 
 
-<div class="container">
+@*<div class="container">
     <div class="row">
-        <div class="col-12">
-            @if (Model.Count == 0)
-            {
-                <div class="row justify-content-center text-center">
-                    <div class="col-12 col-md-10 mt-5">
+        <div class="col-12">*@
+@if (Model.Count == 0)
+{
+    <div class="row justify-content-center text-center">
+        <div class="col-12 col-md-10 mt-5">
 
-                        <i class="fa fa-user fa-5x mb-5"></i>
+            <i class="fa fa-user fa-5x mb-5"></i>
 
-                        <h2>
-                            No Record Found
-                        </h2>
+            <h2>
+                No Record Found
+            </h2>
 
-                        <p class="text-muted">
-                            You do not have any adjustment record.
-                        </p>
+            <p class="text-muted">
+                You do not have any adjustment record.
+            </p>
 
-                        <a asp-action="Create" class="btn btn-lg btn-primary d-none d-md-inline-block mt-3">Create New</a>
+            <a asp-action="Create" class="btn btn-lg btn-primary d-none d-md-inline-block mt-3">Create New</a>
+        </div>
+    </div> <!-- / .row -->
+}
+
+else
+{
+    <!-- TABLE: Adjustment Record -->
+    <div class="row">
+        <div class="col-md-10">
+            <div class="box" style=" width:100%">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Adjustment Record</h3>
+                    <br />
+                    <div class="box-tools pull-right">
+                        <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
+                        <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
                     </div>
-                </div> <!-- / .row -->
-            }
-            else
-            {
-                <table id="TempAdjustmentRecord" class="table table-striped table-bordered" style="width: 100%;">
-                    <thead>
-                        <tr>
-                            <th>
-                                Voucher No
-                            </th>
-                            <th>
-                                Issue Date
-                            </th>
-                            <th>
-                                Approve Date
-                            </th>
-                            <th>
-                                Clerk Name
-                            </th>
-                            <th>
-                                Superviser Name
-                            </th>
-                            <th>
-                                Manager Name
-                            </th>
-                            <th>
-                                Status
-                            </th>
-                            <th></th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in Model)
-                        {
-                            <tr>
-                                <td width="10px">
-                                    <a asp-action="Details" asp-route-id="@item.VoucherNo"><u><strong>@Html.DisplayFor(modelItem => item.VoucherNo)</strong></u></a>
-                                </td>
-                                <td width="10px">
-                                    @Html.DisplayFor(modelItem => item.IssueDate)
-                                </td>
-                                <td width="10px">
-                                    @Html.DisplayFor(modelItem => item.ApproveDate)
-                                </td>
-                                <td width="10px">
-                                    @Html.DisplayFor(modelItem => item.Clerk.Name)
-                                </td>
-                                <td width="10px">
-                                    @Html.DisplayFor(modelItem => item.Manager.Name)
-                                </td>
-                                <td width="10px">
-                                    @Html.DisplayFor(modelItem => item.Superviser.Name)
-                                </td>
-                                <td width="10px">
-                                    @Html.DisplayFor(modelItem => item.Status)
-                                </td>
-                                @if (item.Status == "Draft")
+                </div>
+
+                <div class="box-body no-padding">
+                    <div class="table-responsive table-full-width">
+                        <table id="TempAdjustmentRecord" class="table no-margin table-hover table-striped table-responsive table-borderless" style="width: 100%;">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Voucher No
+                                    </th>
+                                    <th>
+                                        Issue Date
+                                    </th>
+                                    <th>
+                                        Approve Date
+                                    </th>
+                                    <th>
+                                        Clerk Name
+                                    </th>
+                                    <th>
+                                        Superviser Name
+                                    </th>
+                                    <th>
+                                        Manager Name
+                                    </th>
+                                    <th>
+                                        Status
+                                    </th>
+                                    <th></th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
                                 {
+                                    <tr>
+                                        <td width="15%">
+                                            <a asp-action="Details" asp-route-id="@item.VoucherNo"><u>@Html.DisplayFor(modelItem => item.VoucherNo)</u></a>
+                                        </td>
+                                        <td width="10%">
+                                            @Html.DisplayFor(modelItem => item.IssueDate)
+                                        </td>
+                                        <td width="15%">
+                                            @Html.DisplayFor(modelItem => item.ApproveDate)
+                                        </td>
+                                        <td width="15%">
+                                            @Html.DisplayFor(modelItem => item.Clerk.Name)
+                                        </td>
+                                        <td width="15%">
+                                            @Html.DisplayFor(modelItem => item.Manager.Name)
+                                        </td>
+                                        <td width="15%">
+                                            @Html.DisplayFor(modelItem => item.Superviser.Name)
+                                        </td>
+                                        <td width="15%">
+                                            @Html.DisplayFor(modelItem => item.Status)
+                                        </td>
 
-                                    @*<td>
-                                        <form asp-action="AdjustmentRecordSubmit" asp-route-id="@item.VoucherNo" method="post" data-ajax="true" data-ajax-update="#TempAdjustmentRecords" role="form" asp-controller="AdjustmentRecords">
-                                            <button type="submit" class="btn btn-primary" style="background-color: #00B894;width:68px;height:33px;border:2px;">
-                                                <font size="2">Submit</font>
-                                            </button>
-                                        </form>
+                                        @if (item.Status == "Draft")
+                                        {
 
-                                    </td>
-                                    <td width="10px">
+                                            @*<td>
+                                                    <form asp-action="AdjustmentRecordSubmit" asp-route-id="@item.VoucherNo" method="post" data-ajax="true" data-ajax-update="#TempAdjustmentRecords" role="form" asp-controller="AdjustmentRecords">
+                                                        <button type="submit" class="btn btn-primary" style="background-color: #00B894;width:68px;height:33px;border:2px;">
+                                                            <font size="2">Submit</font>
+                                                        </button>
+                                                    </form>
 
-                                    </td>*@
-                                    <td>
-                                        <form asp-action="AdjustmentRecordDelete" asp-route-id="@item.VoucherNo" method="post" data-ajax="true" data-ajax-update="#TempAdjustmentRecords" role="form" asp-controller="AdjustmentRecords">
-                                            <button type="submit" class="btn btn-sm btn-danger d-none d-md-inline-block" style="background-color: #dd4b39; width:68px;height:33px;border:2px; ">
-                                                <font size="2">Delete</font>
-                                            </button>
-                                        </form>
-                                    </td>
+                                                </td>
+                                                <td width="10px">
+
+                                                </td>*@
+                                            <td>
+                                                <form asp-action="AdjustmentRecordDelete" asp-route-id="@item.VoucherNo" method="post" data-ajax="true" data-ajax-update="#TempAdjustmentRecords" role="form" asp-controller="AdjustmentRecords">
+                                                    <button style="background-color:transparent; border:transparent">
+                                                        <i class="fa fa-trash-alt" style="color:#dc6460"></i>
+                                                    </button>
+    @*<button type="submit" class="btn btn-sm btn-danger d-none d-md-inline-block" style="background-color: #dd4b39; width:68px;height:33px;border:2px; ">
+                                                        <font size="2">Delete</font>
+                                                    </button>*@
+                                                </form>
+                                            </td>
+                                        }
+                                        else
+                                        {
+                                            @*<<<<<<< HEAD
+                                                                                    <td width="10px">
+                                                                                        <button type="submit" class="btn btn-primary" style="background-color:#99CCCC;width:68px;height:33px;border:2px;" disabled><font size="2">Submit</font></button>
+                                                                                    </td>                                                                        <td width="10px">
+                                                                                        <button type="submit" class="btn btn-sm btn-danger d-none d-md-inline-block" style="width:68px;height:33px;border:2px;" disabled><font size="2">Delete</font></button>
+                                                =======*@
+                                            @*<td><button type="submit" class="btn btn-primary" disabled>Submit</button></td>*@
+                                            <td>
+                                                @*<button type="submit" class="btn btn-sm btn-danger d-none d-md-inline-block" style="background-color: #dd4b39; width:68px;height:33px;border:2px;" disabled><font size="2">Delete</font></button>*@
+                                                <button style="background-color:transparent; border:transparent" disabled>
+                                                    <i class="fa fa-trash-alt" data-toggle="tooltip" title="You have submitted" style="color:#D0D3D4">
+                                                    </i>
+                                                    @*<span class="tooltiptext">Tooltip text</span>*@
+                                                </button>
+                                            </td>
+                                        }
+                                    </tr>
                                 }
-                                else
-                                {
-@*<<<<<<< HEAD
-                                    <td width="10px">
-                                        <button type="submit" class="btn btn-primary" style="background-color:#99CCCC;width:68px;height:33px;border:2px;" disabled><font size="2">Submit</font></button>
-                                    </td>
-                                    <td width="10px">
-                                        <button type="submit" class="btn btn-sm btn-danger d-none d-md-inline-block" style="width:68px;height:33px;border:2px;" disabled><font size="2">Delete</font></button>
-=======*@
-                                    @*<td><button type="submit" class="btn btn-primary" disabled>Submit</button></td>*@
-                                    <td>
-                                        <button type="submit" class="btn btn-sm btn-danger d-none d-md-inline-block" disabled>Delete</button>
-                                    </td>
-                                }
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            }
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-</div>
+}
 
+    <script>
+    $(document).ready(function(){
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+    </script>
