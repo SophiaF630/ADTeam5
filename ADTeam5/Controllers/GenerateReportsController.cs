@@ -63,42 +63,7 @@ namespace ADTeam5.Controllers
             }
             return View();
         }
-
-
-        //[HttpPost]
-        //public async Task<IActionResult> StationeryUsage(DateTime startDate, DateTime endDate, List<int> yearsName, List<int> monthsName, List<string> departmentsCode, List<string> categoriesName)
-        //{
-        //    //Validate start and end date
-        //    //ViewData["StartDate"] = startDate;
-        //    //ViewData["endDate"] = endDate;
-
-        //    //if (startDate != null && endDate != null)
-        //    //{
-        //    //    if (ModelState.IsValid)
-        //    //    {
-        //    //        if (startDate > endDate || endDate < startDate)
-        //    //        {
-        //    //            TempData["Alert1"] = "Start end error";
-        //    //            return RedirectToAction("StationeryUsage");
-
-        //    //        }
-        //    //        else
-        //    //        {
-        //    //            return View();
-        //    //        }
-
-        //    //    }
-        //    //    else
-        //    //    {
-        //    //        TempData["Alert2"] = "Please Fill in All Details!";
-        //    //        return RedirectToAction("StationeryUsage");
-        //    //    }
-        //    //}
-
-        //    List<StationeryUsageViewModel> stationeryUsageViewModelsList = b.GetStationeryUsage("Completed", startDate, endDate, yearsName, monthsName, departmentsCode, categoriesName);
-
-        //    return View(stationeryUsageViewModelsList);
-        //}
+      
 
         public class ReportQueryData
         {
@@ -150,7 +115,7 @@ namespace ADTeam5.Controllers
         public List<string> getMonths(List<string> yearsName, List<string> monthsName, DateTime startDate, DateTime endDate)
         {
             List<string> months = new List<string>();
-            if (yearsName.Count() == 0 || monthsName.Count() == 0)
+            if (yearsName == null || monthsName == null)
             {
                 int startDateYear = startDate.Year;
                 int startDateMonth = startDate.Month;
@@ -177,7 +142,7 @@ namespace ADTeam5.Controllers
                     }
                 }
             }
-            else if (yearsName.Count() != 0 && monthsName.Count() != 0)
+            else if (yearsName != null && monthsName != null)
             {
                 for (int i = 0; i < yearsName.Count(); i++)
                 {
