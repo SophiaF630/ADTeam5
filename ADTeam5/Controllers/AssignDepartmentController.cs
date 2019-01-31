@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Identity;
 using ADTeam5.Areas.Identity.Data;
 using ADTeam5.BusinessLogic;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 namespace ADTeam5.Controllers
 {
@@ -18,16 +19,18 @@ namespace ADTeam5.Controllers
         static string dept;
         static string role;
 
+        private readonly IEmailSender _emailSender;
         private readonly UserManager<ADTeam5User> _userManager;
         private readonly SSISTeam5Context context;
         DeptBizLogic b = new DeptBizLogic();
         readonly GeneralLogic userCheck;
 
-        public AssignDepartmentController(SSISTeam5Context context, UserManager<ADTeam5User> userManager)
+        public AssignDepartmentController(SSISTeam5Context context, UserManager<ADTeam5User> userManager, IEmailSender emailSender)
         {
             this.context = context;
             _userManager = userManager;
             userCheck = new GeneralLogic(context);
+            _emailSender = emailSender;
         }
 
         public async Task<IActionResult> Index()
@@ -65,14 +68,20 @@ namespace ADTeam5.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Index(User u)
+        public async Task<IActionResult> Index(User u)
         {
             if (ModelState.IsValid)
             {
-                Models.Department d2 = b.getDepartmentDetails(dept);                
+                Department d2 = new Department();
+                d2 = context.Department.Where(x => x.DepartmentCode == dept).First();
                 d2.RepId = u.UserId;
                 context.SaveChanges();
                 TempData["Alert1"] = "Department Representative Changed Successfully";
+
+                var q = context.User.Where(x => x.UserId == u.UserId).First();
+                string email = q.EmailAddress;
+                await _emailSender.SendEmailAsync(email, "Congratulations on New Appointment!", "You have been selected as department rep!");
+
                 return RedirectToAction("Index");
             }
             TempData["Alert2"] = "Please Try Again";
