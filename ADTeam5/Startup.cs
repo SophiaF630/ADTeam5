@@ -15,6 +15,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ADTeam5.Models;
 using ADTeam5.Areas.Identity.Data;
+using ADTeam5.Service;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 namespace ADTeam5
 {
@@ -47,6 +49,9 @@ namespace ADTeam5
 
             services.AddDefaultIdentity<ADTeam5User>()
                 .AddEntityFrameworkStores<ADTeam5UserContext>();
+
+            services.AddSingleton<IEmailSender, EmailSender>();
+            services.Configure<EmailOptions>(Configuration);
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
