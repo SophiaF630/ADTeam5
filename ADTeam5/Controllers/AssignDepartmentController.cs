@@ -69,7 +69,8 @@ namespace ADTeam5.Controllers
         {
             if (ModelState.IsValid)
             {
-                Models.Department d2 = b.getDepartmentDetails(dept);                
+                Department d2 = new Department();
+                d2 = context.Department.Where(x => x.DepartmentCode == dept).First();
                 d2.RepId = u.UserId;
                 context.SaveChanges();
                 TempData["Alert1"] = "Department Representative Changed Successfully";
