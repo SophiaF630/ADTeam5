@@ -25,6 +25,7 @@ namespace ADTeam5.Controllers
             userCheck = new GeneralLogic(context);
         }
 
+        //Stationery usage
         public async Task<IActionResult> StationeryUsage()
         {
             ADTeam5User user = await _userManager.GetUserAsync(HttpContext.User);
@@ -64,7 +65,7 @@ namespace ADTeam5.Controllers
             return View();
         }
       
-
+        //Data preparation
         public class ReportQueryData
         {
             public string StartDate { get; set; }
@@ -77,15 +78,15 @@ namespace ADTeam5.Controllers
 
         public class DepartmentData
         {
-            public string name { get; set; }
-            public string stack { get; set; }
-            public List<int> data { get; set; }
+            public string Name { get; set; }
+            public string Stack { get; set; }
+            public List<int> Data { get; set; }
         }
 
         public class ReportReturnData
         {
-            public List<string> xaxis { get; set; }
-            public List<DepartmentData> series { get; set; }
+            public List<string> Xaxis { get; set; }
+            public List<DepartmentData> Series { get; set; }
         }
 
         public List<DepartmentData> prepareData(List<string> departments, List<string> categories, List<StationeryUsageViewModel> rawData)
@@ -97,13 +98,13 @@ namespace ADTeam5.Controllers
                 foreach (string cat in categories)
                 {
                     DepartmentData depData = new DepartmentData();
-                    depData.name = dep + "/" + cat;
-                    depData.data = new List<int>();
-                    depData.stack = deptName;
+                    depData.Name = dep + "/" + cat;
+                    depData.Data = new List<int>();
+                    depData.Stack = deptName;
                     var q = rawData.Where(x => x.DepCode == dep && x.Category == cat);
                     foreach(var item in q)
                     {
-                        depData.data.Add(item.QuantityDelivered);
+                        depData.Data.Add(item.QuantityDelivered);
                     }
                     reportData.Add(depData);
                 }
@@ -112,7 +113,7 @@ namespace ADTeam5.Controllers
             return reportData;
         }
 
-        public List<string> getMonths(List<string> yearsName, List<string> monthsName, DateTime startDate, DateTime endDate)
+        public List<string> GetMonths(List<string> yearsName, List<string> monthsName, DateTime startDate, DateTime endDate)
         {
             List<string> months = new List<string>();
             if (yearsName == null || monthsName == null)
@@ -167,13 +168,55 @@ namespace ADTeam5.Controllers
             List<string> departmentsCode = queryData.Departments;
             List<string> categoriesName = queryData.Categories;
 
-            List<string> months = getMonths(yearsName, monthsName, startDate, endDate);
-            reportData.xaxis = months;
+            List<string> months = GetMonths(yearsName, monthsName, startDate, endDate);
+            reportData.Xaxis = months;
             List<StationeryUsageViewModel> rawData = b.GetStationeryUsage("Completed", startDate, endDate, yearsName, monthsName, departmentsCode, categoriesName);
 
-            reportData.series = prepareData(departmentsCode, categoriesName, rawData);
+            reportData.Series = prepareData(departmentsCode, categoriesName, rawData);
 
             return Json(reportData);
         }
+
+
+
+        //charge back
+        //public async Task<IActionResult> ChargeBack()
+        //{
+        //    ADTeam5User user = await _userManager.GetUserAsync(HttpContext.User);
+        //    List<string> identity = userCheck.checkUserIdentityAsync(user);
+        //    int userID = user.WorkID;
+
+        //    List<ChargeBackViewModel> chargeBackViewModels = b.GetChargeBack("Completed");
+        //    if (chargeBackViewModels.Count != 0)
+        //    {
+        //        //Viewbag for year and month dropdownlist, need to post back
+        //        List<int> years = new List<int>();
+        //        List<int> months = new List<int>() { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };
+        //        var q = chargeBackViewModels.GroupBy(x => new { x.Year }).Select(y => new { year = y.Key.Year });
+        //        foreach (var item in q.ToList())
+        //        {
+        //            years.Add(item.year);
+        //        }
+        //        ViewBag.ListOfYear = years;
+        //        ViewBag.ListOfMonth = months;
+
+        //        //Viewbag for department dropdownlist, need to post back   
+        //        var departments = _context.Department.ToList();
+        //        if (departments.Count != 0)
+        //        {
+        //            ViewBag.ListOfDepartment = departments.Select(x => new Department { DepartmentName = x.DepartmentName, DepartmentCode = x.DepartmentCode });
+        //        }
+
+        //        //Viewbag for category dropdownlist, need to post back   
+        //        List<string> categories = new List<string>();
+        //        var p = chargeBackViewModels.GroupBy(x => new { x.Category }).Select(y => new { category = y.Key.Category });
+        //        foreach (var item in p.ToList())
+        //        {
+        //            categories.Add(item.category);
+        //        }
+        //        ViewBag.ListOfCategory = categories;
+        //    }
+        //    return View();
+        //}
     }
 }
