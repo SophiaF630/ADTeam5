@@ -46,13 +46,13 @@ namespace ADTeam5.Models
         public string Supplier2 { get; set; }
         [StringLength(4)]
         public string Supplier3 { get; set; }
-        [DisplayFormat(ApplyFormatInEditMode = false, DataFormatString = "S{0:c}")]
+        [DisplayFormat(ApplyFormatInEditMode = false, DataFormatString = "S${0:0.00}")]
         [Range(0, 10000, ErrorMessage = "Price cannot be negative")]
         public decimal? Supplier1Price { get; set; }
-        [DisplayFormat(ApplyFormatInEditMode = false, DataFormatString = "S{0:c}")]
+        [DisplayFormat(ApplyFormatInEditMode = false, DataFormatString = "S${0:0.00}")]
         [Range(0, 10000, ErrorMessage = "Price cannot be negative")]
         public decimal? Supplier2Price { get; set; }
-        [DisplayFormat(ApplyFormatInEditMode = false, DataFormatString = "S{0:c}")]
+        [DisplayFormat(ApplyFormatInEditMode = false, DataFormatString = "S${0:0.00}")]
         [Range(0, 10000, ErrorMessage = "Price cannot be negative")]
         public decimal? Supplier3Price { get; set; }
         [ScaffoldColumn(false)]
