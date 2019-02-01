@@ -13,10 +13,10 @@
 <form asp-action="StationeryUsage" method="post">
     <div>
         @*From:
-        <input type="date" name="startDate" id="start" value="=" />
+            <input type="date" name="startDate" id="start" value="=" />
 
-        To:
-        <input type="date" name="endDate" id="end" value="=" />*@
+            To:
+            <input type="date" name="endDate" id="end" value="=" />*@
     </div>
     <div>
         Select Year:
@@ -82,7 +82,8 @@
     </div>
     <div>
         @*<input type="submit" value="Generate" id="generatebtn" />*@
-        <button type="button" class="btn btn-primary generatebtn">Generate
+        <button type="button" class="btn btn-primary generatebtn">
+            Generate
         </button>
     </div>
 </form>
@@ -120,29 +121,29 @@
 
 <!--for testing-->
 @*<script>
-    $("#generatebtn").click(function () {
-        alert($("#departments").val());
-    });
-</script>*@
+        $("#generatebtn").click(function () {
+            alert($("#departments").val());
+        });
+    </script>*@
 
 @*@if (TempData["Alert1"] != null)
-{
-    <div class="alert alert-success" role="alert">
-        <button type="button" class="close" data-dismiss="alert" aira-label="close">
-            <span aria-hidden="true">&times</span>
-        </button>
-        @TempData["Alert1"]
-    </div>
-}
-@if (TempData["Alert2"] != null)
-{
-    <div class="alert alert-danger" role="alert">
-        <button type="button" class="close" data-dismiss="alert" aira-label="close">
-            <span aria-hidden="true">&times</span>
-        </button>
-        @TempData["Alert2"]
-    </div>
-}*@
+    {
+        <div class="alert alert-success" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aira-label="close">
+                <span aria-hidden="true">&times</span>
+            </button>
+            @TempData["Alert1"]
+        </div>
+    }
+    @if (TempData["Alert2"] != null)
+    {
+        <div class="alert alert-danger" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aira-label="close">
+                <span aria-hidden="true">&times</span>
+            </button>
+            @TempData["Alert2"]
+        </div>
+    }*@
 
 <!--plot chart-->
 <script src="~/lib/Highcharts/highcharts.js"></script>
@@ -150,24 +151,24 @@
 <script src="~/lib/Highcharts/modules/export-data.js"></script>
 
 @*<script>
-    $(document).ready(function () {
-        $(".generatebtn").click(function () {
-            var yearsList = $("#years").map(function () {
-                return $(this).val();
-            }).get();
-            var monthsList = $("#months").map(function () {
-                return $(this).val();
-            }).get();
-            alert($("#years").val());
-            $.get("/GenerateReports/GetYearMonthList", { startDate: $("#start").val(), endDate: $("#end").val(), yearsName: yearsList, monthsName: monthsList }, function (data) {
-                $("#container").empty();
-                $.each(data, function (index, row) {
-                    $("#").append(row)
+        $(document).ready(function () {
+            $(".generatebtn").click(function () {
+                var yearsList = $("#years").map(function () {
+                    return $(this).val();
+                }).get();
+                var monthsList = $("#months").map(function () {
+                    return $(this).val();
+                }).get();
+                alert($("#years").val());
+                $.get("/GenerateReports/GetYearMonthList", { startDate: $("#start").val(), endDate: $("#end").val(), yearsName: yearsList, monthsName: monthsList }, function (data) {
+                    $("#container").empty();
+                    $.each(data, function (index, row) {
+                        $("#").append(row)
+                    });
                 });
-            });
-        })
-    });
-</script>*@
+            })
+        });
+    </script>*@
 
 <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 <script type="text/javascript">
@@ -208,7 +209,7 @@
                     },
 
                     title: {
-                        text: 'Total fruit consumtion, grouped by gender'
+                        text: 'Total stationery used for selected category, grouped by department'
                     },
                     //legend: {
                     //    enabled: false
@@ -240,13 +241,17 @@
                     },
                     series: chartData.series
                 });
+<<<<<<< HEAD
             }
 
-            
 
 
+
+=======
+            }            
+>>>>>>> 5ac44aa908bc7a7ef6ee6b9a58c2a030fbd81669
         })
     });
-    
+
 </script>
 

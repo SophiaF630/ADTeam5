@@ -920,42 +920,42 @@ namespace ADTeam5.BusinessLogic
             List<StationeryUsageViewModel> stationeryUsageViewModelList = new List<StationeryUsageViewModel>();
 
             //join disbursement lists and record details table
-            var q = from rd in _context.RecordDetails
+            var filterByStatus = from rd in _context.RecordDetails
                     join dl in _context.DisbursementList on rd.Rrid equals dl.Dlid
                     where dl.Status == status
                     orderby dl.CompleteDate ascending
-                    select new { category = rd.ItemNumberNavigation.Category, rd.QuantityDelivered, dl.CompleteDate, dl.DepartmentCode };
+                    select new { category = rd.ItemNumberNavigation.Category, rd.QuantityDelivered, dl.CompleteDate,
+                        year = dl.CompleteDate.Value.Year, month = dl.CompleteDate.Value.Month, dl.DepartmentCode };
+
+            var groupByYearMonth = filterByStatus.GroupBy( x => new { x.category, x.year, x.month, x.DepartmentCode })
+                .Select(x => new { Category = x.Key.category, Departmentcode = x.Key.DepartmentCode,
+                    Year = x.Key.year, Month = x.Key.month, Quantity = x.Sum(y=>y.QuantityDelivered)});
+
 
             List<StationeryUsageViewModel> filterByDepAndCat = new List<StationeryUsageViewModel>();
             List<StationeryUsageViewModel> filterByYearMonth = new List<StationeryUsageViewModel>();
-            if (q.ToList().Count != 0)
+            if (groupByYearMonth != null)
             {
                 //select department and category
-                if(departmentsCode.Count != 0 && categoriesName.Count != 0)
+                if(departmentsCode != null && categoriesName != null)
                 {
-                   foreach(var item in q.ToList())
+                   foreach(var item in groupByYearMonth.ToList())
                     {
                         int rowID = 1;
-                        if (departmentsCode.Contains(item.DepartmentCode) && categoriesName.Contains(item.category))
+                        if (departmentsCode.Contains(item.Departmentcode) && categoriesName.Contains(item.Category))
                         {
                             StationeryUsageViewModel stationeryUsageViewModel = new StationeryUsageViewModel();
-                            stationeryUsageViewModel.Category = item.category;
-                            stationeryUsageViewModel.QuantityDelivered = item.QuantityDelivered;
-                            stationeryUsageViewModel.CompleteDate = item.CompleteDate;
-                            stationeryUsageViewModel.Year = item.CompleteDate.Value.Year;
-                            stationeryUsageViewModel.Month = item.CompleteDate.Value.Month;
-                            stationeryUsageViewModel.DepCode = item.DepartmentCode;
+                            stationeryUsageViewModel.Category = item.Category;
+                            stationeryUsageViewModel.QuantityDelivered = item.Quantity;
+                            stationeryUsageViewModel.Year = item.Year;
+                            stationeryUsageViewModel.Month = item.Month;
+                            stationeryUsageViewModel.DepCode = item.Departmentcode;
 
                             filterByDepAndCat.Add(stationeryUsageViewModel);
                             rowID++;
                         }
                     }
-                    if (yearsName.Count == 0 || monthsName.Count == 0)
-                    {
-                        var filterByStartEnd = filterByDepAndCat.Where(x => x.CompleteDate >= startDate && x.CompleteDate <= endDate);
-                        stationeryUsageViewModelList = filterByStartEnd.ToList();
-                    }
-                    else if (yearsName.Count != 0 && monthsName.Count != 0)
+                    if (yearsName != null && monthsName != null)
                     {
                         foreach (var item in filterByDepAndCat)
                         {
@@ -965,9 +965,8 @@ namespace ADTeam5.BusinessLogic
                                 StationeryUsageViewModel stationeryUsageViewModel = new StationeryUsageViewModel();
                                 stationeryUsageViewModel.Category = item.Category;
                                 stationeryUsageViewModel.QuantityDelivered = item.QuantityDelivered;
-                                stationeryUsageViewModel.CompleteDate = item.CompleteDate;
-                                stationeryUsageViewModel.Year = item.CompleteDate.Value.Year;
-                                stationeryUsageViewModel.Month = item.CompleteDate.Value.Month;
+                                stationeryUsageViewModel.Year = item.Year;
+                                stationeryUsageViewModel.Month = item.Month;
                                 stationeryUsageViewModel.DepCode = item.DepCode;
 
                                 filterByYearMonth.Add(stationeryUsageViewModel);
