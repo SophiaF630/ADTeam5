@@ -45,7 +45,7 @@ namespace ADTeam5.Controllers
         // GET: Suppliers/Create
         public IActionResult Create()
         {
-            return View();
+            return View(new Supplier());
         }
 
         // POST: Suppliers/Create
@@ -53,13 +53,14 @@ namespace ADTeam5.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("SupplierCode,SupplierName,GstregistrationNo,TitleOfCourtesy,ContactName,PhoneNo,FaxNo,Address,City,PostalCode")] Supplier supplier)
+        public async Task<IActionResult> Create ([Bind("SupplierCode,SupplierName,GstregistrationNo,TitleOfCourtesy,ContactName,PhoneNo,FaxNo,Address,City,PostalCode")] Supplier supplier)
         {
             if (ModelState.IsValid)
             {
                 _context.Add(supplier);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
+
             }
             return View(supplier);
         }

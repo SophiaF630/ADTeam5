@@ -1,0 +1,249 @@
+﻿
+@{
+    ViewData["Title"] = "ChargeBack";
+}
+
+<script src="~/plugins/jquery/dist/jquery.min.js"></script>
+<link href="~/lib/bootstrap/bootstrap-multiselect.css" rel="stylesheet" />
+<script src="~/lib/bootstrap/bootstrap-multiselect.js"></script>
+
+
+<h1>ChargeBack</h1>
+
+<form asp-action="StationeryUsage" method="post">
+    <div>
+        @*From:
+            <input type="date" name="startDate" id="start" value="=" />
+
+            To:
+            <input type="date" name="endDate" id="end" value="=" />*@
+    </div>
+    <div>
+        Select Year:
+        <select id="years" multiple="multiple" required name="yearsName">
+            @if (ViewBag.ListOfYear != null)
+            {
+                @foreach (var item in ViewBag.ListOfYear)
+                {
+                    @if (item != null)
+                    {
+                        <option value="@item">
+                            @item
+                        </option>}
+                }
+            }
+        </select>
+
+        Select Month:
+        <select id="months" multiple="multiple" required name="monthsName">
+            @if (ViewBag.ListOfMonth != null)
+            {
+                @foreach (var item in ViewBag.ListOfMonth)
+                {
+                    @if (item != null)
+                    {
+                        <option value="@item">
+                            @item
+                        </option>}
+                }
+            }
+        </select>
+    </div>
+    <div>
+        Select Department:
+        <select id="departments" multiple="multiple" required name="departmentsCode">
+            @if (ViewBag.ListOfDepartment != null)
+            {
+                @foreach (var item in ViewBag.ListOfDepartment)
+                {
+                    @if (item != null)
+                    {
+                        <option value="@item.DepartmentCode">
+                            @item.DepartmentName
+                        </option>}
+                }
+            }
+        </select>
+
+        Select Category:
+        <select id="categories" multiple="multiple" required name="categoriesName">
+            @if (ViewBag.ListOfCategory != null)
+            {
+                @foreach (var item in ViewBag.ListOfCategory)
+                {
+                    @if (item != null)
+                    {
+                        <option value="@item">
+                            @item
+                        </option>}
+                }
+            }
+        </select>
+    </div>
+    <div>
+        @*<input type="submit" value="Generate" id="generatebtn" />*@
+        <button type="button" class="btn btn-primary generatebtn">
+            Generate
+        </button>
+    </div>
+</form>
+
+
+
+<script>
+    $(function () {
+        $('#years').multiselect({
+            includeSelectAllOption: true
+        });
+    });
+</script>
+<script>
+    $(function () {
+        $('#months').multiselect({
+            includeSelectAllOption: true
+        });
+    });
+</script>
+<script>
+    $(function () {
+        $('#departments').multiselect({
+            includeSelectAllOption: true
+        });
+    });
+</script>
+<script>
+    $(function () {
+        $('#categories').multiselect({
+            includeSelectAllOption: true
+        });
+    });
+</script>
+
+<!--for testing-->
+@*<script>
+        $("#generatebtn").click(function () {
+            alert($("#departments").val());
+        });
+    </script>*@
+
+@*@if (TempData["Alert1"] != null)
+    {
+        <div class="alert alert-success" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aira-label="close">
+                <span aria-hidden="true">&times</span>
+            </button>
+            @TempData["Alert1"]
+        </div>
+    }
+    @if (TempData["Alert2"] != null)
+    {
+        <div class="alert alert-danger" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aira-label="close">
+                <span aria-hidden="true">&times</span>
+            </button>
+            @TempData["Alert2"]
+        </div>
+    }*@
+
+<!--plot chart-->
+<script src="~/lib/Highcharts/highcharts.js"></script>
+<script src="~/lib/Highcharts/modules/exporting.js"></script>
+<script src="~/lib/Highcharts/modules/export-data.js"></script>
+
+@*<script>
+        $(document).ready(function () {
+            $(".generatebtn").click(function () {
+                var yearsList = $("#years").map(function () {
+                    return $(this).val();
+                }).get();
+                var monthsList = $("#months").map(function () {
+                    return $(this).val();
+                }).get();
+                alert($("#years").val());
+                $.get("/GenerateReports/GetYearMonthList", { startDate: $("#start").val(), endDate: $("#end").val(), yearsName: yearsList, monthsName: monthsList }, function (data) {
+                    $("#container").empty();
+                    $.each(data, function (index, row) {
+                        $("#").append(row)
+                    });
+                });
+            })
+        });
+    </script>*@
+
+<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(".generatebtn").click(function () {
+            var yearsList = $("#years").map(function () {
+                return $(this).val();
+            }).get();
+            var monthsList = $("#months").map(function () {
+                return $(this).val();
+            }).get();
+            var departmentList = $("#departments").map(function () {
+                return $(this).val();
+            }).get();
+            var categoryList = $("#categories").map(function () {
+                return $(this).val();
+            }).get();
+            var in_data = {
+                StartDate: $("#start").val(),
+                EndDate: $("#end").val(),
+                YearsName: yearsList,
+                MonthsName: monthsList,
+                Departments: departmentList,
+                Categories: categoryList
+            }
+            console.log(in_data);
+            $.post("/GenerateReports/GetYearMonthList", in_data, function (data) {
+                var chartData = data;
+                plotChart(chartData);
+
+            });
+
+            function plotChart(chartData) {
+                Highcharts.chart('container', {
+
+                    chart: {
+                        type: 'column'
+                    },
+
+                    title: {
+                        text: 'Total stationery used for selected category, grouped by department'
+                    },
+                    //legend: {
+                    //    enabled: false
+                    //},
+                    xAxis: {
+                        categories: chartData.xaxis
+                    },
+
+                    yAxis: {
+                        allowDecimals: false,
+                        min: 0,
+                        title: {
+                            text: 'Number of fruits'
+                        }
+                    },
+
+                    tooltip: {
+                        formatter: function () {
+                            return '<b>' + this.x + '</b><br/>' +
+                                this.series.name + ': ' + this.y + '<br/>' +
+                                'Total: ' + this.point.stackTotal;
+                        }
+                    },
+
+                    plotOptions: {
+                        column: {
+                            stacking: 'normal'
+                        }
+                    },
+                    series: chartData.series
+                });
+            }
+        })
+    });
+
+</script>
+

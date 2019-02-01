@@ -891,7 +891,7 @@ namespace ADTeam5.BusinessLogic
                     where dl.Status == status
                     select new { category = rd.ItemNumberNavigation.Category, rd.QuantityDelivered, dl.CompleteDate, dl.DepartmentCode };
 
-            if (q.ToList().Count != 0)
+            if (q != null)
             {
                 int rowID = 1;
                 foreach (var item in q.ToList())
@@ -915,7 +915,7 @@ namespace ADTeam5.BusinessLogic
         }
 
         //Get Stationery Usage of all selected disbursement lists
-        public List<StationeryUsageViewModel> GetStationeryUsage(string status, DateTime startDate, DateTime endDate, List<string> yearsName, List<string> monthsName, List<string> departmentsCode, List<string> categoriesName)
+        public List<StationeryUsageViewModel> GetStationeryUsage(string status, DateTime startDate, DateTime endDate, List<string> yearNames, List<string> monthNames, List<string> departmentCodes, List<string> categoryNames)
         {
             List<StationeryUsageViewModel> stationeryUsageViewModelList = new List<StationeryUsageViewModel>();
 
@@ -937,12 +937,12 @@ namespace ADTeam5.BusinessLogic
             if (groupByYearMonth != null)
             {
                 //select department and category
-                if(departmentsCode != null && categoriesName != null)
+                if(departmentCodes != null && categoryNames != null)
                 {
                    foreach(var item in groupByYearMonth.ToList())
                     {
                         int rowID = 1;
-                        if (departmentsCode.Contains(item.Departmentcode) && categoriesName.Contains(item.Category))
+                        if (departmentCodes.Contains(item.Departmentcode) && categoryNames.Contains(item.Category))
                         {
                             StationeryUsageViewModel stationeryUsageViewModel = new StationeryUsageViewModel();
                             stationeryUsageViewModel.Category = item.Category;
@@ -955,12 +955,12 @@ namespace ADTeam5.BusinessLogic
                             rowID++;
                         }
                     }
-                    if (yearsName != null && monthsName != null)
+                    if (yearNames != null && monthNames != null)
                     {
                         foreach (var item in filterByDepAndCat)
                         {
                             int rowID = 1;
-                            if ( yearsName.Contains(item.Year.ToString()) && monthsName.Contains(item.Month.ToString()) )
+                            if (yearNames.Contains(item.Year.ToString()) && monthNames.Contains(item.Month.ToString()) )
                             {
                                 StationeryUsageViewModel stationeryUsageViewModel = new StationeryUsageViewModel();
                                 stationeryUsageViewModel.Category = item.Category;
@@ -980,5 +980,115 @@ namespace ADTeam5.BusinessLogic
 
             return stationeryUsageViewModelList;
         }
-    }
+
+
+        //GetChargeBack
+        //public List<ChargeBackViewModel> GetChargeBack(string status)
+        //{
+        //    List<ChargeBackViewModel> chargeBackViewModelsList = new List<ChargeBackViewModel>();
+
+        //    //join disbursement lists and record details table
+        //    var q = from rd in _context.RecordDetails
+        //            join dl in _context.DisbursementList on rd.Rrid equals dl.Dlid
+        //            where dl.Status == status
+        //            select new { rd.ItemNumber, rd.QuantityDelivered, dl.CompleteDate, dl.DepartmentCode };
+
+        //    if (q != null)
+        //    {
+        //        int rowID = 1;
+        //        foreach (var item in q.ToList())
+        //        {
+        //            ChargeBackViewModel chargeBackViewModel = new ChargeBackViewModel();
+        //            decimal? Supplier1Price = _context.Catalogue.FirstOrDefault(x => x.ItemNumber == item.ItemNumber).Supplier1Price;
+
+        //            chargeBackViewModel.RowID = rowID;
+        //            chargeBackViewModel.Year = item.CompleteDate.Value.Year;
+        //            chargeBackViewModel.Month = item.CompleteDate.Value.Month;
+        //            chargeBackViewModel.DepCode = item.DepartmentCode;
+        //            chargeBackViewModel.TotalAmount = item.QuantityDelivered * Supplier1Price;
+
+        //            chargeBackViewModelsList.Add(chargeBackViewModel);
+        //            rowID++;
+        //        }
+        //    }
+
+        //    return chargeBackViewModelsList;
+        //}
+
+        //public List<ChargeBackViewModel> GetChargeBack(string status, DateTime startDate, DateTime endDate, List<string> yearNames, List<string> monthNames, List<string> departmentCodes)
+        //{
+        //    List<ChargeBackViewModel> chargeBackViewModelsList = new List<ChargeBackViewModel>();
+
+        //    //join disbursement lists and record details table
+        //    var filterByStatus = from rd in _context.RecordDetails
+        //                         join dl in _context.DisbursementList on rd.Rrid equals dl.Dlid
+        //                         where dl.Status == status
+        //                         orderby dl.CompleteDate ascending
+        //                         select new
+        //                         {
+        //                             itemNumber = rd.ItemNumber,
+        //                             rd.QuantityDelivered,
+        //                             dl.CompleteDate,
+        //                             year = dl.CompleteDate.Value.Year,
+        //                             month = dl.CompleteDate.Value.Month,
+        //                             dl.DepartmentCode
+        //                         };
+
+        //    var groupByYearMonth = filterByStatus.GroupBy(x => new { x.itemNumber, x.year, x.month, x.DepartmentCode })
+        //        .Select(x => new {
+        //            ItemNumber = x.Key.itemNumber,
+        //            Departmentcode = x.Key.DepartmentCode,
+        //            Year = x.Key.year,
+        //            Month = x.Key.month,
+        //            Quantity = x.Sum(y => y.QuantityDelivered)
+        //        });
+
+
+        //    List<ChargeBackViewModel> filterByDep = new List<ChargeBackViewModel>();
+        //    List<ChargeBackViewModel> filterByYearMonth = new List<ChargeBackViewModel>();
+        //    if (groupByYearMonth != null)
+        //    {
+        //        //select department and category
+        //        if (departmentCodes != null)
+        //        {
+        //            foreach (var item in groupByYearMonth.ToList())
+        //            {
+        //                int rowID = 1;
+        //                if (departmentCodes.Contains(item.Departmentcode))
+        //                {
+        //                    ChargeBackViewModel chargeBackViewModel = new ChargeBackViewModel();
+        //                    chargeBackViewModel.QuantityDelivered = item.Quantity;
+        //                    chargeBackViewModel.Year = item.Year;
+        //                    chargeBackViewModel.Month = item.Month;
+        //                    chargeBackViewModel.DepCode = item.Departmentcode;
+
+        //                    filterByDepAndCat.Add(chargeBackViewModel);
+        //                    rowID++;
+        //                }
+        //            }
+        //            if (yearNames != null && monthNames != null)
+        //            {
+        //                foreach (var item in filterByDepAndCat)
+        //                {
+        //                    int rowID = 1;
+        //                    if (yearNames.Contains(item.Year.ToString()) && monthNames.Contains(item.Month.ToString()))
+        //                    {
+        //                        ChargeBackViewModel chargeBackViewModel = new ChargeBackViewModel();
+        //                        chargeBackViewModel.QuantityDelivered = item.QuantityDelivered;
+        //                        chargeBackViewModel.Year = item.Year;
+        //                        chargeBackViewModel.Month = item.Month;
+        //                        chargeBackViewModel.DepCode = item.DepCode;
+
+        //                        filterByYearMonth.Add(chargeBackViewModel);
+        //                        rowID++;
+        //                    }
+        //                }
+        //                chargeBackViewModelsList = filterByYearMonth;
+        //            }
+        //        }
+        //    }
+        //    return chargeBackViewModelsList;
+        //}
+    }    
 }
+

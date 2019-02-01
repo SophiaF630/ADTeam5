@@ -22,7 +22,7 @@ namespace ADTeam5.Controllers
         readonly GeneralLogic userCheck;
 
         DeptBizLogic b = new DeptBizLogic();
-        static List<string> ItemNumberList= new List<string>();
+        static List<string> ItemNumberList = new List<string>();
         static List<string> ItemNameList = new List<string>();
         static List<int> QuantityList = new List<int>();
         static string id;
@@ -34,7 +34,7 @@ namespace ADTeam5.Controllers
             userCheck = new GeneralLogic(context);
         }
 
-        public async Task<IActionResult>Index()
+        public async Task<IActionResult> Index()
         {
             ADTeam5User user = await _userManager.GetUserAsync(HttpContext.User);
             userid = user.WorkID;
@@ -42,13 +42,28 @@ namespace ADTeam5.Controllers
             dept = identity[0];
             role = identity[1];
 
-            List<Catalogue> catalogueList = new List<Catalogue>();
-            catalogueList = (from x in context.Catalogue select x).ToList();
-            catalogueList.Insert(0, new Catalogue { ItemNumber = "0", ItemName = "Select" });
-            ViewBag.ListofCatalogueName = catalogueList;
-
-            if(ItemNumberList.Count >0)
+            List<Catalogue> categoryList = new List<Catalogue>();
+            var q = context.Catalogue.GroupBy(x => new { x.Category }).Select(x => x.FirstOrDefault());
+            foreach (var item in q)
             {
+                categoryList.Add(item);
+            }
+            categoryList.Insert(0, new Catalogue { ItemNumber = "0", Category = "---Select Category---" });
+            ViewBag.ListofCategory = categoryList;
+
+            List<Catalogue> itemNameList = new List<Catalogue>();
+            itemNameList = (from x in context.Catalogue select x).ToList();
+            itemNameList.Insert(0, new Catalogue { ItemNumber = "0", ItemName = "---Select Item---" });
+            ViewBag.ListofItemName = itemNameList;
+
+            //List<Catalogue> catalogueList = new List<Catalogue>();
+            //catalogueList = (from x in context.Catalogue select x).ToList();
+            //catalogueList.Insert(0, new Catalogue { ItemNumber = "0", ItemName = "Select" });
+            //ViewBag.ListofCatalogueName = catalogueList;
+
+            if (ItemNumberList.Count > 0)
+            {
+                ViewBag.ItemNumberList = ItemNumberList;
                 ViewBag.ItemNameList = ItemNameList;
                 ViewBag.QuantityList = QuantityList;
                 ViewData["SubmitButton"] = true;
@@ -57,7 +72,7 @@ namespace ADTeam5.Controllers
             {
                 ViewData["SubmitButton"] = null;
             }
-            
+
             return View();
         }
 
@@ -72,11 +87,11 @@ namespace ADTeam5.Controllers
             bool itemExists = false;
             string ItemNumber = itemNumber;
 
-            if(ItemNameList != null)
+            if (ItemNameList != null)
             {
-                for(int i = 0; i < ItemNumberList.Count; i++)
+                for (int i = 0; i < ItemNumberList.Count; i++)
                 {
-                    if(ItemNumberList[i].Equals(itemNumber))
+                    if (ItemNumberList[i].Equals(itemNumber))
                     {
                         itemExists = true;
                         QuantityList[i] = QuantityList[i] + quantity;
@@ -89,7 +104,7 @@ namespace ADTeam5.Controllers
                 }
             }
 
-            if(itemExists ==false)
+            if (itemExists == false)
             {
                 ItemNumberList.Add(ItemNumber);
 
@@ -109,8 +124,8 @@ namespace ADTeam5.Controllers
             return RedirectToAction("Index");
         }
 
-       [HttpGet]
-        public IActionResult Details (string id)
+        [HttpGet]
+        public IActionResult Details(string id)
         {
             ViewData["RRID"] = id;
             var q = context.RecordDetails.Where(x => x.Rrid == id);
@@ -123,37 +138,90 @@ namespace ADTeam5.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Submit()
         {
-                // Make new EmployeeRequestRecord
-                Models.EmployeeRequestRecord e = new Models.EmployeeRequestRecord();
-                id = b.IDGenerator(dept);
-                DateTime requestDate = DateTime.Now.Date;
-                int empId = userid;
-                var findHeadId= context.Department.Where(x => x.DepartmentCode == dept).First();
-                int headId = findHeadId.HeadId;
-                string deptCode = dept; 
-                string status = "Submitted";
-                e.Rrid = id;
-                e.RequestDate = requestDate;
-                e.DepEmpId = empId;
-                e.DepHeadId = headId;
-                e.DepCode = deptCode;
-                e.Status = status;
-                context.EmployeeRequestRecord.Add(e);
-                context.SaveChanges();
+            // Make new EmployeeRequestRecord
+            Models.EmployeeRequestRecord e = new Models.EmployeeRequestRecord();
+            id = b.IDGenerator(dept);
+            DateTime requestDate = DateTime.Now.Date;
+            int empId = userid;
+            var findHeadId = context.Department.Where(x => x.DepartmentCode == dept).First();
+            int headId = findHeadId.HeadId;
+            string deptCode = dept;
+            string status = "Submitted";
+            e.Rrid = id;
+            e.RequestDate = requestDate;
+            e.DepEmpId = empId;
+            e.DepHeadId = headId;
+            e.DepCode = deptCode;
+            e.Status = status;
+            context.EmployeeRequestRecord.Add(e);
+            context.SaveChanges();
 
-                //Make new Record Details
-                for (int k = 0; k< QuantityList.Count; k++)
-                {
-                    Models.RecordDetails r = new Models.RecordDetails();
-                    r.Rrid = id;
-                    r.ItemNumber = ItemNumberList[k];
-                    r.Quantity = QuantityList[k];
+            //Make new Record Details
+            for (int k = 0; k < QuantityList.Count; k++)
+            {
+                Models.RecordDetails r = new Models.RecordDetails();
+                r.Rrid = id;
+                r.ItemNumber = ItemNumberList[k];
+                r.Quantity = QuantityList[k];
                 context.RecordDetails.Add(r);
-                    context.SaveChanges();
-                }
+                context.SaveChanges();
+            }
             return RedirectToAction("Details", new { id });
         }
 
+        [HttpPost]
+        public async Task<IActionResult> ItemDelete(string itemNumber)
+        {
+            ADTeam5User user = await _userManager.GetUserAsync(HttpContext.User);
+            userid = user.WorkID;
+            List<string> identity = userCheck.checkUserIdentityAsync(user);
+            dept = identity[0];
+            role = identity[1];
 
+            string deleteItemNumber = itemNumber;
+
+            for (int i = 0; i < ItemNumberList.Count; i++)
+            {
+                if (ItemNumberList[i] == (deleteItemNumber))
+                {
+                    ItemNumberList.RemoveAt(i);
+                    ItemNameList.RemoveAt(i);
+                    QuantityList.RemoveAt(i);
+                    break;
+                }
+                else
+                {
+                    continue;
+                }
+            }
+
+            List<Catalogue> categoryList = new List<Catalogue>();
+            var q = context.Catalogue.GroupBy(x => new { x.Category }).Select(x => x.FirstOrDefault());
+            foreach (var item in q)
+            {
+                categoryList.Add(item);
+            }
+            categoryList.Insert(0, new Catalogue { ItemNumber = "0", Category = "---Select Category---" });
+            ViewBag.ListofCategory = categoryList;
+
+            List<Catalogue> itemNameList = new List<Catalogue>();
+            itemNameList = (from x in context.Catalogue select x).ToList();
+            itemNameList.Insert(0, new Catalogue { ItemNumber = "0", ItemName = "---Select Item---" });
+            ViewBag.ListofItemName = itemNameList;
+
+            if (ItemNumberList.Count > 0)
+            {
+                ViewBag.ItemNumberList = ItemNumberList;
+                ViewBag.ItemNameList = ItemNameList;
+                ViewBag.QuantityList = QuantityList;
+                ViewData["SubmitButton"] = true;
+            }
+            else
+            {
+                ViewData["SubmitButton"] = null;
+            }
+            return RedirectToAction("Index");
+
+        }
     }
 }
