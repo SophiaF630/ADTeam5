@@ -38,14 +38,11 @@
                                     @Html.DisplayNameFor(model => model.SupplierCode)
                                 </th>
                                 <th>
-                                    Supplier Name@*@Html.DisplayNameFor(model => model.SupplierName)*@
+                                    @Html.DisplayNameFor(model => model.SupplierName)
                                 </th>
-                                <th>
+                                @*<th>
                                     @Html.DisplayNameFor(model => model.GstregistrationNo)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.TitleOfCourtesy)
-                                </th>
+                                </th>*@
                                 <th>
                                     @Html.DisplayNameFor(model => model.ContactName)
                                 </th>
@@ -72,8 +69,7 @@
                         <tbody>
                             @foreach (var item in Model)
                             {
-                            <tr>
-                                <<<<<<< HEAD
+                            <tr>                                
                                 <td>
                                     @Html.DisplayFor(modelItem => item.SupplierCode)
                                 </td>
