@@ -75,8 +75,13 @@
                                 Supplier1 Price@*@Html.DisplayNameFor(model => model.Supplier1Price)*@
                             </th>
 
+<<<<<<< HEAD
                             <th>
                                 Supplier2@*@Html.DisplayNameFor(model => model.Supplier2Navigation)*@
+=======
+                            @*<th>
+                                @Html.DisplayNameFor(model => model.Supplier2Navigation)
+>>>>>>> 5ac44aa908bc7a7ef6ee6b9a58c2a030fbd81669
                             </th>
                             <th>
                                 Supplier2 Price@*@Html.DisplayNameFor(model => model.Supplier2Price)*@
@@ -88,9 +93,15 @@
                                 Supplier3 Price@*@Html.DisplayNameFor(model => model.Supplier3Price)*@
                             </th>
 
+<<<<<<< HEAD
                             @*<th>
                                     @Html.DisplayNameFor(model => model.Location)
                                 </th>*@
+=======
+                            <th>
+                                @Html.DisplayNameFor(model => model.Location)
+                            </th>*@
+>>>>>>> 5ac44aa908bc7a7ef6ee6b9a58c2a030fbd81669
 
                             <th></th>
                             <th></th>
@@ -100,6 +111,7 @@
                     <tbody>
                         @foreach (var item in Model)
                         {
+<<<<<<< HEAD
                             <tr>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.ItemNumber)
@@ -172,6 +184,58 @@
                                     @*<a asp-action="Delete" asp-route-id="@item.ItemNumber">Delete</a>*@
                                 </td>
                             </tr>
+=======
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ItemNumber)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Category)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ItemName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ReorderLevel)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ReorderQty)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.UnitOfMeasure)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Stock)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Supplier1Navigation.SupplierCode)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Supplier1Price)
+                            </td>
+                            @*<td>
+                                @Html.DisplayFor(modelItem => item.Supplier2Navigation.SupplierCode)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Supplier2Price)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Supplier3Navigation.SupplierCode)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Supplier3Price)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Location)
+                            </td>*@
+
+                            <td>
+                                <a asp-action="Edit" asp-route-id="@item.ItemNumber">Edit</a> |
+                                <a asp-action="Details" asp-route-id="@item.ItemNumber">Details</a> |
+                                <a asp-action="Delete" asp-route-id="@item.ItemNumber">Delete</a>
+                            </td>
+                        </tr>
+>>>>>>> 5ac44aa908bc7a7ef6ee6b9a58c2a030fbd81669
                         }
                     </tbody>
                 </table>
