@@ -49,6 +49,34 @@ namespace ADTeam5.Controllers
             return View(catalogue);
         }
 
+        // GET: Catalogues/Create
+        public IActionResult Create()
+        {
+            ViewData["Supplier1"] = new SelectList(_context.Supplier, "SupplierCode", "SupplierCode");
+            ViewData["Supplier2"] = new SelectList(_context.Supplier, "SupplierCode", "SupplierCode" );
+            ViewData["Supplier3"] = new SelectList(_context.Supplier, "SupplierCode", "SupplierCode");
+            return View(new Catalogue());
+        }
+
+        // POST: Suppliers/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("ItemNumber,Category,ItemName,ReorderLevel,ReorderQty,UnitOfMeasure,Stock,Out,Supplier1,Supplier2,Supplier3,Supplier1Price,Supplier2Price,Supplier3Price")] Catalogue catalogue)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Add(catalogue);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+
+            }
+            return View(catalogue);
+        }
+
+
+
         //// GET: Catalogues/Create
         //public IActionResult Create()
         //{
@@ -77,20 +105,20 @@ namespace ADTeam5.Controllers
         //    return View(catalogue);
         //}
 
-        // GET: Catalogues/Create
-        public IActionResult Create()
-        {
-            List<Supplier> supplierList = new List<Supplier>();
-            supplierList = _context.Supplier.ToList();
-            supplierList.Insert(0, new Supplier { SupplierCode = "0", SupplierName = "Select" });
-            ViewBag.ListofSupplier = supplierList;
+        //GET: Catalogues/Create
+        //public IActionResult Create()
+        //{
+        //    List<Supplier> supplierList = new List<Supplier>();
+        //    supplierList = _context.Supplier.ToList();
+        //    supplierList.Insert(0, new Supplier { SupplierCode = "0", SupplierName = "Select" });
+        //    ViewBag.ListofSupplier = supplierList;
 
-            List<Catalogue> catalogueList = new List<Catalogue>();
-            catalogueList = (from x in _context.Catalogue select x).ToList();
-            catalogueList.Insert(0, new Catalogue { ItemNumber = "0", Category = "Select" });
-            ViewBag.ListofCatalogue = catalogueList;
-            return View();
-        }
+        //    List<Catalogue> catalogueList = new List<Catalogue>();
+        //    catalogueList = (from x in _context.Catalogue select x).ToList();
+        //    catalogueList.Insert(0, new Catalogue { ItemNumber = "0", Category = "Select" });
+        //    ViewBag.ListofCatalogue = catalogueList;
+        //    return View();
+        //}
 
         //// POST: Catalogues/Create
         //// To protect from overposting attacks, please enable the specific properties you want to bind to, for 
