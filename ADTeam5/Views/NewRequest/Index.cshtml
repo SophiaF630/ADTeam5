@@ -1,103 +1,37 @@
 ﻿@model ADTeam5.ViewModels.TemporaryRecordDetails
 
 @{
-    ViewData["Title"] = "NewRequest";
+    ViewData["Title"] = "Index";
 }
-    <div class="box">
 
-        <div class="box-header">
-            <div align="center">
-                <div style="width: 400px; padding: 20px; margin: 20px; border-style:outset; border-width:1px">
+@*<h1>Items to be added to voucher</h1>*@
+<section class="content">
+    <div class="row">
+        <div class="col-lg-12">
+            @*<div class="box">
+                <div class="box-header">
                     <div align="center" vertical-align="middle">
-                        <h1 class="box-title">
-                            <strong><font size="5">New Request</font></strong>
-                        </h1>
+                        <div style="width: 400px;padding: 20px;margin: 20px;border-style:outset; border-width:1px; ">
+                            <div align="center" vertical-align="middle">
+                                <h1 class="box-title">
+                                    <strong><font size="5">Items to be added to voucher</font></strong>
+                                </h1>
+                            </div>
+                            <div class="box-tools">
+                            </div>
+                        </div>
+                    </div>*@
+
+
+            <div class="container">
+                <div class="row">
+                    <div class="col">
+                        <div id="NewRequest">
+                            <partial name="_NewRequest" model="Model" />
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6">
-
-
-                    @{
-                        <form asp-controller="NewRequest" asp-action="AddItem" method="post" class="form-horizontal" role="form">
-
-                            <div class="form-group">
-                                <label>Item Name</label>
-                                <select asp-for="ItemNumber" class="form-control" asp-items="@(new SelectList(ViewBag.ListofCatalogueName, "ItemNumber", "ItemName"))"></select>
-                            </div>
-
-                            <div class="form-group">
-                                <label> Quantity</label>
-                                @Html.EditorFor(model => model.Quantity, new { htmlAttributes = new { @min = 1, @max = 999, @class = "form-control left-border-none", @id = "Quantity" } })
-                            </div>
-
-                            <div class="form-group">
-                                <input type="submit" value="Add Item" class="btn btn-primary" />
-                            </div>
-
-                        </form>
-
-                    }
-                </div>
-            </div>
-        </div>
     </div>
-  
-
-
-    @if (ViewBag.ItemNameList != null && ViewBag.QuantityList != null)
-    {
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>
-                        <ul>Item Name</ul>
-                    </th>
-                    <th>
-                        <ul>Quantity</ul>
-                    </th>
-
-                    <th></th>
-                </tr>
-            </thead>
-
-            <tbody>
-
-                <tr>
-
-                    <td>
-                        @foreach (var item in ViewBag.ItemNameList)
-                        {
-                            <ul>@item</ul>
-                        }
-                    </td>
-
-                    <td>
-                        @foreach (var item in ViewBag.QuantityList)
-                        {
-                            <ul>@item</ul>
-
-                        }
-                    </td>
-                    @*<td>
-                            <a asp-action="Edit" asp-route-id="@ViewBag.ItemNameList">Edit</a> |
-                            <a asp-action="Delete" asp-route-id="@ViewBag.ItemNameList">Delete</a>
-                        </td>*@
-                </tr>
-
-            </tbody>
-        </table>
-    }
-
-    @if (ViewData["SubmitButton"] != null)
-    {
-        <form asp-action="Submit" method="post">
-            <div class="form-group">
-                <input type="submit" value="Submit Request" class="btn btn-info" />
-            </div>
-        </form>
-
-    }
+</section>
