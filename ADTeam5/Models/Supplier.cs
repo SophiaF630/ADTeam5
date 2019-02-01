@@ -16,30 +16,36 @@ namespace ADTeam5.Models
             CatalogueSupplier3Navigation = new HashSet<Catalogue>();
             PurchaseOrderRecord = new HashSet<PurchaseOrderRecord>();
         }
-
+        [Required]
         [Display(Name = "Code")]
         public string SupplierCode { get; set; }
+        [Required]
         [Display(Name = "Supplier")]
         [StringLength(50)]
         public string SupplierName { get; set; }
+        [Required]
         [StringLength(12)]
         public string GstregistrationNo { get; set; }
+        [Required]
         [StringLength(5)]
         public string TitleOfCourtesy { get; set; }
+        [Required]
         [Display(Name = "Contact Name")]
         [StringLength(50)]
         public string ContactName { get; set; }
+        [Required]
         [Display(Name = "Contact No.")]
-        [MaxLength(10)]
         public int PhoneNo { get; set; }
+        [Required]
         [Display(Name = "Fax No.")]
-        [MaxLength(10)]
         public int? FaxNo { get; set; }
+        [Required]
         [StringLength(250)]
         public string Address { get; set; }
+        [Required]
         [StringLength(50)]
         public string City { get; set; }
-        [MaxLength(10)]
+        [Required]
         public int? PostalCode { get; set; }
 
         public virtual ICollection<Catalogue> CatalogueSupplier1Navigation { get; set; }
