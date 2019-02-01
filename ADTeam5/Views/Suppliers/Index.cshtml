@@ -72,71 +72,66 @@
                         <tbody>
                             @foreach (var item in Model)
                             {
-                                <tr>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.SupplierCode)
-                                    </td>
+                            <tr>
+                                <<<<<<< HEAD
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.SupplierCode)
+                                </td>
 
-                                    <td>
-                                        <div style="width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">
-                                            @Html.DisplayFor(modelItem => item.SupplierName)
-                                        </div>
-
-                                    </td>
-
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.GstregistrationNo)
-                                    </td>
-                                    <td>
+                                <td>
+                                    <div style="width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">
+                                        @Html.DisplayFor(modelItem => item.SupplierName)
+                                    </div>
+                                </td>
+                                <td>
+                                    <div style="width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">
                                         @Html.DisplayFor(modelItem => item.TitleOfCourtesy)
-                                    </td>
-                                    <td>
                                         @Html.DisplayFor(modelItem => item.ContactName)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.PhoneNo)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.FaxNo)
-                                    </td>
+                                    </div>
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.PhoneNo)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.FaxNo)
+                                </td>
 
-                                    <td style="width:35%">
-                                        <div style="width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">
-                                            @Html.DisplayFor(modelItem => item.Address)
-                                        </div>
-                                    </td>
-
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.City)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.PostalCode)
-                                    </td>
-                                    <td>
-                                        <button type="button" class="btn btn-primary" style="background-color:transparent;border:transparent">
-                                            <a asp-action="Edit" asp-route-id="@item.SupplierCode">
-                                                <i class="fa fa-edit" style="color:#66B3B3"></i>
-                                            </a>
-                                        </button>
-                                        @*<a asp-action="Edit" asp-route-id="@item.SupplierCode"><button class="btn btn-primary" style="width:70px;height:30px;border:2px; background-color:#3c8dbc">Edit</button></a>*@
-                                    </td>
-                                    <td>
-                                        <button type="button" class="btn btn-primary" style="background-color:transparent;border:transparent">
-                                            <a asp-action="Details" asp-route-id="@item.SupplierCode">
-                                                <i class="fa fa-list-alt" data-toggle="tooltip" title="View Details" style="color:#666666"></i>
-                                            </a>
-                                        </button>
-                                        @*<a asp-action="Details" asp-route-id="@item.SupplierCode"><button class="btn btn-primary" style="width:70px;height:30px;border:2px; background-color:#3c8dbc">Details</button></a>*@
-                                    </td>
-                                    <td>
-                                        <button type="button" class="btn btn-primary" style="background-color:transparent;border:transparent">
-                                            <a asp-action="Delete" asp-route-id="@item.SupplierCode">
-                                                <i class="fa fa-trash-alt" style="color:#dc6460"></i>
-                                            </a>
-                                        </button>
-                                        @*<a asp-action="Delete" asp-route-id="@item.SupplierCode"><button class="btn btn-primary" style="width:70px;height:30px;border:2px; background-color:#3c8dbc">Delete</button></a>*@
-                                    </td>
-                                </tr>
+                                <td style="width:35%">
+                                    <div style="width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">
+                                        @Html.DisplayFor(modelItem => item.Address)
+                                    </div>
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.City)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.PostalCode)
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-primary" style="background-color:transparent;border:transparent">
+                                        <a asp-action="Edit" asp-route-id="@item.SupplierCode">
+                                            <i class="fa fa-edit" style="color:#66B3B3"></i>
+                                        </a>
+                                    </button>
+                                    @*<a asp-action="Edit" asp-route-id="@item.SupplierCode"><button class="btn btn-primary" style="width:70px;height:30px;border:2px; background-color:#3c8dbc">Edit</button></a>*@
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-primary" style="background-color:transparent;border:transparent">
+                                        <a asp-action="Details" asp-route-id="@item.SupplierCode">
+                                            <i class="fa fa-list-alt" data-toggle="tooltip" title="View Details" style="color:#666666"></i>
+                                        </a>
+                                    </button>
+                                    @*<a asp-action="Details" asp-route-id="@item.SupplierCode"><button class="btn btn-primary" style="width:70px;height:30px;border:2px; background-color:#3c8dbc">Details</button></a>*@
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-primary" style="background-color:transparent;border:transparent">
+                                        <a asp-action="Delete" asp-route-id="@item.SupplierCode">
+                                            <i class="fa fa-trash-alt" style="color:#dc6460"></i>
+                                        </a>
+                                    </button>
+                                    @*<a asp-action="Delete" asp-route-id="@item.SupplierCode"><button class="btn btn-primary" style="width:70px;height:30px;border:2px; background-color:#3c8dbc">Delete</button></a>*@
+                                </td>
+                            </tr>
                             }
                         </tbody>
                     </table>

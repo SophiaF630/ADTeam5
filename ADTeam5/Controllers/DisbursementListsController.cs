@@ -215,7 +215,7 @@ namespace ADTeam5.Controllers
                     
                     //update disbursement list status
                     var disbursementList = _context.DisbursementList.Find(id);
-                    disbursementList.Status = "Delivered";
+                    disbursementList.Status = "Completed";
                     disbursementList.CompleteDate = DateTime.Now;
                     _context.DisbursementList.Update(disbursementList);
                     _context.SaveChanges();
