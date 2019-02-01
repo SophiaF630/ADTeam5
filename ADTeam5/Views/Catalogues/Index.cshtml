@@ -4,14 +4,25 @@
     ViewData["Title"] = "Index";
 }
 @*<div align="center" vertical-align="middle">
-    <h1>Catalogues</h1>
-</div>*@
+        <h1>Catalogues</h1>
+    </div>*@
+<script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<link href="~/plugins/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet" />
 
-<p>
-    <div align="right" vertical-align="right">
+
+<style>
+    #Catalogues {
+        white-space: nowrap;
+    }
+</style>
+
+
+
+@*<div align="right" vertical-align="right">
         <button><a asp-action="Create">Create New</a></button>
-    </div>
-</p>
+    </div>*@
+
 <!-- Main content -->
 @*<section class="content">
     <div class="row">
@@ -19,45 +30,50 @@
             <div class="box">
                 <div class="box-header with-border">*@
 <div class="row">
-    <div class="col-md-12">
+    <div class="col-lg-12">
         <div class="box">
             <div class="box-header with-border">
-                <h3 class="box-title"><strong>Catalogues Information</strong></h3>
+                <h3 class="box-title">
+                    Catalogues Information
+                    <button type="button" class="btn btn-primary createNew" style="width:120px;height:32px;border:2px;margin-left:680px; background-color:#00B894">
+                        <i class='fas fa-plus' style='font-size:14px'></i> <a asp-action="Create"><font color="white">&nbsp;&nbsp;Create New</font></a>
+                    </button>
+                </h3>
             </div>
+            <br />
             <!-- /.box-header -->
             <div class="box-body table-responsive no-padding">
-                <table id="Catalogues" class="table table-hover">
+                <table id="Catalogues" class="table table-bordered table-striped table-condensed table-hover">
                     <thead>
                         <tr>
                             @*<th>
-                                @Html.DisplayNameFor(model => model.ItemNumber)
-                            </th>*@
-                            <th style="width: 10px">No.</th>
+                                    @Html.DisplayNameFor(model => model.ItemNumber)
+                                </th>*@
+                            <th>No.</th>
                             <th>
                                 @Html.DisplayNameFor(model => model.Category)
                             </th>
                             <th>
-                                Name@*@Html.DisplayNameFor(model => model.ItemName)*@
+                                Name
                             </th>
                             <th>
-                                ReLevel@*@Html.DisplayNameFor(model => model.ReorderLevel)*@
+                                @Html.DisplayNameFor(model => model.ReorderLevel)
                             </th>
                             <th>
-                                ReQty@*@Html.DisplayNameFor(model => model.ReorderQty)*@
+                                @Html.DisplayNameFor(model => model.ReorderQty)
                             </th>
                             <th>
-                                UOM@*@Html.DisplayNameFor(model => model.UnitOfMeasure)*@
+                                @Html.DisplayNameFor(model => model.UnitOfMeasure)
                             </th>
                             <th>
                                 @Html.DisplayNameFor(model => model.Stock)
                             </th>
                             <th>
-                                Sup1@*@Html.DisplayNameFor(model => model.Supplier1Navigation)*@
+                               @Html.DisplayNameFor(model => model.Supplier1Navigation)
                             </th>
                             <th>
                                 @Html.DisplayNameFor(model => model.Supplier1Price)
                             </th>
-
                             @*<th>
                                 @Html.DisplayNameFor(model => model.Supplier2Navigation)
                             </th>
@@ -69,68 +85,88 @@
                             </th>
                             <th>
                                 @Html.DisplayNameFor(model => model.Supplier3Price)
-                            </th>
-
-                            <th>
-                                @Html.DisplayNameFor(model => model.Location)
                             </th>*@
+                            @*<th>
+                                    @Html.DisplayNameFor(model => model.Location)
+                                </th>*@
 
+                            <th></th>
+                            <th></th>
                             <th></th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach (var item in Model)
                         {
-                        <tr>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.ItemNumber)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Category)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.ItemName)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.ReorderLevel)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.ReorderQty)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.UnitOfMeasure)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Stock)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Supplier1Navigation.SupplierCode)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Supplier1Price)
-                            </td>
-                            @*<td>
-                                @Html.DisplayFor(modelItem => item.Supplier2Navigation.SupplierCode)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Supplier2Price)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Supplier3Navigation.SupplierCode)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Supplier3Price)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Location)
-                            </td>*@
-
-                            <td>
-                                <a asp-action="Edit" asp-route-id="@item.ItemNumber">Edit</a> |
-                                <a asp-action="Details" asp-route-id="@item.ItemNumber">Details</a> |
-                                <a asp-action="Delete" asp-route-id="@item.ItemNumber">Delete</a>
-                            </td>
-                        </tr>
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ItemNumber)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Category)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ItemName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ReorderLevel)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ReorderQty)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.UnitOfMeasure)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Stock)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Supplier1Navigation.SupplierCode)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Supplier1Price)
+                                </td>
+                                @*<td>
+                                    @Html.DisplayFor(modelItem => item.Supplier2Navigation.SupplierCode)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Supplier2Price)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Supplier3Navigation.SupplierCode)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Supplier3Price)
+                                </td>*@
+                                @*<td>
+                                        @Html.DisplayFor(modelItem => item.Location)
+                                    </td>*@
+                                <td>
+                                    <button type="button" class="btn btn-primary" style="background-color:transparent;border:transparent">
+                                        <a asp-action="Edit" asp-route-id="@item.ItemNumber">
+                                            <i class="fa fa-edit" style="color:#66B3B3"></i>
+                                        </a>
+                                    </button>
+                                    @*<a asp-action="Edit" asp-route-id="@item.ItemNumber">Edit</a>*@
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-primary" style="background-color:transparent;border:transparent">
+                                        <a asp-action="Details" asp-route-id="@item.ItemNumber">
+                                            <i class="fa fa-list-alt" data-toggle="tooltip" title="View Details" style="color:#666666"></i>
+                                        </a>
+                                    </button>
+                                    @*<i class="fa fa-file-text-o" style="font-size:24px"></i>*@
+                                    @*<a asp-action="Details" asp-route-id="@item.ItemNumber">Details</a>*@
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-primary" style="background-color:transparent;border:transparent">
+                                        <a asp-action="Delete" asp-route-id="@item.ItemNumber">
+                                            <i class="fa fa-trash-alt" style="color:#dc6460"></i>
+                                        </a>
+                                    </button>
+                                    @*<a asp-action="Delete" asp-route-id="@item.ItemNumber">Delete</a>*@
+                                </td>
+                            </tr>
                         }
                     </tbody>
                 </table>
@@ -138,3 +174,22 @@
         </div>
     </div>
 </div>
+
+<!-- DataTables -->
+<script src="~/plugins/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="~/plugins/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+
+
+<!-- page script -->
+<script>
+    $(document).ready(function () {
+        $('#Catalogues').DataTable({
+            'paging': true,
+            'lengthChange': true,
+            'searching': true,
+            'ordering': true,
+            'info': true,
+            'autoWidth': false,                              
+        });
+    });
+</script>

@@ -41,6 +41,7 @@ namespace ADTeam5.Models
         [Range(0, 10000, ErrorMessage = "Amount cannot be negative")]
         public int Out { get; set; }
         [StringLength(4)]
+        [Display(Name = "Supplier 1")]
         public string Supplier1 { get; set; }
         [StringLength(4)]
         public string Supplier2 { get; set; }
@@ -48,6 +49,7 @@ namespace ADTeam5.Models
         public string Supplier3 { get; set; }
         [DisplayFormat(ApplyFormatInEditMode = false, DataFormatString = "S${0:0.00}")]
         [Range(0, 10000, ErrorMessage = "Price cannot be negative")]
+        [Display(Name = "Supplier 1 Price")]
         public decimal? Supplier1Price { get; set; }
         [DisplayFormat(ApplyFormatInEditMode = false, DataFormatString = "S${0:0.00}")]
         [Range(0, 10000, ErrorMessage = "Price cannot be negative")]

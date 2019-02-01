@@ -27,7 +27,7 @@ namespace ADTeam5.Service
             var client = new SendGridClient(sendGridKey);
             var msg = new SendGridMessage()
             {
-                From = new EmailAddress("SSISTeam5@gmail.com", "Logic University SSIS"),
+                From = new EmailAddress("SSISTeam5@LogicUniversity.com", "Logic University SSIS"),
                 Subject = subject,
                 PlainTextContent = message,
                 HtmlContent = message

@@ -19,7 +19,7 @@ namespace ADTeam5.Models
 
         [Display(Name = "Code")]
         public string SupplierCode { get; set; }
-        [Display(Name = "Supplier")]
+        [Display(Name = "Supplier Name")]
         [StringLength(50)]
         public string SupplierName { get; set; }
         [StringLength(12)]
