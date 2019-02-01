@@ -80,7 +80,7 @@ namespace ADTeam5.Controllers
 
                 var q = context.User.Where(x => x.UserId == u.UserId).First();
                 string email = q.EmailAddress;
-                await _emailSender.SendEmailAsync(email, "Congratulations on New Appointment!", "You have been selected as department rep!");
+                await _emailSender.SendEmailAsync(email, "Department Rep", "Dear " + q.Name + ", you have been appointed as the department representative for stationery collection.");
 
                 return RedirectToAction("Index");
             }
