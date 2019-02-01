@@ -51,13 +51,7 @@
                                     </th>
                                     <th>
                                         @Html.DisplayNameFor(model => model.SupplierName)
-                                    </th>
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.GstregistrationNo)
-                                    </th>
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.TitleOfCourtesy)
-                                    </th>
+                                    </th>                              
                                     <th>
                                         @Html.DisplayNameFor(model => model.ContactName)
                                     </th>
@@ -93,18 +87,14 @@
                                             <div style="width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">
                                                 @Html.DisplayFor(modelItem => item.SupplierName)
                                             </div>
-
-                                        </td>
-
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.GstregistrationNo)
                                         </td>
                                         <td>
-                                            @Html.DisplayFor(modelItem => item.TitleOfCourtesy)
+                                            <div style="width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">
+                                                @Html.DisplayFor(modelItem => item.TitleOfCourtesy)
+                                                @Html.DisplayFor(modelItem => item.ContactName)
+                                                </div>
                                         </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.ContactName)
-                                        </td>
+  
                                         <td>
                                             @Html.DisplayFor(modelItem => item.PhoneNo)
                                         </td>

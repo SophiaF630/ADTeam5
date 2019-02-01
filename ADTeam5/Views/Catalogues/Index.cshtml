@@ -58,7 +58,7 @@
                                 @Html.DisplayNameFor(model => model.Supplier1Price)
                             </th>
 
-                            <th>
+                            @*<th>
                                 @Html.DisplayNameFor(model => model.Supplier2Navigation)
                             </th>
                             <th>
@@ -73,7 +73,7 @@
 
                             <th>
                                 @Html.DisplayNameFor(model => model.Location)
-                            </th>
+                            </th>*@
 
                             <th></th>
                         </tr>
@@ -109,7 +109,7 @@
                             <td>
                                 @Html.DisplayFor(modelItem => item.Supplier1Price)
                             </td>
-                            <td>
+                            @*<td>
                                 @Html.DisplayFor(modelItem => item.Supplier2Navigation.SupplierCode)
                             </td>
                             <td>
@@ -123,7 +123,7 @@
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.Location)
-                            </td>
+                            </td>*@
 
                             <td>
                                 <a asp-action="Edit" asp-route-id="@item.ItemNumber">Edit</a> |
