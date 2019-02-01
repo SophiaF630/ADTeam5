@@ -51,10 +51,10 @@ else
                     <h3 class="box-title">Items to be added to voucher</h3>
                     <br />
 
-                    <div class="box-tools pull-right">
+                    @*<div class="box-tools pull-right">
                         <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
                         <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
-                    </div>
+                    </div>*@
                 </div>
 
 
@@ -120,9 +120,7 @@ else
                                         <td>
                                             <form asp-action="VoucherItemDelete" asp-route-id="@item.RowID" method="post" data-ajax="true" data-ajax-update="#TempVoucherDetailsList" role="form" asp-controller="IssueVoucher">
                                                 <button style="background-color:transparent; border:transparent">
-
                                                     <i class="fa fa-trash-alt" style="color:#dc6460"></i>
-
                                                 </button>
 
                                                 @*<button type="submit" class="btn btn-sm btn-danger d-none d-md-inline-block" style="width:70px;height:30px;border:2px; background-color:#dc6460">

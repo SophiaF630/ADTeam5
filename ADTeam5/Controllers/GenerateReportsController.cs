@@ -97,7 +97,7 @@ namespace ADTeam5.Controllers
                 foreach (string cat in categories)
                 {
                     DepartmentData depData = new DepartmentData();
-                    depData.name = deptName + "/" + cat;
+                    depData.name = dep + "/" + cat;
                     depData.data = new List<int>();
                     depData.stack = deptName;
                     var q = rawData.Where(x => x.DepCode == dep && x.Category == cat);

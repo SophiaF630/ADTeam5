@@ -5,113 +5,139 @@
 }
 
 
-<div class="container">
+@*<div class="container">*@
+
+@if (Model.Count == 0)
+{
+    <div class="row justify-content-center text-center">
+        <div class="col-12 col-md-10 mt-5">
+
+            <i class="fa fa-user fa-5x mb-5"></i>
+
+            <h2>
+                No Record Found
+            </h2>
+
+            <p class="text-muted">
+                You do not have any adjustment record.
+            </p>
+
+            <a asp-action="Create" class="btn btn-lg btn-primary d-none d-md-inline-block mt-3">Create New</a>
+        </div>
+    </div> <!-- / .row -->
+}
+else
+{
     <div class="row">
-        <div class="col-md-6">
-            @if (Model.Count == 0)
-            {
-                <div class="row justify-content-center text-center">
-                    <div class="col-12 col-md-10 mt-5">
-
-                        <i class="fa fa-user fa-5x mb-5"></i>
-
-                        <h2>
-                            No Record Found
-                        </h2>
-
-                        <p class="text-muted">
-                            You do not have any adjustment record.
-                        </p>
-
-                        <a asp-action="Create" class="btn btn-lg btn-primary d-none d-md-inline-block mt-3">Create New</a>
+        <div class="col-md-10">
+            <div class="box" style=" width:100%">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Purchase Order Record</h3>
+                    <br />
+                    <div class="box-tools pull-right">
+                        <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
+                        <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
                     </div>
-                </div> <!-- / .row -->
-            }
-            else
-            {
-                <table id="TempAdjustmentRecord" class="table table-striped table-bordered" style="width: 100%;">
-                    <thead>
-                        <tr>
-                            <th>
-                                PO No
-                            </th>
-                            <th>
-                                Supplier
-                            </th>
-                            <th>
-                                Order Date
-                            </th>
-                            <th>
-                                Estimated Deliver Date
-                            </th>
-                            <th>
-                                Complete Date
-                            </th>
-                            <th>
-                                Clerk Name
-                            </th>
-                            <th>
-                                Status
-                            </th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in Model)
-                        {
-                            <tr>
-                                <td>
-                                    <a asp-action="Details" asp-route-id="@item.Poid">@Html.DisplayFor(modelItem => item.Poid)</a>
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.SupplierCode)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.OrderDate)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.ExpectedCompleteDate)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.CompleteDate)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.StoreClerk.Name)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Status)
-                                </td>
-                                @if (item.Status == "Draft")
-                                {
-                                    @*<td>
-                                            <form asp-action="PurchaseOrderRecordSubmit" asp-route-id="@item.Poid" method="post" data-ajax="true" data-ajax-update="#TempPurchaseOrderRecords" role="form" asp-controller="PurchaseOrderRecords">
-                                                <button type="submit" class="btn btn-primary">
-                                                    Submit
-                                                </button>
-                                            </form>
-                                        </td>*@
-                                    <td>
-                                        <form asp-action="PurchaseOrderRecordDelete" asp-route-id="@item.Poid" method="post" data-ajax="true" data-ajax-update="#TempPurchaseOrderRecords" role="form" asp-controller="PurchaseOrderRecords">
-                                            <button type="submit" class="btn btn-sm btn-danger d-none d-md-inline-block">
-                                                Delete
-                                            </button>
-                                        </form>
-                                    </td>
-                                }
-                                else
-                                {
-                                    @*<td><button type="submit" class="btn btn-primary" disabled>Submit</button></td>*@
-                                    <td>
-                                        <button type="submit" class="btn btn-sm btn-danger d-none d-md-inline-block" disabled>Delete</button>
-                                    </td>
-                                }
-                            </tr>
-                        }
-                    </tbody>
-                </table>
+                </div>
 
-            }
+                <div class="box-body no-padding">
+                    <div class="table-responsive table-full-width">
+                        <table id="TempAdjustmentRecord" class="table no-margin table-hover table-striped table-borderless" style="width: 100%;">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Purchase Order No.
+                                    </th>
+                                    <th>
+                                        Supplier
+                                    </th>
+                                    <th>
+                                        Order Date
+                                    </th>
+                                    <th>
+                                        Estimated Deliver Date
+                                    </th>
+                                    <th>
+                                        Complete Date
+                                    </th>
+                                    <th>
+                                        Clerk Name
+                                    </th>
+                                    <th>
+                                        Status
+                                    </th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            <a asp-action="Details" asp-route-id="@item.Poid"><u>@Html.DisplayFor(modelItem => item.Poid)</u></a>
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.SupplierCode)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.OrderDate)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.ExpectedCompleteDate)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.CompleteDate)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.StoreClerk.Name)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Status)
+                                        </td>
+                                        @if (item.Status == "Draft")
+                                        {
+                                            @*<td>
+                                                <form asp-action="PurchaseOrderRecordSubmit" asp-route-id="@item.Poid" method="post" data-ajax="true" data-ajax-update="#TempPurchaseOrderRecords" role="form" asp-controller="PurchaseOrderRecords">
+                                                    <button type="submit" class="btn btn-primary">
+                                                        Submit
+                                                    </button>
+                                                </form>
+                                            </td>*@
+                                            <td>
+                                                <form asp-action="PurchaseOrderRecordDelete" asp-route-id="@item.Poid" method="post" data-ajax="true" data-ajax-update="#TempPurchaseOrderRecords" role="form" asp-controller="PurchaseOrderRecords">
+                                                    <button type="submit" class="btn btn-sm btn-danger d-none d-md-inline-block" style="background-color:transparent; border:transparent">
+                                                        <i class="fa fa-trash-alt" style="color:#dc6460"></i>
+                                                    </button>  
+                                                  @*<button type="submit" class="btn btn-sm btn-danger d-none d-md-inline-block">
+                                                        Delete
+                                                    </button>*@
+                                                </form>
+                                            </td>
+                                        }
+                                        else
+                                        {
+                                            @*<td><button type="submit" class="btn btn-primary" disabled>Submit</button></td>*@
+                                            <td>
+                                                <button type="submit" class="btn btn-sm btn-danger d-none d-md-inline-block" style="background-color:transparent; border:transparent" disabled>
+                                                    <i class="fa fa-trash-alt" data-toggle="tooltip" title="You have submitted" style="color:#D0D3D4">
+                                                    </i>
+                                                </button>
+                                            </td>
+                                           
+                                                @*<td>
+            <button type="submit" class="btn btn-sm btn-danger d-none d-md-inline-block" disabled>Delete</button>
+        </td>*@
+                                                }
+</tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-</div>
+                }
+
+                @*</div>*@
 
