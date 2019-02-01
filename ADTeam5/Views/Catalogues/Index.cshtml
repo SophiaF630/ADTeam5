@@ -54,7 +54,7 @@
                                 @Html.DisplayNameFor(model => model.Category)
                             </th>
                             <th>
-                                Name@*@Html.DisplayNameFor(model => model.ItemName)*@
+                                Name
                             </th>
                             <th>
                                 @Html.DisplayNameFor(model => model.ReorderLevel)
@@ -69,39 +69,26 @@
                                 @Html.DisplayNameFor(model => model.Stock)
                             </th>
                             <th>
-                                Supplier1@*@Html.DisplayNameFor(model => model.Supplier1Navigation)*@
+                               @Html.DisplayNameFor(model => model.Supplier1Navigation)
                             </th>
                             <th>
-                                Supplier1 Price@*@Html.DisplayNameFor(model => model.Supplier1Price)*@
+                                @Html.DisplayNameFor(model => model.Supplier1Price)
                             </th>
-
-<<<<<<< HEAD
-                            <th>
-                                Supplier2@*@Html.DisplayNameFor(model => model.Supplier2Navigation)*@
-=======
                             @*<th>
                                 @Html.DisplayNameFor(model => model.Supplier2Navigation)
->>>>>>> 5ac44aa908bc7a7ef6ee6b9a58c2a030fbd81669
                             </th>
                             <th>
-                                Supplier2 Price@*@Html.DisplayNameFor(model => model.Supplier2Price)*@
+                                @Html.DisplayNameFor(model => model.Supplier2Price)
                             </th>
                             <th>
-                                Supplier3@*@Html.DisplayNameFor(model => model.Supplier3Navigation)*@
+                                @Html.DisplayNameFor(model => model.Supplier3Navigation)
                             </th>
                             <th>
-                                Supplier3 Price@*@Html.DisplayNameFor(model => model.Supplier3Price)*@
-                            </th>
-
-<<<<<<< HEAD
+                                @Html.DisplayNameFor(model => model.Supplier3Price)
+                            </th>*@
                             @*<th>
                                     @Html.DisplayNameFor(model => model.Location)
                                 </th>*@
-=======
-                            <th>
-                                @Html.DisplayNameFor(model => model.Location)
-                            </th>*@
->>>>>>> 5ac44aa908bc7a7ef6ee6b9a58c2a030fbd81669
 
                             <th></th>
                             <th></th>
@@ -111,7 +98,6 @@
                     <tbody>
                         @foreach (var item in Model)
                         {
-<<<<<<< HEAD
                             <tr>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.ItemNumber)
@@ -140,7 +126,7 @@
                                 <td>
                                     @Html.DisplayFor(modelItem => item.Supplier1Price)
                                 </td>
-                                <td>
+                                @*<td>
                                     @Html.DisplayFor(modelItem => item.Supplier2Navigation.SupplierCode)
                                 </td>
                                 <td>
@@ -151,13 +137,10 @@
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.Supplier3Price)
-                                </td>
+                                </td>*@
                                 @*<td>
                                         @Html.DisplayFor(modelItem => item.Location)
                                     </td>*@
-
-
-
                                 <td>
                                     <button type="button" class="btn btn-primary" style="background-color:transparent;border:transparent">
                                         <a asp-action="Edit" asp-route-id="@item.ItemNumber">
@@ -184,58 +167,6 @@
                                     @*<a asp-action="Delete" asp-route-id="@item.ItemNumber">Delete</a>*@
                                 </td>
                             </tr>
-=======
-                        <tr>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.ItemNumber)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Category)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.ItemName)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.ReorderLevel)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.ReorderQty)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.UnitOfMeasure)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Stock)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Supplier1Navigation.SupplierCode)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Supplier1Price)
-                            </td>
-                            @*<td>
-                                @Html.DisplayFor(modelItem => item.Supplier2Navigation.SupplierCode)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Supplier2Price)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Supplier3Navigation.SupplierCode)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Supplier3Price)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Location)
-                            </td>*@
-
-                            <td>
-                                <a asp-action="Edit" asp-route-id="@item.ItemNumber">Edit</a> |
-                                <a asp-action="Details" asp-route-id="@item.ItemNumber">Details</a> |
-                                <a asp-action="Delete" asp-route-id="@item.ItemNumber">Delete</a>
-                            </td>
-                        </tr>
->>>>>>> 5ac44aa908bc7a7ef6ee6b9a58c2a030fbd81669
                         }
                     </tbody>
                 </table>
