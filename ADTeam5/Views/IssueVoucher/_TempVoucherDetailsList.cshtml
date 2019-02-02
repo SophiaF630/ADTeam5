@@ -309,6 +309,7 @@ else
         $("#Category").change(function () {
             $.get("/IssueVoucher/GetItemNameList", { category: $("#Category").val() }, function (data) {
                 $("#ItemNumber").empty();
+                $("#ItemNumber").append("<option value='" + "0" + "'>" + "---Select item---" + "</option>");
                 $.each(data, function (index, row) {
                     $("#ItemNumber").append("<option value='" + row.itemNumber + "'>" + row.itemName + "</option>")
                 });

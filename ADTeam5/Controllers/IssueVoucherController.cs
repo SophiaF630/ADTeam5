@@ -88,9 +88,10 @@ namespace ADTeam5.Controllers
                     if (Array.Exists(itemSubmitted, i => i == item.RowID.ToString()))
                     {
                         b.AddItemsToVoucher(item.RowID, voucherNo, tempVoucherDetailsList);
-                        b.CreateAdjustmentRecord(userID, voucherNo, "Submitted");
+                        
                     }
                 }
+                b.CreateAdjustmentRecord(userID, voucherNo, "Submitted");
                 //return RedirectToAction(nameof(Index));
             }
             else if(itemSavedToDraft.Length != 0)
@@ -101,9 +102,10 @@ namespace ADTeam5.Controllers
                     if (Array.Exists(itemSavedToDraft, i => i == item.RowID.ToString()))
                     {
                         b.AddItemsToVoucher(item.RowID, voucherNo, tempVoucherDetailsList);
-                        b.CreateAdjustmentRecord(userID, voucherNo, "Draft");
+                        
                     }
                 }
+                b.CreateAdjustmentRecord(userID, voucherNo, "Draft");
                 //return RedirectToAction(nameof(Index));
             }
 
