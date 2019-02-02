@@ -228,7 +228,7 @@
                 Categories: categoryList
             }
             console.log(in_data);
-            $.post("/GenerateReports/GetYearMonthList", in_data, function (data) {
+            $.post("/GenerateReports/GetStationeryUsageReportData", in_data, function (data) {
                 var chartData = data;
                 plotChart(chartData);
 

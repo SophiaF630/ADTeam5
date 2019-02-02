@@ -983,112 +983,116 @@ namespace ADTeam5.BusinessLogic
 
 
         //GetChargeBack
-        //public List<ChargeBackViewModel> GetChargeBack(string status)
-        //{
-        //    List<ChargeBackViewModel> chargeBackViewModelsList = new List<ChargeBackViewModel>();
+        public List<ChargeBackViewModel> GetChargeBack(string status)
+        {
+            List<ChargeBackViewModel> chargeBackViewModelsList = new List<ChargeBackViewModel>();
 
-        //    //join disbursement lists and record details table
-        //    var q = from rd in _context.RecordDetails
-        //            join dl in _context.DisbursementList on rd.Rrid equals dl.Dlid
-        //            where dl.Status == status
-        //            select new { rd.ItemNumber, rd.QuantityDelivered, dl.CompleteDate, dl.DepartmentCode };
+            //join disbursement lists and record details table
+            var q = from rd in _context.RecordDetails
+                    join dl in _context.DisbursementList on rd.Rrid equals dl.Dlid
+                    where dl.Status == status
+                    select new { rd.ItemNumber, rd.QuantityDelivered, dl.CompleteDate, dl.DepartmentCode };
 
-        //    if (q != null)
-        //    {
-        //        int rowID = 1;
-        //        foreach (var item in q.ToList())
-        //        {
-        //            ChargeBackViewModel chargeBackViewModel = new ChargeBackViewModel();
-        //            decimal? Supplier1Price = _context.Catalogue.FirstOrDefault(x => x.ItemNumber == item.ItemNumber).Supplier1Price;
+            if (q != null)
+            {
+                int rowID = 1;
+                foreach (var item in q.ToList())
+                {
+                    ChargeBackViewModel chargeBackViewModel = new ChargeBackViewModel();
+                    decimal? supplier1Price = _context.Catalogue.FirstOrDefault(x => x.ItemNumber == item.ItemNumber).Supplier1Price;
 
-        //            chargeBackViewModel.RowID = rowID;
-        //            chargeBackViewModel.Year = item.CompleteDate.Value.Year;
-        //            chargeBackViewModel.Month = item.CompleteDate.Value.Month;
-        //            chargeBackViewModel.DepCode = item.DepartmentCode;
-        //            chargeBackViewModel.TotalAmount = item.QuantityDelivered * Supplier1Price;
+                    chargeBackViewModel.RowID = rowID;
+                    chargeBackViewModel.Year = item.CompleteDate.Value.Year;
+                    chargeBackViewModel.Month = item.CompleteDate.Value.Month;
+                    chargeBackViewModel.DepCode = item.DepartmentCode;
+                    chargeBackViewModel.TotalAmount = item.QuantityDelivered * supplier1Price;
 
-        //            chargeBackViewModelsList.Add(chargeBackViewModel);
-        //            rowID++;
-        //        }
-        //    }
+                    chargeBackViewModelsList.Add(chargeBackViewModel);
+                    rowID++;
+                }
+            }
 
-        //    return chargeBackViewModelsList;
-        //}
+            return chargeBackViewModelsList;
+        }
 
-        //public List<ChargeBackViewModel> GetChargeBack(string status, DateTime startDate, DateTime endDate, List<string> yearNames, List<string> monthNames, List<string> departmentCodes)
-        //{
-        //    List<ChargeBackViewModel> chargeBackViewModelsList = new List<ChargeBackViewModel>();
+        public List<ChargeBackViewModel> GetChargeBack(string status, DateTime startDate, DateTime endDate, List<string> yearNames, List<string> monthNames, List<string> departmentCodes)
+        {
+            List<ChargeBackViewModel> chargeBackViewModelsList = new List<ChargeBackViewModel>();
 
-        //    //join disbursement lists and record details table
-        //    var filterByStatus = from rd in _context.RecordDetails
-        //                         join dl in _context.DisbursementList on rd.Rrid equals dl.Dlid
-        //                         where dl.Status == status
-        //                         orderby dl.CompleteDate ascending
-        //                         select new
-        //                         {
-        //                             itemNumber = rd.ItemNumber,
-        //                             rd.QuantityDelivered,
-        //                             dl.CompleteDate,
-        //                             year = dl.CompleteDate.Value.Year,
-        //                             month = dl.CompleteDate.Value.Month,
-        //                             dl.DepartmentCode
-        //                         };
+            //join disbursement lists and record details table
+            var filterByStatus = from rd in _context.RecordDetails
+                                 join dl in _context.DisbursementList on rd.Rrid equals dl.Dlid
+                                 where dl.Status == status
+                                 orderby dl.CompleteDate ascending
+                                 select new
+                                 {
+                                     itemNumber = rd.ItemNumber,
+                                     rd.QuantityDelivered,
+                                     dl.CompleteDate,
+                                     year = dl.CompleteDate.Value.Year,
+                                     month = dl.CompleteDate.Value.Month,
+                                     dl.DepartmentCode
+                                 };
 
-        //    var groupByYearMonth = filterByStatus.GroupBy(x => new { x.itemNumber, x.year, x.month, x.DepartmentCode })
-        //        .Select(x => new {
-        //            ItemNumber = x.Key.itemNumber,
-        //            Departmentcode = x.Key.DepartmentCode,
-        //            Year = x.Key.year,
-        //            Month = x.Key.month,
-        //            Quantity = x.Sum(y => y.QuantityDelivered)
-        //        });
+            var groupByYearMonth = filterByStatus.GroupBy(x => new { x.itemNumber, x.year, x.month, x.DepartmentCode })
+                .Select(x => new
+                {
+                    ItemNumber = x.Key.itemNumber,
+                    Departmentcode = x.Key.DepartmentCode,
+                    Year = x.Key.year,
+                    Month = x.Key.month,
+                    Quantity = x.Sum(y => y.QuantityDelivered)
+                });
 
 
-        //    List<ChargeBackViewModel> filterByDep = new List<ChargeBackViewModel>();
-        //    List<ChargeBackViewModel> filterByYearMonth = new List<ChargeBackViewModel>();
-        //    if (groupByYearMonth != null)
-        //    {
-        //        //select department and category
-        //        if (departmentCodes != null)
-        //        {
-        //            foreach (var item in groupByYearMonth.ToList())
-        //            {
-        //                int rowID = 1;
-        //                if (departmentCodes.Contains(item.Departmentcode))
-        //                {
-        //                    ChargeBackViewModel chargeBackViewModel = new ChargeBackViewModel();
-        //                    chargeBackViewModel.QuantityDelivered = item.Quantity;
-        //                    chargeBackViewModel.Year = item.Year;
-        //                    chargeBackViewModel.Month = item.Month;
-        //                    chargeBackViewModel.DepCode = item.Departmentcode;
+            List<ChargeBackViewModel> filterByDep = new List<ChargeBackViewModel>();
+            List<ChargeBackViewModel> filterByYearMonth = new List<ChargeBackViewModel>();
+            if (groupByYearMonth != null)
+            {
+                //select department
+                if (departmentCodes != null)
+                {
+                    foreach (var item in groupByYearMonth.ToList())
+                    {
+                        int rowID = 1;
+                        if (departmentCodes.Contains(item.Departmentcode))
+                        {
+                            ChargeBackViewModel chargeBackViewModel = new ChargeBackViewModel();
+                            decimal? supplier1Price = _context.Catalogue.FirstOrDefault(x => x.ItemNumber == item.ItemNumber).Supplier1Price;
 
-        //                    filterByDepAndCat.Add(chargeBackViewModel);
-        //                    rowID++;
-        //                }
-        //            }
-        //            if (yearNames != null && monthNames != null)
-        //            {
-        //                foreach (var item in filterByDepAndCat)
-        //                {
-        //                    int rowID = 1;
-        //                    if (yearNames.Contains(item.Year.ToString()) && monthNames.Contains(item.Month.ToString()))
-        //                    {
-        //                        ChargeBackViewModel chargeBackViewModel = new ChargeBackViewModel();
-        //                        chargeBackViewModel.QuantityDelivered = item.QuantityDelivered;
-        //                        chargeBackViewModel.Year = item.Year;
-        //                        chargeBackViewModel.Month = item.Month;
-        //                        chargeBackViewModel.DepCode = item.DepCode;
+                            chargeBackViewModel.Year = item.Year;
+                            chargeBackViewModel.Month = item.Month;
+                            chargeBackViewModel.DepCode = item.Departmentcode;
+                            chargeBackViewModel.TotalAmount = item.Quantity * supplier1Price;
 
-        //                        filterByYearMonth.Add(chargeBackViewModel);
-        //                        rowID++;
-        //                    }
-        //                }
-        //                chargeBackViewModelsList = filterByYearMonth;
-        //            }
-        //        }
-        //    }
-        //    return chargeBackViewModelsList;
-        //}
+                            filterByDep.Add(chargeBackViewModel);
+                            rowID++;
+                        }
+                    }
+                    if (yearNames != null && monthNames != null)
+                    {
+                        foreach (var item in filterByDep)
+                        {
+                            int rowID = 1;
+                            if (yearNames.Contains(item.Year.ToString()) && monthNames.Contains(item.Month.ToString()))
+                            {
+                                ChargeBackViewModel chargeBackViewModel = new ChargeBackViewModel();
+                                
+                                chargeBackViewModel.Year = item.Year;
+                                chargeBackViewModel.Month = item.Month;
+                                chargeBackViewModel.DepCode = item.DepCode;
+                                chargeBackViewModel.TotalAmount = item.TotalAmount;
+
+                                filterByYearMonth.Add(chargeBackViewModel);
+                                rowID++;
+                            }
+                        }
+                        chargeBackViewModelsList = filterByYearMonth;
+                    }
+                }
+            }
+            return chargeBackViewModelsList;
+        }
     }    
 }
 
