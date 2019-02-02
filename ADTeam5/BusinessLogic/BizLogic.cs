@@ -191,8 +191,8 @@ namespace ADTeam5.BusinessLogic
                     }
                     else
                     {
-                        RecordDetails rd = new RecordDetails();
-                        rd.Quantity += r.Quantity;
+                        //RecordDetails rd = new RecordDetails();
+                        q.Quantity += r.Quantity;
                     }
 
                     _context.SaveChanges();
@@ -1034,62 +1034,82 @@ namespace ADTeam5.BusinessLogic
                                      dl.DepartmentCode
                                  };
 
-            var groupByYearMonth = filterByStatus.GroupBy(x => new { x.itemNumber, x.year, x.month, x.DepartmentCode })
-                .Select(x => new
-                {
-                    ItemNumber = x.Key.itemNumber,
-                    Departmentcode = x.Key.DepartmentCode,
-                    Year = x.Key.year,
-                    Month = x.Key.month,
-                    Quantity = x.Sum(y => y.QuantityDelivered)
-                });
+            //var groupByYearMonthItem1 = filterByStatus.GroupBy(x => new { x.itemNumber, x.year, x.month, x.DepartmentCode })
+            //    .Select(x => new
+            //    {
+            //        ItemNumber = x.Key.itemNumber,
+            //        Departmentcode = x.Key.DepartmentCode,
+            //        Year = x.Key.year,
+            //        Month = x.Key.month,
+            //        Quantity = x.Sum(y => y.QuantityDelivered),
+            //        Amount = x.Sum(y => y.QuantityDelivered) * _context.Catalogue.Find(x.Key.itemNumber).Supplier1Price
+            //    });
+
+            var groupByYearMonthItem = from fbs in filterByStatus
+                    join cat in _context.Catalogue on fbs.itemNumber equals cat.ItemNumber
+                    group fbs by new { fbs.itemNumber, fbs.year, fbs.month, fbs.DepartmentCode, cat.Supplier1Price } into g
+                    select new { g.Key.itemNumber, g.Key.DepartmentCode, g.Key.year, g.Key.month, Amount = g.Sum(x => x.QuantityDelivered) * g.Key.Supplier1Price };
+
+            //var groupByDep = groupByYearMonthItem.GroupBy(x => new { x.year, x.month, x.DepartmentCode })
+            //    .Select(x => new { x.Key.DepartmentCode, x.Key.year, x.Key.month, TotalAmount = x.Sum(y => y.Amount)});
+            //var groupByDep = from g in groupByYearMonthItem
+            //                  group g by new { g.DepartmentCode, g.year, g.month } into p
+            //                  select new { p.Key.DepartmentCode, p.Key.year, p.Key.month, TotalAmount = p.Sum(x => x.Amount) };
 
 
             List<ChargeBackViewModel> filterByDep = new List<ChargeBackViewModel>();
             List<ChargeBackViewModel> filterByYearMonth = new List<ChargeBackViewModel>();
-            if (groupByYearMonth != null)
+            if (groupByYearMonthItem != null && departmentCodes != null)
             {
-                //select department
-                if (departmentCodes != null)
+                foreach (var item in groupByYearMonthItem.ToList())
                 {
-                    foreach (var item in groupByYearMonth.ToList())
+                    int rowID = 1;                    
+                    if (departmentCodes.Contains(item.DepartmentCode))
                     {
-                        int rowID = 1;
-                        if (departmentCodes.Contains(item.Departmentcode))
+                        var q = filterByDep.FirstOrDefault(x => x.DepCode == item.DepartmentCode && x.Year == item.year && x.Month == item.month);
+                        if (q == null)
                         {
                             ChargeBackViewModel chargeBackViewModel = new ChargeBackViewModel();
-                            decimal? supplier1Price = _context.Catalogue.FirstOrDefault(x => x.ItemNumber == item.ItemNumber).Supplier1Price;
+
+                            chargeBackViewModel.Year = item.year;
+                            chargeBackViewModel.Month = item.month;
+                            chargeBackViewModel.DepCode = item.DepartmentCode;
+                            chargeBackViewModel.TotalAmount = item.Amount;
+
+                            filterByDep.Add(chargeBackViewModel);
+                        }
+                        else
+                        {
+                            //ChargeBackViewModel chargeBackViewModel = new ChargeBackViewModel();
+                            //chargeBackViewModel.Year = item.year;
+                            //chargeBackViewModel.Month = item.month;
+                            //chargeBackViewModel.DepCode = item.DepartmentCode;
+                            q.TotalAmount += item.Amount;
+                        }                        
+                        rowID++;
+                    }
+                }
+                if (yearNames != null && monthNames != null)
+                {
+                    foreach (var item in filterByDep)
+                    {
+                        int rowID = 1;
+                        if (yearNames.Contains(item.Year.ToString()) && monthNames.Contains(item.Month.ToString()))
+                        {
+                            ChargeBackViewModel chargeBackViewModel = new ChargeBackViewModel();
 
                             chargeBackViewModel.Year = item.Year;
                             chargeBackViewModel.Month = item.Month;
-                            chargeBackViewModel.DepCode = item.Departmentcode;
-                            chargeBackViewModel.TotalAmount = item.Quantity * supplier1Price;
+                            chargeBackViewModel.DepCode = item.DepCode;
+                            chargeBackViewModel.TotalAmount = item.TotalAmount;
 
-                            filterByDep.Add(chargeBackViewModel);
+                            filterByYearMonth.Add(chargeBackViewModel);
                             rowID++;
                         }
                     }
-                    if (yearNames != null && monthNames != null)
-                    {
-                        foreach (var item in filterByDep)
-                        {
-                            int rowID = 1;
-                            if (yearNames.Contains(item.Year.ToString()) && monthNames.Contains(item.Month.ToString()))
-                            {
-                                ChargeBackViewModel chargeBackViewModel = new ChargeBackViewModel();
-                                
-                                chargeBackViewModel.Year = item.Year;
-                                chargeBackViewModel.Month = item.Month;
-                                chargeBackViewModel.DepCode = item.DepCode;
-                                chargeBackViewModel.TotalAmount = item.TotalAmount;
-
-                                filterByYearMonth.Add(chargeBackViewModel);
-                                rowID++;
-                            }
-                        }
-                        chargeBackViewModelsList = filterByYearMonth;
-                    }
+                    chargeBackViewModelsList = filterByYearMonth;
                 }
+
             }
             return chargeBackViewModelsList;
         }
