@@ -53,11 +53,11 @@ namespace ADTeam5.BusinessLogic
 
         public Models.DepartmentCoveringHeadRecord findCurrentDeputyHeadToEdit(int currentDeputyHeadId)
         {
-            DateTime today = DateTime.Now;
+            DateTime today = DateTime.Now.Date;
             var q = context.DepartmentCoveringHeadRecord.Where(x => x.UserId == currentDeputyHeadId && x.EndDate >= today).First();
-            DepartmentCoveringHeadRecord d2 = new DepartmentCoveringHeadRecord();
-            d2 = q;
-            return d2;
+                DepartmentCoveringHeadRecord d2 = new DepartmentCoveringHeadRecord();
+                d2 = q;
+                return d2;
         }
 
         public List<User> populateAssignDeputyDropDownList(string dept, int repid, int headid)
@@ -119,7 +119,7 @@ namespace ADTeam5.BusinessLogic
         {
             var q = from x in context.EmployeeRequestRecord
                     join s in context.User on x.DepEmpId equals s.UserId
-                    where x.DepCode.Equals(dept) && x.Status == "Submitted"
+                    where x.DepCode.Equals(dept) && x.Status == "Pending Approval"
                     select new OutstandingOrder
                     {
                         Rrid = x.Rrid,
