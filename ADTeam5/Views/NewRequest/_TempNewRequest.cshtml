@@ -1,50 +1,35 @@
-﻿@model List<ADTeam5.ViewModels.TempPurchaseOrderDetails>
+﻿@model List<ADTeam5.ViewModels.TempNewRequest>
 
 @{
-    ViewData["Title"] = "_TempPurchaseOrderDetailsList";
+    ViewData["Title"] = "_TempNewRequest";
 }
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
 
 
-
-
-
 @if (Model.Count == 0)
 {
     <div class="row justify-content-center text-center">
         <div class="col-12 col-md-10 mt-5">
-
-            <i class="fa fa-user fa-5x mb-5"></i>
-
-            <h2>
-                No Record Found
-            </h2>
-
-            <p class="text-muted">
-                You do not have any items to be added to PO.
-            </p>
-            <button type="button" class="btn btn-lg btn-primary d-none d-md-inline-block mt-3 createNewPOItem" style="width:120px;height:40px;border:2px; background-color:#3c8dbc">
-                Create New
+            <button type="button" class="btn btn-lg btn-primary d-none d-md-inline-block mt-3 createNewRequestItem" style="width:180px;height:40px;border:2px; background-color:#3c8dbc">
+                Create New Request
             </button>
         </div>
-    </div> <!-- / .row -->
+    </div>
 }
 else
 {
-
-
     <div class="row">
         <div class="col-md-10">
             <div class="box" style=" width:100%">
                 <div class="box-header with-border">
-                    <h3 class="box-title">Items to be ordered</h3>
+                    <h3 class="box-title">Items Selected</h3>
                     <br />
-                    <div class="box-tools pull-right">
+                    @*<div class="box-tools pull-right">
                         <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
                         <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
-                    </div>
+                    </div>*@
                 </div>
 
                 <div class="box-body no-padding">
