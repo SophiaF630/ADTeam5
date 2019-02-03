@@ -65,21 +65,30 @@ namespace ADTeam5.Controllers
             [HttpPost]
             public IActionResult ApproveOrder()
             {
-                EmployeeRequestRecord e1 = b.findEmployeeRecord(rrid);
-                e1.Status = "Approved";
+                EmployeeRequestRecord e1 = context.EmployeeRequestRecord.Where(x => x.Rrid == rrid).First();
+            e1.Status = "Approved";
                 context.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
 
-            //Please put in validation reason for null
+            //Please put in validation reason for null - Validated
             [HttpPost]
             public IActionResult RejectOrder(string rejectReason)
             {
-                EmployeeRequestRecord e1 = b.findEmployeeRecord(rrid);
-                e1.Status = "Reject";
+            if (String.IsNullOrEmpty(rejectReason))
+            {
+                TempData["NoText"] = "Please key in the reason for rejection.";
+                return RedirectToAction(nameof(Details), new {id = rrid });
+            }
+            else
+            {
+                 EmployeeRequestRecord e1 = context.EmployeeRequestRecord.Where(x => x.Rrid == rrid).First();
+                e1.Status = "Rejected";
                 e1.Remark = rejectReason.ToString();
                 context.SaveChanges();
-                return RedirectToAction(nameof(Index));
+               return RedirectToAction(nameof(Index));
             }
+            
+        }
         }
     }
