@@ -72,7 +72,7 @@ namespace ADTeam5.Controllers
                 }
                 else
                 {
-                    if (startDate > endDate && startDate > DateTime.Now.Date)
+                    if (startDate > endDate && (startDate > DateTime.Now.Date || endDate > DateTime.Now.Date))
                     {
                         TempData["StartAndEndDateError"] = "End date cannot be earlier than start date. Start date and end date cannot be later than today. Please try again.";
                         return RedirectToAction("Index");

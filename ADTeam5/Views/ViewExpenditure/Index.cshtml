@@ -6,41 +6,77 @@
 
 <h1>View Expenditure</h1>
 
-@if (TempData["Alert1"] != null)
+@if (TempData["NoDetails"] != null)
 {
     <div class="alert alert-danger" role="alert">
         <button type="button" class="close" data-dismiss="alert" aira-label="close">
             <span aria-hidden="true">&times</span>
         </button>
-        @TempData["Alert1"]
+        @TempData["NoDetails"]
+    </div>
+}
+@if (TempData["EndDateError"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aira-label="close">
+            <span aria-hidden="true">&times</span>
+        </button>
+        @TempData["EndDateError"]
+    </div>
+}
+@if (TempData["StartDateError"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aira-label="close">
+            <span aria-hidden="true">&times</span>
+        </button>
+        @TempData["StartDateError"]
+    </div>
+}
+@if (TempData["StartAndEndDateError"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aira-label="close">
+            <span aria-hidden="true">&times</span>
+        </button>
+        @TempData["StartAndEndDateError"]
+    </div>
+}
+@if (TempData["FilterError"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aira-label="close">
+            <span aria-hidden="true">&times</span>
+        </button>
+        @TempData["FilterError"]
     </div>
 }
 
-    <form asp-action="Index" method="post">
-        <div class="form-group">
-            Select start date:
-            <input type="date" name="startdate" id="start" value="=" />
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            Select end date:
-            <input type="date" name="enddate" id="end" value=" = " />
+<form asp-action="Index" method="post">
+    <div class="form-group">
+        Select start date:
+        <input type="date" name="startdate" id="start" value="=" />
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        Select end date:
+        <input type="date" name="enddate" id="end" value=" = " />
 
-            <input type="submit" value="Search" id="searchbtn" />
-        </div>
-        <br/>
+        <input type="submit" value="Search" id="searchbtn" />
+    </div>
+    <br />
 
-        @if (ViewData["StartDate"] == null && ViewData["EndDate"] == null)
-        {
-            <b><p>Financial Year: @ViewData["startFinancialYear"] to @ViewData["endFinancialYear"]</p></b>
-        }
+    @if (ViewData["Show"] != null)
+    {
+        <p><b>Financial Year: @ViewData["startFinancialYear"] to @ViewData["endFinancialYear"]</b></p>
+    }
 
-        @if (ViewData["StartDate"] != null && ViewData["EndDate"] != null)
-        {
-            <b><p>Search results from @ViewData["StartDate"] to @ViewData["endDate"]</p></b>
-        }
+    @if (ViewData["StartDate"] != null && ViewData["EndDate"] != null)
+    {
+        <p><b>Search results from @ViewData["StartDate"] to @ViewData["EndDate"]</b></p>
+    }
 
 
 
-    </form>
+</form>
 <table class="table">
     <thead>
         <tr>

@@ -62,7 +62,7 @@ namespace ADTeam5.Controllers
             }
              
             @ViewData["Sum"] = sum;
-
+            @ViewData["Show"] = "true";
             return View(dbList);
         }
 
@@ -72,25 +72,63 @@ namespace ADTeam5.Controllers
         public IActionResult Index(DateTime startDate, DateTime endDate)
         {
             ViewData["StartDate"] = startDate.ToShortDateString();
-            ViewData["endDate"] = endDate.ToShortDateString();
+            ViewData["EndDate"] = endDate.ToShortDateString();
 
-    
+            DateTime dtpDefault = new DateTime(0001, 1, 1, 0, 0, 0);
+
             if (startDate != null && endDate != null)
             {
-                if (ModelState.IsValid)
+                if (startDate.Equals(dtpDefault) || endDate.Equals(dtpDefault))
                 {
-                    List<DisbursementList> dbList = b.findDisbursementListStatusCompleteDateRange(dept, startDate, endDate);
-                    decimal sum = b.findTotalExpenditure(dept, dbList);
-
-                    @ViewData["Sum"] = sum;
-                    return View(dbList);
+                    TempData["NoDetails"] = "Please fill in all search details.";
+                    @ViewData["Show"] = null;
+                    return RedirectToAction("Index");
                 }
+                if (startDate <= endDate && startDate <= DateTime.Now.Date && endDate <= DateTime.Now.Date)
+                {
+                    if (ModelState.IsValid)
+                    {
+                        List<DisbursementList> dbList = b.findDisbursementListStatusCompleteDateRange(dept, startDate, endDate);
+                        decimal sum = b.findTotalExpenditure(dept, dbList);
 
-                TempData["Alert1"] = "Please fill in all details!";
-                return RedirectToAction("Index"); 
+                        @ViewData["Sum"] = sum;
+                        return View(dbList);
+                    }
+                    else
+                    {
+                        TempData["FilterError"] = "Search request was not completed. Please try again.";
+                        return RedirectToAction("Index");
+                    }
+                }
+                else
+                {
+                    if (startDate > endDate && (startDate > DateTime.Now.Date || endDate > DateTime.Now.Date))
+                    {
+                        TempData["StartAndEndDateError"] = "End date cannot be earlier than start date. Start date and end date cannot be later than today. Please try again.";
+                        return RedirectToAction("Index");
+                    }
+                    if (startDate > endDate)
+                    {
+                        TempData["EndDateError"] = "End date cannot be earlier than start date. Please try again.";
+                        return RedirectToAction("Index");
+                    }
+                    if (startDate > DateTime.Now.Date || endDate > DateTime.Now.Date)
+                    {
+                        TempData["StartDateError"] = "Start date and end date cannot be later than today. Please try again.";
+                        return RedirectToAction("Index");
+                    }
+                    else
+                    {
+                        TempData["NoDetails"] = "Please fill in all details!";
+                        return RedirectToAction("Index");
+                    }
+                }
             }
-            TempData["Alert1"] = "Please fill in all details!";
-            return RedirectToAction("Index");
+            else
+            {
+                TempData["NoDetails"] = "Please fill in all details!";
+                return RedirectToAction("Index");
+            }
         }
 
         public IActionResult Details(string Dlid)
