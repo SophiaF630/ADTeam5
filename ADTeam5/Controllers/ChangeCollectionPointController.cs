@@ -36,10 +36,10 @@ namespace ADTeam5.Controllers
             dept = identity[0];
             role = identity[1];
 
-            var q1 = b.findDisbursementListStatus(dept);
-            DisbursementList d1 = q1;
-            int currentCollectionPoint = d1.CollectionPointId;
-
+            var q1 = b.getDepartmentDetails(dept);
+            Department d = q1;
+            int currentCollectionPoint = d.CollectionPointId;
+            
             var q2 = b.findCollectionPointToEdit(currentCollectionPoint);
             CollectionPoint c1 = q2;
             string currentName = c1.CollectionPointName;
@@ -58,24 +58,23 @@ namespace ADTeam5.Controllers
         {
             if (ModelState.IsValid)
             {
-                int c1 = cp.CollectionPointId;
-                var q = context.DisbursementList.Where(x => x.DepartmentCode == dept && x.Status == "Pending Delivery").First();
-                Models.DisbursementList d1 = q;
-                d1.CollectionPointId = c1;
-
-                //int c2 = cp.CollectionPointId;
+                int newCollectionPoint = cp.CollectionPointId;
                 var q1 = context.Department.Where(x => x.DepartmentCode == dept).First();
                 Models.Department d2 = q1;
-                d2.CollectionPointId = c1;
+                d2.CollectionPointId = newCollectionPoint;
 
+                var q2 = context.DisbursementList.Where(x => x.DepartmentCode == dept && x.Status == "Pending Delivery");
+                if(q2.Any())
+                {
+                    Models.DisbursementList d1 = q2.First();
+                    d1.CollectionPointId = newCollectionPoint;
+                }
                 await context.SaveChangesAsync();
                 TempData["Alert1"] = "Collection Point Changed Successfully";
                 return RedirectToAction("Index");
             }
             TempData["Alert2"] = "Please Try Again";
             return RedirectToAction("Index");
-
-
         }
     }
 }
