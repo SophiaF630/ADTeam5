@@ -382,7 +382,7 @@ else
         var itemToAdd = $("input:checkbox:checked", "#TempPurchaseOrderDetails").map(function () {
             return $(this).val();
         }).get();
-        alert(itemToAdd.join(','));
+        //alert(itemToAdd.join(','));
         $.ajax({
             type: "POST",
             url: '@Url.Action("Index", "RaisePurchaseOrder")',

@@ -4,6 +4,7 @@
     ViewData["Title"] = "_TempNewRequest";
 }
 
+
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
 
@@ -20,43 +21,33 @@
 }
 else
 {
+    <!-- TABLE: Issue Request -->
     <div class="row">
         <div class="col-md-10">
             <div class="box" style=" width:100%">
                 <div class="box-header with-border">
-                    <h3 class="box-title">Items Selected</h3>
+                    <h3 class="box-title">Items to be added to request</h3>
                     <br />
+
                     @*<div class="box-tools pull-right">
-                        <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
-                        <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
-                    </div>*@
+                <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
+                <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
+            </div>*@
                 </div>
+
 
                 <div class="box-body no-padding">
                     <div class="table-responsive table-full-width">
-                        <table id="TempPurchaseOrderDetails" class="table no-margin table-hover table-striped table-borderless" style="width: 100%;">
+                        <table id="TempRequestDetails" class="table no-margin table-hover table-striped table-responsive table-borderless" style="width: 100%;">
                             <thead>
                                 <tr>
-                                    <th>
-                                        <!-- select all boxes -->
-                                        <input type="checkbox" name="select-all" id="select-all" />
-                                    </th>
-                                    <th>
-                                        No.
-                                    </th>
-                                    <th>
-                                        Item Number
-                                    </th>
+                                    <th></th>
                                     <th>
                                         Item Name
                                     </th>
                                     <th>
                                         Quantity
                                     </th>
-                                    <th>
-                                        Supplier
-                                    </th>
-
                                     <th></th>
                                     <th></th>
                                 </tr>
@@ -66,108 +57,68 @@ else
                                 {
                                     <tr>
                                         <td>
-                                            <input type="checkbox" id="isChecked" name="isChecked" value="@item.RowID">
+                                            <input type="checkbox" id="isChecked" name="isChecked" checked="checked" value="@item.ItemNumber" />
                                         </td>
-                                        <td class="RowID">
-                                            @Html.DisplayFor(modelItem => item.RowID)
-                                        </td>
-                                        <td class="ItemNumber">
-                                            @Html.DisplayFor(modelItem => item.ItemNumber)
-                                        </td>
-                                        <td class="ItemName">
+                                        <td class="ItemName" width="40%">
                                             @Html.DisplayFor(modelItem => item.ItemName)
                                         </td>
-                                        <td class="Quantity">
+                                        <td class="Quantity" width="10%">
                                             @Html.DisplayFor(modelItem => item.Quantity)
                                         </td>
-                                        <td class="Supplier">
-                                            @Html.DisplayFor(modelItem => item.SupplierCode)
-                                        </td>
                                         <td>
-                                            <button type="button" class="btn btn-primary editPOItem" style="background-color:transparent; border:transparent">
+                                            <button class="editRequestItem" style="background-color:transparent; border:transparent">
                                                 <i class="fa fa-edit" style="color:#66B3B3"></i>
                                             </button>
-                                            @*<button type="button" class="btn btn-primary editPOItem">
-                                                    Edit
-                                                </button>*@
                                         </td>
                                         <td>
-                                            <form asp-action="POItemDelete" asp-route-id="@item.RowID" method="post" data-ajax="true" data-ajax-update="#TempPurchaseOrderDetailsList" role="form" asp-controller="RaisePurchaseOrder">
-                                                <button type="submit" class="btn btn-sm btn-danger d-none d-md-inline-block" style="background-color:transparent; border:transparent">
+                                            <form asp-action="RequestItemDelete" asp-route-itemNumber="@item.ItemNumber" method="post" data-ajax="true" data-ajax-update="#TempNewRequest" role="form" asp-controller="NewRequest">
+                                                <button style="background-color:transparent; border:transparent">
                                                     <i class="fa fa-trash-alt" style="color:#dc6460"></i>
                                                 </button>
-                                                @*<button type="submit" class="btn btn-sm btn-danger d-none d-md-inline-block">
-                                                        Delete
-                                                    </button>*@
                                             </form>
                                         </td>
-
                                     </tr>
                                 }
                             </tbody>
                         </table>
                         <br />
-                        <button type="button" class="btn btn-primary createNewPOItem" style="width:120px;height:32px;border:2px;margin-left:36px; background-color:#00B894">
-                            <i class='fas fa-plus-circle' style='font-size:14px'></i>&nbsp;&nbsp;Create New
+                        <button type="button" class="btn btn-primary createNewRequestItem" style="width:120px;height:32px;border:2px;margin-left:36px; background-color:#00B894">
+                            <i class='fas fa-plus-circle' style='font-size:14px'></i>&nbsp;&nbsp;Add Item
                         </button>
-                        <br />
-                        <br />
+                        <hr />
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-md-10">
-            <div class="box" style=" width:100%">
-                <div class="box-header with-border">
-                    <h3 class="box-title">View Total</h3>
-                    <br />
-
-                    @*<div class="box-tools pull-right">
-                            <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
-                            <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
-                        </div>*@
-
+                <br />
+                <br />
+                @*<div style="margin-left:320px">
+                    <button type="button" asp-action="Submit" class="btn btn-primary submit" style="background-color: #00B894;width:120px;height:32px;border:2px;">
+                        Submit
+                    </button>
+                </div>*@
+                <div style="margin-left:320px">
+                    <input type="submit" value="Submit" class="btn btn-primary submit" style="background-color: #00B894;width:120px;height:32px;border:2px;" />
                 </div>
-                <br>
-                <div style="margin-left:400px">
-                    <label style="width:100px;height:30px;">
-                        <font size="2">&nbsp;&nbsp;&nbsp;&nbsp;Amount:&nbsp;&nbsp;&nbsp;&nbsp;$</font>
-                    </label>
-                    <input type="text" style="background:transparent;border:none;width:60px;border-bottom:1px solid #808080" />
-                    <br />
-                    <label style="width:100px;height:30px;">
-                        <font size="2">&nbsp;GST&nbsp;(7%):&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$</font>
-                    </label>
-                    <input type="text" style="background:transparent;border:none;width:60px;border-bottom:1px solid #808080" />
-                    <br />
-                    <label style="width:100px;height:30px;">
-                        <font size="2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Total:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$</font>
-                    </label>
-                    <input type="text" style="background:transparent;border:none;width:60px;border-bottom:1px solid #808080" />
-                </div>
+                <br />
             </div>
-        </div>
-    </div>
-    @*<label>Total Amount:</label>*@
-    @*<br />*@
-    @*<input type="submit" value="Save As Draft" class="btn btn-primary addToDraft" />
-        <input type="submit" value="Submit" class="btn btn-primary submit" />*@
-    <div style="margin-left:320px">
-        <input type="submit" value="Save As Draft" class="btn btn-primary addToDraft" style="width:120px;height:32px;border:2px; background-color:#CC9933" />
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <input type="submit" value="Submit" class="btn btn-primary submit" style="background-color: #00B894;width:120px;height:32px;border:2px;" />
-    </div>
+        </div><!-- /.box-body -->
+    </div><!-- /.box -->
+    <!-- /.box-footer -->
+
 
 }
 
+@*</div>*@
+
+@*<div class="box-footer clearfix">
+        <a href="javascript:void(0)" class="btn btn-sm btn-info btn-flat pull-left">Place New Order</a>
+        <a href="javascript:void(0)" class="btn btn-sm btn-default btn-flat pull-right">View All Orders</a>
+    </div>*@
 
 
 
-<!-- Modal for create PO item-->
-<div class="modal fade in" id="createNewPOItemModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<!-- /.col -->
+<!-- Modal for create Request item-->
+<div class="modal fade in" id="CreateNewRequestItemModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <br />
@@ -176,7 +127,7 @@ else
                 <div style="width: 400px;padding: 15px;margin: 15px;border-style:outset; border-width:1px; ">
                     <div align="center" vertical-align="middle">
                         <h5 class="modal-title" id="exampleModalLongTitle">
-                            <strong><font size="5">Add To PO</font></strong>
+                            <strong><font size="5">Add To Request</font></strong>
                         </h5>
                         @*<button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
@@ -185,9 +136,9 @@ else
                 </div>
             </div>
             <div class="modal-body">
-                <form method="POST">
+                <form method="POST" asp-action="AddItem">
                     <div class="form-group">
-                        <input type="hidden" id="createNewPOItemModalID" name="createNewPOItemModalName" class="form-control" value="0" />
+                        <input type="hidden" id="CreateNewRequestItemModalID" name="createNewRequestItemModalName" class="form-control" value="0" />
                     </div>
                     <div class="form-group">
                         <label for="Category">Category</label>
@@ -204,10 +155,6 @@ else
                         <label for="Quantity">Quantity</label>
                         <input type="text" id="Quantity" name="quantity" class="form-control" value="" />
                     </div>
-                    <div class="form-group">
-                        <label for="Supplier">Supplier</label>
-                        <div id="Supplier"></div>
-                    </div>
                     <div align="center">
                         <button class="btn" data-dismiss="modal" aria-hidden="true" style="width:80px;height:30px;border:2px; background-color:#EEEEEE"><font size="3" color="black">Close</font></button>
                         <button type="submit" class="btn btn-primary" style="width:120px;height:30px;border:2px; background-color:#3c8dbc"><font size="3" color="white">Save Changes</font></button>
@@ -221,35 +168,28 @@ else
 
 
 <!-- Modal for edit quantity-->
-<div class="modal fade" id="POItemModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal fade" id="RequestItemModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Update PO Item</h5>
+                <h5 class="modal-title" id="exampleModalLongTitle">Update Request Item</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <form method="POST">
+                <form method="POST" asp-action="EditItem">
                     <div class="form-group">
-                        <input type="hidden" id="POItemModalID" name="POItemModalName" class="form-control" value="0" />
-                    </div>
-                    <div class="form-group">
-                        <input type="hidden" id="RowID" name="rowID" class="form-control" value="" />
+                        <input type="hidden" id="RequestItemModalID" name="RequestItemModalName" class="form-control" value="0" />
                     </div>
                     <div class="form-group">
                         <label for="ItemName">Item Name</label>
-                        <input type="hidden" id="ItemNamerValue" name="itemName" class="form-control" value="" />
+                        <input type="hidden" id="ItemNameValue" name="itemName" class="form-control" value="" />
                         <input type="text" id="ItemNameDisplay" name="" class="form-control" value="" disabled />
                     </div>
                     <div class="form-group">
                         <label for="Quantity">Quantity</label>
                         <input type="text" id="Quantity" name="quantity" class="form-control" value="" />
-                    </div>
-                    <div class="form-group">
-                        <label for="EditSupplier">Supplier</label>
-                        <div id="EditSupplier"></div>
                     </div>
                     <div class="modal-footer">
                         <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
@@ -262,19 +202,18 @@ else
 </div>
 
 
+
 <script>
-    $(".createNewPOItem").click(function () {
+    $(".createNewRequestItem").click(function () {
         //var $row = $(this).closest("tr");    // Find the row
         var itemNumber = ""; // Find the text
         var quantity = "";
-        var supplierName = "";
-        var createNewPOItemModalID = 1;
+        var createNewRequestItemModalID = 1;
 
-        var $modal = $('#createNewPOItemModal');
+        var $modal = $('#CreateNewRequestItemModal');
         $modal.find('#ItemNumber').val(itemNumber);
         $modal.find('#Quantity').val(quantity);
-        $modal.find('#Supplier').val(supplierName);
-        $modal.find('#createNewPOItemModalID').val(createNewPOItemModalID);
+        $modal.find('#CreateNewRequestItemModalID').val(createNewRequestItemModalID);
 
         $modal.modal('show');
     });
@@ -283,7 +222,7 @@ else
 <script>
     $(document).ready(function () {
         $("#Category").change(function () {
-            $.get("/RaisePurchaseOrder/GetItemNameList", { category: $("#Category").val() }, function (data) {
+            $.get("/NewRequest/GetItemNameList", { category: $("#Category").val() }, function (data) {
                 $("#ItemNumber").empty();
                 $("#ItemNumber").append("<option value='" + "0" + "'>" + "---Select item---" + "</option>");
                 $.each(data, function (index, row) {
@@ -294,60 +233,42 @@ else
     });
 </script>
 
-<script>
-    $(document).ready(function () {
-        $("#ItemNumber").change(function () {
-            $.get("/RaisePurchaseOrder/GetSuppliers", { itemNumber: $("#ItemNumber").val() }, function (data) {
-                $("#Supplier").empty();
-                $.each(data, function (index, row) {
-                    $('#Supplier').append('<input type="radio" name="supplierName" value="' + row + '"/>' + row + '<br/>');
-                });
-            });
-        })
-    });
-</script>
 
 <script>
-    $(".editPOItem").click(function () {
+    $(".editRequestItem").click(function () {
         var $row = $(this).closest("tr");    // Find the row
-        var rowID = $row.find("td.RowID").text().trim();
         var itemName = $row.find("td.ItemName").text().trim(); // Find the text
-        var itemNumber = $row.find("td.ItemNumber").text().trim(); // Find the text
         var quantity = $row.find("td.Quantity").text().trim();
-        var supplierName = "";
-        var POItemModalID = 1;
+        var requestItemModalID = 1;
 
-        $.get("/RaisePurchaseOrder/GetSuppliers", { itemNumber: itemNumber }, function (data) {
-            $("#EditSupplier").empty();
-            $.each(data, function (index, row) {
-                $('#EditSupplier').append('<input type="radio" name="supplierName" value="' + row + '"/>' + row + '<br/>');
-            });
-        });
-
-        var $modal = $('#POItemModal');
-        $modal.find('#RowID').val(rowID);
+        var $modal = $('#RequestItemModal');
         $modal.find('#ItemNameValue').val(itemName);
         $modal.find('#ItemNameDisplay').val(itemName);
         $modal.find('#Quantity').val(quantity);
-        $modal.find('#Supplier').val(supplierName);
-        $modal.find('#POItemModalID').val(POItemModalID);
+        $modal.find('#RequestItemModalID').val(requestItemModalID);
 
         $modal.modal('show');
     });
 </script>
 
-
+@*<script>
+    $(document).ready(function () {
+        $(".submit").click(function () {
+            document.location = '@Url.Action("Submit", "NewRequest")';
+        });
+    });
+</script>*@
 
 <script>
     $(document).ready(function () {
         $(".submit").click(function () {
-            var itemToAdd = $("input:checkbox:checked", "#TempPurchaseOrderDetails").map(function () {
+            var itemToAdd = $("input:checkbox:checked", "#TempRequestDetails").map(function () {
                 return $(this).val();
             }).get();
-            //alert(itemToAdd.join(','));
+            alert(itemToAdd.join(','));
             $.ajax({
                 type: "POST",
-                url: '@Url.Action("Index", "RaisePurchaseOrder")',
+                url: '@Url.Action("Index", "NewRequest")',
                 dataType: "html",
                 data: { itemSubmitted: itemToAdd },
                 success:
@@ -361,39 +282,35 @@ else
     });
 </script>
 
+@*<script>
+    $(document).ready(function () {
+        $(".submit2").click(function () {
+            //var itemToAdd = $("#TempRequestDetails").map(function () {
+            //    return $(this).val();
+            //    //return $(this).itemName;
+            //}).get();
+            var itemToAdd = [];
+            $.each($("#TempRequestDetails"), function (i, item) {
+                var ItemName = $(item).find("td.ItemName").text().trim();
+                itemToAdd.push(ItemName);
+            });
+          
 
-<script>
-    $(".addToDraft").click(function () {
-        var itemToAdd = $("input:checkbox:checked", "#TempPurchaseOrderDetails").map(function () {
-            return $(this).val();
-        }).get();
-        alert(itemToAdd.join(','));
-        $.ajax({
-            type: "POST",
-            url: '@Url.Action("Index", "RaisePurchaseOrder")',
-            dataType: "html",
-            data: { itemSavedToDraft: itemToAdd },
-            success:
-                function (data) {
-                    //$('#result').html(data);
-                    alert("saved to draft");
-                    location.reload();
-                }
-        })
+            alert(itemToAdd.join(','));
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("Index", "NewRequest")',
+                dataType: "html",
+                //data: { itemSubmitted: itemToAdd },
+                data: JSON.stringify(itemToAdd),
+                success:
+                    function (data) {
+                        //$('#result').html(data);
+                        alert("submitted");
+                        window.location.reload();
+                    }
+            })
+        });
     });
-</script>
-<!--select all checkbox-->
-<script>
-    $('#select-all').click(function (event) {
-        if (this.checked) {
-            // Iterate each checkbox
-            $(':checkbox').each(function () {
-                this.checked = true;
-            });
-        } else {
-            $(':checkbox').each(function () {
-                this.checked = false;
-            });
-        }
-    });
-</script>
+</script>*@
+
