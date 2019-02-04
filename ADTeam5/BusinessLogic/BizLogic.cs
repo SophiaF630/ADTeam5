@@ -636,15 +636,21 @@ namespace ADTeam5.BusinessLogic
             rd = _context.RecordDetails.Where(x => x.Rrid == purchaseOrderRecord.Poid).ToList();
 
             List<PurchaseOrderRecordDetails> result = new List<PurchaseOrderRecordDetails>();
+            int rowID = 1;
             foreach (var item in rd)
             {
                 PurchaseOrderRecordDetails poList = new PurchaseOrderRecordDetails();
 
+                poList.RowID = rowID;
                 poList.ItemNumber = item.ItemNumber;
                 poList.ItemName = _context.Catalogue.FirstOrDefault(x => x.ItemNumber == item.ItemNumber).ItemName;
                 poList.Quantity = item.Quantity;
+                poList.QuantityDelivered = item.QuantityDelivered;
+                poList.RDID = item.Rdid;
+                poList.POID = poid;
 
                 result.Add(poList);
+                rowID++;
             }
             return result;
         }
@@ -746,6 +752,13 @@ namespace ADTeam5.BusinessLogic
             _context.SaveChanges();
         }
 
+        public void UpdatePOItem(int rowID, int quantityDelivered, List<PurchaseOrderRecordDetails> purchaseOrderDetailsList)
+        {
+            //get rdid
+            PurchaseOrderRecordDetails po = purchaseOrderDetailsList.FirstOrDefault(x => x.RowID == rowID);
+            int rdid = po.RDID;
+        }
+
         //CreatePurchaseOrderRecord
         public void CreatePurchaseOrderRecord(int userID, string poNo, string supplierCode, string status)
         {
@@ -803,6 +816,20 @@ namespace ADTeam5.BusinessLogic
             //get rdid
             TempPurchaseOrderDetails tempPurchaseOrderDetails = tempPurchaseOrderDetailsList.FirstOrDefault(x => x.RowID == rowID);
             int rdid = tempPurchaseOrderDetails.RDID;
+
+            RecordDetails rd = _context.RecordDetails.FirstOrDefault(x => x.Rdid == rdid);
+            if (rd != null)
+            {
+                _context.RecordDetails.Remove(rd);
+                _context.SaveChanges();
+            }
+        }
+
+        public void DeletePOItem(int rowID, List<PurchaseOrderRecordDetails> purchaseOrderDetailsList)
+        {
+            //get rdid
+            PurchaseOrderRecordDetails purchaseOrderDetails = purchaseOrderDetailsList.FirstOrDefault(x => x.RowID == rowID);
+            int rdid = purchaseOrderDetails.RDID;
 
             RecordDetails rd = _context.RecordDetails.FirstOrDefault(x => x.Rdid == rdid);
             if (rd != null)
@@ -877,6 +904,7 @@ namespace ADTeam5.BusinessLogic
             return name;
         }
 
+        
 
 
 

@@ -9,6 +9,7 @@ using ADTeam5.BusinessLogic;
 using ADTeam5.Areas.Identity.Data;
 using Microsoft.AspNetCore.Identity;
 using ADTeam5.ViewModels;
+using Microsoft.AspNetCore.Routing;
 
 namespace ADTeam5.Controllers
 {
@@ -22,12 +23,12 @@ namespace ADTeam5.Controllers
         private readonly UserManager<ADTeam5User> _userManager;
         readonly GeneralLogic userCheck;
 
-        DeptBizLogic b = new DeptBizLogic();
+        BizLogic b = new BizLogic();
         static List<string> ItemNumberList = new List<string>();
         static List<string> ItemNameList = new List<string>();
         static List<int> QuantityList = new List<int>();
         static List<TempNewRequest> tempNewRequests = new List<TempNewRequest>();
-        string id;
+        string rrid;
 
         public NewRequestController(SSISTeam5Context context, UserManager<ADTeam5User> userManager)
         {
@@ -58,6 +59,7 @@ namespace ADTeam5.Controllers
             itemNameList.Insert(0, new Catalogue { ItemNumber = "0", ItemName = "---Select Item---" });
             ViewBag.ListofItemName = itemNameList;
 
+            
             return View(tempNewRequests);
             
         }
@@ -74,52 +76,50 @@ namespace ADTeam5.Controllers
 
             if (itemSubmitted.Length != 0)
             {
-                // Make new EmployeeRequestRecord
-                EmployeeRequestRecord e = new EmployeeRequestRecord();
-                id = b.IDGenerator(dept);
-                DateTime requestDate = DateTime.Now.Date;
-                int empId = userid;
-                var findHeadId = _context.Department.Where(x => x.DepartmentCode == dept).First();
-                int headId = findHeadId.HeadId;
-                string deptCode = dept;
-                string status = "Submitted";
-                e.Rrid = id;
-                e.RequestDate = requestDate;
-                e.DepEmpId = empId;
-                e.DepHeadId = headId;
-                e.DepCode = deptCode;
-                e.Status = status;
-                _context.EmployeeRequestRecord.Add(e);
-                _context.SaveChanges();
-
+                rrid = b.IDGenerator(dept);
                 foreach (var item in tempNewRequests)
                 {
-                    if (Array.Exists(itemSubmitted, i => i == item.RowID.ToString()))
+                    if (Array.Exists(itemSubmitted, i => i == item.ItemNumber.ToString()))
                     {
+                        //add items to request
                         RecordDetails r = new RecordDetails();
-                        r.Rrid = id;
+                        r.Rrid = rrid;
                         r.ItemNumber = item.ItemNumber;
                         r.Quantity = item.Quantity;
+                        r.QuantityDelivered = 0;
                         _context.RecordDetails.Add(r);
-                        _context.SaveChanges();
-
-                        tempNewRequests.Remove(item);
+                        _context.SaveChanges();                       
                     }
                 }
-                //return RedirectToAction(nameof(Index));
+
+                //check if item exists in record details
+                var record = _context.RecordDetails.FirstOrDefault(x => x.Rrid == rrid);
+                if (record != null)
+                {
+                    // Make new EmployeeRequestRecord
+                    EmployeeRequestRecord e = new EmployeeRequestRecord();
+                    DateTime requestDate = DateTime.Now.Date;
+                    int empId = userid;
+                    var findHeadId = _context.Department.Where(x => x.DepartmentCode == dept).First();
+                    int headId = findHeadId.HeadId;
+                    string deptCode = dept;
+                    string status = "Submitted";
+                    e.Rrid = rrid;
+                    e.RequestDate = requestDate;
+                    e.DepEmpId = empId;
+                    e.DepHeadId = headId;
+                    e.DepCode = deptCode;
+                    e.Status = status;
+                    _context.EmployeeRequestRecord.Add(e);
+                    _context.SaveChanges();
+                }
             }
 
-            //Viewbag for category dropdown list, need to post back
-            List<Catalogue> categoryList = new List<Catalogue>();
-            var q = _context.Catalogue.GroupBy(x => new { x.Category }).Select(x => x.FirstOrDefault());
-            foreach (var item in q)
-            {
-                categoryList.Add(item);
-            }
-            categoryList.Insert(0, new Catalogue { ItemNumber = "0", Category = "---Select Category---" });
-            ViewBag.ListofCategory = categoryList;
+            tempNewRequests = new List<TempNewRequest>();
+            List<RecordDetails> rdList = _context.RecordDetails.Where(x => x.Rrid == rrid).ToList();
 
-            return View(tempNewRequests);
+            //return RedirectToAction("Details", new { id = rrid });          
+            return Json(new { redirecturl = "NewRequest/Details/"+ rrid });
         }
 
 
@@ -127,6 +127,7 @@ namespace ADTeam5.Controllers
         public IActionResult AddItem(string itemNumber, int quantity)
         {
             //check if item exists
+            int rowID = 1;
             var request = tempNewRequests.FirstOrDefault(x => x.ItemNumber == itemNumber);
             if (request != null)
             {
@@ -135,10 +136,13 @@ namespace ADTeam5.Controllers
             else
             {
                 TempNewRequest tempNewRequest = new TempNewRequest();
+                tempNewRequest.RowID = rowID;
                 tempNewRequest.ItemNumber = itemNumber;
                 tempNewRequest.ItemName = _context.Catalogue.Find(itemNumber).ItemName;
                 tempNewRequest.Quantity = quantity;
                 tempNewRequests.Add(tempNewRequest);
+
+                rowID++;
             }
 
             //Viewbag for category dropdown list, need to post back
@@ -179,52 +183,7 @@ namespace ADTeam5.Controllers
 
 
 
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Submit(string[] itemSubmitted)
-        {
-            ADTeam5User user = await _userManager.GetUserAsync(HttpContext.User);
-            userid = user.WorkID;
-            List<string> identity = userCheck.checkUserIdentityAsync(user);
-            dept = identity[0];
-            role = identity[1];
-
-            if (tempNewRequests.Count != 0)
-            {
-                // Make new EmployeeRequestRecord
-                EmployeeRequestRecord e = new EmployeeRequestRecord();
-                id = b.IDGenerator(dept);
-                DateTime requestDate = DateTime.Now.Date;
-                int empId = userid;
-                var findHeadId = _context.Department.Where(x => x.DepartmentCode == dept).First();
-                int headId = findHeadId.HeadId;
-                string deptCode = dept;
-                string status = "Submitted";
-                e.Rrid = id;
-                e.RequestDate = requestDate;
-                e.DepEmpId = empId;
-                e.DepHeadId = headId;
-                e.DepCode = deptCode;
-                e.Status = status;
-                _context.EmployeeRequestRecord.Add(e);
-                _context.SaveChanges();
-
-                //Make new Record Details
-                foreach(var item in tempNewRequests)
-                {
-                    RecordDetails r = new RecordDetails();
-                    r.Rrid = id;
-                    r.ItemNumber = item.ItemNumber;
-                    r.Quantity = item.Quantity;
-                    _context.RecordDetails.Add(r);
-                    _context.SaveChanges();
-
-                    tempNewRequests.Remove(item);
-                }
-            }
-            //return RedirectToAction("Details", new { id });
-            return View(tempNewRequests);
-        }
-
+       
         [HttpPost]
         public async Task<IActionResult> RequestItemDelete(string itemNumber)
         {
@@ -250,6 +209,7 @@ namespace ADTeam5.Controllers
             if (tempNewRequests == null)
             {
                 tempNewRequests = new List<TempNewRequest>();
+                
             }
             return PartialView("_TempNewRequest", tempNewRequests);
 

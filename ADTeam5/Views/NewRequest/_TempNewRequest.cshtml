@@ -275,7 +275,8 @@ else
                     function (data) {
                         //$('#result').html(data);
                         alert("submitted");
-                        window.location.reload();
+                        data = JSON.parse(data);
+                        window.location.href = data.redirecturl;
                     }
             })
         });

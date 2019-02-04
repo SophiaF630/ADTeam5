@@ -55,13 +55,41 @@ namespace ADTeam5.Models
             List<string> identity = userCheck.checkUserIdentityAsync(user);
             int userID = user.WorkID;
 
+            //Viewbag for category dropdown list, need to post back
+            List<Catalogue> categoryList = new List<Catalogue>();
+            var q = _context.Catalogue.GroupBy(x => new { x.Category }).Select(x => x.FirstOrDefault());
+            foreach (var item in q)
+            {
+                categoryList.Add(item);
+            }
+            categoryList.Insert(0, new Catalogue { ItemNumber = "0", Category = "---Select Category---" });
+            ViewBag.ListofCategory = categoryList;
+
             if (id == null)
             {
                 return NotFound();
             }
 
+            string poStatus = _context.PurchaseOrderRecord.Find(id).Status;
+            ViewBag.POStatus = poStatus;
+
             List<PurchaseOrderRecordDetails> result = b.GetPurchaseOrderRecordDetails(id);
             return View(result);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Details(string id, string rowID, int quantityDelivered)
+        {
+            ADTeam5User user = await _userManager.GetUserAsync(HttpContext.User);
+            List<string> identity = userCheck.checkUserIdentityAsync(user);
+            int userID = user.WorkID;
+
+            List<PurchaseOrderRecordDetails> purchaseOrderDetailsList = b.GetPurchaseOrderRecordDetails(id);
+
+           // b.UpdatePOItem(rowID, quantityDelivered, purchaseOrderDetailsList);
+
+            
+            return View("Details", purchaseOrderDetailsList);
         }
 
 
@@ -113,12 +141,37 @@ namespace ADTeam5.Models
             return PartialView("_TempPurchaseOrderRecords", tempPurchaseOrderRecords);
         }
 
-
-        //Create
-        public async Task<IActionResult> Create()
+        [HttpPost]
+        public async Task<IActionResult> POItemDelete(string poid, int id)
         {
-            return RedirectToAction("Index", "RaisePurchaseOrder", new { area = "" });
+            ADTeam5User user = await _userManager.GetUserAsync(HttpContext.User);
+            List<string> identity = userCheck.checkUserIdentityAsync(user);
+            int userID = user.WorkID;
+
+            //Viewbag for category dropdown list, need to post back
+            List<Catalogue> categoryList = new List<Catalogue>();
+            var q = _context.Catalogue.GroupBy(x => new { x.Category }).Select(x => x.FirstOrDefault());
+            foreach (var item in q)
+            {
+                categoryList.Add(item);
+            }
+            categoryList.Insert(0, new Catalogue { ItemNumber = "0", Category = "---Select Category---" });
+            ViewBag.ListofCategory = categoryList;
+
+            List<PurchaseOrderRecordDetails> purchaseOrderDetailsList1 = b.GetPurchaseOrderRecordDetails(poid);
+
+            b.DeletePOItem(id, purchaseOrderDetailsList1);
+
+            List<PurchaseOrderRecordDetails> purchaseOrderDetailsList = b.GetPurchaseOrderRecordDetails(poid);
+
+            if (purchaseOrderDetailsList == null)
+            {
+                purchaseOrderDetailsList = new List<PurchaseOrderRecordDetails>();
+            }
+            return View("Details", purchaseOrderDetailsList);
         }
+
+        
 
         private bool PurchaseOrderRecordExists(string id)
         {

@@ -97,20 +97,20 @@ else
                                         @if (item.Status == "Draft")
                                         {
                                             @*<td>
-                                                <form asp-action="PurchaseOrderRecordSubmit" asp-route-id="@item.Poid" method="post" data-ajax="true" data-ajax-update="#TempPurchaseOrderRecords" role="form" asp-controller="PurchaseOrderRecords">
-                                                    <button type="submit" class="btn btn-primary">
-                                                        Submit
-                                                    </button>
-                                                </form>
-                                            </td>*@
+                                                    <form asp-action="PurchaseOrderRecordSubmit" asp-route-id="@item.Poid" method="post" data-ajax="true" data-ajax-update="#TempPurchaseOrderRecords" role="form" asp-controller="PurchaseOrderRecords">
+                                                        <button type="submit" class="btn btn-primary">
+                                                            Submit
+                                                        </button>
+                                                    </form>
+                                                </td>*@
                                             <td>
                                                 <form asp-action="PurchaseOrderRecordDelete" asp-route-id="@item.Poid" method="post" data-ajax="true" data-ajax-update="#TempPurchaseOrderRecords" role="form" asp-controller="PurchaseOrderRecords">
                                                     <button type="submit" class="btn btn-sm btn-danger d-none d-md-inline-block" style="background-color:transparent; border:transparent">
                                                         <i class="fa fa-trash-alt" style="color:#dc6460"></i>
-                                                    </button>  
-                                                  @*<button type="submit" class="btn btn-sm btn-danger d-none d-md-inline-block">
-                                                        Delete
-                                                    </button>*@
+                                                    </button>
+                                                    @*<button type="submit" class="btn btn-sm btn-danger d-none d-md-inline-block">
+                                                            Delete
+                                                        </button>*@
                                                 </form>
                                             </td>
                                         }
@@ -123,12 +123,12 @@ else
                                                     </i>
                                                 </button>
                                             </td>
-                                           
-                                                @*<td>
-            <button type="submit" class="btn btn-sm btn-danger d-none d-md-inline-block" disabled>Delete</button>
-        </td>*@
-                                                }
-</tr>
+
+                                            @*<td>
+                                                    <button type="submit" class="btn btn-sm btn-danger d-none d-md-inline-block" disabled>Delete</button>
+                                                </td>*@
+                                        }
+                                    </tr>
                                 }
                             </tbody>
                         </table>
@@ -137,7 +137,7 @@ else
             </div>
         </div>
     </div>
-                }
+}
 
-                @*</div>*@
+@*</div>*@
 

@@ -4,65 +4,197 @@
     ViewData["Title"] = "Details";
 }
 
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+
 @*<h1>Purchase Order Details -- same as AdjustmentRecordDetails</h1>*@
 
 
-<div class="container">
-    <div class="row">
-        <div class="col-12">
-            <table id="AdjustmentDetails" class="table table-striped table-bordered" style="width: 100%;">
-                <thead>
-                    <tr>
-                        
-                        <th>
-                            @Html.DisplayNameFor(model => model.ItemNumber)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.ItemName)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Quantity)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.SupplierCode)
-                        </th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model)
-                    {
-                        <tr>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.ItemNumber)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.ItemName)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Quantity)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.SupplierCode)
-                            </td>
-                            <td>
-                                <a asp-action="Edit" asp-route-id="@item.ItemNumber">Edit</a> |
-                                <a asp-action="Delete" asp-route-id="@item.ItemNumber">Delete</a>
+<div class="row">
+    <div class="col-md-10">
+        <div class="box" style=" width:100%">
+            <div class="box-header with-border">
+                <h3 class="box-title">Purchase Order Record</h3>
+                <br />
+                @*<div class="box-tools pull-right">
+                        <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
+                        <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
+                    </div>*@
+            </div>
 
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
+            <div class="box-body no-padding">
+                <div class="table-responsive table-full-width">
+                    <table id="TempPurchaseOrderDetails" class="table no-margin table-hover table-striped table-borderless" style="width: 100%;">
+                        <thead>
+                            <tr>
+                                <th>
+                                    No.
+                                </th>
+                                <th>
+                                    Item Number
+                                </th>
+                                <th>
+                                    Item Name
+                                </th>
+                                <th>
+                                    Quantity Ordered
+                                </th>
+                                <th>
+                                    Quantity Delivered
+                                </th>
+                                @if (ViewBag.POStatus == "Draft")
+                                {
+                                    <th></th>
+                                    <th></th>
+                                }
+                                @if (ViewBag.POStatus == "Pending Delivery")
+                                {
+                                    <th></th>
+                                }
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td class="RowID">
+                                        @Html.DisplayFor(modelItem => item.RowID)
+                                    </td>
+                                    <td class="ItemNumber">
+                                        @Html.DisplayFor(modelItem => item.ItemNumber)
+                                    </td>
+                                    <td class="ItemName">
+                                        @Html.DisplayFor(modelItem => item.ItemName)
+                                    </td>
+                                    <td class="Quantity">
+                                        @Html.DisplayFor(modelItem => item.Quantity)
+                                    </td>
+                                    <td class="Supplier">
+                                        @Html.DisplayFor(modelItem => item.QuantityDelivered)
+                                    </td>
+
+                                    @if (ViewBag.POStatus == "Draft")
+                                    {
+                                        <td>
+                                            <button type="button" class="btn btn-primary editPOItem" style="background-color:transparent; border:transparent">
+                                                <i class="fa fa-edit" style="color:#66B3B3"></i>
+                                            </button>
+                                        </td>
+                                        <td>
+                                            <form asp-action="POItemDelete" asp-route-id="@item.RowID" asp-route-poid="@item.POID" method="post" data-ajax="true" data-ajax-update="#Details" role="form" data-ajax-success="deleteItem(this)">
+                                                <button type="submit" class="btn btn-sm btn-danger d-none d-md-inline-block" style="background-color:transparent; border:transparent">
+                                                    <i class="fa fa-trash-alt" style="color:#dc6460"></i>
+                                                </button>
+                                            </form>
+                                        </td>
+                                    }
+                                    @if (ViewBag.POStatus == "Pending Delivery")
+                                    {
+                                        <td>
+                                            <button type="button" class="btn btn-primary editPOItem" style="background-color:transparent; border:transparent">
+                                                <i class="fa fa-edit" style="color:#66B3B3"></i>
+                                            </button>
+                                        </td>
+                                    }
+
+                                </tr>
+                            }
+                        </tbody>
+                    </table>                    
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
+<div style="margin-left:320px">
+    @if (ViewBag.POStatus == "Draft")
+    {
+        <input type="submit" value="Save As Draft" class="btn btn-primary addToDraft" style="width:120px;height:32px;border:2px; background-color:#CC9933" />
+        <input type="submit" value="Submit" class="btn btn-primary submit" style="background-color: #00B894;width:120px;height:32px;border:2px;" />
 
-<input type="submit" value="Save as Draft" class="btn btn-primary" />
-<input type="submit" value="Submit" class="btn btn-primary" />
+    }
+    @if (ViewBag.POStatus == "Pending Delivery")
+    {
+        <input type="submit" value="Confirm Delivery" class="btn btn-primary confirmDelivery" style="width:120px;height:32px;border:2px; background-color:#CC9933" />
+    }
+</div>
+
 
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
 
+
+<!-- Modal for edit quantity-->
+<div class="modal fade" id="POItemModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Update PO Item</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" asp-controller="EditQuantityDelivered">
+                    <div class="form-group">
+                        <input type="hidden" id="POItemModalID" name="POItemModalName" class="form-control" value="0" />
+                    </div>
+                    <div class="form-group">
+                        <input type="hidden" id="RowID" name="rowID" class="form-control" value="" />
+                    </div>
+                    <div class="form-group">
+                        <label for="ItemName">Item Name</label>
+                        <input type="hidden" id="ItemNamerValue" name="itemName" class="form-control" value="" />
+                        <input type="text" id="ItemNameDisplay" name="" class="form-control" value="" disabled />
+                    </div>
+                    <div class="form-group">
+                        <label for="Quantity">Quantity Ordered</label>
+                        <input type="hidden" id="QuantityValue" name="quantity" class="form-control" value="" />
+                        <input type="text" id="QuantityDisplay" name="" class="form-control" value="" disabled />
+                    </div>
+                    <div class="form-group">
+                        <label for="Quantity">Quantity Delivered</label>
+                        <input type="text" id="QuantityDelivered" name="quantityDelivered" class="form-control" value="" />
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(".editPOItem").click(function () {
+        var $row = $(this).closest("tr");    // Find the row
+        var rowID = $row.find("td.RowID").text().trim();
+        var itemName = $row.find("td.ItemName").text().trim(); // Find the text
+        var quantity = $row.find("td.Quantity").text().trim();
+        var quantityDelivered = "";
+        var POItemModalID = 1;
+
+        var $modal = $('#POItemModal');
+        $modal.find('#RowID').val(rowID);
+        $modal.find('#ItemNameValue').val(itemName);
+        $modal.find('#ItemNameDisplay').val(itemName);
+        $modal.find('#QuantityValue').val(quantity);
+        $modal.find('#QuantityDisplay').val(quantity);
+        $modal.find('#QuantityDelivered').val(quantityDelivered);
+        $modal.find('#POItemModalID').val(POItemModalID);
+
+        $modal.modal('show');
+    });
+</script>
+
+
+<script>
+    function deleteItem(table) {
+
+        $(table).parents('tr').remove();
+
+    }
+</script>
