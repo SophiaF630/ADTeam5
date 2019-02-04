@@ -64,14 +64,15 @@ namespace ADTeam5.Models
             }
             categoryList.Insert(0, new Catalogue { ItemNumber = "0", Category = "---Select Category---" });
             ViewBag.ListofCategory = categoryList;
+            
 
             if (id == null)
             {
                 return NotFound();
             }
 
-            string poStatus = _context.PurchaseOrderRecord.Find(id).Status;
-            ViewBag.POStatus = poStatus;
+            ViewBag.POStatus = _context.PurchaseOrderRecord.Find(id).Status;
+
 
             List<PurchaseOrderRecordDetails> result = b.GetPurchaseOrderRecordDetails(id);
             return View(result);
@@ -83,6 +84,8 @@ namespace ADTeam5.Models
             ADTeam5User user = await _userManager.GetUserAsync(HttpContext.User);
             List<string> identity = userCheck.checkUserIdentityAsync(user);
             int userID = user.WorkID;
+
+            ViewBag.POStatus = _context.PurchaseOrderRecord.Find(id).Status;
 
             List<PurchaseOrderRecordDetails> purchaseOrderDetailsList = b.GetPurchaseOrderRecordDetails(id);
 
