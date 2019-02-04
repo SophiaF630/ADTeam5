@@ -45,35 +45,59 @@ namespace ADTeam5.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Index(DateTime startDate, DateTime endDate)
         {
-            ViewData["StartDate"] = startDate;
-            ViewData["endDate"] = endDate;
+            ViewData["StartDate"] = startDate.ToShortDateString();
+            ViewData["endDate"] = endDate.ToShortDateString();
+
+            DateTime dtpDefault = new DateTime(0001, 1, 1, 0, 0, 0);
 
             if (startDate != null && endDate != null)
             {
-                if (ModelState.IsValid)
+                if (startDate.Equals(dtpDefault) || endDate.Equals(dtpDefault))
                 {
-                    var t = context.EmployeeRequestRecord.Where(s => s.RequestDate >= startDate && s.RequestDate <= endDate && s.DepCode == dept);
-                    return View(t);
+                    TempData["NoDetails"] = "Please fill in all search details.";
+                    return RedirectToAction("Index");
+                }
+                if (startDate <= endDate && startDate <= DateTime.Now.Date && endDate <= DateTime.Now.Date)
+                {
+                    if (ModelState.IsValid)
+                    {
+                        var t = context.EmployeeRequestRecord.Where(s => s.RequestDate >= startDate && s.RequestDate <= endDate && s.DepCode == dept);
+                        return View(t);
+                    }
+                    else
+                    {
+                        TempData["FilterError"] = "Search request was not completed. Please try again.";
+                        return RedirectToAction("Index");
+                    }
                 }
                 else
                 {
-                    TempData["Alert2"] = "Please Fill in All Details!";
+                    if (startDate > endDate && startDate > DateTime.Now.Date)
+                    {
+                        TempData["StartAndEndDateError"] = "End date cannot be earlier than start date. Start date and end date cannot be later than today. Please try again.";
+                        return RedirectToAction("Index");
+                    }
+                    if (startDate > endDate)
+                    {
+                        TempData["EndDateError"] = "End date cannot be earlier than start date. Please try again.";
+                        return RedirectToAction("Index");
+                    }
+                    if (startDate > DateTime.Now.Date || endDate > DateTime.Now.Date)
+                    {
+                        TempData["StartDateError"] = "Start date and end date cannot be later than today. Please try again.";
+                        return RedirectToAction("Index");
+                    }
+                    TempData["NoDetails"] = "Please fill in all search details.";
                     return RedirectToAction("Index");
                 }
             }
-            if (startDate > endDate || endDate < startDate)
-            {
-                TempData["Alert1"] = "Start end error";
-                return RedirectToAction("Index");
-
-            }
             else
             {
-                var t = context.EmployeeRequestRecord.Where(x => x.DepCode == dept);
-                return View(t);
+                TempData["NoDetails"] = "Please fill in all search details.";
+                return RedirectToAction("Index");
             }
-
         }
+
         public IActionResult Details(string id)
         {
             rrid = id;
