@@ -1,4 +1,4 @@
-﻿@model ADTeam5.ViewModels.TemporaryRecordDetails
+﻿@model List<ADTeam5.ViewModels.TempNewRequest>
 
 @{
     ViewData["Title"] = "Index";
@@ -26,8 +26,8 @@
             <div class="container">
                 <div class="row">
                     <div class="col">
-                        <div id="NewRequest">
-                            <partial name="_NewRequest" model="Model" />
+                        <div id="TempNewRequest">
+                            <partial name="_TempNewRequest" model="Model" />
                         </div>
                     </div>
                 </div>

@@ -1,55 +1,32 @@
-﻿@model List<ADTeam5.ViewModels.TempVoucherDetails>
+﻿@model List<ADTeam5.ViewModels.TempNewRequest>
 
 @{
-    ViewData["Title"] = "_TempVoucherDetails";
+    ViewData["Title"] = "_TempNewRequest";
 }
 
-@*<html>
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-        <environment include="Development">*@
+
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
 
-@*</environment>
-    </head>*@
 
-@*<div class="container">*@
-@*<div class="row">
-    <div class="col-md-10">
-        <div class="box">*@
 @if (Model.Count == 0)
 {
     <div class="row justify-content-center text-center">
         <div class="col-12 col-md-10 mt-5">
-
-            <i class="fa fa-user fa-5x mb-5"></i>
-
-            <h2>
-                No Record Found
-            </h2>
-
-            <p class="text-muted">
-                You do not have any items to be added to voucher.
-            </p>
-            <button type="button" class="btn btn-lg btn-primary d-none d-md-inline-block mt-3 createNewVoucherItem" style="width:120px;height:40px;border:2px; background-color:#3c8dbc">
-                Create New
+            <button type="button" class="btn btn-lg btn-primary d-none d-md-inline-block mt-3 createNewRequestItem" style="width:180px;height:40px;border:2px; background-color:#3c8dbc">
+                Create New Request
             </button>
         </div>
     </div>
 }
 else
 {
-
-
-    <!-- TABLE: Issue Voucher -->
+    <!-- TABLE: Issue Request -->
     <div class="row">
         <div class="col-md-10">
             <div class="box" style=" width:100%">
                 <div class="box-header with-border">
-                    <h3 class="box-title">Items to be added to voucher</h3>
+                    <h3 class="box-title">Items to be added to request</h3>
                     <br />
 
                     @*<div class="box-tools pull-right">
@@ -61,27 +38,15 @@ else
 
                 <div class="box-body no-padding">
                     <div class="table-responsive table-full-width">
-                        <table id="TempVoucherDetails" class="table no-margin table-hover table-striped table-responsive table-borderless" style="width: 100%;">
+                        <table id="TempRequestDetails" class="table no-margin table-hover table-striped table-responsive table-borderless" style="width: 100%;">
                             <thead>
                                 <tr>
-                                    <th>
-                                        <!-- select all boxes -->
-                                        <input type="checkbox" name="select-all" id="select-all" />
-                                    </th>
-                                    <th>
-                                        No.
-                                    </th>
-                                    <th>
-                                        Item Number
-                                    </th>
+                                    <th></th>
                                     <th>
                                         Item Name
                                     </th>
                                     <th>
                                         Quantity
-                                    </th>
-                                    <th>
-                                        Remark
                                     </th>
                                     <th></th>
                                     <th></th>
@@ -92,13 +57,7 @@ else
                                 {
                                     <tr>
                                         <td>
-                                            <input type="checkbox" id="isChecked" name="isChecked" value="@item.RowID">
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.RowID)
-                                        </td>
-                                        <td width="20%">
-                                            @Html.DisplayFor(modelItem => item.ItemNumber)
+                                            <input type="checkbox" id="isChecked" name="isChecked" checked="checked" value="@item.ItemNumber" />
                                         </td>
                                         <td class="ItemName" width="40%">
                                             @Html.DisplayFor(modelItem => item.ItemName)
@@ -106,27 +65,16 @@ else
                                         <td class="Quantity" width="10%">
                                             @Html.DisplayFor(modelItem => item.Quantity)
                                         </td>
-                                        <td class="Remark" width="60%">
-                                            @Html.DisplayFor(modelItem => item.Remark)
-                                        </td>
                                         <td>
-                                            <button class="editVoucherItem" style="background-color:transparent; border:transparent">
+                                            <button class="editRequestItem" style="background-color:transparent; border:transparent">
                                                 <i class="fa fa-edit" style="color:#66B3B3"></i>
                                             </button>
-
-                                            @*<button type="button" class="btn btn-primary editVoucherItem" style="width:70px;height:30px;border:2px; background-color:#66B3B3">
-                                        <font size="2">Edit</font>
-                                    </button>*@
                                         </td>
                                         <td>
-                                            <form asp-action="VoucherItemDelete" asp-route-id="@item.RowID" method="post" data-ajax="true" data-ajax-update="#TempVoucherDetailsList" role="form" asp-controller="IssueVoucher">
+                                            <form asp-action="RequestItemDelete" asp-route-itemNumber="@item.ItemNumber" method="post" data-ajax="true" data-ajax-update="#TempNewRequest" role="form" asp-controller="NewRequest">
                                                 <button style="background-color:transparent; border:transparent">
                                                     <i class="fa fa-trash-alt" style="color:#dc6460"></i>
                                                 </button>
-
-                                                @*<button type="submit" class="btn btn-sm btn-danger d-none d-md-inline-block" style="width:70px;height:30px;border:2px; background-color:#dc6460">
-                                            <font size="2">Delete</font>
-                                        </button>*@
                                             </form>
                                         </td>
                                     </tr>
@@ -134,48 +82,27 @@ else
                             </tbody>
                         </table>
                         <br />
-                        <button type="button" class="btn btn-primary createNewVoucherItem" style="width:120px;height:32px;border:2px;margin-left:36px; background-color:#00B894">
+                        <button type="button" class="btn btn-primary createNewRequestItem" style="width:120px;height:32px;border:2px;margin-left:36px; background-color:#00B894">
                             <i class='fas fa-plus-circle' style='font-size:14px'></i>&nbsp;&nbsp;Add Item
                         </button>
                         <hr />
-
-
-                        <div style="margin-left:800px">
-                            <label style="width:100px;height:30px;">
-                                <font size="2">&nbsp;&nbsp;&nbsp;&nbsp;Amount:&nbsp;&nbsp;&nbsp;&nbsp;$</font>
-                            </label>
-                            <input type="text" style="background:transparent;border:none;width:60px;border-bottom:1px solid #808080" />
-                            <br />
-                            <label style="width:100px;height:30px;">
-                                <font size="2">&nbsp;GST&nbsp;(7%):&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$</font>
-                            </label>
-                            <input type="text" style="background:transparent;border:none;width:60px;border-bottom:1px solid #808080" />
-                            <br />
-                            <label style="width:100px;height:30px;">
-                                <font size="2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Total:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$</font>
-                            </label>
-                            <input type="text" style="background:transparent;border:none;width:60px;border-bottom:1px solid #808080" />
-                        </div>
                     </div>
                 </div>
                 <br />
                 <br />
+                @*<div style="margin-left:320px">
+                    <button type="button" asp-action="Submit" class="btn btn-primary submit" style="background-color: #00B894;width:120px;height:32px;border:2px;">
+                        Submit
+                    </button>
+                </div>*@
                 <div style="margin-left:320px">
-                    <input type="submit" value="Save As Draft" class="btn btn-primary addToDraft" style="width:120px;height:32px;border:2px; background-color:#CC9933" />
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <input type="submit" value="Submit" class="btn btn-primary submit" style="background-color: #00B894;width:120px;height:32px;border:2px;" />
                 </div>
-
                 <br />
-                
-
-
             </div>
         </div><!-- /.box-body -->
     </div><!-- /.box -->
     <!-- /.box-footer -->
-
-
 
 
 }
@@ -190,8 +117,8 @@ else
 
 
 <!-- /.col -->
-<!-- Modal for create voucher item-->
-<div class="modal fade in" id="CreateNewVoucherItemModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<!-- Modal for create Request item-->
+<div class="modal fade in" id="CreateNewRequestItemModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <br />
@@ -200,7 +127,7 @@ else
                 <div style="width: 400px;padding: 15px;margin: 15px;border-style:outset; border-width:1px; ">
                     <div align="center" vertical-align="middle">
                         <h5 class="modal-title" id="exampleModalLongTitle">
-                            <strong><font size="5">Add To Voucher</font></strong>
+                            <strong><font size="5">Add To Request</font></strong>
                         </h5>
                         @*<button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
@@ -209,9 +136,9 @@ else
                 </div>
             </div>
             <div class="modal-body">
-                <form method="POST">
+                <form method="POST" asp-action="AddItem">
                     <div class="form-group">
-                        <input type="hidden" id="CreateNewVoucherItemModalID" name="createNewVoucherItemModalName" class="form-control" value="0" />
+                        <input type="hidden" id="CreateNewRequestItemModalID" name="createNewRequestItemModalName" class="form-control" value="0" />
                     </div>
                     <div class="form-group">
                         <label for="Category">Category</label>
@@ -228,10 +155,6 @@ else
                         <label for="Quantity">Quantity</label>
                         <input type="text" id="Quantity" name="quantity" class="form-control" value="" />
                     </div>
-                    <div class="form-group">
-                        <label for="Remark">Remark</label>
-                        <input type="text" id="Remark" name="remark" class="form-control" value="" />
-                    </div>
                     <div align="center">
                         <button class="btn" data-dismiss="modal" aria-hidden="true" style="width:80px;height:30px;border:2px; background-color:#EEEEEE"><font size="3" color="black">Close</font></button>
                         <button type="submit" class="btn btn-primary" style="width:120px;height:30px;border:2px; background-color:#3c8dbc"><font size="3" color="white">Save Changes</font></button>
@@ -245,22 +168,19 @@ else
 
 
 <!-- Modal for edit quantity-->
-<div class="modal fade" id="VoucherItemModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal fade" id="RequestItemModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Update Voucher Item</h5>
+                <h5 class="modal-title" id="exampleModalLongTitle">Update Request Item</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <form method="POST">
+                <form method="POST" asp-action="EditItem">
                     <div class="form-group">
-                        <input type="hidden" id="VoucherItemModalID" name="voucherItemModalName" class="form-control" value="0" />
-                    </div>
-                    <div class="form-group">
-                        <input type="hidden" id="RowID" name="rowID" class="form-control" value="" />
+                        <input type="hidden" id="RequestItemModalID" name="RequestItemModalName" class="form-control" value="0" />
                     </div>
                     <div class="form-group">
                         <label for="ItemName">Item Name</label>
@@ -270,10 +190,6 @@ else
                     <div class="form-group">
                         <label for="Quantity">Quantity</label>
                         <input type="text" id="Quantity" name="quantity" class="form-control" value="" />
-                    </div>
-                    <div class="form-group">
-                        <label for="Remark">Remark</label>
-                        <input type="text" id="Remark" name="remark" class="form-control" value="" />
                     </div>
                     <div class="modal-footer">
                         <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
@@ -288,18 +204,16 @@ else
 
 
 <script>
-    $(".createNewVoucherItem").click(function () {
+    $(".createNewRequestItem").click(function () {
         //var $row = $(this).closest("tr");    // Find the row
         var itemNumber = ""; // Find the text
         var quantity = "";
-        var remark = "";
-        var createNewVoucherItemModalID = 1;
+        var createNewRequestItemModalID = 1;
 
-        var $modal = $('#CreateNewVoucherItemModal');
+        var $modal = $('#CreateNewRequestItemModal');
         $modal.find('#ItemNumber').val(itemNumber);
         $modal.find('#Quantity').val(quantity);
-        $modal.find('#Remark').val(remark);
-        $modal.find('#CreateNewVoucherItemModalID').val(createNewVoucherItemModalID);
+        $modal.find('#CreateNewRequestItemModalID').val(createNewRequestItemModalID);
 
         $modal.modal('show');
     });
@@ -308,7 +222,7 @@ else
 <script>
     $(document).ready(function () {
         $("#Category").change(function () {
-            $.get("/IssueVoucher/GetItemNameList", { category: $("#Category").val() }, function (data) {
+            $.get("/NewRequest/GetItemNameList", { category: $("#Category").val() }, function (data) {
                 $("#ItemNumber").empty();
                 $("#ItemNumber").append("<option value='" + "0" + "'>" + "---Select item---" + "</option>");
                 $.each(data, function (index, row) {
@@ -319,56 +233,42 @@ else
     });
 </script>
 
-<!--select all checkbox-->
-<script>
-    $('#select-all').click(function (event) {
-        if (this.checked) {
-            // Iterate each checkbox
-            $(':checkbox').each(function () {
-                this.checked = true;
-            });
-        } else {
-            $(':checkbox').each(function () {
-                this.checked = false;
-            });
-        }
-    });
-</script>
-
 
 <script>
-    $(".editVoucherItem").click(function () {
+    $(".editRequestItem").click(function () {
         var $row = $(this).closest("tr");    // Find the row
-        var rowID = $row.find("td.RowID").text().trim();
         var itemName = $row.find("td.ItemName").text().trim(); // Find the text
         var quantity = $row.find("td.Quantity").text().trim();
-        var remark = $row.find("td.Remark").text().trim();
-        var voucherItemModalID = 1;
+        var requestItemModalID = 1;
 
-        var $modal = $('#VoucherItemModal');
-        $modal.find('#RowID').val(rowID);
+        var $modal = $('#RequestItemModal');
         $modal.find('#ItemNameValue').val(itemName);
         $modal.find('#ItemNameDisplay').val(itemName);
         $modal.find('#Quantity').val(quantity);
-        $modal.find('#Remark').val(remark);
-        $modal.find('#VoucherItemModalID').val(voucherItemModalID);
+        $modal.find('#RequestItemModalID').val(requestItemModalID);
 
         $modal.modal('show');
     });
 </script>
 
-
+@*<script>
+    $(document).ready(function () {
+        $(".submit").click(function () {
+            document.location = '@Url.Action("Submit", "NewRequest")';
+        });
+    });
+</script>*@
 
 <script>
     $(document).ready(function () {
         $(".submit").click(function () {
-            var itemToAdd = $("input:checkbox:checked", "#TempVoucherDetails").map(function () {
+            var itemToAdd = $("input:checkbox:checked", "#TempRequestDetails").map(function () {
                 return $(this).val();
             }).get();
-            //alert(itemToAdd.join(','));
+            alert(itemToAdd.join(','));
             $.ajax({
                 type: "POST",
-                url: '@Url.Action("Index", "IssueVoucher")',
+                url: '@Url.Action("Index", "NewRequest")',
                 dataType: "html",
                 data: { itemSubmitted: itemToAdd },
                 success:
@@ -382,27 +282,35 @@ else
     });
 </script>
 
+@*<script>
+    $(document).ready(function () {
+        $(".submit2").click(function () {
+            //var itemToAdd = $("#TempRequestDetails").map(function () {
+            //    return $(this).val();
+            //    //return $(this).itemName;
+            //}).get();
+            var itemToAdd = [];
+            $.each($("#TempRequestDetails"), function (i, item) {
+                var ItemName = $(item).find("td.ItemName").text().trim();
+                itemToAdd.push(ItemName);
+            });
+          
 
-<script>
-    $(".addToDraft").click(function () {
-        var itemToAdd = $("input:checkbox:checked", "#TempVoucherDetails").map(function () {
-            return $(this).val();
-        }).get();
-        alert(itemToAdd.join(','));
-        $.ajax({
-            type: "POST",
-            url: '@Url.Action("Index", "IssueVoucher")',
-            dataType: "html",
-            data: { itemSavedToDraft: itemToAdd },
-            success:
-                function (data) {
-                    //$('#result').html(data);
-                    alert("saved to draft");
-                    location.reload();
-                }
-        })
+            alert(itemToAdd.join(','));
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("Index", "NewRequest")',
+                dataType: "html",
+                //data: { itemSubmitted: itemToAdd },
+                data: JSON.stringify(itemToAdd),
+                success:
+                    function (data) {
+                        //$('#result').html(data);
+                        alert("submitted");
+                        window.location.reload();
+                    }
+            })
+        });
     });
-</script>
-
-@*</html>*@
+</script>*@
 

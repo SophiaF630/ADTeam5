@@ -1,7 +1,7 @@
 ﻿@model List<ADTeam5.ViewModels.TempNewRequest>
 
 @{
-    ViewData["Title"] = "_TempVoucherDetails";
+    ViewData["Title"] = "_NewRequest";
 }
 
 @*<html>
@@ -87,21 +87,20 @@ else
                                         }
                                     </td>
                                     <td>
-                                        @foreach (var item in ViewBag.ItemNameList)
+                                        @foreach (var item in ViewBag.ItemNumberList)
                                         {
                                             <ul>
-                                                <button class="editVoucherItem" style="background-color:transparent; border:transparent">
+                                                <button type="button" class="editVoucherItem" style="background-color:transparent; border:transparent">
                                                     <i class="fa fa-edit" style="color:#66B3B3"></i>
                                                 </button>
                                             </ul>
                                         }
-                                    </td>
-                                  
+                                    </td>                                  
                                     <td>
                                         @foreach (var item in ViewBag.ItemNumberList)
                                         {
                                         <form method="POST" asp-action="ItemDelete"
-                                              asp-route-itemNumber="@item" role="form" asp-controller="NewRequest">
+                                              asp-route-itemNumber="@item" data-ajax="true" data-ajax-update="#NewRequest" role="form" asp-controller="NewRequest">
                                             <button style="background-color:transparent; border:transparent">
                                                 <i class="fa fa-trash-alt" style="color:#dc6460"></i>
                                             </button>
@@ -211,7 +210,7 @@ else
                 </button>
             </div>
             <div class="modal-body">
-                <form method="POST">
+                <form method="POST" asp-action="EditItem">
                     <div class="form-group">
                         <input type="hidden" id="RowID" name="rowID" class="form-control" value="" />
                     </div>
@@ -268,13 +267,11 @@ else
 <script>
     $(".editVoucherItem").click(function () {
         var $row = $(this).closest("tr");    // Find the row
-        var rowID = $row.find("td.RowID").text().trim();
         var itemName = $row.find("td.ItemName").text().trim(); // Find the text
         var quantity = $row.find("td.Quantity").text().trim();
         var voucherItemModalID = 1;
 
         var $modal = $('#VoucherItemModal');
-        $modal.find('#RowID').val(rowID);
         $modal.find('#ItemNameValue').val(itemName);
         $modal.find('#ItemNameDisplay').val(itemName);
         $modal.find('#Quantity').val(quantity);

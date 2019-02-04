@@ -218,10 +218,7 @@ namespace ADTeam5.Controllers
                     disbursementList.Status = "Completed";
                     disbursementList.CompleteDate = DateTime.Now;
                     _context.DisbursementList.Update(disbursementList);
-                    _context.SaveChanges();
-
-                    //update inventory transaction record
-
+                    _context.SaveChanges();                    
 
                     return RedirectToAction(nameof(Index));
                 }
