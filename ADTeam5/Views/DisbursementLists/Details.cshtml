@@ -102,13 +102,19 @@
                     </div>
                 </div>
             </div>
-            <button type="button" class="btn btn-primary confirmDelivery">
-                Confirm Delivery
-            </button>
-
-            <div>
-                <a href="#" data-toggle="modal" data-target="#BackToListModal">Back to List</a>
-            </div>
+            @if (ViewBag.DisbursementListStatus == "Pending Delivery")
+            {
+                <button type="button" class="btn btn-primary confirmDelivery">
+                    Confirm Delivery
+                </button>
+                <button type="button" class="btn btn-primary noShow">
+                    No Show
+                </button>
+            }
+                <div>
+                    <a href="#" data-toggle="modal" data-target="#BackToListModal">Back to List</a>
+                </div>
+            
         </div>
 
     </div>
@@ -223,6 +229,32 @@
     </div>
 </div>
 
+<!-- Modal for No Show-->
+<div class="modal fade" id="NoShowModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">**Warning**</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="POST">
+                    <div class="form-group">
+                        <input type="hidden" id="NoShowModalID" name="noShowModalName" class="form-control" value="1" />
+                    </div>
+                    Status cannot be changed after confirmation
+                    <div class="modal-footer">
+                        <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Confirm</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Modal for Back To List-->
 <div class="modal fade" id="BackToListModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -301,7 +333,15 @@
         $modal.modal('show');
     });
 </script>
+<script>
+    $(".noShow").click(function () {
+        var backToListModalID = 1;
 
+        var $modal = $('#NoShowModal');
+        $modal.find('#NoShowModalID').val(backToListModalID);
+        $modal.modal('show');
+    });
+</script>
 <script>
     $(".backToList").click(function () {
         var backToListModalID = 1;
