@@ -39,9 +39,28 @@ namespace ADTeam5.Controllers
             dept = identity[0];
             role = identity[1];
 
-            List<DisbursementList> dbList = b.findDisbursementListStatusComplete(dept);
+            List<DisbursementList> dbList = new List<DisbursementList>();
+            dbList = b.findDisbursementListStatusComplete(dept);
             decimal sum = b.findTotalExpenditure(dept, dbList);
 
+            int todayYear = DateTime.Now.Year;
+            int nextYear;
+            int lastYear;
+            int todayMonth = DateTime.Now.Month;
+
+            if (todayMonth < 4)
+            {
+                lastYear = todayYear - 1;
+                ViewData["startFinancialYear"] = "April " + lastYear;
+                ViewData["endFinancialYear"] = "March " + todayYear;
+            }
+            else
+            {
+                nextYear = todayYear + 1;
+                ViewData["startFinancialYear"] = "April " + todayYear;
+                ViewData["endFinancialYear"] = "March" + nextYear;
+            }
+             
             @ViewData["Sum"] = sum;
 
             return View(dbList);
@@ -70,18 +89,8 @@ namespace ADTeam5.Controllers
                 TempData["Alert1"] = "Please fill in all details!";
                 return RedirectToAction("Index"); 
             }
-            else if (startDate > endDate || endDate < startDate)
-            {
-                //TempData["Alert1"] = "Please Try Again";
-                //return RedirectToAction("Index");
-                return Content("try again");
-            }
-            else 
-            {
-                var t = context.DisbursementList;
-                return View(t);
-            }
-
+            TempData["Alert1"] = "Please fill in all details!";
+            return RedirectToAction("Index");
         }
 
         public IActionResult Details(string Dlid)

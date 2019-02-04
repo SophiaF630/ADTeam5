@@ -82,9 +82,9 @@ namespace ADTeam5.BusinessLogic
         {
             
             var q2 = context.CollectionPoint.Where(x => x.CollectionPointId == currentCollectionPoint).First();
-            CollectionPoint d2 = new CollectionPoint();
-            d2 = q2;
-            return d2;
+            CollectionPoint c = new CollectionPoint();
+            c = q2;
+            return c;
         }
 
         //NewRequest 
@@ -176,10 +176,31 @@ namespace ADTeam5.BusinessLogic
 
         public List<DisbursementList> findDisbursementListStatusComplete(string dept)
         {
-            var q1 = context.DisbursementList.Where(x => x.DepartmentCode == dept && x.Status == "Completed").ToList();
-            List<DisbursementList> dList = new List<DisbursementList>();
-            dList = q1;
-            return dList;
+            List<DisbursementList> dbList = new List<DisbursementList>();
+            int todayYear = DateTime.Now.Year;
+            int nextYear;
+            int lastYear;
+            int todayMonth = DateTime.Now.Month;
+            DateTime startFinancialYear;
+            DateTime endFinancialYear;
+
+            if (todayMonth < 4)
+            {
+                lastYear = todayYear - 1;
+                startFinancialYear = new DateTime(lastYear, 4, 1, 0, 0, 0);
+                endFinancialYear = new DateTime(todayYear, 3, 31, 0, 0, 0);
+            }
+            else
+            {
+                nextYear = todayYear + 1;
+                startFinancialYear = new DateTime(todayYear, 4, 1, 0, 0, 0);
+                endFinancialYear = new DateTime(nextYear, 3, 31, 0, 0, 0);
+            }
+
+            var q = context.DisbursementList.Where(x => x.DepartmentCode == dept && x.Status == "Completed" && x.CompleteDate >= startFinancialYear && x.CompleteDate <= endFinancialYear);
+            dbList = q.ToList();
+
+            return dbList;
         }
 
         public List<DisbursementList> findDisbursementListStatusCompleteDateRange(string dept, DateTime startDate, DateTime endDate)

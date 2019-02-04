@@ -16,21 +16,31 @@
     </div>
 }
 
-<form asp-action="Index" method="post">
-    <div class="form-group">
-        From:
-        <input type="date" name="startdate" id="start" value="=" />
-        To:
-        <input type="date" name="enddate" id="end" value=" = " />
+    <form asp-action="Index" method="post">
+        <div class="form-group">
+            Select start date:
+            <input type="date" name="startdate" id="start" value="=" />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            Select end date:
+            <input type="date" name="enddate" id="end" value=" = " />
 
-        <input type="submit" value="Search" id="searchbtn" />
-    </div>
-    @if (ViewData["StartDate"] != null && ViewData["EndDate"] != null)
-    {
-        <p>Between @ViewData["StartDate"] to @ViewData["endDate"]</p>
-    }
+            <input type="submit" value="Search" id="searchbtn" />
+        </div>
+        <br/>
 
-</form>
+        @if (ViewData["StartDate"] == null && ViewData["EndDate"] == null)
+        {
+            <b><p>Financial Year: @ViewData["startFinancialYear"] to @ViewData["endFinancialYear"]</p></b>
+        }
+
+        @if (ViewData["StartDate"] != null && ViewData["EndDate"] != null)
+        {
+            <b><p>Search results from @ViewData["StartDate"] to @ViewData["endDate"]</p></b>
+        }
+
+
+
+    </form>
 <table class="table">
     <thead>
         <tr>

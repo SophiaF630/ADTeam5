@@ -57,10 +57,10 @@
 <h1>View Request</h1>
 <form asp-action="Index" method="post">
     <div>
-        From:
+        Select start date:
         <input type="date" name="startdate" id="start" value="=" />
-
-        To:
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        Select end date:
         <input type="date" name="enddate" id="end" value=" = " />
 
         <input type="submit" value="Search" id="searchbtn" />
@@ -69,9 +69,8 @@
 
     @if (ViewData["StartDate"] != null & ViewData["EndDate"] != null)
     {
-        <p>Search results from @ViewData["StartDate"] to @ViewData["EndDate"]</p>
+    <p> <b>Search results from @ViewData["StartDate"] to @ViewData["EndDate"]</b></p>
     }
-    <br />
 </form>
 <table class="table">
     <thead>
