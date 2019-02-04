@@ -99,6 +99,9 @@ namespace ADTeam5.Controllers
             List<DisbursementListDetails> result = new List<DisbursementListDetails>();
             List<int> rowIDList = new List<int>();
 
+            //viewbag for status check
+            ViewBag.DisbursementListStatus = _context.DisbursementList.FirstOrDefault(x => x.Dlid == id).Status;
+
             //if pending delivery show temp disbursement list
             if (_context.DisbursementList.Find(id).Status == "Pending Delivery")
             {
@@ -162,11 +165,14 @@ namespace ADTeam5.Controllers
 
         // POST: DisbursementLists/Details/5
         [HttpPost]
-        public async Task<IActionResult> Details(string id, int rowID, string itemNumber, int quantityDelivered, int quantityForVoucher, string remarkForDelivery, string remarkForVoucher, string confirmationPassword, int quantityDeliveredModalName, int addToVoucherModalName, int confirmDeliveryModalName, int backToListModalName)
+        public async Task<IActionResult> Details(string id, int rowID, string itemNumber, int quantityDelivered, int quantityForVoucher, string remarkForDelivery, string remarkForVoucher, string confirmationPassword, int quantityDeliveredModalName, int addToVoucherModalName, int confirmDeliveryModalName, int noShowModalName, int backToListModalName)
         {
             ADTeam5User user = await _userManager.GetUserAsync(HttpContext.User);
             List<string> identity = userCheck.checkUserIdentityAsync(user);
             int userID = user.WorkID;
+
+            //viewbag for status check
+            ViewBag.DisbursementListStatus = _context.DisbursementList.FirstOrDefault(x => x.Dlid == id).Status;
 
             if (addToVoucherModalName == 1)
             {
@@ -227,6 +233,17 @@ namespace ADTeam5.Controllers
                     //check
                     //show incorrect password
                 }
+            }
+            else if(noShowModalName == 1)
+            {
+                //update disbursement list status
+                var disbursementList = _context.DisbursementList.Find(id);
+                disbursementList.Status = "No Show";
+                disbursementList.CompleteDate = DateTime.Now;
+                _context.DisbursementList.Update(disbursementList);
+                _context.SaveChanges();
+
+                return RedirectToAction(nameof(Index));
             }
             else if(backToListModalName == 1)
             {
