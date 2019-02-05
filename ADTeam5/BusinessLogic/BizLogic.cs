@@ -969,7 +969,15 @@ namespace ADTeam5.BusinessLogic
             }
         }
 
-
+        //UpdateCatalogueStockAfterSupplierDelivery
+        public void UpdateCatalogueStockAfterSupplierDelivery(string itemNumber, int quantity)
+        {
+            Catalogue item = _context.Catalogue.FirstOrDefault(x => x.ItemNumber == itemNumber);
+            int stock = item.Stock;
+            item.Stock = stock + quantity;
+            _context.Catalogue.Update(item);
+            _context.SaveChanges();
+        }
 
         //Department part
         public List<EmployeeRequestRecord> searchRequestByDateAndDept(DateTime startDate, DateTime endDate, string dept)

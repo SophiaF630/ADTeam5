@@ -94,6 +94,14 @@ namespace ADTeam5.Models
             int userID = user.WorkID;
 
             ViewBag.POStatus = _context.PurchaseOrderRecord.Find(id).Status;
+            //ViewBag for voucher price            
+            decimal? amount = b.GetTotalAmountForPO(id);
+            decimal? GST = Math.Round((decimal)(amount * (decimal?)0.07), 2);
+            ViewBag.Amount = amount;
+            ViewBag.GST = GST;
+            ViewBag.TotalAmount = amount + GST;
+            ViewBag.POStatus = _context.PurchaseOrderRecord.Find(id).Status;
+
 
             if (POItemModalName == 1)
             {
@@ -145,7 +153,7 @@ namespace ADTeam5.Models
                 _context.PurchaseOrderRecord.Update(po);
                 _context.SaveChanges();
 
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Details", id);
             }
             else if (POItemModalQtyDeliveredName == 1)
             {
@@ -166,9 +174,9 @@ namespace ADTeam5.Models
                     string itemNo = item.ItemNumber;
                     int qtyDelivered = item.QuantityDelivered;
                     int rdid = item.RDID;
-
-                    b.UpdateCatalogueOutAfterDelivery(itemNo, qtyDelivered);
+                    
                     b.UpdateQuantityDeliveredAfterDelivery(qtyDelivered, rdid);
+                    b.UpdateCatalogueStockAfterSupplierDelivery(itemNo, qtyDelivered);
 
                     int balance = _context.Catalogue.Find(itemNo).Stock;
                     b.UpdateInventoryTransRecord(itemNo, id, qtyDelivered, balance);
@@ -187,6 +195,8 @@ namespace ADTeam5.Models
             {
                 return RedirectToAction(nameof(Index));
             }
+
+           
 
             return View("Details", tempPurchaseOrderRecordDetails);
         }
