@@ -53,9 +53,9 @@ else
                     <br />
 
                     @*<div class="box-tools pull-right">
-            <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
-            <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
-        </div>*@
+                            <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
+                            <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
+                        </div>*@
                 </div>
 
 
@@ -121,8 +121,8 @@ else
                                             </button>
 
                                             @*<button type="button" class="btn btn-primary editVoucherItem" style="width:70px;height:30px;border:2px; background-color:#66B3B3">
-                                <font size="2">Edit</font>
-                            </button>*@
+                                                    <font size="2">Edit</font>
+                                                </button>*@
                                         </td>
                                         <td>
                                             <form asp-action="VoucherItemDelete" asp-route-id="@item.RowID" method="post" data-ajax="true" data-ajax-update="#TempVoucherDetailsList" role="form" asp-controller="IssueVoucher">
@@ -131,8 +131,8 @@ else
                                                 </button>
 
                                                 @*<button type="submit" class="btn btn-sm btn-danger d-none d-md-inline-block" style="width:70px;height:30px;border:2px; background-color:#dc6460">
-                                    <font size="2">Delete</font>
-                                </button>*@
+                                                        <font size="2">Delete</font>
+                                                    </button>*@
                                             </form>
                                         </td>
                                     </tr>
@@ -145,38 +145,47 @@ else
                         </button>
                         <hr />
                         <div style="margin-left:800px">
-                            <label id="amount" le="width:100px;height:30px;">
-                                <font size="2">&nbsp;&nbsp;&nbsp;&nbsp;Amount:&nbsp;&nbsp;&nbsp;&nbsp;$</font>
-                            </label>
-                            <input type="text"  value="" style="background:transparent;border:none;width:60px;border-bottom:1px solid #808080" />
-                            <br />
-                            <label id="GST" style="width:100px;height:30px;">
-                                <font size="2">&nbsp;GST&nbsp;(7%):&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$</font>
-                            </label>
-                            <input type="text"  value="" style="background:transparent;border:none;width:60px;border-bottom:1px solid #808080" />
-                            <br />
-                            <label id="totalAmount" style="width:100px;height:30px;">
-                                <font size="2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Total:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$</font>
-                            </label>
-                            <input type="text" value="" style="background:transparent;border:none;width:60px;border-bottom:1px solid #808080" />
+                            <table>
+                                <tr>                         
+                                    <td>
+                                        <label id="amount">
+                                            <font size="2">Amount: $</font>
+                                        </label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label id="GST">
+                                            <font size="2">GST(7%): $</font>
+                                        </label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label id="totalAmount">
+                                            <font size="2">Total: $</font>
+                                        </label>
+                                    </td>
+                                </tr>
+                            </table>                            
                         </div>
 
                         @*<div style="margin-left:800px">
-                            <label style="width:100px;height:30px;">
-                                <font size="2">&nbsp;&nbsp;&nbsp;&nbsp;Amount:&nbsp;&nbsp;&nbsp;&nbsp;$</font>
-                            </label>
-                            <input type="text" id="amount" value="" style="background:transparent;border:none;width:60px;border-bottom:1px solid #808080" />
-                            <br />
-                            <label style="width:100px;height:30px;">
-                                <font size="2">&nbsp;GST&nbsp;(7%):&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$</font>
-                            </label>
-                            <input type="text" id="GST" value="" style="background:transparent;border:none;width:60px;border-bottom:1px solid #808080" />
-                            <br />
-                            <label style="width:100px;height:30px;">
-                                <font size="2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Total:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$</font>
-                            </label>
-                            <input type="text" id="totalAmount" value="" style="background:transparent;border:none;width:60px;border-bottom:1px solid #808080" />
-                        </div>*@
+                                <label style="width:100px;height:30px;">
+                                    <font size="2">&nbsp;&nbsp;&nbsp;&nbsp;Amount:&nbsp;&nbsp;&nbsp;&nbsp;$</font>
+                                </label>
+                                <input type="text" id="amount" value="" style="background:transparent;border:none;width:60px;border-bottom:1px solid #808080" />
+                                <br />
+                                <label style="width:100px;height:30px;">
+                                    <font size="2">&nbsp;GST&nbsp;(7%):&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$</font>
+                                </label>
+                                <input type="text" id="GST" value="" style="background:transparent;border:none;width:60px;border-bottom:1px solid #808080" />
+                                <br />
+                                <label style="width:100px;height:30px;">
+                                    <font size="2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Total:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$</font>
+                                </label>
+                                <input type="text" id="totalAmount" value="" style="background:transparent;border:none;width:60px;border-bottom:1px solid #808080" />
+                            </div>*@
                     </div>
                 </div>
                 <br />
@@ -188,7 +197,7 @@ else
                 </div>
 
                 <br />
-                
+
 
 
             </div>
@@ -425,7 +434,7 @@ else
         })
     });
 </script>
-<script>    
+@*<script>
     function doit() {
         //alert("selected");
         var n = 0;
@@ -435,24 +444,42 @@ else
         var objs = document.getElementsByName("isChecked");
         console.log(objs);
         for (var i = 0; i < objs.length; i++) {
-            if (objs[i].checked) {
-                var $row = $(this).closest("tr");    // Find the row
-                var quantity = $row.find("td.Quantity").text().trim();
-                var price = $row.find("td.Price").text().trim();
-                amount += quantity * price;
-                GST = amount * 0.07;
-                totalAmount = amount + GST;
+            if (objs[i].checked) {                
                 n++;
             }
         }
-        
         document.getElementById("number").innerText = "Items to be added to voucher. " + n + " item(s) selected";
-        //document.getElementById("amount").innerText = "    Amount:    $" + amount;
-       //document.getElementById("amount").text = n;
+
     };
+</script>*@
+
+<script>
+    $('#TempVoucherDetails').click(function () {
+        var amount = 0;
+        var GST = 0;
+        var totalAmount = 0;
+        var n = 0;
+        var objs = document.getElementsByName("isChecked");
+        for (var i = 0; i < objs.length; i++) {
+            if (objs[i].checked) {
+                n++;
+            }
+        }
+        $('input:checkbox:checked').each(function () {
+            var $row = $(this).closest("tr");    // Find the row
+            var quantity = $row.find("td.Quantity").text().trim();
+            var price = $row.find("td.Price").text().trim();
+            // now push that row to the result array
+            amount += quantity * price;
+        });
+        GST = Math.round(amount * 0.07*100)/100;
+        totalAmount = amount + GST;
+        //console.log(amount);
+        document.getElementById("number").innerText = "Items to be added to voucher. " + n + " item(s) selected";
+        document.getElementById("amount").innerText = "Amount: $" + amount;
+        document.getElementById("GST").innerText = "GST (7 %): $" + GST;
+        document.getElementById("totalAmount").innerText = "Total Amount: $" + totalAmount;
+    });
 </script>
-
-
-
-@*</html>*@
+    @*</html>*@
 
