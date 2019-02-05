@@ -434,24 +434,6 @@ else
         })
     });
 </script>
-@*<script>
-    function doit() {
-        //alert("selected");
-        var n = 0;
-        var amount = 0;
-        var GST = 0;
-        var totalAmount = 0;
-        var objs = document.getElementsByName("isChecked");
-        console.log(objs);
-        for (var i = 0; i < objs.length; i++) {
-            if (objs[i].checked) {                
-                n++;
-            }
-        }
-        document.getElementById("number").innerText = "Items to be added to voucher. " + n + " item(s) selected";
-
-    };
-</script>*@
 
 <script>
     $('#TempVoucherDetails').click(function () {
@@ -469,7 +451,6 @@ else
             var $row = $(this).closest("tr");    // Find the row
             var quantity = $row.find("td.Quantity").text().trim();
             var price = $row.find("td.Price").text().trim();
-            // now push that row to the result array
             amount += quantity * price;
         });
         GST = Math.round(amount * 0.07*100)/100;
