@@ -4,6 +4,8 @@
     ViewData["Title"] = "_TempPurchaseOrderRecords";
 }
 
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
 
 @*<div class="container">*@
 
@@ -55,8 +57,8 @@ else
                                         Order Date
                                     </th>
                                     @*<th>
-                                        Estimated Deliver Date
-                                    </th>*@
+                                            Estimated Deliver Date
+                                        </th>*@
                                     <th>
                                         Complete Date
                                     </th>
@@ -83,8 +85,8 @@ else
                                             @Html.DisplayFor(modelItem => item.OrderDate)
                                         </td>
                                         @*<td>
-                                            @Html.DisplayFor(modelItem => item.ExpectedCompleteDate)
-                                        </td>*@
+                                                @Html.DisplayFor(modelItem => item.ExpectedCompleteDate)
+                                            </td>*@
                                         <td>
                                             @Html.DisplayFor(modelItem => item.CompleteDate)
                                         </td>
@@ -103,16 +105,14 @@ else
                                                         </button>
                                                     </form>
                                                 </td>*@
-                                            <td>
-                                                <form asp-action="PurchaseOrderRecordDelete" asp-route-id="@item.Poid" method="post" data-ajax="true" data-ajax-update="#TempPurchaseOrderRecords" role="form" asp-controller="PurchaseOrderRecords">
-                                                    <button type="submit" class="btn btn-sm btn-danger d-none d-md-inline-block" style="background-color:transparent; border:transparent">
-                                                        <i class="fa fa-trash-alt" style="color:#dc6460"></i>
-                                                    </button>
-                                                    @*<button type="submit" class="btn btn-sm btn-danger d-none d-md-inline-block">
-                                                            Delete
-                                                        </button>*@
-                                                </form>
-                                            </td>
+                                        <td>
+                                            <form asp-action="PurchaseOrderRecordDelete" asp-route-id="@item.Poid" method="post" data-ajax="true" data-ajax-update="#TempPurchaseOrderRecords" role="form" asp-controller="PurchaseOrderRecords">
+                                                <button class="btn btn-sm btn-danger d-none d-md-inline-block" style="background-color:transparent; border:transparent">
+                                                    <i class="fa fa-trash-alt" style="color:#dc6460"></i>
+                                                </button>                         
+                                            </form>
+        
+                                        </td>
                                         }
                                         else
                                         {

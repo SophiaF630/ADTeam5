@@ -969,6 +969,26 @@ namespace ADTeam5.BusinessLogic
             }
         }
 
+        //RemoveRecordDetails
+        public void RemoveRecordDetails(string id)
+        {
+            List<RecordDetails> recordDetailsToBeDeleted = _context.RecordDetails.Where(x => x.Rrid == id).ToList();
+            foreach (var q in recordDetailsToBeDeleted)
+            {
+                _context.RecordDetails.Remove(q);
+                _context.SaveChanges();
+                
+            }
+        }
+
+        //Remove PO record
+        public void RemovePORecord(string id)
+        {
+            PurchaseOrderRecord poRecordToBeDeleted = _context.PurchaseOrderRecord.FirstOrDefault(x => x.Poid == id);
+            _context.PurchaseOrderRecord.Remove(poRecordToBeDeleted);
+            _context.SaveChanges();
+        }
+
         //UpdateCatalogueStockAfterSupplierDelivery
         public void UpdateCatalogueStockAfterSupplierDelivery(string itemNumber, int quantity)
         {
