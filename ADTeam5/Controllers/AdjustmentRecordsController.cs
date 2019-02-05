@@ -59,7 +59,14 @@ namespace ADTeam5.Controllers
             if (id == null)
             {
                 return NotFound();
-            }           
+            }
+
+            //ViewBag for voucher price            
+            decimal? amount = b.GetTotalAmountForVoucher(id);
+            decimal? GST = Math.Round((decimal)(amount * (decimal?)0.07), 2);
+            ViewBag.Amount = amount;
+            ViewBag.GST = GST;
+            ViewBag.TotalAmount = amount + GST;
 
             List<AdjustmentRecordDetails> result = b.GetAdjustmentRecordDetails(id);
 
@@ -72,6 +79,9 @@ namespace ADTeam5.Controllers
             }
             categoryList.Insert(0, new Catalogue { ItemNumber = "0", Category = "---Select Category---" });
             ViewBag.ListofCategory = categoryList;
+
+            //ViewBag for record status
+            ViewBag.AdjustmentRecordStatus = _context.AdjustmentRecord.FirstOrDefault(x => x.VoucherNo == id).Status;
 
             return View(result);
         }
@@ -124,6 +134,9 @@ namespace ADTeam5.Controllers
             }
             categoryList.Insert(0, new Catalogue { ItemNumber = "0", Category = "---Select Category---" });
             ViewBag.ListofCategory = categoryList;
+
+            //ViewBag for record status
+            ViewBag.AdjustmentRecordStatus = _context.AdjustmentRecord.FirstOrDefault(x => x.VoucherNo == id).Status;
 
             List<AdjustmentRecordDetails> result = b.GetAdjustmentRecordDetails(id);
 
@@ -210,6 +223,14 @@ namespace ADTeam5.Controllers
             {
                 adjustmentRecordDetailsList = new List<AdjustmentRecordDetails>();
             }
+
+            //ViewBag for voucher price            
+            decimal? amount = b.GetTotalAmountForVoucher(id);
+            decimal? GST = Math.Round((decimal)(amount * (decimal?)0.07), 2);
+            ViewBag.Amount = amount;
+            ViewBag.GST = GST;
+            ViewBag.TotalAmount = amount + GST;
+
             return PartialView("_TempDetails", adjustmentRecordDetailsList);
 
 
