@@ -32,7 +32,7 @@ namespace ADTeam5.Models
         [Display(Name = "Reorder Quantity")]
         [RegularExpression(@"^[0-9]*$", ErrorMessage = "Numbers only")]
         [Range(0, 10000, ErrorMessage = "Reorder Quantity cannot be negative")]
-        public int? ReorderQty { get; set; }
+        public int ReorderQty { get; set; }
         [Display(Name = "Unit of Measure")]
         public string UnitOfMeasure { get; set; }
         [ReadOnly(true)]

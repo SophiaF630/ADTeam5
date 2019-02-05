@@ -36,7 +36,7 @@ namespace ADTeam5.Controllers
             ADTeam5User user = await _userManager.GetUserAsync(HttpContext.User);
             List<string> identity = userCheck.checkUserIdentityAsync(user);
             int userID = user.WorkID;
-
+            //b.AddReorderLevelItemToTempPurchaseOrderDetailsList();
             List<TempPurchaseOrderDetails> tempPurchaseOrderDetails = b.GetTempPurchaseOrderDetailsList();
 
             //Viewbag for catagory
@@ -87,7 +87,7 @@ namespace ADTeam5.Controllers
                         if (Array.Exists(itemSubmitted, i => i == item.RowID.ToString()) && item.SupplierCode == s)
                         {
                             b.AddItemsToPO(item.RowID, poNo, tempPurchaseOrderDetailsList);
-                            b.CreatePurchaseOrderRecord(userID, poNo, s, "Submitted");
+                            b.CreatePurchaseOrderRecord(userID, poNo, s, "Pending Delivery");
                         }
                     }
                 }

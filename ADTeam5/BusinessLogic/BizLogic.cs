@@ -672,15 +672,70 @@ namespace ADTeam5.BusinessLogic
             return result;
         }
 
-    //Get temp PurchaseOrderDetailsList
-    public List<TempPurchaseOrderDetails> GetTempPurchaseOrderDetailsList()
+
+        //Add item at reorder qty to TempPurchaseOrderDetailsList
+        public List<TempPurchaseOrderDetails> AddReorderLevelItemToTempPurchaseOrderDetailsList()
+        {
+            var itemsAtReorderLevel = _context.Catalogue.Where(x => x.Stock <= x.ReorderLevel).ToList();
+
+            //find pending delivery items quantity
+            var pendingDeliveryItems = from rd in _context.RecordDetails
+                                       join po in _context.PurchaseOrderRecord on rd.Rrid equals po.Poid
+                                       where po.Status == "Pending Delivery"
+                                       group rd by new { rd.ItemNumber } into g
+                                       select new { g.Key.ItemNumber, Quantity = g.Sum(x => x.Quantity) };
+
+            List<TempPurchaseOrderDetails> autoPurchaseOrderDetails = new List<TempPurchaseOrderDetails>();
+            int rowID = 1;
+            foreach(var item in itemsAtReorderLevel)
+            {
+                var q = pendingDeliveryItems.Where(x => x.ItemNumber == item.ItemNumber && x.Quantity >= item.ReorderQty);
+                foreach(var p in q)
+                {
+                    if (item.ItemNumber != p.ItemNumber)
+                    {
+                        TempPurchaseOrderDetails tempPOD = new TempPurchaseOrderDetails();
+                        tempPOD.RowID = rowID;
+                        tempPOD.ItemNumber = item.ItemNumber;
+                        tempPOD.ItemName = _context.Catalogue.FirstOrDefault(x => x.ItemNumber == item.ItemNumber).ItemName;
+                        tempPOD.Quantity = item.ReorderQty;
+                        tempPOD.Remark = "";
+                        tempPOD.SupplierCode = _context.Catalogue.FirstOrDefault(x => x.ItemNumber == item.ItemNumber).Supplier1;
+
+                        autoPurchaseOrderDetails.Add(tempPOD);
+                        rowID++;
+                    }
+                }
+                
+            }
+
+            return autoPurchaseOrderDetails;
+        }
+
+        //Get temp PurchaseOrderDetailsList
+        public List<TempPurchaseOrderDetails> GetTempPurchaseOrderDetailsList()
         {
             List<TempPurchaseOrderDetails> result = new List<TempPurchaseOrderDetails>();
+
+            //Find auto generated items by system
+            List<TempPurchaseOrderDetails> autoPurchaseOrderDetails = AddReorderLevelItemToTempPurchaseOrderDetailsList();
+
+            //Find manual add in items via "POTemp"
             List<PurchaseOrderRecord> purchaseOrderRecordList = _context.PurchaseOrderRecord
                 .Where(x => x.Poid.Contains("POTemp")).ToList();
+            List<TempPurchaseOrderDetails> manualPurchaseOrderDetails = new List<TempPurchaseOrderDetails>();
+            //last row ID of auto
+            int rowID = 0;
+            if (autoPurchaseOrderDetails.Count != 0)
+            {
+                rowID = autoPurchaseOrderDetails.Select(x => x.RowID).Max() + 1;
+            }
+            else
+            {
+                rowID = 1;
+            }
             if (purchaseOrderRecordList.Count != 0)
             {
-                int rowID = 1;
                 foreach (var record in purchaseOrderRecordList)
                 {
                     List<RecordDetails> rdList = _context.RecordDetails.Where(x => x.Rrid == record.Poid).ToList();
@@ -695,11 +750,14 @@ namespace ADTeam5.BusinessLogic
                         tPOList.Remark = item.Remark;
                         tPOList.SupplierCode = _context.PurchaseOrderRecord.FirstOrDefault(x => x.Poid == item.Rrid).SupplierCode;
 
-                        result.Add(tPOList);
+                        manualPurchaseOrderDetails.Add(tPOList);
                         rowID++;
                     }
                 }
             }
+
+            //join auto and manual generated tempPOlist
+            result = autoPurchaseOrderDetails.Concat(manualPurchaseOrderDetails).ToList<TempPurchaseOrderDetails>();
             return result;
         }
 
@@ -794,48 +852,47 @@ namespace ADTeam5.BusinessLogic
             PurchaseOrderRecord poRecord = _context.PurchaseOrderRecord.FirstOrDefault(x => x.Poid == poNo);
             if (poRecord == null && supplierCode != null)
             {
-                if (status == "Submitted")
-                {
-                    //Generate new adjustment record
-                    PurchaseOrderRecord purchaseOrderRecord = new PurchaseOrderRecord();
-                    purchaseOrderRecord.Poid = poNo;
-                    purchaseOrderRecord.OrderDate = DateTime.Now.Date;
-                    purchaseOrderRecord.StoreClerkId = userID;
-                    purchaseOrderRecord.SupplierCode = supplierCode;
-                    purchaseOrderRecord.Status = "Submitted";
+                //Generate new adjustment record
+                PurchaseOrderRecord purchaseOrderRecord = new PurchaseOrderRecord();
+                purchaseOrderRecord.Poid = poNo;
+                purchaseOrderRecord.OrderDate = DateTime.Now.Date;
+                purchaseOrderRecord.StoreClerkId = userID;
+                purchaseOrderRecord.SupplierCode = supplierCode;
+                purchaseOrderRecord.Status = status;
 
-                    _context.PurchaseOrderRecord.Add(purchaseOrderRecord);
-                    _context.SaveChanges();
-                }
-                else if (status == "Draft")
-                {
-                    //Generate new adjustment record
-                    PurchaseOrderRecord purchaseOrderRecord = new PurchaseOrderRecord();
-                    purchaseOrderRecord.Poid = poNo;
-                    purchaseOrderRecord.OrderDate = DateTime.Now.Date;
-                    purchaseOrderRecord.StoreClerkId = userID;
-                    purchaseOrderRecord.SupplierCode = supplierCode;
-                    purchaseOrderRecord.Status = "Draft";
-
-                    _context.PurchaseOrderRecord.Add(purchaseOrderRecord);
-                    _context.SaveChanges();
-                }
+                _context.PurchaseOrderRecord.Add(purchaseOrderRecord);
+                _context.SaveChanges();
             }
         }
 
         //Add items to PO
         public void AddItemsToPO(int rowID, string poNo, List<TempPurchaseOrderDetails> tempPurchaseOrderDetailsList)
         {
-            //get rdid
+           
             TempPurchaseOrderDetails tempPurchaseOrderDetails = tempPurchaseOrderDetailsList.FirstOrDefault(x => x.RowID == rowID);
             int rdid = tempPurchaseOrderDetails.RDID;
-            //update record details
-            RecordDetails rd = _context.RecordDetails.FirstOrDefault(x => x.Rdid == rdid);
-            if (rd != null)
+            if(rdid != 0)
             {
-                rd.Rrid = poNo;
-                _context.SaveChanges();
+                //for existing items in records, get rdid
+                //update record details
+                RecordDetails rd = _context.RecordDetails.FirstOrDefault(x => x.Rdid == rdid);
+                if (rd != null)
+                {
+                    rd.Rrid = poNo;
+                    _context.SaveChanges();
+                }
             }
+            else
+            {
+                //for non-existing items in records
+                RecordDetails rd = new RecordDetails();
+                rd.Rrid = poNo;
+                rd.ItemNumber = tempPurchaseOrderDetails.ItemNumber;
+                rd.Quantity = tempPurchaseOrderDetails.Quantity;
+                rd.QuantityDelivered = 0;
+                _context.RecordDetails.Add(rd);
+                _context.SaveChanges();
+            }           
         }
 
         //Delete PO item
