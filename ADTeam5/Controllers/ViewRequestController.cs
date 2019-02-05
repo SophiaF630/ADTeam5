@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ADTeam5.Areas.Identity.Data;
 using ADTeam5.Models;
+using ADTeam5.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -106,22 +107,73 @@ namespace ADTeam5.Controllers
             var q1 = context.EmployeeRequestRecord.Where(x => x.Rrid == rrid).First();
             EmployeeRequestRecord e1 = q1;
 
-            if (e1.Status == "Approved")
+            ViewData["Status"] = e1.Status;
+
+            if (e1.Status == "Pending Approval")
             {
                 return RedirectToAction("Edit", "ViewRequest", new { id });
             }
             else
             {
-                var q = context.RecordDetails.Where(x => x.Rrid == id);
-                return View(q);
+                var q2 = from x in context.RecordDetails
+                         join s in context.Catalogue on x.ItemNumber equals s.ItemNumber
+                         where x.Rrid == rrid
+                         select new ViewRequestDetails
+                         {
+                             itemName = s.ItemName,
+                             quantity = x.Quantity
+                         };
+                List<ViewRequestDetails> list = new List<ViewRequestDetails>();
+                list = q2.ToList();
+                return View(list);
             }
+
         }
         public IActionResult Edit(string id)
         {
             rrid = id;
             ViewData["RRID"] = rrid;
-            var q = context.RecordDetails.Where(x => x.Rrid == id);
-            return View("Edit");
+
+            var q1 = context.EmployeeRequestRecord.Where(x => x.Rrid == rrid).First();
+            EmployeeRequestRecord e1 = q1;
+
+            ViewData["Status"] = e1.Status;
+
+            var q2 = from x in context.RecordDetails
+                     join s in context.Catalogue on x.ItemNumber equals s.ItemNumber
+                     where x.Rrid == rrid
+                     select new ViewRequestDetails
+                     {
+                         rrid = x.Rrid,
+                         itemName = s.ItemName,
+                         quantity = x.Quantity
+                     };
+            List<ViewRequestDetails> list = new List<ViewRequestDetails>();
+            list = q2.ToList();
+
+            return View(list);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RequestItemDelete(string itemName, string rrid)
+        {
+            var q = context.Catalogue.Where(x => x.ItemName == itemName).FirstOrDefault();
+            string itemNumber = q.ItemNumber;
+
+            var q3 = context.RecordDetails.Where(x => x.Rrid == rrid && x.ItemNumber == itemNumber).FirstOrDefault();
+            context.RecordDetails.Remove(q3);
+            await context.SaveChangesAsync();
+            return RedirectToAction("Edit", new { id = rrid});
+        }
+        [HttpPost]
+        public async Task<IActionResult> RequestItemEdit(string itemName, int quantity)
+        {
+            var q = context.Catalogue.Where(x => x.ItemName == itemName).FirstOrDefault();
+            string itemNumber = q.ItemNumber;
+            var q3 = context.RecordDetails.Where(x => x.Rrid == rrid && x.ItemNumber == itemNumber).FirstOrDefault();
+            q3.Quantity = quantity;
+            await context.SaveChangesAsync();
+            return RedirectToAction("Edit", new { id = rrid});
         }
     }
 }
