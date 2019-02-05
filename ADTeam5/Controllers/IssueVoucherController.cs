@@ -10,12 +10,14 @@ using ADTeam5.Areas.Identity.Data;
 using ADTeam5.ViewModels;
 using ADTeam5.BusinessLogic;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 
 namespace ADTeam5.Controllers
 {
     public class IssueVoucherController : Controller
     {
+        private readonly IEmailSender _emailSender;
         private readonly UserManager<ADTeam5User> _userManager;
         private readonly SSISTeam5Context _context;
         BizLogic b = new BizLogic();
@@ -25,11 +27,12 @@ namespace ADTeam5.Controllers
         static List<int> QuantityList = new List<int>();
         static string voucherNo = "";
 
-        public IssueVoucherController(SSISTeam5Context context, UserManager<ADTeam5User> userManager)
+        public IssueVoucherController(SSISTeam5Context context, UserManager<ADTeam5User> userManager, IEmailSender emailSender)
         {
-            _context = context;
+           _context = context;
             _userManager = userManager;
             userCheck = new GeneralLogic(context);
+            _emailSender = emailSender;
         }
 
         // GET: IssueVoucher
@@ -89,6 +92,28 @@ namespace ADTeam5.Controllers
                     {
                         b.AddItemsToVoucher(item.RowID, voucherNo, tempVoucherDetailsList);
                         b.CreateAdjustmentRecord(userID, voucherNo, "Submitted");
+
+                        //send success email to staff
+                        var staff = _context.User.Where(x => x.UserId == userID).First();
+                        string email = staff.EmailAddress;
+                        await _emailSender.SendEmailAsync(email, "Department Representative Appointment", "Dear " + staff.Name + ",<br>You have been appointed as the department representative for stationery collection.");
+
+                        //send notification email to supervisor
+
+                        var bosstest = (from User in _context.User
+                                   join Department in _context.Department
+                                   on User.UserId equals Department.HeadId
+                                   where Department.DepartmentCode == "STAS"
+                                   select new User {EmailAddress = User.EmailAddress, Name = User.Name }).ToList();
+
+                        //var boss = from User in _context.User
+                        //          join Department in _context.Department
+                        //            on User.UserId equals Department.HeadId
+                                    
+                        //          select new { User.EmailAddress, User.Name };
+
+                        ////string email2 = boss.EmailAddress;
+                        //await _emailSender.SendEmailAsync(email2, "Department Representative Appointment", "Dear " + boss.Name + ",<br>You have been appointed as the department representative for stationery collection.");
                     }
                 }
                 //return RedirectToAction(nameof(Index));

@@ -6,6 +6,7 @@ using ADTeam5.Areas.Identity.Data;
 using ADTeam5.BusinessLogic;
 using ADTeam5.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ADTeam5.Controllers
@@ -16,16 +17,18 @@ namespace ADTeam5.Controllers
         static string dept;
         static string role;
 
+        private readonly IEmailSender _emailSender;
         private readonly SSISTeam5Context context;
         private readonly UserManager<ADTeam5User> _userManager;
         readonly GeneralLogic userCheck;
         DeptBizLogic b = new DeptBizLogic();
 
-        public ChangeCollectionPointController(SSISTeam5Context context, UserManager<ADTeam5User> userManager)
+        public ChangeCollectionPointController(SSISTeam5Context context, UserManager<ADTeam5User> userManager, IEmailSender emailSender)
         {
             this.context = context;
             _userManager = userManager;
             userCheck = new GeneralLogic(context);
+            _emailSender = emailSender;
         }
 
         public async Task<IActionResult> Index()
@@ -70,6 +73,12 @@ namespace ADTeam5.Controllers
 
                 await context.SaveChangesAsync();
                 TempData["Alert1"] = "Collection Point Changed Successfully";
+
+                //send success email to dept rep
+                var deptrep = context.User.Where(x => x.UserId == userid).First();
+                string email = deptrep.EmailAddress;
+                await _emailSender.SendEmailAsync(email, "Department Representative Appointment", "Dear " + deptrep.Name + ",<br>Stationery collection point for " + deptrep.DepartmentCode + "department has successfully been changed.");
+                
                 return RedirectToAction("Index");
             }
             TempData["Alert2"] = "Please Try Again";
