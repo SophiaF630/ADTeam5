@@ -724,13 +724,24 @@ namespace ADTeam5.BusinessLogic
                 _context.SaveChanges();
             }
 
-            RecordDetails recordDetails = new RecordDetails();
-            recordDetails.Rrid = poNo;
-            recordDetails.ItemNumber = itemNumber;
-            recordDetails.Quantity = qty;
-            recordDetails.Remark = "";
-            _context.RecordDetails.Add(recordDetails);
-            _context.SaveChanges();
+            //check if item exists
+            RecordDetails rd = _context.RecordDetails.FirstOrDefault(x => x.Rrid == poNo && x.ItemNumber == itemNumber);
+            if (rd == null)
+            {
+                RecordDetails recordDetails = new RecordDetails();
+                recordDetails.Rrid = poNo;
+                recordDetails.ItemNumber = itemNumber;
+                recordDetails.Quantity = qty;
+                recordDetails.Remark = "";
+                _context.RecordDetails.Add(recordDetails);
+                _context.SaveChanges();
+            }
+            else
+            {
+                rd.Quantity += qty;
+                _context.RecordDetails.Update(rd);
+                _context.SaveChanges();
+            }            
 
         }
 
