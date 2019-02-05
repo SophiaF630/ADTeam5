@@ -163,7 +163,17 @@ namespace ADTeam5.Controllers
             var q3 = context.RecordDetails.Where(x => x.Rrid == rrid && x.ItemNumber == itemNumber).FirstOrDefault();
             context.RecordDetails.Remove(q3);
             await context.SaveChangesAsync();
-            return RedirectToAction("Edit", new {id = rrid });
+            return RedirectToAction("Edit", new { id = rrid});
+        }
+        [HttpPost]
+        public async Task<IActionResult> RequestItemEdit(string itemName, int quantity)
+        {
+            var q = context.Catalogue.Where(x => x.ItemName == itemName).FirstOrDefault();
+            string itemNumber = q.ItemNumber;
+            var q3 = context.RecordDetails.Where(x => x.Rrid == rrid && x.ItemNumber == itemNumber).FirstOrDefault();
+            q3.Quantity = quantity;
+            await context.SaveChangesAsync();
+            return RedirectToAction("Edit", new { id = rrid});
         }
     }
 }
