@@ -6,6 +6,9 @@
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+<script type="text/javascript"
+        src="http://code.jquery.com/jquery-latest.js">
+</script>
 
 <h2>Details</h2>
 
@@ -34,26 +37,30 @@
     <tbody>
         @foreach (var item in Model)
         {
-            <tr>
-                <td class="ItemName">
-                    @Html.DisplayFor(modelItem => item.itemName)
-                </td>
-                <td class="Quantity">
-                    @Html.DisplayFor(modelItem => item.quantity)
-                </td>
-                <td>
-                    <button type="button" class="editItem" style="background-color:transparent; border:transparent">
-                        <i class="fa fa-edit" style="color:#66B3B3"></i>
+        <tr>
+            <td class="ItemName">
+                @Html.DisplayFor(modelItem => item.itemName)
+                @*<meta http-equiv="refresh" content="5" />*@
+            </td>
+            <td class="Quantity">
+                @Html.DisplayFor(modelItem => item.quantity)
+                <meta http-equiv="refresh" content="5" />
+            </td>
+            <td>
+                <button type="button" class="editItem" style="background-color:transparent; border:transparent">
+                    <i class="fa fa-edit" style="color:#66B3B3"></i>
+                </button>
+            </td>
+            <td>
+                <form asp-action="RequestItemDelete" asp-route-itemName="@item.itemName" asp-route-rrid="@item.rrid" method="post" data-ajax="true" data-ajax-update="#TempVoucherDetailsList" role="form" asp-controller="ViewRequest" onclick="return confirm('Are you sure you want to delete this item?');">
+                    <button style="background-color:transparent; border:transparent">
+                        <i class="fa fa-trash-alt" style="color:#dc6460"></i>
+
                     </button>
-                </td>
-                <td>
-                    <form asp-action="RequestItemDelete" asp-route-itemName="@item.itemName" asp-route-rrid="@item.rrid" method="post" data-ajax="true" data-ajax-update="#TempVoucherDetailsList" role="form" asp-controller="ViewRequest" onclick="return confirm('Are you sure you want to delete this item?');">
-                        <button style="background-color:transparent; border:transparent">
-                            <i class="fa fa-trash-alt" style="color:#dc6460"></i>
-                        </button>
-                    </form>
-                </td>
-            </tr>
+                    @*<meta http-equiv="refresh" content="10" />*@
+                </form>
+            </td>
+        </tr>
         }
     </tbody>
 </table>
@@ -73,7 +80,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form asp-action="RequestItemEdit" asp-controller="ViewRequest"  method="POST">
+                <form asp-action="RequestItemEdit" asp-controller="ViewRequest" method="POST">
                     <div class="form-group">
                         <label for="ItemName">Item Name</label>
                         <input type="hidden" id="ItemNameValue" name="itemName" class="form-control" value="" />
