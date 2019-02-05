@@ -56,7 +56,7 @@
                                             Department
                                         </th>
                                         <th>
-                                            Rep Name
+                                            Rep
                                         </th>
                                         <th>
                                             @Html.DisplayNameFor(model => model.EstDeliverDate)
@@ -67,7 +67,9 @@
                                         <th>
                                             @Html.DisplayNameFor(model => model.Status)
                                         </th>
-                                        <th></th>
+                                        <th>
+                                            Change Deliver Date
+                                        </th>
 
                                     </tr>
                                 </thead>
@@ -94,26 +96,26 @@
                                             <td class="EstDeliverDate" width="17%">
                                                 @Html.DisplayFor(modelItem => item.EstDeliverDate)
                                             </td>
-                                            <td width="15%">
+                                            <td width="13%">
                                                 @Html.DisplayFor(modelItem => item.CompleteDate)
                                             </td>
-                                            <td>
+                                            <td width="10px">
                                                 @Html.DisplayFor(modelItem => item.Status)
                                             </td>
                                             <td>
                                                 @if (@item.Status == "Pending Delivery")
                                                 {
-                                                    <button type="button" class="btn btn-primary changeEstDeliverDate" style="background-color:transparent; border:transparent">
+                                                    <button type="button" class="btn btn-primary changeEstDeliverDate" style="background-color:transparent; border:transparent; margin-left:50px">
                                                         <i class="far fa-calendar-alt" style="color:#66B3B3">
-                                                            <span class="tooltiptext">Change Deliver Date</span>
+                                                            
                                                         </i>
                                                     </button>
                                                 }
                                                 else
                                                 {
-                                                    <button type="button" class="btn btn-primary changeEstDeliverDate" style="background-color:transparent; border:transparent" disabled>
-                                                        <i class="far fa-calendar-alt" style="color:#66B3B3">
-                                                            <span class="tooltiptext">Change Deliver Date</span>
+                                                    <button type="button" class="btn btn-primary changeEstDeliverDate" style="background-color:transparent; border:transparent;margin-left:50px" disabled>
+                                                        <i class="far fa-calendar-alt" style="color:#D0D3D4">
+                                                            
                                                         </i>
                                                     </button>
                                                 }
