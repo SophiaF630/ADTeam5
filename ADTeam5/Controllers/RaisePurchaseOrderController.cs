@@ -77,26 +77,37 @@ namespace ADTeam5.Controllers
 
             if (itemSubmitted.Length != 0)
             {
-                poNo = b.IDGenerator("PO");
-                foreach (var item in tempPurchaseOrderDetailsList)
+                //split supplier
+                var supplier = tempPurchaseOrderDetailsList.GroupBy(x => x.SupplierCode).Select(y => y.Key);
+                foreach (var s in supplier)
                 {
-                    if (Array.Exists(itemSubmitted, i => i == item.RowID.ToString()))
+                    poNo = b.IDGenerator("PO");
+                    foreach (var item in tempPurchaseOrderDetailsList)
                     {
-                        b.AddItemsToPO(item.RowID, poNo, tempPurchaseOrderDetailsList);
-                        b.CreatePurchaseOrderRecord(userID, poNo, item.SupplierCode, "Submitted");
+                        if (Array.Exists(itemSubmitted, i => i == item.RowID.ToString()) && item.SupplierCode == s)
+                        {
+                            b.AddItemsToPO(item.RowID, poNo, tempPurchaseOrderDetailsList);
+                            b.CreatePurchaseOrderRecord(userID, poNo, s, "Submitted");
+                        }
                     }
                 }
+
+                
                 //return RedirectToAction(nameof(Index));
             }
             else if (itemSavedToDraft.Length != 0)
             {
-                poNo = b.IDGenerator("PO");
-                foreach (var item in tempPurchaseOrderDetailsList)
+                var supplier = tempPurchaseOrderDetailsList.GroupBy(x => x.SupplierCode).Select(y => y.Key);
+                foreach (var s in supplier)
                 {
-                    if (Array.Exists(itemSavedToDraft, i => i == item.RowID.ToString()))
+                    poNo = b.IDGenerator("PO");
+                    foreach (var item in tempPurchaseOrderDetailsList)
                     {
-                        b.AddItemsToPO(item.RowID, poNo, tempPurchaseOrderDetailsList);
-                        b.CreatePurchaseOrderRecord(userID, poNo, item.SupplierCode, "Draft");
+                        if (Array.Exists(itemSavedToDraft, i => i == item.RowID.ToString()))
+                        {
+                            b.AddItemsToPO(item.RowID, poNo, tempPurchaseOrderDetailsList);
+                            b.CreatePurchaseOrderRecord(userID, poNo, s, "Draft");
+                        }
                     }
                 }
                 //return RedirectToAction(nameof(Index));
