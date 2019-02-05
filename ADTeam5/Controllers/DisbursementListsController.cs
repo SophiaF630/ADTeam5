@@ -224,7 +224,9 @@ namespace ADTeam5.Controllers
                     disbursementList.Status = "Completed";
                     disbursementList.CompleteDate = DateTime.Now;
                     _context.DisbursementList.Update(disbursementList);
-                    _context.SaveChanges();                    
+                    _context.SaveChanges();
+
+                    TempData["CorrectPassword"] = "Successful confirmation. Delivery completed!";
 
                     return RedirectToAction(nameof(Index));
                 }
@@ -232,6 +234,7 @@ namespace ADTeam5.Controllers
                 {
                     //check
                     //show incorrect password
+                    TempData["IncorrectPassword"] = "Incorrect collection password. Please try again.";
                 }
             }
             else if(noShowModalName == 1)
