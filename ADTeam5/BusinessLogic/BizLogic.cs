@@ -599,6 +599,24 @@ namespace ADTeam5.BusinessLogic
             return price;
         }
 
+        //Amount(ex. GST) of a voucher, supplier1Price is used
+        public decimal? GetTotalAmountForPO(string poid)
+        {
+            var tmp = _context.RecordDetails.Where(s => s.Rrid == poid).ToList();
+            if (tmp == null)
+                return 0;
+            decimal? price = 0;
+            string supplierCode = _context.PurchaseOrderRecord.FirstOrDefault(x => x.Poid == poid).SupplierCode;
+            foreach (RecordDetails i in tmp)
+            {
+
+                decimal? pricePerItem = GetPriceOfItem(i.ItemNumber, supplierCode);
+                decimal? p = i.Quantity * pricePerItem;
+                price += p;
+            }
+            return price;
+        }
+
         //FindDepartmentOrSupplier through disbursement list ID or PO ID
         public string FindDepartmentOrSupplier(string recordId)
         {
@@ -663,6 +681,8 @@ namespace ADTeam5.BusinessLogic
                 poList.ItemName = _context.Catalogue.FirstOrDefault(x => x.ItemNumber == item.ItemNumber).ItemName;
                 poList.Quantity = item.Quantity;
                 poList.QuantityDelivered = item.QuantityDelivered;
+                string supplierCode = _context.PurchaseOrderRecord.FirstOrDefault(x => x.Poid == poid).SupplierCode;
+                poList.Price = GetPriceOfItem(item.ItemNumber, supplierCode);
                 poList.RDID = item.Rdid;
                 poList.POID = poid;
 
@@ -748,7 +768,9 @@ namespace ADTeam5.BusinessLogic
                         tPOList.ItemName = _context.Catalogue.FirstOrDefault(x => x.ItemNumber == item.ItemNumber).ItemName;
                         tPOList.Quantity = item.Quantity;
                         tPOList.Remark = item.Remark;
-                        tPOList.SupplierCode = _context.PurchaseOrderRecord.FirstOrDefault(x => x.Poid == item.Rrid).SupplierCode;
+                        string supplierCode = _context.PurchaseOrderRecord.FirstOrDefault(x => x.Poid == item.Rrid).SupplierCode;
+                        tPOList.SupplierCode = supplierCode;
+                        tPOList.Price = GetPriceOfItem(item.ItemNumber, supplierCode);
 
                         manualPurchaseOrderDetails.Add(tPOList);
                         rowID++;
@@ -759,6 +781,28 @@ namespace ADTeam5.BusinessLogic
             //join auto and manual generated tempPOlist
             result = autoPurchaseOrderDetails.Concat(manualPurchaseOrderDetails).ToList<TempPurchaseOrderDetails>();
             return result;
+        }
+
+        //find price according to supplier code
+        public decimal? GetPriceOfItem(string itemNumber, string supplierCode)
+        {
+            decimal? price = 0;
+            string supplier1 = _context.Catalogue.FirstOrDefault(x => x.ItemNumber == itemNumber).Supplier1;
+            string supplier2 = _context.Catalogue.FirstOrDefault(x => x.ItemNumber == itemNumber).Supplier2;
+            string supplier3 = _context.Catalogue.FirstOrDefault(x => x.ItemNumber == itemNumber).Supplier3;
+            if (supplierCode == supplier1)
+            { 
+                price = _context.Catalogue.FirstOrDefault(x => x.ItemNumber == itemNumber).Supplier1Price;
+            }
+            else if (supplierCode == supplier2)
+            {
+                price = _context.Catalogue.FirstOrDefault(x => x.ItemNumber == itemNumber).Supplier2Price;
+            }
+            else if (supplierCode == supplier3)
+            {
+                price = _context.Catalogue.FirstOrDefault(x => x.ItemNumber == itemNumber).Supplier3Price;
+            }
+            return price;
         }
 
         //Create New POItem
@@ -925,7 +969,15 @@ namespace ADTeam5.BusinessLogic
             }
         }
 
-
+        //UpdateCatalogueStockAfterSupplierDelivery
+        public void UpdateCatalogueStockAfterSupplierDelivery(string itemNumber, int quantity)
+        {
+            Catalogue item = _context.Catalogue.FirstOrDefault(x => x.ItemNumber == itemNumber);
+            int stock = item.Stock;
+            item.Stock = stock + quantity;
+            _context.Catalogue.Update(item);
+            _context.SaveChanges();
+        }
 
         //Department part
         public List<EmployeeRequestRecord> searchRequestByDateAndDept(DateTime startDate, DateTime endDate, string dept)

@@ -42,6 +42,9 @@
                                 <th>
                                     Quantity Delivered
                                 </th>
+                                <th>
+                                    Price
+                                </th>
                                 @if (ViewBag.POStatus == "Draft")
                                 {
                                     <th></th>
@@ -72,6 +75,9 @@
                                     <td class="Supplier">
                                         @Html.DisplayFor(modelItem => item.QuantityDelivered)
                                     </td>
+                                    <td class="Price">
+                                        @Html.DisplayFor(modelItem => item.Price)
+                                    </td>
 
                                     @if (ViewBag.POStatus == "Draft")
                                     {
@@ -81,7 +87,7 @@
                                             </button>
                                         </td>
                                         <td>
-                                            <form asp-action="POItemDelete" asp-route-id="@item.RowID" asp-route-poid="@item.POID" method="post" data-ajax="true" data-ajax-update="#Details" role="form" data-ajax-success="deleteItem(this)">
+                                            <form asp-action="POItemDelete" asp-route-id="@item.RowID" asp-route-poid="@item.POID" method="post" data-ajax="true" data-ajax-update="#Details" role="form" data-ajax-success="deleteItem(this)" onclick="return confirm('Are you sure you want to delete this item?');">
                                                 <button type="submit" class="btn btn-sm btn-danger d-none d-md-inline-block" style="background-color:transparent; border:transparent">
                                                     <i class="fa fa-trash-alt" style="color:#dc6460"></i>
                                                 </button>
@@ -101,6 +107,24 @@
                             }
                         </tbody>
                     </table>
+                    <br />
+                    <hr />
+                    <div style="margin-left:800px">
+                        <label style="width:100px;height:30px;">
+                            <font size="2">&nbsp;&nbsp;&nbsp;&nbsp;Amount:&nbsp;&nbsp;&nbsp;&nbsp;$</font>
+                        </label>
+                        <input type="text" value="@ViewBag.Amount" style="background:transparent;border:none;width:60px;border-bottom:1px solid #808080" />
+                        <br />
+                        <label style="width:100px;height:30px;">
+                            <font size="2">&nbsp;GST&nbsp;(7%):&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$</font>
+                        </label>
+                        <input type="text" value="@ViewBag.GST" style="background:transparent;border:none;width:60px;border-bottom:1px solid #808080" />
+                        <br />
+                        <label style="width:100px;height:30px;">
+                            <font size="2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Total:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$</font>
+                        </label>
+                        <input type="text" value="@ViewBag.TotalAmount" style="background:transparent;border:none;width:60px;border-bottom:1px solid #808080" />
+                    </div>
                 </div>
             </div>
         </div>
@@ -122,7 +146,7 @@
 
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a href="#" data-toggle="modal" data-target="#BackToListModal">Back to List</a>
 </div>
 
 
@@ -151,7 +175,7 @@
                     </div>
                     <div class="form-group">
                         <label for="Quantity">Quantity Ordered</label>
-                        <input type="text" id="Quantity" name="quantity" class="form-control" value="" />
+                        <input type="number" min="1" step="1"  id="Quantity" name="quantity" class="form-control" value="" />
                     </div>
                     <div class="modal-footer">
                         <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
@@ -189,7 +213,7 @@
                     <div class="form-group">
                         <label for="Quantity">Quantity Ordered</label>
                         <input type="hidden" id="QuantityValue" name="quantity" class="form-control" value="" />
-                        <input type="text" id="QuantityDisplay" name="" class="form-control" value="" disabled />
+                        <input type="number" min="1" step="1"  id="QuantityDisplay" name="" class="form-control" value="" disabled />
                     </div>
                     <div class="form-group">
                         <label for="Quantity">Quantity Delivered</label>
@@ -219,7 +243,7 @@
                     <div class="form-group">
                         <input type="hidden" id="AddToDraftModalID" name="addToDraftModalName" class="form-control" value="1" />
                     </div>
-                        Your changes will be saved
+                    Your changes will be saved
                     <div class="modal-footer">
                         <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
                         <button type="submit" class="btn btn-primary">Confirm</button>
@@ -244,7 +268,7 @@
                     <div class="form-group">
                         <input type="hidden" id="SubmitModalID" name="submitModalName" class="form-control" value="1" />
                     </div>
-                        Order cannot be changed after submission
+                    Order cannot be changed after submission
                     <div class="modal-footer">
                         <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
                         <button type="submit" class="btn btn-primary">Confirm</button>
@@ -295,7 +319,7 @@
                     <div class="form-group">
                         <input type="hidden" id="BackToListModalID" name="backToListModalName" class="form-control" value="1" />
                     </div>
-                    Your form will not be saved
+                    Your changes not be saved
                     <div class="modal-footer">
                         <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
                         <button type="submit" class="btn btn-primary" value="Redirect" onclick="window.location='@Url.Action("Index", "PurchaseOrderRecords")'">Confirm</button>

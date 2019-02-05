@@ -13,7 +13,7 @@
 {
     <div class="row justify-content-center text-center">
         <div class="col-12 col-md-10 mt-5">
-            <button type="button" class="btn btn-lg btn-primary d-none d-md-inline-block mt-3 createNewRequestItem" style="width:180px;height:40px;border:2px; background-color:#3c8dbc">
+            <button type="button" class="btn btn-lg btn-primary d-none d-md-inline-block mt-3 createNewRequestItem" style="width:180px;height:40px;border:2px; background-color:#00B894">
                 Create New Request
             </button>
         </div>
@@ -48,6 +48,12 @@ else
                                     <th>
                                         Quantity
                                     </th>
+                                    <th>
+                                        Edit
+                                    </th>
+                                    <th>
+                                        Delete
+                                    </th>
                                     <th></th>
                                     <th></th>
                                 </tr>
@@ -59,10 +65,10 @@ else
                                         <td>
                                             <input type="checkbox" id="isChecked" name="isChecked" checked="checked" value="@item.ItemNumber" style="display:none"/>
                                         </td>
-                                        <td class="ItemName" width="40%">
+                                        <td class="ItemName">
                                             @Html.DisplayFor(modelItem => item.ItemName)
                                         </td>
-                                        <td class="Quantity" width="10%">
+                                        <td class="Quantity">
                                             @Html.DisplayFor(modelItem => item.Quantity)
                                         </td>
                                         <td>
@@ -149,11 +155,11 @@ else
                     </div>
                     <div class="form-group">
                         <label for="ItemNumber">ItemName</label>
-                        <select for="ItemNumber" class="form-control" id="ItemNumber" name="itemNumber" asp-items="@(new SelectList(" "))"></select>
+                        <select for="ItemNumber" class="form-control" id="ItemNumber" required="required"name="itemNumber" asp-items="@(new SelectList(" "))"></select>
                     </div>
                     <div class="form-group">
                         <label for="Quantity">Quantity</label>
-                        <input type="text" id="Quantity" name="quantity" class="form-control" value="" />
+                        <input type="number" min="1" step="1" id="Quantity" name="quantity"   required="required" class="form-control" value="" />
                     </div>
                     <div align="center">
                         <button class="btn" data-dismiss="modal" aria-hidden="true" style="width:80px;height:30px;border:2px; background-color:#EEEEEE"><font size="3" color="black">Close</font></button>
@@ -189,7 +195,7 @@ else
                     </div>
                     <div class="form-group">
                         <label for="Quantity">Quantity</label>
-                        <input type="text" id="Quantity" name="quantity" class="form-control" value="" />
+                        <input type="number" min="1" step="1" id="Quantity" name="quantity" class="form-control" value="" />
                     </div>
                     <div class="modal-footer">
                         <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
@@ -274,7 +280,7 @@ else
                 success:
                     function (data) {
                         //$('#result').html(data);
-                        alert("submitted");
+                        alert("Submitted");
                         data = JSON.parse(data);
                         window.location.href = data.redirecturl;
                     }

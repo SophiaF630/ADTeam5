@@ -4,6 +4,10 @@
     ViewData["Title"] = "Create";
 }
 
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+
 <h1>Create</h1>
 
 <h4>Catalogue</h4>
@@ -48,22 +52,46 @@
                 <span asp-validation-for="Stock" class="text-danger"></span>
             </div>
             @*<div class="form-group">
-                <label asp-for="Out" class="control-label"></label>
-                <input asp-for="Out" class="form-control" />
-                <span asp-validation-for="Out" class="text-danger"></span>
-            </div>*@
+                    <label asp-for="Out" class="control-label"></label>
+                    <input asp-for="Out" class="form-control" />
+                    <span asp-validation-for="Out" class="text-danger"></span>
+                </div>*@
+            @*<div class="form-group">
+                    <label asp-for="Supplier1" class="control-label"></label>
+                    <select asp-for="Supplier1" class="form-control" asp-items="ViewBag.Supplier1"></select>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Supplier2" class="control-label"></label>
+                    <select asp-for="Supplier2" class="form-control" asp-items="ViewBag.Supplier2"></select>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Supplier3" class="control-label"></label>
+                    <select asp-for="Supplier3" class="form-control" asp-items="ViewBag.Supplier3"></select>
+                </div>*@
             <div class="form-group">
-                <label asp-for="Supplier1" class="control-label"></label>
-                <select asp-for="Supplier1" class ="form-control" asp-items="ViewBag.Supplier1"></select>
+                <label for="Supplier1">Supplier1</label>
+                @if (ViewBag.Supplier1 != null)
+                {
+                    <select for="Supplier1" class="form-control" id="Supplier1" asp-items="@(new SelectList(ViewBag.Supplier1, "SupplierCode", "SupplierName"))"></select>
+                }
             </div>
             <div class="form-group">
-                <label asp-for="Supplier2" class="control-label"></label>
-                <select asp-for="Supplier2" class ="form-control" asp-items="ViewBag.Supplier2"></select>
+                <label for="Supplier2">Supplier2</label>
+                @*@if (ViewBag.Supplier2 != null)
+                    {
+                        <select for="Supplier2" class="form-control" id="Supplier2" asp-items="@(new SelectList(ViewBag.Supplier2, "SupplierCode", "SupplierName"))"></select>
+                    }*@
+                <select for="Supplier2" class="form-control" id="Supplier2" name="supplier2" asp-items="@(new SelectList(" "))"></select>
             </div>
             <div class="form-group">
-                <label asp-for="Supplier3" class="control-label"></label>
-                <select asp-for="Supplier3" class ="form-control" asp-items="ViewBag.Supplier3"></select>
+                <label for="Supplier3">Supplier3</label>
+                @*@if (ViewBag.Supplier3 != null)
+                    {
+                        <select for="Supplier3" class="form-control" id="Supplier3" asp-items="@(new SelectList(ViewBag.Supplier3, "SupplierCode", "SupplierName"))"></select>
+                    }*@
+                <select for="Supplier3" class="form-control" id="Supplier3" name="supplier3" asp-items="@(new SelectList(" "))"></select>
             </div>
+
             <div class="form-group">
                 <label asp-for="Supplier1Price" class="control-label"></label>
                 <input asp-for="Supplier1Price" class="form-control" />
@@ -80,10 +108,10 @@
                 <span asp-validation-for="Supplier3Price" class="text-danger"></span>
             </div>
             @*<div class="form-group">
-                <label asp-for="Location" class="control-label"></label>
-                <input asp-for="Location" class="form-control" />
-                <span asp-validation-for="Location" class="text-danger"></span>
-            </div>*@
+                    <label asp-for="Location" class="control-label"></label>
+                    <input asp-for="Location" class="form-control" />
+                    <span asp-validation-for="Location" class="text-danger"></span>
+                </div>*@
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
@@ -98,3 +126,85 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+
+
+<script>
+    $(document).ready(function () {
+        $("#Supplier1").change(function () {
+            var supplier1 = $("#Supplier1").val()
+            $.get("/Catalogues/GetSupplier2List", { supplier1: $("#Supplier1").val(), supplier3: $("#Supplier3").val() }, function (data) {
+                //var supplier2 = $("#Supplier2").val();
+                //if (supplier2 == supplier1 || supplier2 == "") {
+                    $("#Supplier2").empty();
+                    $("#Supplier2").append("<option value='" + "0" + "'>" + " " + "</option>");
+                    $.each(data, function (index, row) {
+                        $("#Supplier2").append("<option value='" + row.supplierCode + "'>" + row.supplierName + "</option>")
+                    });
+                //}
+            });
+            $.get("/Catalogues/GetSupplier3List", { supplier1: $("#Supplier1").val(), supplier2: $("#Supplier2").val() }, function (data) {
+                //var supplier3 = $("#Supplier3").val();
+                //if (supplier3 == supplier1) {
+                    $("#Supplier3").empty();
+                    $("#Supplier3").append("<option value='" + "0" + "'>" + " " + "</option>");
+                    $.each(data, function (index, row) {
+                        $("#Supplier3").append("<option value='" + row.supplierCode + "'>" + row.supplierName + "</option>")
+                    });
+                //}
+            });
+        })
+    });
+</script>
+<script>
+    $(document).ready(function () {
+        $("#Supplier2").change(function () {
+            var supplier2 = $("#Supplier2").val();
+            //$.get("/Catalogues/GetSupplier1List", { supplier: $("#Supplier2").val(), supplier3: $("#Supplier3").val() }, function (data) {
+            //    var supplier1 = $("#Supplier1").val();
+            //    if (supplier1 == "") {
+            //        $("#Supplier1").empty();
+            //        $("#Supplier1").append("<option value='" + "0" + "'>" + " " + "</option>");
+            //        $.each(data, function (index, row) {
+            //            $("#Supplier1").append("<option value='" + row.supplierCode + "'>" + row.supplierName + "</option>")
+            //        });
+            //    }
+            //});
+            $.get("/Catalogues/GetSupplier3List", { supplier1: $("#Supplier1").val(), supplier2: $("#Supplier2").val() }, function (data) {
+                //var supplier3 = $("#Supplier3").val();
+                //if (supplier3 == supplier2 || supplier3 == "") {
+                    $("#Supplier3").empty();
+                    $("#Supplier3").append("<option value='" + "0" + "'>" + " " + "</option>");
+                    $.each(data, function (index, row) {
+                        $("#Supplier3").append("<option value='" + row.supplierCode + "'>" + row.supplierName + "</option>")
+                    });
+                //}
+            });
+        })
+    });
+</script>
+@*<script>
+        $(document).ready(function () {
+            $("#Supplier3").change(function () {
+                $.get("/Catalogues/GetSupplier1List", { supplier: $("#Supplier2").val(), supplier3: $("#Supplier3").val() }, function (data) {
+                    var supplier1 = $("#Supplier1").val();
+                    if (supplier1 == "") {
+                        $("#Supplier1").empty();
+                        $("#Supplier1").append("<option value='" + "0" + "'>" + " " + "</option>");
+                        $.each(data, function (index, row) {
+                            $("#Supplier1").append("<option value='" + row.supplierCode + "'>" + row.supplierName + "</option>")
+                        });
+                    }
+                });
+                $.get("/Catalogues/GetSupplier2List", { supplier1: $("#Supplier1").val(), supplier3: $("#Supplier3").val() }, function (data) {
+                    var supplier2 = $("#Supplier2").val();
+                    if (supplier2 == "") {
+                        $("#Supplier2").empty();
+                        $("#Supplier2").append("<option value='" + "0" + "'>" + " " + "</option>");
+                        $.each(data, function (index, row) {
+                            $("#Supplier2").append("<option value='" + row.supplierCode + "'>" + row.supplierName + "</option>")
+                        });
+                    }
+                });
+            })
+        });
+    </script>*@

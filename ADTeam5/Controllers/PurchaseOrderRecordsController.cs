@@ -67,13 +67,18 @@ namespace ADTeam5.Models
             }
             categoryList.Insert(0, new Catalogue { ItemNumber = "0", Category = "---Select Category---" });
             ViewBag.ListofCategory = categoryList;
-            
 
             if (id == null)
             {
                 return NotFound();
             }
 
+            //ViewBag for voucher price            
+            decimal? amount = b.GetTotalAmountForPO(id);
+            decimal? GST = Math.Round((decimal)(amount * (decimal?)0.07), 2);
+            ViewBag.Amount = amount;
+            ViewBag.GST = GST;
+            ViewBag.TotalAmount = amount + GST;
             ViewBag.POStatus = _context.PurchaseOrderRecord.Find(id).Status;
 
 
@@ -82,13 +87,21 @@ namespace ADTeam5.Models
         }
 
         [HttpPost]
-        public async Task<IActionResult> Details(string id, int rowID, int quantity, int quantityDelivered, int POItemModalName, int POItemModalQtyDeliveredName, int confirmDeliveryModalName, int AddToDraftModalName, int SubmitModalName)
+        public async Task<IActionResult> Details(string id, int rowID, int quantity, int quantityDelivered, int POItemModalName, int POItemModalQtyDeliveredName, int confirmDeliveryModalName, int AddToDraftModalName, int SubmitModalName, int backToListModalName)
         {
             ADTeam5User user = await _userManager.GetUserAsync(HttpContext.User);
             List<string> identity = userCheck.checkUserIdentityAsync(user);
             int userID = user.WorkID;
 
             ViewBag.POStatus = _context.PurchaseOrderRecord.Find(id).Status;
+            //ViewBag for voucher price            
+            decimal? amount = b.GetTotalAmountForPO(id);
+            decimal? GST = Math.Round((decimal)(amount * (decimal?)0.07), 2);
+            ViewBag.Amount = amount;
+            ViewBag.GST = GST;
+            ViewBag.TotalAmount = amount + GST;
+            ViewBag.POStatus = _context.PurchaseOrderRecord.Find(id).Status;
+
 
             if (POItemModalName == 1)
             {
@@ -140,7 +153,7 @@ namespace ADTeam5.Models
                 _context.PurchaseOrderRecord.Update(po);
                 _context.SaveChanges();
 
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Details", id);
             }
             else if (POItemModalQtyDeliveredName == 1)
             {
@@ -161,9 +174,9 @@ namespace ADTeam5.Models
                     string itemNo = item.ItemNumber;
                     int qtyDelivered = item.QuantityDelivered;
                     int rdid = item.RDID;
-
-                    b.UpdateCatalogueOutAfterDelivery(itemNo, qtyDelivered);
+                    
                     b.UpdateQuantityDeliveredAfterDelivery(qtyDelivered, rdid);
+                    b.UpdateCatalogueStockAfterSupplierDelivery(itemNo, qtyDelivered);
 
                     int balance = _context.Catalogue.Find(itemNo).Stock;
                     b.UpdateInventoryTransRecord(itemNo, id, qtyDelivered, balance);
@@ -177,9 +190,15 @@ namespace ADTeam5.Models
                     _context.SaveChanges();
 
                     return RedirectToAction(nameof(Index));
-                }
+            }
+            else if (backToListModalName == 1)
+            {
+                return RedirectToAction(nameof(Index));
+            }
 
-                return View("Details", tempPurchaseOrderRecordDetails);
+           
+
+            return View("Details", tempPurchaseOrderRecordDetails);
         }
 
 
