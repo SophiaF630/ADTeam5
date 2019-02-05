@@ -404,6 +404,7 @@ namespace ADTeam5.BusinessLogic
                     tvList.ItemNumber = item.ItemNumber;
                     tvList.ItemName = _context.Catalogue.FirstOrDefault(x => x.ItemNumber == item.ItemNumber).ItemName;
                     tvList.Quantity = item.Quantity;
+                    tvList.Price = _context.Catalogue.FirstOrDefault(x => x.ItemNumber == item.ItemNumber).Supplier1Price;
                     tvList.Remark = item.Remark;
 
                     result.Add(tvList);
@@ -582,7 +583,7 @@ namespace ADTeam5.BusinessLogic
             }
         }
 
-        //this part is temp and may not work on other status
+        //Amount(ex. GST) of a voucher, supplier1Price is used
         public decimal? GetTotalAmountForVoucher(string voucherNo)
         {
             var tmp = _context.RecordDetails.Where(s => s.Rrid == voucherNo).ToList();
