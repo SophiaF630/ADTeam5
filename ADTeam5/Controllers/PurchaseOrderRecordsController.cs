@@ -87,7 +87,7 @@ namespace ADTeam5.Models
         }
 
         [HttpPost]
-        public async Task<IActionResult> Details(string id, int rowID, int quantity, int quantityDelivered, int POItemModalName, int POItemModalQtyDeliveredName, int confirmDeliveryModalName, int AddToDraftModalName, int SubmitModalName)
+        public async Task<IActionResult> Details(string id, int rowID, int quantity, int quantityDelivered, int POItemModalName, int POItemModalQtyDeliveredName, int confirmDeliveryModalName, int AddToDraftModalName, int SubmitModalName, int backToListModalName)
         {
             ADTeam5User user = await _userManager.GetUserAsync(HttpContext.User);
             List<string> identity = userCheck.checkUserIdentityAsync(user);
@@ -182,9 +182,13 @@ namespace ADTeam5.Models
                     _context.SaveChanges();
 
                     return RedirectToAction(nameof(Index));
-                }
+            }
+            else if (backToListModalName == 1)
+            {
+                return RedirectToAction(nameof(Index));
+            }
 
-                return View("Details", tempPurchaseOrderRecordDetails);
+            return View("Details", tempPurchaseOrderRecordDetails);
         }
 
 

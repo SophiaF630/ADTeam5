@@ -4,9 +4,9 @@
     ViewData["Title"] = "Index";
 }
 
-
-<script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+
 
 
 @*<h1>Disbursement List Details</h1>*@
@@ -270,7 +270,7 @@
                     <div class="form-group">
                         <input type="hidden" id="BackToListModalID" name="backToListModalName" class="form-control" value="1" />
                     </div>
-                    Your form will not be saved
+                    Your changes not be saved
                     <div class="modal-footer">
                         <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
                         <button type="submit" class="btn btn-primary" value="Redirect" onclick="window.location='@Url.Action("Index", "DisbursementLists")'">Confirm</button>

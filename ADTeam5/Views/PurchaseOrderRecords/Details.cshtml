@@ -146,7 +146,7 @@
 
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a href="#" data-toggle="modal" data-target="#BackToListModal">Back to List</a>
 </div>
 
 
@@ -243,7 +243,7 @@
                     <div class="form-group">
                         <input type="hidden" id="AddToDraftModalID" name="addToDraftModalName" class="form-control" value="1" />
                     </div>
-                        Your changes will be saved
+                    Your changes will be saved
                     <div class="modal-footer">
                         <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
                         <button type="submit" class="btn btn-primary">Confirm</button>
@@ -268,7 +268,7 @@
                     <div class="form-group">
                         <input type="hidden" id="SubmitModalID" name="submitModalName" class="form-control" value="1" />
                     </div>
-                        Order cannot be changed after submission
+                    Order cannot be changed after submission
                     <div class="modal-footer">
                         <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
                         <button type="submit" class="btn btn-primary">Confirm</button>
@@ -319,7 +319,7 @@
                     <div class="form-group">
                         <input type="hidden" id="BackToListModalID" name="backToListModalName" class="form-control" value="1" />
                     </div>
-                    Your form will not be saved
+                    Your changes not be saved
                     <div class="modal-footer">
                         <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
                         <button type="submit" class="btn btn-primary" value="Redirect" onclick="window.location='@Url.Action("Index", "PurchaseOrderRecords")'">Confirm</button>
