@@ -834,15 +834,16 @@ namespace ADTeam5.BusinessLogic
             RecordDetails editPOItem = _context.RecordDetails.FirstOrDefault(x => x.Rdid == rdid);
             editPOItem.Quantity = quantity;
             editPOItem.Rrid = poidNew;
-            _context.Update(editPOItem);
+            _context.RecordDetails.Update(editPOItem);
             _context.SaveChanges();
         }
 
-        public void UpdatePOItem(int rowID, int quantityDelivered, List<PurchaseOrderRecordDetails> purchaseOrderDetailsList)
+        public void UpdatePOItemQtyOrdered(int rdid, int quantity)
         {
-            //get rdid
-            PurchaseOrderRecordDetails po = purchaseOrderDetailsList.FirstOrDefault(x => x.RowID == rowID);
-            int rdid = po.RDID;
+            var record = _context.RecordDetails.FirstOrDefault(x => x.Rdid == rdid);
+            record.Quantity = quantity;
+            _context.RecordDetails.Update(record);
+            _context.SaveChanges();
         }
 
         //CreatePurchaseOrderRecord

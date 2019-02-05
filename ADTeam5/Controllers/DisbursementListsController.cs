@@ -54,7 +54,7 @@ namespace ADTeam5.Controllers
                 List<RecordDetails> rd = b.GenerateRecordDetailsOfDisbursementList(depCodeList[i]);
             }
 
-            var sSISTeam5Context = _context.DisbursementList.Include(d => d.CollectionPointNavigation).Include(d => d.DepartmentCodeNavigation).Include(d => d.RepNavigation);
+            var sSISTeam5Context = _context.DisbursementList.Include(d => d.CollectionPointNavigation).Include(d => d.DepartmentCodeNavigation).Include(d => d.RepNavigation).OrderByDescending(x => x.Dlid);
             return View(await sSISTeam5Context.ToListAsync());
         }
 
@@ -75,7 +75,7 @@ namespace ADTeam5.Controllers
             {
                 b.ChangeEstDeliverDate(departmentName, estDeliverDate);
             }
-            var sSISTeam5Context = _context.DisbursementList.Include(d => d.CollectionPointNavigation).Include(d => d.DepartmentCodeNavigation).Include(d => d.RepNavigation);
+            var sSISTeam5Context = _context.DisbursementList.Include(d => d.CollectionPointNavigation).Include(d => d.DepartmentCodeNavigation).Include(d => d.RepNavigation).OrderByDescending(x => x.Dlid);
 
             return View(sSISTeam5Context);
         }
