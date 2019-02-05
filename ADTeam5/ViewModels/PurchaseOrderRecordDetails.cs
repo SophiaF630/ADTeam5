@@ -20,5 +20,6 @@ namespace ADTeam5.ViewModels
         public int Quantity { get; set; }
         [Display(Name = "Quantity Delivered")]
         public int QuantityDelivered { get; set; }
+        public decimal? Price { get; set; }
     }
 }

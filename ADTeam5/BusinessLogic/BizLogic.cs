@@ -599,6 +599,24 @@ namespace ADTeam5.BusinessLogic
             return price;
         }
 
+        //Amount(ex. GST) of a voucher, supplier1Price is used
+        public decimal? GetTotalAmountForPO(string poid)
+        {
+            var tmp = _context.RecordDetails.Where(s => s.Rrid == poid).ToList();
+            if (tmp == null)
+                return 0;
+            decimal? price = 0;
+            string supplierCode = _context.PurchaseOrderRecord.FirstOrDefault(x => x.Poid == poid).SupplierCode;
+            foreach (RecordDetails i in tmp)
+            {
+
+                decimal? pricePerItem = GetPriceOfItem(i.ItemNumber, supplierCode);
+                decimal? p = i.Quantity * pricePerItem;
+                price += p;
+            }
+            return price;
+        }
+
         //FindDepartmentOrSupplier through disbursement list ID or PO ID
         public string FindDepartmentOrSupplier(string recordId)
         {
@@ -663,6 +681,8 @@ namespace ADTeam5.BusinessLogic
                 poList.ItemName = _context.Catalogue.FirstOrDefault(x => x.ItemNumber == item.ItemNumber).ItemName;
                 poList.Quantity = item.Quantity;
                 poList.QuantityDelivered = item.QuantityDelivered;
+                string supplierCode = _context.PurchaseOrderRecord.FirstOrDefault(x => x.Poid == poid).SupplierCode;
+                poList.Price = GetPriceOfItem(item.ItemNumber, supplierCode);
                 poList.RDID = item.Rdid;
                 poList.POID = poid;
 

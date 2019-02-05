@@ -67,13 +67,18 @@ namespace ADTeam5.Models
             }
             categoryList.Insert(0, new Catalogue { ItemNumber = "0", Category = "---Select Category---" });
             ViewBag.ListofCategory = categoryList;
-            
 
             if (id == null)
             {
                 return NotFound();
             }
 
+            //ViewBag for voucher price            
+            decimal? amount = b.GetTotalAmountForPO(id);
+            decimal? GST = Math.Round((decimal)(amount * (decimal?)0.07), 2);
+            ViewBag.Amount = amount;
+            ViewBag.GST = GST;
+            ViewBag.TotalAmount = amount + GST;
             ViewBag.POStatus = _context.PurchaseOrderRecord.Find(id).Status;
 
 
