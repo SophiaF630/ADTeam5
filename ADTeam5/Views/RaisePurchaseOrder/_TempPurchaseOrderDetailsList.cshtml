@@ -212,12 +212,13 @@ else
             <div align="center" vertical-align="middle">
                 <div style="width: 400px;padding: 15px;margin: 15px;border-style:outset; border-width:1px; ">
                     <div align="center" vertical-align="middle">
+
                         <h5 class="modal-title" id="exampleModalLongTitle">
                             <strong><font size="5">Add To PO</font></strong>
                         </h5>
                         @*<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>*@
+            <span aria-hidden="true">&times;</span>
+        </button>*@
                     </div>
                 </div>
             </div>
@@ -235,19 +236,19 @@ else
                     </div>
                     <div class="form-group">
                         <label for="ItemNumber">ItemName</label>
-                        <select for="ItemNumber" class="form-control" id="ItemNumber" name="itemNumber" asp-items="@(new SelectList(" "))"></select>
+                        <select for="ItemNumber" class="form-control" id="ItemNumber" required="required" name="itemNumber" asp-items="@(new SelectList(" "))"></select>
                     </div>
                     <div class="form-group">
                         <label for="Quantity">Quantity</label>
-                        <input type="text" id="Quantity" name="quantity" class="form-control" value="" />
+                        <input type="number" min="1" step="1" id="Quantity" name="quantity"  required="required" class="form-control" value="" />
                     </div>
                     <div class="form-group">
                         <label for="Supplier">Supplier</label>
-                        <div id="Supplier"></div>
+                        <div id="Supplier" ></div>
                     </div>
                     <div align="center">
                         <button class="btn" data-dismiss="modal" aria-hidden="true" style="width:80px;height:30px;border:2px; background-color:#EEEEEE"><font size="3" color="black">Close</font></button>
-                        <button type="submit" class="btn btn-primary" style="width:120px;height:30px;border:2px; background-color:#3c8dbc"><font size="3" color="white">Save Changes</font></button>
+                        <button type="submit" class="btn btn-primary"  style="width:120px;height:30px;border:2px; background-color:#3c8dbc"><font size="3" color="white">Save Changes</font></button>
                     </div>
                 </form>
 
@@ -282,7 +283,7 @@ else
                     </div>
                     <div class="form-group">
                         <label for="Quantity">Quantity</label>
-                        <input type="text" id="Quantity" name="quantity" class="form-control" value="" />
+                        <input type="number" min="1" step="1" id="Quantity" name="quantity" class="form-control" value="" />
                     </div>
                     <div class="form-group">
                         <label for="EditSupplier">Supplier</label>
@@ -310,7 +311,7 @@ else
         var $modal = $('#createNewPOItemModal');
         $modal.find('#ItemNumber').val(itemNumber);
         $modal.find('#Quantity').val(quantity);
-        $modal.find('#Supplier').val(supplierName);
+       $modal.find('#Supplier').val(supplierName);
         $modal.find('#createNewPOItemModalID').val(createNewPOItemModalID);
 
         $modal.modal('show');
@@ -337,7 +338,7 @@ else
             $.get("/RaisePurchaseOrder/GetSuppliers", { itemNumber: $("#ItemNumber").val() }, function (data) {
                 $("#Supplier").empty();
                 $.each(data, function (index, row) {
-                    $('#Supplier').append('<input type="radio" name="supplierName" value="' + row + '"/>' + row + '<br/>');
+                    $('#Supplier').append('<input type="radio" name="supplierName"  checked="checked" value="' + row + '"/>' + row + '<br/>');
                 });
             });
         })
@@ -354,10 +355,12 @@ else
         var supplierName = $row.find("td.Suplier").text().trim();;
         var POItemModalID = 1;
 
+      
         $.get("/RaisePurchaseOrder/GetSuppliers", { itemNumber: itemNumber }, function (data) {
             $("#EditSupplier").empty();
             $.each(data, function (index, row) {
-                $('#EditSupplier').append('<input type="radio" name="supplierName" value="' + row + '"/>' + row + '<br/>');
+                $('#EditSupplier').append('<input type="radio" name="supplierName"   value="' + row + '"/>' + row + '<br/>');
+
             });
         });
 
@@ -390,7 +393,7 @@ else
                 success:
                     function (data) {
                         //$('#result').html(data);
-                        alert("submitted");
+                        alert("Purchased order is submitted");
                         window.location.reload();
                     }
             })
@@ -413,7 +416,7 @@ else
             success:
                 function (data) {
                     //$('#result').html(data);
-                    alert("saved to draft");
+                    alert("Saved to draft");
                     location.reload();
                 }
         })
@@ -462,3 +465,4 @@ else
         document.getElementById("totalAmount").innerText = "Total Amount: $" + totalAmount;
     });
 </script>
+
