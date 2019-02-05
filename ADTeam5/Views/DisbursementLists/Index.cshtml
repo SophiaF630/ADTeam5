@@ -57,7 +57,7 @@
                                             @Html.DisplayNameFor(model => model.Status)
                                         </th>
                                         <th>
-                                            Change Deliver Date
+                                           
                                         </th>
 
                                     </tr>
@@ -69,42 +69,42 @@
                                             <td>
                                                 <a asp-action="Details" asp-route-id="@item.Dlid"><U>@Html.DisplayFor(modelItem => item.Dlid)</U></a>
                                             </td>
-                                            <td width="12%">
+                                            <td width="15%">
                                                 @Html.DisplayFor(modelItem => item.CollectionPointNavigation.CollectionPointName)
                                             </td>
-                                            <td width="8%">
+                                            <td width="17%">
                                                 @*@Html.DisplayFor(modelItem => item.CollectionPointNavigation.CollectionTime).ToString("dd/MMM/yyyy HH:mm tt");*@
                                                 @item.CollectionPointNavigation.CollectionTime.ToShortTimeString()
                                             </td>
                                             <td class="DepartmentName" width="9%" >
                                                 @Html.DisplayFor(modelItem => item.DepartmentCodeNavigation.DepartmentName)
                                             </td>
-                                            <td width="7%">
+                                            <td width="5%">
                                                 @Html.DisplayFor(modelItem => item.RepNavigation.Name)
                                             </td>
-                                            <td class="EstDeliverDate" width="17%">
+                                            <td class="EstDeliverDate" width="24%">
                                                 @Html.DisplayFor(modelItem => item.EstDeliverDate)
                                             </td>
-                                            <td width="13%">
+                                            <td width="16%">
                                                 @Html.DisplayFor(modelItem => item.CompleteDate)
                                             </td>
-                                            <td width="10px">
+                                            <td width="3%">
                                                 @Html.DisplayFor(modelItem => item.Status)
                                             </td>
                                             <td>
                                                 @if (@item.Status == "Pending Delivery")
                                                 {
-                                                    <button type="button" class="btn btn-primary changeEstDeliverDate" style="background-color:transparent; border:transparent; margin-left:50px">
-                                                        <i class="far fa-calendar-alt" style="color:#66B3B3">
-                                                            
+                                                    <button type="button" class="btn btn-primary changeEstDeliverDate" style="background-color:transparent; border:transparent;">
+                                                        <i class="fa fa-calendar-alt" style="color:#66B3B3">
+                                                            Change Deliver Date
                                                         </i>
                                                     </button>
                                                 }
                                                 else
                                                 {
-                                                    <button type="button" class="btn btn-primary changeEstDeliverDate" style="background-color:transparent; border:transparent;margin-left:50px" disabled>
-                                                        <i class="far fa-calendar-alt" style="color:#D0D3D4">
-                                                            
+                                                    <button type="button" class="btn btn-primary changeEstDeliverDate" style="background-color:transparent; border:transparent;" disabled>
+                                                        <i class="fa fa-calendar-alt" style="color:#D0D3D4">
+                                                            Change Deliver Date
                                                         </i>
                                                     </button>
                                                 }
