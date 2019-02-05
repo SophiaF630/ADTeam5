@@ -582,6 +582,22 @@ namespace ADTeam5.BusinessLogic
             }
         }
 
+        //this part is temp and may not work on other status
+        public decimal? GetTotalAmountForVoucher(string voucherNo)
+        {
+            var tmp = _context.RecordDetails.Where(s => s.Rrid == voucherNo).ToList();
+            if (tmp == null)
+                return 0;
+            decimal? price = 0;
+            foreach (RecordDetails i in tmp)
+            {
+                Catalogue k = _context.Catalogue.Where(s => s.ItemNumber == i.ItemNumber).ToList().First();
+                decimal? p = Math.Abs(i.Quantity) * k.Supplier1Price;
+                price += p;
+            }
+            return price;
+        }
+
         //FindDepartmentOrSupplier through disbursement list ID or PO ID
         public string FindDepartmentOrSupplier(string recordId)
         {
@@ -686,7 +702,7 @@ namespace ADTeam5.BusinessLogic
             return result;
         }
 
-        //Create New VoucherItem
+        //Create New POItem
         public void CreateNewPOItem(int userID, string itemNumber, int qty, string supplierName)
         {
             string supplierCode = _context.Supplier.FirstOrDefault(x => x.SupplierName == supplierName).SupplierCode;
@@ -810,7 +826,7 @@ namespace ADTeam5.BusinessLogic
             }
         }
 
-        //Delete voucher item
+        //Delete PO item
         public void DeletePOItem(int rowID, List<TempPurchaseOrderDetails> tempPurchaseOrderDetailsList)
         {
             //get rdid

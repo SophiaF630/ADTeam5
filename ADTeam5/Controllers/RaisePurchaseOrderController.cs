@@ -104,6 +104,9 @@ namespace ADTeam5.Controllers
 
             List<TempPurchaseOrderDetails> result = b.GetTempPurchaseOrderDetailsList();
 
+            //calculate order total amount by supplier
+
+
             //Viewbag for category dropdown list, need to post back
             List<Catalogue> categoryList = new List<Catalogue>();
             var q = _context.Catalogue.GroupBy(x => new { x.Category }).Select(x => x.FirstOrDefault());

@@ -55,6 +55,9 @@ namespace ADTeam5.Controllers
             itemNameList.Insert(0, new Catalogue { ItemNumber = "0", ItemName = "---Select Item---" });
             ViewBag.ListofItemName = itemNameList;
 
+            
+
+
             return View(tempVoucherDetailsList);
         }
 
@@ -65,7 +68,8 @@ namespace ADTeam5.Controllers
             ADTeam5User user = await _userManager.GetUserAsync(HttpContext.User);
             List<string> identity = userCheck.checkUserIdentityAsync(user);
             int userID = user.WorkID;
-            voucherNo = "";            
+            voucherNo = "";
+
 
             //handle post action
             List<TempVoucherDetails> tempVoucherDetailsList = b.GetTempVoucherDetailsList(userID);
@@ -152,6 +156,15 @@ namespace ADTeam5.Controllers
             {
                 tempVoucherDetailsList = new List<TempVoucherDetails>();
             }
+
+            //ViewBag for voucher price
+            string tempVoucherNo = "VTemp" + userID;
+            decimal? amount = b.GetTotalAmountForVoucher(tempVoucherNo);
+            decimal? GST = Math.Round((decimal)(amount * (decimal?)0.07), 2);
+            ViewBag.Amount = amount;
+            ViewBag.GST = GST;
+            ViewBag.TotalAmount = amount + GST;
+
             return PartialView("_TempVoucherDetailsList", tempVoucherDetailsList);
 
         }

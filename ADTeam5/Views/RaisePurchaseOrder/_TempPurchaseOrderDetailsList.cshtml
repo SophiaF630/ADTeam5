@@ -329,7 +329,7 @@ else
         var itemName = $row.find("td.ItemName").text().trim(); // Find the text
         var itemNumber = $row.find("td.ItemNumber").text().trim(); // Find the text
         var quantity = $row.find("td.Quantity").text().trim();
-        var supplierName = "";
+        var supplierName = $row.find("td.Suplier").text().trim();;
         var POItemModalID = 1;
 
         $.get("/RaisePurchaseOrder/GetSuppliers", { itemNumber: itemNumber }, function (data) {
