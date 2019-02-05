@@ -53,11 +53,11 @@ namespace ADTeam5.BusinessLogic
 
         public Models.DepartmentCoveringHeadRecord findCurrentDeputyHeadToEdit(int currentDeputyHeadId)
         {
-            DateTime today = DateTime.Now;
+            DateTime today = DateTime.Now.Date;
             var q = context.DepartmentCoveringHeadRecord.Where(x => x.UserId == currentDeputyHeadId && x.EndDate >= today).First();
-            DepartmentCoveringHeadRecord d2 = new DepartmentCoveringHeadRecord();
-            d2 = q;
-            return d2;
+                DepartmentCoveringHeadRecord d2 = new DepartmentCoveringHeadRecord();
+                d2 = q;
+                return d2;
         }
 
         public List<User> populateAssignDeputyDropDownList(string dept, int repid, int headid)
@@ -82,9 +82,9 @@ namespace ADTeam5.BusinessLogic
         {
             
             var q2 = context.CollectionPoint.Where(x => x.CollectionPointId == currentCollectionPoint).First();
-            CollectionPoint d2 = new CollectionPoint();
-            d2 = q2;
-            return d2;
+            CollectionPoint c = new CollectionPoint();
+            c = q2;
+            return c;
         }
 
         //NewRequest 
@@ -119,7 +119,7 @@ namespace ADTeam5.BusinessLogic
         {
             var q = from x in context.EmployeeRequestRecord
                     join s in context.User on x.DepEmpId equals s.UserId
-                    where x.DepCode.Equals(dept) && x.Status == "Submitted"
+                    where x.DepCode.Equals(dept) && x.Status == "Pending Approval"
                     select new OutstandingOrder
                     {
                         Rrid = x.Rrid,
@@ -176,10 +176,31 @@ namespace ADTeam5.BusinessLogic
 
         public List<DisbursementList> findDisbursementListStatusComplete(string dept)
         {
-            var q1 = context.DisbursementList.Where(x => x.DepartmentCode == dept && x.Status == "Completed").ToList();
-            List<DisbursementList> dList = new List<DisbursementList>();
-            dList = q1;
-            return dList;
+            List<DisbursementList> dbList = new List<DisbursementList>();
+            int todayYear = DateTime.Now.Year;
+            int nextYear;
+            int lastYear;
+            int todayMonth = DateTime.Now.Month;
+            DateTime startFinancialYear;
+            DateTime endFinancialYear;
+
+            if (todayMonth < 4)
+            {
+                lastYear = todayYear - 1;
+                startFinancialYear = new DateTime(lastYear, 4, 1, 0, 0, 0);
+                endFinancialYear = new DateTime(todayYear, 3, 31, 0, 0, 0);
+            }
+            else
+            {
+                nextYear = todayYear + 1;
+                startFinancialYear = new DateTime(todayYear, 4, 1, 0, 0, 0);
+                endFinancialYear = new DateTime(nextYear, 3, 31, 0, 0, 0);
+            }
+
+            var q = context.DisbursementList.Where(x => x.DepartmentCode == dept && x.Status == "Completed" && x.CompleteDate >= startFinancialYear && x.CompleteDate <= endFinancialYear);
+            dbList = q.ToList();
+
+            return dbList;
         }
 
         public List<DisbursementList> findDisbursementListStatusCompleteDateRange(string dept, DateTime startDate, DateTime endDate)

@@ -3,8 +3,21 @@
 @{
     ViewData["Title"] = "Details";
 }
+
+<script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+
 <h1></h1>
 <h2>Details</h2>
+@if (TempData["NoText"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aira-label="close">
+            <span aria-hidden="true">&times</span>
+        </button>
+        @TempData["NoText"]
+    </div>
+}
 <p>Requisition Form No: @ViewData["RRID"]</p>
 <p>Employee Name: @ViewData["Name"]</p>
 
@@ -36,8 +49,56 @@
 </table>
 
 
-<form asp-controller="OutstandingOrder" asp-action="RejectOrder" method="post">
-    Reason For Rejection: <input type="text" name="rejectReason"> <button type="submit">Reject</button>
-</form>
 
-<form asp-controller="OutstandingOrder" asp-action="ApproveOrder" method="post"><button type="submit">Approve</button></form>
+<button type="submit" class="btn btn-lg btn-primary d-none d-md-inline-block mt-3 rejectReason" style="background-color: #800000">Reject</button>
+<form asp-controller="OutstandingOrder" asp-action="ApproveOrder" method="post"><button type="submit" class="btn btn-lg btn-primary d-none d-md-inline-block mt-3" style="background-color:#008000">Approve</button></form>
+
+
+<!-- Modal for create voucher item-->
+<div class="modal fade in" id="CreateNewVoucherItemModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <br />
+            @*<div class="modal-header">*@
+
+            <div class="modal-body">
+                <form asp-controller="OutstandingOrder" asp-action="RejectOrder" method="post">
+
+
+                    <div class="form-group">
+                        <label for="rejectReason">Reason for Rejection:</label>
+                        @if (TempData["NoText"] != null)
+                        {
+                            <div class="alert alert-danger" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aira-label="close">
+                                    <span aria-hidden="true">&times</span>
+                                </button>
+                                @TempData["NoText"]
+                            </div>
+                        }
+                        <input type="text" id="rejectReason" name="rejectReason" class="form-control" value="" />
+                    </div>
+                    <div align="center">
+                        <button class="btn" data-dismiss="modal" aria-hidden="true" style="width:80px;height:30px;border:2px; background-color:#EEEEEE"><font size="3" color="black">Cancel</font></button>
+                        <button type="submit" class="btn btn-primary" style="width:120px;height:30px;border:2px; background-color:#3c8dbc"><font size="3" color="white">Submit</font></button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(".rejectReason").click(function () {
+        var rejectReason = "";
+        var createNewVoucherItemModalID = 1;
+
+        var $modal = $('#CreateNewVoucherItemModal');
+        $modal.find('#rejectReason').val(rejectReason);
+        var empty = true;
+        $modal.find('#CreateNewVoucherItemModalID').val(createNewVoucherItemModalID);
+
+        $modal.modal('show');
+    });
+</script>

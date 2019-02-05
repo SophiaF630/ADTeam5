@@ -51,6 +51,10 @@ namespace ADTeam5.Controllers
                 ViewData["CurrentDeputyHeadStartDate"] = d2.StartDate.ToShortDateString();
                 ViewData["CurrentDeputyHeadEndDate"] = d2.EndDate.ToShortDateString();
             }
+            else
+            {
+                edit = false;
+            }
 
             List<User> userList = new List<User>();
             Models.Department d = b.getDepartmentDetails(dept);
@@ -67,7 +71,21 @@ namespace ADTeam5.Controllers
         {
             if (startdate > enddate || startdate < DateTime.Now.Date.AddDays(-1))
             {
-                TempData["DateAlert"] = "Please enter valid dates!";
+                if (startdate > enddate && startdate < DateTime.Now.Date.AddDays(-1))
+                {
+                    TempData["DateAlert"] = "End date cannot be earlier than start date. Start date cannot be earlier than today. Please try again.";
+                    return RedirectToAction("Index");
+                }
+                if (startdate > enddate)
+                {
+                    TempData["DateAlert"] = "End date cannot be earlier than start date. Please try again.";
+                    return RedirectToAction("Index");
+                }
+                if (startdate < DateTime.Now.Date.AddDays(-1))
+                {
+                    TempData["DateAlert"] = "Start date cannot be earlier than today. Please try again.";
+                    return RedirectToAction("Index");
+                }
                 return RedirectToAction("Index");
             }
             else
@@ -79,16 +97,16 @@ namespace ADTeam5.Controllers
 
                     if (edit == true)
                     {
-                        var q = context.DepartmentCoveringHeadRecord.Where(x => x.UserId == currentDeputyHeadId).First();
+                        var q = context.DepartmentCoveringHeadRecord.Where(x => x.UserId == currentDeputyHeadId).FirstOrDefault();
                         Models.DepartmentCoveringHeadRecord d2 = new Models.DepartmentCoveringHeadRecord();
                         d2 = q;
                         d2.UserId = u.UserId;
                         d2.StartDate = startdate;
                         d2.EndDate = enddate;
-                        //send email to old deputy head
-                        var oldhead = context.User.Where(x => x.UserId == currentDeputyHeadId).First();
-                        string email2 = oldhead.EmailAddress;
-                        await _emailSender.SendEmailAsync(email2, "Department Deputy Head Replacement", "Dear " + oldhead.Name + ",<br>You have been replaced as department deputy head.");
+
+                        context.SaveChanges();
+                        TempData["EditSuccess"] = "Changes were saved successfully!";
+
                     }
                     else
                     {
@@ -97,18 +115,17 @@ namespace ADTeam5.Controllers
                         d2.StartDate = startdate;
                         d2.EndDate = enddate;
                         context.Add(d2);
+                        context.SaveChanges();
+                        TempData["NewSuccess"] = "New deputy head appointed!";
                     }
-                    //send email to new deputy head
-                    var newhead = context.User.Where(x => x.UserId == u.UserId).First();
-                    string email = newhead.EmailAddress;
-                    await _emailSender.SendEmailAsync(email, "Department Representative Appointment", "Dear " + newhead.Name + ",<br>You have been appointed as the department deputy head.");
 
-                    //save changes
-                    context.SaveChanges();
-                    TempData["Success"] = "Edits Saved Successfully";
                     return RedirectToAction("Index");
                 }
-                return RedirectToAction("Index");
+                else
+                {
+                    return RedirectToAction("Index");
+                }
+              
             }
         }
 

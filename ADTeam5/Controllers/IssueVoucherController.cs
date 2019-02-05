@@ -58,6 +58,9 @@ namespace ADTeam5.Controllers
             itemNameList.Insert(0, new Catalogue { ItemNumber = "0", ItemName = "---Select Item---" });
             ViewBag.ListofItemName = itemNameList;
 
+            
+
+
             return View(tempVoucherDetailsList);
         }
 
@@ -68,7 +71,8 @@ namespace ADTeam5.Controllers
             ADTeam5User user = await _userManager.GetUserAsync(HttpContext.User);
             List<string> identity = userCheck.checkUserIdentityAsync(user);
             int userID = user.WorkID;
-            voucherNo = "";            
+            voucherNo = "";
+
 
             //handle post action
             List<TempVoucherDetails> tempVoucherDetailsList = b.GetTempVoucherDetailsList(userID);
@@ -91,31 +95,10 @@ namespace ADTeam5.Controllers
                     if (Array.Exists(itemSubmitted, i => i == item.RowID.ToString()))
                     {
                         b.AddItemsToVoucher(item.RowID, voucherNo, tempVoucherDetailsList);
-                        b.CreateAdjustmentRecord(userID, voucherNo, "Submitted");
 
-                        //send success email to staff
-                        var staff = _context.User.Where(x => x.UserId == userID).First();
-                        string email = staff.EmailAddress;
-                        await _emailSender.SendEmailAsync(email, "Department Representative Appointment", "Dear " + staff.Name + ",<br>You have been appointed as the department representative for stationery collection.");
-
-                        //send notification email to supervisor
-
-                        var bosstest = (from User in _context.User
-                                   join Department in _context.Department
-                                   on User.UserId equals Department.HeadId
-                                   where Department.DepartmentCode == "STAS"
-                                   select new User {EmailAddress = User.EmailAddress, Name = User.Name }).ToList();
-
-                        //var boss = from User in _context.User
-                        //          join Department in _context.Department
-                        //            on User.UserId equals Department.HeadId
-                                    
-                        //          select new { User.EmailAddress, User.Name };
-
-                        ////string email2 = boss.EmailAddress;
-                        //await _emailSender.SendEmailAsync(email2, "Department Representative Appointment", "Dear " + boss.Name + ",<br>You have been appointed as the department representative for stationery collection.");
                     }
                 }
+                b.CreateAdjustmentRecord(userID, voucherNo, "Submitted");
                 //return RedirectToAction(nameof(Index));
             }
             else if(itemSavedToDraft.Length != 0)
@@ -126,9 +109,10 @@ namespace ADTeam5.Controllers
                     if (Array.Exists(itemSavedToDraft, i => i == item.RowID.ToString()))
                     {
                         b.AddItemsToVoucher(item.RowID, voucherNo, tempVoucherDetailsList);
-                        b.CreateAdjustmentRecord(userID, voucherNo, "Draft");
+                        
                     }
                 }
+                b.CreateAdjustmentRecord(userID, voucherNo, "Draft");
                 //return RedirectToAction(nameof(Index));
             }
 
@@ -175,6 +159,15 @@ namespace ADTeam5.Controllers
             {
                 tempVoucherDetailsList = new List<TempVoucherDetails>();
             }
+
+            //ViewBag for voucher price
+            string tempVoucherNo = "VTemp" + userID;
+            decimal? amount = b.GetTotalAmountForVoucher(tempVoucherNo);
+            decimal? GST = Math.Round((decimal)(amount * (decimal?)0.07), 2);
+            ViewBag.Amount = amount;
+            ViewBag.GST = GST;
+            ViewBag.TotalAmount = amount + GST;
+
             return PartialView("_TempVoucherDetailsList", tempVoucherDetailsList);
 
         }

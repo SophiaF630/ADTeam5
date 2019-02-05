@@ -74,11 +74,21 @@ namespace ADTeam5.Controllers
         {
             if (ModelState.IsValid)
             {
+                int newUserId = u.UserId;
                 Department d2 = new Department();
                 d2 = context.Department.Where(x => x.DepartmentCode == dept).First();
-                d2.RepId = u.UserId;
+                d2.RepId = newUserId;
+
+                var t = context.DisbursementList.Where(x => x.DepartmentCode == dept && x.Status == "Pending Delivery");
+                if (t.Any())
+                {
+                    DisbursementList d3 = new DisbursementList();
+                       d3 =  t.First();
+                    d3.RepId = newUserId;
+                }
+
                 context.SaveChanges();
-                TempData["Alert1"] = "Department Representative Changed Successfully";
+                TempData["Alert1"] = "Department Representative Changed Successfully!";
 
                 //send email to new dept rep
                 var q = context.User.Where(x => x.UserId == u.UserId).First();

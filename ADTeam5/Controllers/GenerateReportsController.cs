@@ -158,7 +158,7 @@ namespace ADTeam5.Controllers
         }
 
         [HttpPost]
-        public JsonResult GetYearMonthList(ReportQueryData queryData)
+        public JsonResult GetStationeryUsageReportData(ReportQueryData queryData)
         {
             ReportReturnData reportData = new ReportReturnData();
             List<string> yearsName = queryData.YearsName;
@@ -180,43 +180,95 @@ namespace ADTeam5.Controllers
 
 
         //charge back
-        //public async Task<IActionResult> ChargeBack()
-        //{
-        //    ADTeam5User user = await _userManager.GetUserAsync(HttpContext.User);
-        //    List<string> identity = userCheck.checkUserIdentityAsync(user);
-        //    int userID = user.WorkID;
+        public async Task<IActionResult> ChargeBack()
+        {
+            ADTeam5User user = await _userManager.GetUserAsync(HttpContext.User);
+            List<string> identity = userCheck.checkUserIdentityAsync(user);
+            int userID = user.WorkID;
 
-        //    List<ChargeBackViewModel> chargeBackViewModels = b.GetChargeBack("Completed");
-        //    if (chargeBackViewModels.Count != 0)
-        //    {
-        //        //Viewbag for year and month dropdownlist, need to post back
-        //        List<int> years = new List<int>();
-        //        List<int> months = new List<int>() { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };
-        //        var q = chargeBackViewModels.GroupBy(x => new { x.Year }).Select(y => new { year = y.Key.Year });
-        //        foreach (var item in q.ToList())
-        //        {
-        //            years.Add(item.year);
-        //        }
-        //        ViewBag.ListOfYear = years;
-        //        ViewBag.ListOfMonth = months;
+            List<ChargeBackViewModel> chargeBackViewModels = b.GetChargeBack("Completed");
+            if (chargeBackViewModels.Count != 0)
+            {
+                //Viewbag for year and month dropdownlist, need to post back
+                List<int> years = new List<int>();
+                List<int> months = new List<int>() { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };
+                var q = chargeBackViewModels.GroupBy(x => new { x.Year }).Select(y => new { year = y.Key.Year });
+                foreach (var item in q.ToList())
+                {
+                    years.Add(item.year);
+                }
+                ViewBag.ListOfYear = years;
+                ViewBag.ListOfMonth = months;
 
-        //        //Viewbag for department dropdownlist, need to post back   
-        //        var departments = _context.Department.ToList();
-        //        if (departments.Count != 0)
-        //        {
-        //            ViewBag.ListOfDepartment = departments.Select(x => new Department { DepartmentName = x.DepartmentName, DepartmentCode = x.DepartmentCode });
-        //        }
+                //Viewbag for department dropdownlist, need to post back   
+                var departments = _context.Department.ToList();
+                if (departments.Count != 0)
+                {
+                    ViewBag.ListOfDepartment = departments.Select(x => new Department { DepartmentName = x.DepartmentName, DepartmentCode = x.DepartmentCode });
+                }
+                
+            }
+            return View();
+        }
 
-        //        //Viewbag for category dropdownlist, need to post back   
-        //        List<string> categories = new List<string>();
-        //        var p = chargeBackViewModels.GroupBy(x => new { x.Category }).Select(y => new { category = y.Key.Category });
-        //        foreach (var item in p.ToList())
-        //        {
-        //            categories.Add(item.category);
-        //        }
-        //        ViewBag.ListOfCategory = categories;
-        //    }
-        //    return View();
-        //}
+        //Data preparation
+        public class ChargebackReportQueryData
+        {
+            public string StartDate { get; set; }
+            public string EndDate { get; set; }
+            public List<string> YearsName { get; set; }
+            public List<string> MonthsName { get; set; }
+            public List<string> Departments { get; set; }
+        }
+
+        public class ChargebackDepartmentData
+        {
+            public string Name { get; set; }
+            public List<decimal?> Data { get; set; }
+        }
+
+        public class ChargebackReportReturnData
+        {
+            public List<string> Xaxis { get; set; }
+            public List<ChargebackDepartmentData> Series { get; set; }
+        }
+
+        public List<ChargebackDepartmentData> ChargebackPrepareData(List<string> departments, List<ChargeBackViewModel> rawData)
+        {
+            List<ChargebackDepartmentData> reportData = new List<ChargebackDepartmentData>();
+            foreach (string dep in departments)
+            {
+                var deptName = _context.Department.Find(dep).DepartmentName;
+                ChargebackDepartmentData depData = new ChargebackDepartmentData();
+                depData.Name = deptName;
+                depData.Data = new List<decimal?>();
+                var q = rawData.Where(x => x.DepCode == dep);
+                foreach (var item in q)
+                {
+                    depData.Data.Add(item.TotalAmount);
+                }
+                reportData.Add(depData);
+            }
+            return reportData;
+        }
+
+        [HttpPost]
+        public JsonResult GetChargebackReportData(ChargebackReportQueryData queryData)
+        {
+            ChargebackReportReturnData reportData = new ChargebackReportReturnData();
+            List<string> yearsName = queryData.YearsName;
+            List<string> monthsName = queryData.MonthsName;
+            DateTime startDate = Convert.ToDateTime(queryData.StartDate);
+            DateTime endDate = Convert.ToDateTime(queryData.EndDate);
+            List<string> departmentsCode = queryData.Departments;
+
+            List<string> months = GetMonths(yearsName, monthsName, startDate, endDate);
+            reportData.Xaxis = months;
+            List<ChargeBackViewModel> rawData = b.GetChargeBack("Completed", startDate, endDate, yearsName, monthsName, departmentsCode);
+
+            reportData.Series = ChargebackPrepareData(departmentsCode, rawData);
+
+            return Json(reportData);
+        }
     }
 }

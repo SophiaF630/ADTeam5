@@ -90,11 +90,23 @@
                                                 @Html.DisplayFor(modelItem => item.Status)
                                             </td>
                                             <td>
-                                                <button type="button" class="btn btn-primary changeEstDeliverDate" style="background-color:transparent; border:transparent">
-                                                    <i class="far fa-calendar-alt" style="color:#66B3B3">
-                                                        <span class="tooltiptext">Change Deliver Date</span>
-                                                    </i>
-                                                </button>
+                                                @if (@item.Status == "Pending Delivery")
+                                                {
+                                                    <button type="button" class="btn btn-primary changeEstDeliverDate" style="background-color:transparent; border:transparent">
+                                                        <i class="far fa-calendar-alt" style="color:#66B3B3">
+                                                            <span class="tooltiptext">Change Deliver Date</span>
+                                                        </i>
+                                                    </button>
+                                                }
+                                                else
+                                                {
+                                                    <button type="button" class="btn btn-primary changeEstDeliverDate" style="background-color:transparent; border:transparent" disabled>
+                                                        <i class="far fa-calendar-alt" style="color:#66B3B3">
+                                                            <span class="tooltiptext">Change Deliver Date</span>
+                                                        </i>
+                                                    </button>
+                                                }
+
                                             </td>
                                         </tr>
                                     }

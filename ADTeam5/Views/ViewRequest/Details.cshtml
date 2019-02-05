@@ -1,23 +1,24 @@
-﻿@model IEnumerable<ADTeam5.Models.RecordDetails>
+﻿@model IEnumerable<ADTeam5.ViewModels.ViewRequestDetails>
 
 @{
     ViewData["Title"] = "Details";
 }
 
 
-<h4>Details</h4>
+<h2>Details</h2>
 
-<p>Requisition Form No: @ViewData["RRID"]</p>
+<p><b>Requisition Form No: @ViewData["RRID"]</b></p>
+<p>Status: @ViewData["Status"]</p>
 
 
 <table class="table">
     <thead>
         <tr>
             <th>
-                Item Number
+                Item Name
             </th>
             <th>
-                Item Quantity
+                Quantity
             </th>
 
         </tr>
@@ -27,10 +28,10 @@
         {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.ItemNumber)
+                @Html.DisplayFor(modelItem => item.itemName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Quantity)
+                @Html.DisplayFor(modelItem => item.quantity)
             </td>
 
         </tr>

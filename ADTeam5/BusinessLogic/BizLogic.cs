@@ -191,8 +191,8 @@ namespace ADTeam5.BusinessLogic
                     }
                     else
                     {
-                        RecordDetails rd = new RecordDetails();
-                        rd.Quantity += r.Quantity;
+                        //RecordDetails rd = new RecordDetails();
+                        q.Quantity += r.Quantity;
                     }
 
                     _context.SaveChanges();
@@ -404,6 +404,7 @@ namespace ADTeam5.BusinessLogic
                     tvList.ItemNumber = item.ItemNumber;
                     tvList.ItemName = _context.Catalogue.FirstOrDefault(x => x.ItemNumber == item.ItemNumber).ItemName;
                     tvList.Quantity = item.Quantity;
+                    tvList.Price = _context.Catalogue.FirstOrDefault(x => x.ItemNumber == item.ItemNumber).Supplier1Price;
                     tvList.Remark = item.Remark;
 
                     result.Add(tvList);
@@ -582,6 +583,22 @@ namespace ADTeam5.BusinessLogic
             }
         }
 
+        //Amount(ex. GST) of a voucher, supplier1Price is used
+        public decimal? GetTotalAmountForVoucher(string voucherNo)
+        {
+            var tmp = _context.RecordDetails.Where(s => s.Rrid == voucherNo).ToList();
+            if (tmp == null)
+                return 0;
+            decimal? price = 0;
+            foreach (RecordDetails i in tmp)
+            {
+                Catalogue k = _context.Catalogue.Where(s => s.ItemNumber == i.ItemNumber).ToList().First();
+                decimal? p = Math.Abs(i.Quantity) * k.Supplier1Price;
+                price += p;
+            }
+            return price;
+        }
+
         //FindDepartmentOrSupplier through disbursement list ID or PO ID
         public string FindDepartmentOrSupplier(string recordId)
         {
@@ -636,28 +653,89 @@ namespace ADTeam5.BusinessLogic
             rd = _context.RecordDetails.Where(x => x.Rrid == purchaseOrderRecord.Poid).ToList();
 
             List<PurchaseOrderRecordDetails> result = new List<PurchaseOrderRecordDetails>();
+            int rowID = 1;
             foreach (var item in rd)
             {
                 PurchaseOrderRecordDetails poList = new PurchaseOrderRecordDetails();
 
+                poList.RowID = rowID;
                 poList.ItemNumber = item.ItemNumber;
                 poList.ItemName = _context.Catalogue.FirstOrDefault(x => x.ItemNumber == item.ItemNumber).ItemName;
                 poList.Quantity = item.Quantity;
+                poList.QuantityDelivered = item.QuantityDelivered;
+                poList.RDID = item.Rdid;
+                poList.POID = poid;
 
                 result.Add(poList);
+                rowID++;
             }
             return result;
         }
 
-    //Get temp PurchaseOrderDetailsList
-    public List<TempPurchaseOrderDetails> GetTempPurchaseOrderDetailsList()
+
+        //Add item at reorder qty to TempPurchaseOrderDetailsList
+        public List<TempPurchaseOrderDetails> AddReorderLevelItemToTempPurchaseOrderDetailsList()
+        {
+            var itemsAtReorderLevel = _context.Catalogue.Where(x => x.Stock <= x.ReorderLevel).ToList();
+
+            //find pending delivery items quantity
+            var pendingDeliveryItems = from rd in _context.RecordDetails
+                                       join po in _context.PurchaseOrderRecord on rd.Rrid equals po.Poid
+                                       where po.Status == "Pending Delivery"
+                                       group rd by new { rd.ItemNumber } into g
+                                       select new { g.Key.ItemNumber, Quantity = g.Sum(x => x.Quantity) };
+
+            List<TempPurchaseOrderDetails> autoPurchaseOrderDetails = new List<TempPurchaseOrderDetails>();
+            int rowID = 1;
+            foreach(var item in itemsAtReorderLevel)
+            {
+                var q = pendingDeliveryItems.Where(x => x.ItemNumber == item.ItemNumber && x.Quantity >= item.ReorderQty);
+                foreach(var p in q)
+                {
+                    if (item.ItemNumber != p.ItemNumber)
+                    {
+                        TempPurchaseOrderDetails tempPOD = new TempPurchaseOrderDetails();
+                        tempPOD.RowID = rowID;
+                        tempPOD.ItemNumber = item.ItemNumber;
+                        tempPOD.ItemName = _context.Catalogue.FirstOrDefault(x => x.ItemNumber == item.ItemNumber).ItemName;
+                        tempPOD.Quantity = item.ReorderQty;
+                        tempPOD.Remark = "";
+                        tempPOD.SupplierCode = _context.Catalogue.FirstOrDefault(x => x.ItemNumber == item.ItemNumber).Supplier1;
+
+                        autoPurchaseOrderDetails.Add(tempPOD);
+                        rowID++;
+                    }
+                }
+                
+            }
+
+            return autoPurchaseOrderDetails;
+        }
+
+        //Get temp PurchaseOrderDetailsList
+        public List<TempPurchaseOrderDetails> GetTempPurchaseOrderDetailsList()
         {
             List<TempPurchaseOrderDetails> result = new List<TempPurchaseOrderDetails>();
+
+            //Find auto generated items by system
+            List<TempPurchaseOrderDetails> autoPurchaseOrderDetails = AddReorderLevelItemToTempPurchaseOrderDetailsList();
+
+            //Find manual add in items via "POTemp"
             List<PurchaseOrderRecord> purchaseOrderRecordList = _context.PurchaseOrderRecord
                 .Where(x => x.Poid.Contains("POTemp")).ToList();
+            List<TempPurchaseOrderDetails> manualPurchaseOrderDetails = new List<TempPurchaseOrderDetails>();
+            //last row ID of auto
+            int rowID = 0;
+            if (autoPurchaseOrderDetails.Count != 0)
+            {
+                rowID = autoPurchaseOrderDetails.Select(x => x.RowID).Max() + 1;
+            }
+            else
+            {
+                rowID = 1;
+            }
             if (purchaseOrderRecordList.Count != 0)
             {
-                int rowID = 1;
                 foreach (var record in purchaseOrderRecordList)
                 {
                     List<RecordDetails> rdList = _context.RecordDetails.Where(x => x.Rrid == record.Poid).ToList();
@@ -672,15 +750,18 @@ namespace ADTeam5.BusinessLogic
                         tPOList.Remark = item.Remark;
                         tPOList.SupplierCode = _context.PurchaseOrderRecord.FirstOrDefault(x => x.Poid == item.Rrid).SupplierCode;
 
-                        result.Add(tPOList);
+                        manualPurchaseOrderDetails.Add(tPOList);
                         rowID++;
                     }
                 }
             }
+
+            //join auto and manual generated tempPOlist
+            result = autoPurchaseOrderDetails.Concat(manualPurchaseOrderDetails).ToList<TempPurchaseOrderDetails>();
             return result;
         }
 
-        //Create New VoucherItem
+        //Create New POItem
         public void CreateNewPOItem(int userID, string itemNumber, int qty, string supplierName)
         {
             string supplierCode = _context.Supplier.FirstOrDefault(x => x.SupplierName == supplierName).SupplierCode;
@@ -701,13 +782,24 @@ namespace ADTeam5.BusinessLogic
                 _context.SaveChanges();
             }
 
-            RecordDetails recordDetails = new RecordDetails();
-            recordDetails.Rrid = poNo;
-            recordDetails.ItemNumber = itemNumber;
-            recordDetails.Quantity = qty;
-            recordDetails.Remark = "";
-            _context.RecordDetails.Add(recordDetails);
-            _context.SaveChanges();
+            //check if item exists
+            RecordDetails rd = _context.RecordDetails.FirstOrDefault(x => x.Rrid == poNo && x.ItemNumber == itemNumber);
+            if (rd == null)
+            {
+                RecordDetails recordDetails = new RecordDetails();
+                recordDetails.Rrid = poNo;
+                recordDetails.ItemNumber = itemNumber;
+                recordDetails.Quantity = qty;
+                recordDetails.Remark = "";
+                _context.RecordDetails.Add(recordDetails);
+                _context.SaveChanges();
+            }
+            else
+            {
+                rd.Quantity += qty;
+                _context.RecordDetails.Update(rd);
+                _context.SaveChanges();
+            }            
 
         }
 
@@ -742,7 +834,15 @@ namespace ADTeam5.BusinessLogic
             RecordDetails editPOItem = _context.RecordDetails.FirstOrDefault(x => x.Rdid == rdid);
             editPOItem.Quantity = quantity;
             editPOItem.Rrid = poidNew;
-            _context.Update(editPOItem);
+            _context.RecordDetails.Update(editPOItem);
+            _context.SaveChanges();
+        }
+
+        public void UpdatePOItemQtyOrdered(int rdid, int quantity)
+        {
+            var record = _context.RecordDetails.FirstOrDefault(x => x.Rdid == rdid);
+            record.Quantity = quantity;
+            _context.RecordDetails.Update(record);
             _context.SaveChanges();
         }
 
@@ -753,56 +853,69 @@ namespace ADTeam5.BusinessLogic
             PurchaseOrderRecord poRecord = _context.PurchaseOrderRecord.FirstOrDefault(x => x.Poid == poNo);
             if (poRecord == null && supplierCode != null)
             {
-                if (status == "Submitted")
-                {
-                    //Generate new adjustment record
-                    PurchaseOrderRecord purchaseOrderRecord = new PurchaseOrderRecord();
-                    purchaseOrderRecord.Poid = poNo;
-                    purchaseOrderRecord.OrderDate = DateTime.Now.Date;
-                    purchaseOrderRecord.StoreClerkId = userID;
-                    purchaseOrderRecord.SupplierCode = supplierCode;
-                    purchaseOrderRecord.Status = "Submitted";
+                //Generate new adjustment record
+                PurchaseOrderRecord purchaseOrderRecord = new PurchaseOrderRecord();
+                purchaseOrderRecord.Poid = poNo;
+                purchaseOrderRecord.OrderDate = DateTime.Now.Date;
+                purchaseOrderRecord.StoreClerkId = userID;
+                purchaseOrderRecord.SupplierCode = supplierCode;
+                purchaseOrderRecord.Status = status;
 
-                    _context.PurchaseOrderRecord.Add(purchaseOrderRecord);
-                    _context.SaveChanges();
-                }
-                else if (status == "Draft")
-                {
-                    //Generate new adjustment record
-                    PurchaseOrderRecord purchaseOrderRecord = new PurchaseOrderRecord();
-                    purchaseOrderRecord.Poid = poNo;
-                    purchaseOrderRecord.OrderDate = DateTime.Now.Date;
-                    purchaseOrderRecord.StoreClerkId = userID;
-                    purchaseOrderRecord.SupplierCode = supplierCode;
-                    purchaseOrderRecord.Status = "Draft";
-
-                    _context.PurchaseOrderRecord.Add(purchaseOrderRecord);
-                    _context.SaveChanges();
-                }
+                _context.PurchaseOrderRecord.Add(purchaseOrderRecord);
+                _context.SaveChanges();
             }
         }
 
         //Add items to PO
         public void AddItemsToPO(int rowID, string poNo, List<TempPurchaseOrderDetails> tempPurchaseOrderDetailsList)
         {
-            //get rdid
+           
             TempPurchaseOrderDetails tempPurchaseOrderDetails = tempPurchaseOrderDetailsList.FirstOrDefault(x => x.RowID == rowID);
             int rdid = tempPurchaseOrderDetails.RDID;
-            //update record details
-            RecordDetails rd = _context.RecordDetails.FirstOrDefault(x => x.Rdid == rdid);
-            if (rd != null)
+            if(rdid != 0)
             {
-                rd.Rrid = poNo;
-                _context.SaveChanges();
+                //for existing items in records, get rdid
+                //update record details
+                RecordDetails rd = _context.RecordDetails.FirstOrDefault(x => x.Rdid == rdid);
+                if (rd != null)
+                {
+                    rd.Rrid = poNo;
+                    _context.SaveChanges();
+                }
             }
+            else
+            {
+                //for non-existing items in records
+                RecordDetails rd = new RecordDetails();
+                rd.Rrid = poNo;
+                rd.ItemNumber = tempPurchaseOrderDetails.ItemNumber;
+                rd.Quantity = tempPurchaseOrderDetails.Quantity;
+                rd.QuantityDelivered = 0;
+                _context.RecordDetails.Add(rd);
+                _context.SaveChanges();
+            }           
         }
 
-        //Delete voucher item
+        //Delete PO item
         public void DeletePOItem(int rowID, List<TempPurchaseOrderDetails> tempPurchaseOrderDetailsList)
         {
             //get rdid
             TempPurchaseOrderDetails tempPurchaseOrderDetails = tempPurchaseOrderDetailsList.FirstOrDefault(x => x.RowID == rowID);
             int rdid = tempPurchaseOrderDetails.RDID;
+
+            RecordDetails rd = _context.RecordDetails.FirstOrDefault(x => x.Rdid == rdid);
+            if (rd != null)
+            {
+                _context.RecordDetails.Remove(rd);
+                _context.SaveChanges();
+            }
+        }
+
+        public void DeletePOItem(int rowID, List<PurchaseOrderRecordDetails> purchaseOrderDetailsList)
+        {
+            //get rdid
+            PurchaseOrderRecordDetails purchaseOrderDetails = purchaseOrderDetailsList.FirstOrDefault(x => x.RowID == rowID);
+            int rdid = purchaseOrderDetails.RDID;
 
             RecordDetails rd = _context.RecordDetails.FirstOrDefault(x => x.Rdid == rdid);
             if (rd != null)
@@ -877,7 +990,7 @@ namespace ADTeam5.BusinessLogic
             return name;
         }
 
-
+        
 
 
         //Generate Report Part
@@ -983,112 +1096,136 @@ namespace ADTeam5.BusinessLogic
 
 
         //GetChargeBack
-        //public List<ChargeBackViewModel> GetChargeBack(string status)
-        //{
-        //    List<ChargeBackViewModel> chargeBackViewModelsList = new List<ChargeBackViewModel>();
+        public List<ChargeBackViewModel> GetChargeBack(string status)
+        {
+            List<ChargeBackViewModel> chargeBackViewModelsList = new List<ChargeBackViewModel>();
 
-        //    //join disbursement lists and record details table
-        //    var q = from rd in _context.RecordDetails
-        //            join dl in _context.DisbursementList on rd.Rrid equals dl.Dlid
-        //            where dl.Status == status
-        //            select new { rd.ItemNumber, rd.QuantityDelivered, dl.CompleteDate, dl.DepartmentCode };
+            //join disbursement lists and record details table
+            var q = from rd in _context.RecordDetails
+                    join dl in _context.DisbursementList on rd.Rrid equals dl.Dlid
+                    where dl.Status == status
+                    select new { rd.ItemNumber, rd.QuantityDelivered, dl.CompleteDate, dl.DepartmentCode };
 
-        //    if (q != null)
-        //    {
-        //        int rowID = 1;
-        //        foreach (var item in q.ToList())
-        //        {
-        //            ChargeBackViewModel chargeBackViewModel = new ChargeBackViewModel();
-        //            decimal? Supplier1Price = _context.Catalogue.FirstOrDefault(x => x.ItemNumber == item.ItemNumber).Supplier1Price;
+            if (q != null)
+            {
+                int rowID = 1;
+                foreach (var item in q.ToList())
+                {
+                    ChargeBackViewModel chargeBackViewModel = new ChargeBackViewModel();
+                    decimal? supplier1Price = _context.Catalogue.FirstOrDefault(x => x.ItemNumber == item.ItemNumber).Supplier1Price;
 
-        //            chargeBackViewModel.RowID = rowID;
-        //            chargeBackViewModel.Year = item.CompleteDate.Value.Year;
-        //            chargeBackViewModel.Month = item.CompleteDate.Value.Month;
-        //            chargeBackViewModel.DepCode = item.DepartmentCode;
-        //            chargeBackViewModel.TotalAmount = item.QuantityDelivered * Supplier1Price;
+                    chargeBackViewModel.RowID = rowID;
+                    chargeBackViewModel.Year = item.CompleteDate.Value.Year;
+                    chargeBackViewModel.Month = item.CompleteDate.Value.Month;
+                    chargeBackViewModel.DepCode = item.DepartmentCode;
+                    chargeBackViewModel.TotalAmount = item.QuantityDelivered * supplier1Price;
 
-        //            chargeBackViewModelsList.Add(chargeBackViewModel);
-        //            rowID++;
-        //        }
-        //    }
+                    chargeBackViewModelsList.Add(chargeBackViewModel);
+                    rowID++;
+                }
+            }
 
-        //    return chargeBackViewModelsList;
-        //}
+            return chargeBackViewModelsList;
+        }
 
-        //public List<ChargeBackViewModel> GetChargeBack(string status, DateTime startDate, DateTime endDate, List<string> yearNames, List<string> monthNames, List<string> departmentCodes)
-        //{
-        //    List<ChargeBackViewModel> chargeBackViewModelsList = new List<ChargeBackViewModel>();
+        public List<ChargeBackViewModel> GetChargeBack(string status, DateTime startDate, DateTime endDate, List<string> yearNames, List<string> monthNames, List<string> departmentCodes)
+        {
+            List<ChargeBackViewModel> chargeBackViewModelsList = new List<ChargeBackViewModel>();
 
-        //    //join disbursement lists and record details table
-        //    var filterByStatus = from rd in _context.RecordDetails
-        //                         join dl in _context.DisbursementList on rd.Rrid equals dl.Dlid
-        //                         where dl.Status == status
-        //                         orderby dl.CompleteDate ascending
-        //                         select new
-        //                         {
-        //                             itemNumber = rd.ItemNumber,
-        //                             rd.QuantityDelivered,
-        //                             dl.CompleteDate,
-        //                             year = dl.CompleteDate.Value.Year,
-        //                             month = dl.CompleteDate.Value.Month,
-        //                             dl.DepartmentCode
-        //                         };
+            //join disbursement lists and record details table
+            var filterByStatus = from rd in _context.RecordDetails
+                                 join dl in _context.DisbursementList on rd.Rrid equals dl.Dlid
+                                 where dl.Status == status
+                                 orderby dl.CompleteDate ascending
+                                 select new
+                                 {
+                                     itemNumber = rd.ItemNumber,
+                                     rd.QuantityDelivered,
+                                     dl.CompleteDate,
+                                     year = dl.CompleteDate.Value.Year,
+                                     month = dl.CompleteDate.Value.Month,
+                                     dl.DepartmentCode
+                                 };
 
-        //    var groupByYearMonth = filterByStatus.GroupBy(x => new { x.itemNumber, x.year, x.month, x.DepartmentCode })
-        //        .Select(x => new {
-        //            ItemNumber = x.Key.itemNumber,
-        //            Departmentcode = x.Key.DepartmentCode,
-        //            Year = x.Key.year,
-        //            Month = x.Key.month,
-        //            Quantity = x.Sum(y => y.QuantityDelivered)
-        //        });
+            //var groupByYearMonthItem1 = filterByStatus.GroupBy(x => new { x.itemNumber, x.year, x.month, x.DepartmentCode })
+            //    .Select(x => new
+            //    {
+            //        ItemNumber = x.Key.itemNumber,
+            //        Departmentcode = x.Key.DepartmentCode,
+            //        Year = x.Key.year,
+            //        Month = x.Key.month,
+            //        Quantity = x.Sum(y => y.QuantityDelivered),
+            //        Amount = x.Sum(y => y.QuantityDelivered) * _context.Catalogue.Find(x.Key.itemNumber).Supplier1Price
+            //    });
+
+            var groupByYearMonthItem = from fbs in filterByStatus
+                    join cat in _context.Catalogue on fbs.itemNumber equals cat.ItemNumber
+                    group fbs by new { fbs.itemNumber, fbs.year, fbs.month, fbs.DepartmentCode, cat.Supplier1Price } into g
+                    select new { g.Key.itemNumber, g.Key.DepartmentCode, g.Key.year, g.Key.month, Amount = g.Sum(x => x.QuantityDelivered) * g.Key.Supplier1Price };
+
+            //var groupByDep = groupByYearMonthItem.GroupBy(x => new { x.year, x.month, x.DepartmentCode })
+            //    .Select(x => new { x.Key.DepartmentCode, x.Key.year, x.Key.month, TotalAmount = x.Sum(y => y.Amount)});
+            //var groupByDep = from g in groupByYearMonthItem
+            //                  group g by new { g.DepartmentCode, g.year, g.month } into p
+            //                  select new { p.Key.DepartmentCode, p.Key.year, p.Key.month, TotalAmount = p.Sum(x => x.Amount) };
 
 
-        //    List<ChargeBackViewModel> filterByDep = new List<ChargeBackViewModel>();
-        //    List<ChargeBackViewModel> filterByYearMonth = new List<ChargeBackViewModel>();
-        //    if (groupByYearMonth != null)
-        //    {
-        //        //select department and category
-        //        if (departmentCodes != null)
-        //        {
-        //            foreach (var item in groupByYearMonth.ToList())
-        //            {
-        //                int rowID = 1;
-        //                if (departmentCodes.Contains(item.Departmentcode))
-        //                {
-        //                    ChargeBackViewModel chargeBackViewModel = new ChargeBackViewModel();
-        //                    chargeBackViewModel.QuantityDelivered = item.Quantity;
-        //                    chargeBackViewModel.Year = item.Year;
-        //                    chargeBackViewModel.Month = item.Month;
-        //                    chargeBackViewModel.DepCode = item.Departmentcode;
+            List<ChargeBackViewModel> filterByDep = new List<ChargeBackViewModel>();
+            List<ChargeBackViewModel> filterByYearMonth = new List<ChargeBackViewModel>();
+            if (groupByYearMonthItem != null && departmentCodes != null)
+            {
+                foreach (var item in groupByYearMonthItem.ToList())
+                {
+                    int rowID = 1;                    
+                    if (departmentCodes.Contains(item.DepartmentCode))
+                    {
+                        var q = filterByDep.FirstOrDefault(x => x.DepCode == item.DepartmentCode && x.Year == item.year && x.Month == item.month);
+                        if (q == null)
+                        {
+                            ChargeBackViewModel chargeBackViewModel = new ChargeBackViewModel();
 
-        //                    filterByDepAndCat.Add(chargeBackViewModel);
-        //                    rowID++;
-        //                }
-        //            }
-        //            if (yearNames != null && monthNames != null)
-        //            {
-        //                foreach (var item in filterByDepAndCat)
-        //                {
-        //                    int rowID = 1;
-        //                    if (yearNames.Contains(item.Year.ToString()) && monthNames.Contains(item.Month.ToString()))
-        //                    {
-        //                        ChargeBackViewModel chargeBackViewModel = new ChargeBackViewModel();
-        //                        chargeBackViewModel.QuantityDelivered = item.QuantityDelivered;
-        //                        chargeBackViewModel.Year = item.Year;
-        //                        chargeBackViewModel.Month = item.Month;
-        //                        chargeBackViewModel.DepCode = item.DepCode;
+                            chargeBackViewModel.Year = item.year;
+                            chargeBackViewModel.Month = item.month;
+                            chargeBackViewModel.DepCode = item.DepartmentCode;
+                            chargeBackViewModel.TotalAmount = item.Amount;
 
-        //                        filterByYearMonth.Add(chargeBackViewModel);
-        //                        rowID++;
-        //                    }
-        //                }
-        //                chargeBackViewModelsList = filterByYearMonth;
-        //            }
-        //        }
-        //    }
-        //    return chargeBackViewModelsList;
-        //}
+                            filterByDep.Add(chargeBackViewModel);
+                        }
+                        else
+                        {
+                            //ChargeBackViewModel chargeBackViewModel = new ChargeBackViewModel();
+                            //chargeBackViewModel.Year = item.year;
+                            //chargeBackViewModel.Month = item.month;
+                            //chargeBackViewModel.DepCode = item.DepartmentCode;
+                            q.TotalAmount += item.Amount;
+                        }                        
+                        rowID++;
+                    }
+                }
+                if (yearNames != null && monthNames != null)
+                {
+                    foreach (var item in filterByDep)
+                    {
+                        int rowID = 1;
+                        if (yearNames.Contains(item.Year.ToString()) && monthNames.Contains(item.Month.ToString()))
+                        {
+                            ChargeBackViewModel chargeBackViewModel = new ChargeBackViewModel();
+
+                            chargeBackViewModel.Year = item.Year;
+                            chargeBackViewModel.Month = item.Month;
+                            chargeBackViewModel.DepCode = item.DepCode;
+                            chargeBackViewModel.TotalAmount = item.TotalAmount;
+
+                            filterByYearMonth.Add(chargeBackViewModel);
+                            rowID++;
+                        }
+                    }
+                    chargeBackViewModelsList = filterByYearMonth;
+                }
+
+            }
+            return chargeBackViewModelsList;
+        }
     }    
 }
 

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ADTeam5.Areas.Identity.Data;
 using ADTeam5.Models;
+using ADTeam5.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -37,7 +38,7 @@ namespace ADTeam5.Controllers
             dept = identity[0];
             role = identity[1];
 
-            var q = context.EmployeeRequestRecord.Where(x => x.DepCode == dept);
+            var q = context.EmployeeRequestRecord.Where(x => x.DepCode == dept).OrderByDescending(x=>x.Rrid);
             return View(q);
         }
 
@@ -45,35 +46,59 @@ namespace ADTeam5.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Index(DateTime startDate, DateTime endDate)
         {
-            ViewData["StartDate"] = startDate;
-            ViewData["endDate"] = endDate;
+            ViewData["StartDate"] = startDate.ToShortDateString();
+            ViewData["endDate"] = endDate.ToShortDateString();
+
+            DateTime dtpDefault = new DateTime(0001, 1, 1, 0, 0, 0);
 
             if (startDate != null && endDate != null)
             {
-                if (ModelState.IsValid)
+                if (startDate.Equals(dtpDefault) || endDate.Equals(dtpDefault))
                 {
-                    var t = context.EmployeeRequestRecord.Where(s => s.RequestDate >= startDate && s.RequestDate <= endDate && s.DepCode == dept);
-                    return View(t);
+                    TempData["NoDetails"] = "Please fill in all search details.";
+                    return RedirectToAction("Index");
+                }
+                if (startDate <= endDate && startDate <= DateTime.Now.Date && endDate <= DateTime.Now.Date)
+                {
+                    if (ModelState.IsValid)
+                    {
+                        var t = context.EmployeeRequestRecord.Where(s => s.RequestDate >= startDate && s.RequestDate <= endDate && s.DepCode == dept).OrderByDescending(x => x.Rrid);
+                        return View(t);
+                    }
+                    else
+                    {
+                        TempData["FilterError"] = "Search request was not completed. Please try again.";
+                        return RedirectToAction("Index");
+                    }
                 }
                 else
                 {
-                    TempData["Alert2"] = "Please Fill in All Details!";
+                    if (startDate > endDate && (startDate > DateTime.Now.Date || endDate > DateTime.Now.Date))
+                    {
+                        TempData["StartAndEndDateError"] = "End date cannot be earlier than start date. Start date and end date cannot be later than today. Please try again.";
+                        return RedirectToAction("Index");
+                    }
+                    if (startDate > endDate)
+                    {
+                        TempData["EndDateError"] = "End date cannot be earlier than start date. Please try again.";
+                        return RedirectToAction("Index");
+                    }
+                    if (startDate > DateTime.Now.Date || endDate > DateTime.Now.Date)
+                    {
+                        TempData["StartDateError"] = "Start date and end date cannot be later than today. Please try again.";
+                        return RedirectToAction("Index");
+                    }
+                    TempData["NoDetails"] = "Please fill in all search details.";
                     return RedirectToAction("Index");
                 }
             }
-            if (startDate > endDate || endDate < startDate)
-            {
-                TempData["Alert1"] = "Start end error";
-                return RedirectToAction("Index");
-
-            }
             else
             {
-                var t = context.EmployeeRequestRecord.Where(x => x.DepCode == dept);
-                return View(t);
+                TempData["NoDetails"] = "Please fill in all search details.";
+                return RedirectToAction("Index");
             }
-
         }
+
         public IActionResult Details(string id)
         {
             rrid = id;
@@ -82,22 +107,74 @@ namespace ADTeam5.Controllers
             var q1 = context.EmployeeRequestRecord.Where(x => x.Rrid == rrid).First();
             EmployeeRequestRecord e1 = q1;
 
-            if (e1.Status == "Approved")
+            ViewData["Status"] = e1.Status;
+
+            if (e1.Status == "Pending Approval")
             {
                 return RedirectToAction("Edit", "ViewRequest", new { id });
             }
             else
             {
-                var q = context.RecordDetails.Where(x => x.Rrid == id);
-                return View(q);
+                var q2 = from x in context.RecordDetails
+                         join s in context.Catalogue on x.ItemNumber equals s.ItemNumber
+                         where x.Rrid == rrid
+                         select new ViewRequestDetails
+                         {
+                             itemName = s.ItemName,
+                             quantity = x.Quantity
+                         };
+                List<ViewRequestDetails> list = new List<ViewRequestDetails>();
+                list = q2.ToList();
+                return View(list);
             }
+
         }
         public IActionResult Edit(string id)
         {
             rrid = id;
             ViewData["RRID"] = rrid;
-            var q = context.RecordDetails.Where(x => x.Rrid == id);
-            return View("Edit");
+
+            var q1 = context.EmployeeRequestRecord.Where(x => x.Rrid == rrid).First();
+            EmployeeRequestRecord e1 = q1;
+
+            ViewData["Status"] = e1.Status;
+
+            var q2 = from x in context.RecordDetails
+                     join s in context.Catalogue on x.ItemNumber equals s.ItemNumber
+                     where x.Rrid == rrid
+                     select new ViewRequestDetails
+                     {
+                         rrid = x.Rrid,
+                         itemName = s.ItemName,
+                         quantity = x.Quantity
+                     };
+            List<ViewRequestDetails> list = new List<ViewRequestDetails>();
+            list = q2.ToList();
+
+            return View(list);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RequestItemDelete(string itemName, string rrid)
+        {
+            var q = context.Catalogue.Where(x => x.ItemName == itemName).FirstOrDefault();
+            string itemNumber = q.ItemNumber;
+
+            var q3 = context.RecordDetails.Where(x => x.Rrid == rrid && x.ItemNumber == itemNumber).FirstOrDefault();
+            context.RecordDetails.Remove(q3);
+            await context.SaveChangesAsync();
+
+            return RedirectToAction("Edit", "ViewRequest", new { id = rrid});
+        }
+        [HttpPost]
+        public async Task<IActionResult> RequestItemEdit(string itemName, int quantity)
+        {
+            var q = context.Catalogue.Where(x => x.ItemName == itemName).FirstOrDefault();
+            string itemNumber = q.ItemNumber;
+            var q3 = context.RecordDetails.Where(x => x.Rrid == rrid && x.ItemNumber == itemNumber).FirstOrDefault();
+            q3.Quantity = quantity;
+            await context.SaveChangesAsync();
+            return RedirectToAction("Edit", new { id = rrid});
         }
     }
 }

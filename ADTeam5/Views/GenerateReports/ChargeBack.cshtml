@@ -10,7 +10,7 @@
 
 <h1>ChargeBack</h1>
 
-<form asp-action="StationeryUsage" method="post">
+<form asp-action="ChargeBack" method="post">
     <div>
         @*From:
             <input type="date" name="startDate" id="start" value="=" />
@@ -65,20 +65,6 @@
             }
         </select>
 
-        Select Category:
-        <select id="categories" multiple="multiple" required name="categoriesName">
-            @if (ViewBag.ListOfCategory != null)
-            {
-                @foreach (var item in ViewBag.ListOfCategory)
-                {
-                    @if (item != null)
-                    {
-                        <option value="@item">
-                            @item
-                        </option>}
-                }
-            }
-        </select>
     </div>
     <div>
         @*<input type="submit" value="Generate" id="generatebtn" />*@
@@ -107,13 +93,6 @@
 <script>
     $(function () {
         $('#departments').multiselect({
-            includeSelectAllOption: true
-        });
-    });
-</script>
-<script>
-    $(function () {
-        $('#categories').multiselect({
             includeSelectAllOption: true
         });
     });
@@ -147,6 +126,7 @@
 
 <!--plot chart-->
 <script src="~/lib/Highcharts/highcharts.js"></script>
+<script src="~/lib/Highcharts/modules/series-label.js"></script>
 <script src="~/lib/Highcharts/modules/exporting.js"></script>
 <script src="~/lib/Highcharts/modules/export-data.js"></script>
 
@@ -182,20 +162,16 @@
             }).get();
             var departmentList = $("#departments").map(function () {
                 return $(this).val();
-            }).get();
-            var categoryList = $("#categories").map(function () {
-                return $(this).val();
-            }).get();
+            }).get();;
             var in_data = {
                 StartDate: $("#start").val(),
                 EndDate: $("#end").val(),
                 YearsName: yearsList,
                 MonthsName: monthsList,
                 Departments: departmentList,
-                Categories: categoryList
             }
             console.log(in_data);
-            $.post("/GenerateReports/GetYearMonthList", in_data, function (data) {
+            $.post("/GenerateReports/GetChargebackReportData", in_data, function (data) {
                 var chartData = data;
                 plotChart(chartData);
 
@@ -204,42 +180,53 @@
             function plotChart(chartData) {
                 Highcharts.chart('container', {
 
-                    chart: {
-                        type: 'column'
+                    title: {
+                        text: 'Stationery Charge-back by Department'
                     },
 
-                    title: {
-                        text: 'Total stationery used for selected category, grouped by department'
+                    subtitle: {
+                        text: ''
                     },
-                    //legend: {
-                    //    enabled: false
-                    //},
                     xAxis: {
                         categories: chartData.xaxis
                     },
-
                     yAxis: {
-                        allowDecimals: false,
-                        min: 0,
                         title: {
-                            text: 'Number of fruits'
+                            text: 'Stationery Chargeback'
                         }
                     },
-
-                    tooltip: {
-                        formatter: function () {
-                            return '<b>' + this.x + '</b><br/>' +
-                                this.series.name + ': ' + this.y + '<br/>' +
-                                'Total: ' + this.point.stackTotal;
-                        }
+                    legend: {
+                        layout: 'vertical',
+                        align: 'right',
+                        verticalAlign: 'middle'
                     },
 
                     plotOptions: {
-                        column: {
-                            stacking: 'normal'
+                        series: {
+                            label: {
+                                connectorAllowed: false
+                            },
+                            //pointStart: 2010
                         }
                     },
-                    series: chartData.series
+
+                    series: chartData.series,
+
+                    responsive: {
+                        rules: [{
+                            condition: {
+                                maxWidth: 500
+                            },
+                            chartOptions: {
+                                legend: {
+                                    layout: 'horizontal',
+                                    align: 'center',
+                                    verticalAlign: 'bottom'
+                                }
+                            }
+                        }]
+                    }
+
                 });
             }
         })
