@@ -213,7 +213,7 @@ namespace ADTeam5.Models
         //    int userID = user.WorkID;
 
         //    PurchaseOrderRecord poRecordToBeSubmitted = _context.PurchaseOrderRecord.FirstOrDefault(x => x.Poid == id);
-        //    poRecordToBeSubmitted.Status = "Submitted";
+        //    poRecordToBeSubmitted.Status = Pending Approval;
         //    _context.SaveChanges();
 
         //    PurchaseOrderRecord ar = _context.PurchaseOrderRecord.FirstOrDefault(x => !x.Poid.Contains("POTemp"));
