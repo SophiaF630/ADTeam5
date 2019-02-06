@@ -54,83 +54,124 @@
 }
 
 
-<h1>View Request</h1>
-<form asp-action="Index" method="post">
-    <div>
-        Select start date:
-        <input type="date" name="startdate" id="start" value="=" />
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        Select end date:
-        <input type="date" name="enddate" id="end" value=" = " />
+@*<h1>View Request</h1>*@
 
-        <input type="submit" value="Search" id="searchbtn" />
-    </div>
-    <br />
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="box" style=" width:100%">
+                <div class="box-header with-border">
+                    <h3 class="box-title">View Request</h3>
+                    <br />
+                </div>
+                <br />
+                <form asp-action="Index" method="post">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group" style="margin-left:10px">
+                                <label>Select start date:</label>
+                                <div class="input-group date" style="width:440px">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <input type="date" class="form-control pull-right" id="start">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group" style="margin-left:30px">
+                                <label>Select end date:</label>
+                                <div class="input-group date" style="width:440px">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <input type="date" class="form-control pull-right" name="enddate" id="end">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <input type="submit" value="Search" class="btn btn-primary submit" id="searchbtn" style="background-color: #00B894;width:150px;height:36px;border:2px;margin-left:430px" />
+                    <br />
+                    <hr />
 
-    @if (ViewData["StartDate"] != null & ViewData["EndDate"] != null)
-    {
-    <p> <b>Search results from @ViewData["StartDate"] to @ViewData["EndDate"]</b></p>
-    }
-</form>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                Request Date
-            </th>
-            <th>
-                Requisition Form No. @ViewData["RRID"]
+                    @if (ViewData["StartDate"] != null & ViewData["EndDate"] != null)
+                    {
+                        <p> <b>Search results from @ViewData["StartDate"] to @ViewData["EndDate"]</b></p>
+                    }
+                </form>
 
-            </th>
-            <th>
-                Status
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.RequestDate)
-                </td>
-                <td>
-                    <a asp-action="Details" asp-route-id="@item.Rrid">
-                        @Html.DisplayFor(modelItem => item.Rrid)
-                    </a>
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Status)
-                </td>
+               
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th>
+                                        Request Date
+                                    </th>
+                                    <th></th>
+                                    <th></th>
+                                    <th>
+                                        Requisition Form No. @ViewData["RRID"]
+                                    </th>
+                                    <th>
+                                        Status
+                                    </th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.RequestDate)
+                                    </td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>
+                                        <a asp-action="Details" asp-route-id="@item.Rrid">
+                                            <U>@Html.DisplayFor(modelItem => item.Rrid)</U>
+                                        </a>
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Status)
+                                    </td>
 
-            </tr>
-        }
-    </tbody>
-</table>
+                                </tr>
+                                }
+                            </tbody>
+                        </table>
+           
+                </div>
+            </div>
+        </div>
 
 
+                    <script>
+                        $(document).ready(function () {
+                            let now = new Date();
 
-<script>
-    $(document).ready(function () {
-        let now = new Date();
+                            let day = ("0" + now.getDate()).slice(-2);
+                            let month = ("0" + (now.getMonth() + 1)).slice(-2);
 
-        let day = ("0" + now.getDate()).slice(-2);
-        let month = ("0" + (now.getMonth() + 1)).slice(-2);
-
-        let today = (day) + "-" + (month) + "-" + now.getFullYear();
+                            let today = (day) + "-" + (month) + "-" + now.getFullYear();
 
 
-        $('#start').val(today);
-        $('#end').val(today);
-        $('#assignbtn').click(function () {
+                            $('#start').val(today);
+                            $('#end').val(today);
+                            $('#assignbtn').click(function () {
 
-            testClicked();
-        });
-    });
-    function testClicked() {
-        $('.getStartDate').html($('#start').val());
-        $('.getEndDate').html($('#end').val());
-    }
+                                testClicked();
+                            });
+                        });
+                        function testClicked() {
+                            $('.getStartDate').html($('#start').val());
+                            $('.getEndDate').html($('#end').val());
+                        }
 
-</script>
+                    </script>
