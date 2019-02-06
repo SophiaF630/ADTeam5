@@ -57,77 +57,86 @@ namespace ADTeam5.Controllers
         [HttpPost]
         public async Task<IActionResult> Index(string itemNumber, int quantity, int rowID, string supplierName, int createNewPOItemModalName, int POItemModalName, string[] itemSubmitted, string[] itemSavedToDraft)
         {
-            ADTeam5User user = await _userManager.GetUserAsync(HttpContext.User);
-            List<string> identity = userCheck.checkUserIdentityAsync(user);
-            int userID = user.WorkID;
-            poNo = "";
-
-            //handle post action
-            List<TempPurchaseOrderDetails> tempPurchaseOrderDetailsList = b.GetTempPurchaseOrderDetailsList();
-
-            if (createNewPOItemModalName == 1)
+            if(supplierName == null || supplierName == "")
             {
-                b.CreateNewPOItem(userID, itemNumber, quantity, supplierName);
-                return RedirectToAction(nameof(Index));
+                TempData["SupplierNameError"] = "Purchase order was not successfully raised. Please try again.";
+                TempData["SupplierSelectionError"] = "Please select supplier.";
+                return RedirectToAction("Index");
             }
-            else if (POItemModalName == 1)
+            else
             {
-                b.UpdatePOItem(userID, rowID, quantity, supplierName, tempPurchaseOrderDetailsList);
-            }
+                ADTeam5User user = await _userManager.GetUserAsync(HttpContext.User);
+                List<string> identity = userCheck.checkUserIdentityAsync(user);
+                int userID = user.WorkID;
+                poNo = "";
 
-            if (itemSubmitted.Length != 0)
-            {
-                //split supplier
-                var supplier = tempPurchaseOrderDetailsList.GroupBy(x => x.SupplierCode).Select(y => y.Key);
-                foreach (var s in supplier)
+                //handle post action
+                List<TempPurchaseOrderDetails> tempPurchaseOrderDetailsList = b.GetTempPurchaseOrderDetailsList();
+
+                if (createNewPOItemModalName == 1)
                 {
-                    poNo = b.IDGenerator("PO");
-                    foreach (var item in tempPurchaseOrderDetailsList)
-                    {
-                        if (Array.Exists(itemSubmitted, i => i == item.RowID.ToString()) && item.SupplierCode == s)
-                        {
-                            b.AddItemsToPO(item.RowID, poNo, tempPurchaseOrderDetailsList);
-                            b.CreatePurchaseOrderRecord(userID, poNo, s, "Pending Delivery");
-                        }
-                    }
+                    b.CreateNewPOItem(userID, itemNumber, quantity, supplierName);
+                    return RedirectToAction(nameof(Index));
+                }
+                else if (POItemModalName == 1)
+                {
+                    b.UpdatePOItem(userID, rowID, quantity, supplierName, tempPurchaseOrderDetailsList);
                 }
 
-                
-                //return RedirectToAction(nameof(Index));
-            }
-            else if (itemSavedToDraft.Length != 0)
-            {
-                var supplier = tempPurchaseOrderDetailsList.GroupBy(x => x.SupplierCode).Select(y => y.Key);
-                foreach (var s in supplier)
+                if (itemSubmitted.Length != 0)
                 {
-                    poNo = b.IDGenerator("PO");
-                    foreach (var item in tempPurchaseOrderDetailsList)
+                    //split supplier
+                    var supplier = tempPurchaseOrderDetailsList.GroupBy(x => x.SupplierCode).Select(y => y.Key);
+                    foreach (var s in supplier)
                     {
-                        if (Array.Exists(itemSavedToDraft, i => i == item.RowID.ToString()))
+                        poNo = b.IDGenerator("PO");
+                        foreach (var item in tempPurchaseOrderDetailsList)
                         {
-                            b.AddItemsToPO(item.RowID, poNo, tempPurchaseOrderDetailsList);
-                            b.CreatePurchaseOrderRecord(userID, poNo, s, "Draft");
+                            if (Array.Exists(itemSubmitted, i => i == item.RowID.ToString()) && item.SupplierCode == s)
+                            {
+                                b.AddItemsToPO(item.RowID, poNo, tempPurchaseOrderDetailsList);
+                                b.CreatePurchaseOrderRecord(userID, poNo, s, "Pending Delivery");
+                            }
                         }
                     }
+
+
+                    //return RedirectToAction(nameof(Index));
                 }
-                //return RedirectToAction(nameof(Index));
+                else if (itemSavedToDraft.Length != 0)
+                {
+                    var supplier = tempPurchaseOrderDetailsList.GroupBy(x => x.SupplierCode).Select(y => y.Key);
+                    foreach (var s in supplier)
+                    {
+                        poNo = b.IDGenerator("PO");
+                        foreach (var item in tempPurchaseOrderDetailsList)
+                        {
+                            if (Array.Exists(itemSavedToDraft, i => i == item.RowID.ToString()))
+                            {
+                                b.AddItemsToPO(item.RowID, poNo, tempPurchaseOrderDetailsList);
+                                b.CreatePurchaseOrderRecord(userID, poNo, s, "Draft");
+                            }
+                        }
+                    }
+                    //return RedirectToAction(nameof(Index));
+                }
+
+                List<TempPurchaseOrderDetails> result = b.GetTempPurchaseOrderDetailsList();
+
+                //calculate order total amount by supplier
+
+
+                //Viewbag for category dropdown list, need to post back
+                List<Catalogue> categoryList = new List<Catalogue>();
+                var q = _context.Catalogue.GroupBy(x => new { x.Category }).Select(x => x.FirstOrDefault());
+                foreach (var item in q)
+                {
+                    categoryList.Add(item);
+                }
+                categoryList.Insert(0, new Catalogue { ItemNumber = "0", Category = "---Select Category---" });
+                ViewBag.ListofCategory = categoryList;
+                return View(result);
             }
-
-            List<TempPurchaseOrderDetails> result = b.GetTempPurchaseOrderDetailsList();
-
-            //calculate order total amount by supplier
-
-
-            //Viewbag for category dropdown list, need to post back
-            List<Catalogue> categoryList = new List<Catalogue>();
-            var q = _context.Catalogue.GroupBy(x => new { x.Category }).Select(x => x.FirstOrDefault());
-            foreach (var item in q)
-            {
-                categoryList.Add(item);
-            }
-            categoryList.Insert(0, new Catalogue { ItemNumber = "0", Category = "---Select Category---" });
-            ViewBag.ListofCategory = categoryList;
-            return View(result);
         }
 
 

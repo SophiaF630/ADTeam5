@@ -16,7 +16,7 @@
 <p>Status: @ViewData["Status"]</p>
 
 <div>
-        <button type="button" class="btn btn-lg btn-primary d-none d-md-inline-block mt-3 createNewRequestItem" style="width:180px;height:40px;border:2px; background-color:#00B894">
+        <button type="button" class="btn btn-lg btn-primary d-none d-md-inline-block mt-3 createNewRequestItem" style="width:100px;height:40px;border:2px; background-color:#00B894">
             Add Item
         </button>
 </div>
@@ -174,7 +174,7 @@
         $("#Category").change(function () {
             $.get("/NewRequest/GetItemNameList", { category: $("#Category").val() }, function (data) {
                 $("#ItemNumber").empty();
-                $("#ItemNumber").append("<option value='" + "0" + "'>" + "---Select item---" + "</option>");
+                $("#ItemNumber").append("<option value='" + "0" + "' disabled>" + "---Select item---" + "</option>");
                 $.each(data, function (index, row) {
                     $("#ItemNumber").append("<option value='" + row.itemNumber + "'>" + row.itemName + "</option>")
                 });
