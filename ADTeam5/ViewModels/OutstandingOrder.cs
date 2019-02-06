@@ -10,6 +10,7 @@ namespace ADTeam5.ViewModels
     {
         [Display(Name = "Request No.")]
         public string Rrid { get; set; }
+        [Display(Name = "Requester Name")]
         public string Name { get; set; }
         public string Status { get; set; }
 
