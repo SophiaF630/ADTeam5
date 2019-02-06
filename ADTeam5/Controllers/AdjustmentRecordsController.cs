@@ -77,6 +77,56 @@ namespace ADTeam5.Controllers
             return View(arList);
         }
 
+        // POST: AdjustmentRecords
+        [HttpPost]
+        public async Task<IActionResult> Index(string state)
+        {
+            ADTeam5User user = await _userManager.GetUserAsync(HttpContext.User);
+            List<string> identity = userCheck.checkUserIdentityAsync(user);
+            int userID = user.WorkID;
+            string userRole = identity[1];
+
+            List<AdjustmentRecord> arList = new List<AdjustmentRecord>();
+            //records shown to clerk
+            switch (userRole)
+            {
+                case "Clerk":
+                    AdjustmentRecord arC = _context.AdjustmentRecord.FirstOrDefault(x => x.ClerkId == userID && !x.VoucherNo.Contains("Vtemp") && x.Status != "Draft");
+                    if (arC != null)
+                    {
+                        arList = _context.AdjustmentRecord.Where(x => x.ClerkId == userID && !x.VoucherNo.Contains("Vtemp") && x.Status != "Draft").OrderByDescending(x => x.VoucherNo).ToList();
+                    }
+                    else
+                    {
+                        NotFound();
+                    }
+                    break;
+                case "Supervisor":
+                    AdjustmentRecord arS = _context.AdjustmentRecord.FirstOrDefault(x => x.Status == "Pending Approval" && !x.VoucherNo.Contains("Vtemp"));
+                    if (arS != null)
+                    {
+                        arList = _context.AdjustmentRecord.Where(x => x.Status == "Pending Approval" && !x.VoucherNo.Contains("Vtemp")).OrderByDescending(x => x.VoucherNo).ToList();
+                    }
+                    else
+                    {
+                        NotFound();
+                    }
+                    break;
+                case "Manager":
+                    AdjustmentRecord arM = _context.AdjustmentRecord.FirstOrDefault(x => x.Status == "Pending Manager Approval" && !x.VoucherNo.Contains("Vtemp"));
+                    if (arM != null)
+                    {
+                        arList = _context.AdjustmentRecord.Where(x => x.Status == "Pending Manager Approval" && !x.VoucherNo.Contains("Vtemp")).OrderByDescending(x => x.VoucherNo).ToList();
+                    }
+                    else
+                    {
+                        NotFound();
+                    }
+                    break;
+            }
+            return View(arList);
+        }
+
 
         // GET: AdjustmentRecords/Details/5
         public async Task<IActionResult> Details(string id)

@@ -593,7 +593,7 @@ namespace ADTeam5.BusinessLogic
                 if (userRole == "Supervisor")
                 {
                     ar.SuperviserId = userID;
-                    ar.Status = "Reject";
+                    ar.Status = "Rejected";
                     ar.ApproveDate = DateTime.Now.Date;
                     _context.AdjustmentRecord.Update(ar);
                     _context.SaveChanges();
@@ -601,7 +601,7 @@ namespace ADTeam5.BusinessLogic
                 else if (userRole == "Manager")
                 {
                     ar.SuperviserId = userID;
-                    ar.Status = "Reject";
+                    ar.Status = "Rejected";
                     ar.ApproveDate = DateTime.Now.Date;
                     _context.AdjustmentRecord.Update(ar);
                     _context.SaveChanges();
@@ -1142,7 +1142,7 @@ namespace ADTeam5.BusinessLogic
 
         public List<EmployeeRequestRecord> searchOutstandingRequests(string dept)
         {
-            var q = _context.EmployeeRequestRecord.Where(x => x.Status == "Submitted" && x.DepCode == dept);
+            var q = _context.EmployeeRequestRecord.Where(x => x.Status == "Pending Approval" && x.DepCode == dept);
             return q.ToList();
         }
 

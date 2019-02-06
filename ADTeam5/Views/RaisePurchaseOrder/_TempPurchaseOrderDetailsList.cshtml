@@ -7,7 +7,15 @@
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
 
-
+@if (TempData["SupplierNameError"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aira-label="close">
+            <span aria-hidden="true">&times</span>
+        </button>
+        @TempData["SupplierNameError"]
+    </div>
+}
 
 
 
@@ -79,42 +87,42 @@ else
                             <tbody>
                                 @foreach (var item in Model)
                                 {
-                                <tr>
-                                    <td>
-                                        <input type="checkbox" id="isChecked" name="isChecked" value="@item.RowID">
-                                    </td>
-                                    <td class="RowID">
-                                        @Html.DisplayFor(modelItem => item.RowID)
-                                    </td>
-                                    <td class="ItemNumber">
-                                        @Html.DisplayFor(modelItem => item.ItemNumber)
-                                    </td>
-                                    <td class="ItemName">
-                                        @Html.DisplayFor(modelItem => item.ItemName)
-                                    </td>
-                                    <td class="Quantity">
-                                        @Html.DisplayFor(modelItem => item.Quantity)
-                                    </td>
-                                    <td class="Supplier">
-                                        @Html.DisplayFor(modelItem => item.SupplierCode)
-                                    </td>
-                                    <td class="Price">
-                                        @Html.DisplayFor(modelItem => item.Price)
-                                    </td>
-                                    <td>
-                                        <button class="editPOItem" style="background-color:transparent; border:transparent;">
-                                            <i class="fa fa-edit" style="color:#66B3B3;font-size:14px"></i>
-                                        </button>
-                                    </td>
-                                    <td>
-                                        <form asp-action="POItemDelete" asp-route-id="@item.RowID" method="post" data-ajax="true" data-ajax-update="#TempPurchaseOrderDetailsList" role="form" asp-controller="RaisePurchaseOrder">
-                                            <button type="submit" style="background-color:transparent; border:transparent">
-                                                <i class="fa fa-trash-alt" style="color:#dc6460"></i>
+                                    <tr>
+                                        <td>
+                                            <input type="checkbox" id="isChecked" name="isChecked" value="@item.RowID">
+                                        </td>
+                                        <td class="RowID">
+                                            @Html.DisplayFor(modelItem => item.RowID)
+                                        </td>
+                                        <td class="ItemNumber">
+                                            @Html.DisplayFor(modelItem => item.ItemNumber)
+                                        </td>
+                                        <td class="ItemName">
+                                            @Html.DisplayFor(modelItem => item.ItemName)
+                                        </td>
+                                        <td class="Quantity">
+                                            @Html.DisplayFor(modelItem => item.Quantity)
+                                        </td>
+                                        <td class="Supplier">
+                                            @Html.DisplayFor(modelItem => item.SupplierCode)
+                                        </td>
+                                        <td class="Price">
+                                            @Html.DisplayFor(modelItem => item.Price)
+                                        </td>
+                                        <td>
+                                            <button class="editPOItem" style="background-color:transparent; border:transparent;">
+                                                <i class="fa fa-edit" style="color:#66B3B3;font-size:14px"></i>
                                             </button>
-                                        </form>
-                                    </td>
+                                        </td>
+                                        <td>
+                                            <form asp-action="POItemDelete" asp-route-id="@item.RowID" method="post" data-ajax="true" data-ajax-update="#TempPurchaseOrderDetailsList" role="form" asp-controller="RaisePurchaseOrder">
+                                                <button type="submit" style="background-color:transparent; border:transparent">
+                                                    <i class="fa fa-trash-alt" style="color:#dc6460"></i>
+                                                </button>
+                                            </form>
+                                        </td>
 
-                                </tr>
+                                    </tr>
                                 }
                             </tbody>
                         </table>
@@ -138,9 +146,9 @@ else
                     <br />
 
                     @*<div class="box-tools pull-right">
-                <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
-                <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
-            </div>*@
+                            <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
+                            <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
+                        </div>*@
 
                 </div>
                 <br>
@@ -170,21 +178,21 @@ else
                     </table>
                 </div>
                 @*<div style="margin-left:400px">
-            <label style="width:100px;height:30px;">
-                <font size="2">&nbsp;&nbsp;&nbsp;&nbsp;Amount:&nbsp;&nbsp;&nbsp;&nbsp;$</font>
-            </label>
-            <input type="text" style="background:transparent;border:none;width:60px;border-bottom:1px solid #808080" />
-            <br />
-            <label style="width:100px;height:30px;">
-                <font size="2">&nbsp;GST&nbsp;(7%):&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$</font>
-            </label>
-            <input type="text" style="background:transparent;border:none;width:60px;border-bottom:1px solid #808080" />
-            <br />
-            <label style="width:100px;height:30px;">
-                <font size="2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Total:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$</font>
-            </label>
-            <input type="text" style="background:transparent;border:none;width:60px;border-bottom:1px solid #808080" />
-        </div>*@
+                        <label style="width:100px;height:30px;">
+                            <font size="2">&nbsp;&nbsp;&nbsp;&nbsp;Amount:&nbsp;&nbsp;&nbsp;&nbsp;$</font>
+                        </label>
+                        <input type="text" style="background:transparent;border:none;width:60px;border-bottom:1px solid #808080" />
+                        <br />
+                        <label style="width:100px;height:30px;">
+                            <font size="2">&nbsp;GST&nbsp;(7%):&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$</font>
+                        </label>
+                        <input type="text" style="background:transparent;border:none;width:60px;border-bottom:1px solid #808080" />
+                        <br />
+                        <label style="width:100px;height:30px;">
+                            <font size="2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Total:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$</font>
+                        </label>
+                        <input type="text" style="background:transparent;border:none;width:60px;border-bottom:1px solid #808080" />
+                    </div>*@
             </div>
         </div>
     </div>
@@ -208,6 +216,15 @@ else
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <br />
+            @if (TempData["SupplierSelectionError"] != null)
+            {
+                <div class="alert alert-danger" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aira-label="close">
+                        <span aria-hidden="true">&times</span>
+                    </button>
+                    @TempData["SupplierSelectionError"]
+                </div>
+            }
             @*<div class="modal-header">*@
             <div align="center" vertical-align="middle">
                 <div style="width: 400px;padding: 15px;margin: 15px;border-style:outset; border-width:1px; ">
@@ -217,8 +234,8 @@ else
                             <strong><font size="5">Add To PO</font></strong>
                         </h5>
                         @*<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>*@
+                        <span aria-hidden="true">&times;</span>
+                    </button>*@
                     </div>
                 </div>
             </div>
@@ -240,15 +257,15 @@ else
                     </div>
                     <div class="form-group">
                         <label for="Quantity">Quantity</label>
-                        <input type="number" min="1" step="1" id="Quantity" name="quantity"  required="required" class="form-control" value="" />
+                        <input type="number" min="1" step="1" id="Quantity" name="quantity" required="required" class="form-control" value="" />
                     </div>
                     <div class="form-group">
                         <label for="Supplier">Supplier</label>
-                        <div id="Supplier" ></div>
+                        <div id="Supplier"></div>
                     </div>
                     <div align="center">
                         <button class="btn" data-dismiss="modal" aria-hidden="true" style="width:80px;height:30px;border:2px; background-color:#EEEEEE"><font size="3" color="black">Close</font></button>
-                        <button type="submit" class="btn btn-primary"  style="width:120px;height:30px;border:2px; background-color:#3c8dbc"><font size="3" color="white">Save Changes</font></button>
+                        <button type="submit" class="btn btn-primary" style="width:120px;height:30px;border:2px; background-color:#3c8dbc"><font size="3" color="white">Save Changes</font></button>
                     </div>
                 </form>
 
@@ -311,7 +328,7 @@ else
         var $modal = $('#createNewPOItemModal');
         $modal.find('#ItemNumber').val(itemNumber);
         $modal.find('#Quantity').val(quantity);
-       $modal.find('#Supplier').val(supplierName);
+        $modal.find('#Supplier').val(supplierName);
         $modal.find('#createNewPOItemModalID').val(createNewPOItemModalID);
 
         $modal.modal('show');
@@ -323,7 +340,7 @@ else
         $("#Category").change(function () {
             $.get("/RaisePurchaseOrder/GetItemNameList", { category: $("#Category").val() }, function (data) {
                 $("#ItemNumber").empty();
-                $("#ItemNumber").append("<option value='" + "0" + "'>" + "---Select item---" + "</option>");
+                $("#ItemNumber").append("<option value='" + "0" + "' disabled>" + "---Select item---" + " </option>");
                 $.each(data, function (index, row) {
                     $("#ItemNumber").append("<option value='" + row.itemNumber + "'>" + row.itemName + "</option>")
                 });
@@ -338,7 +355,7 @@ else
             $.get("/RaisePurchaseOrder/GetSuppliers", { itemNumber: $("#ItemNumber").val() }, function (data) {
                 $("#Supplier").empty();
                 $.each(data, function (index, row) {
-                    $('#Supplier').append('<input type="radio" name="supplierName"  checked="checked" value="' + row + '"/>' + row + '<br/>');
+                    $('#Supplier').append('<input type="radio" name="supplierName"  required="required" value="' + row + '"/>' + row + '<br/>');
                 });
             });
         })
@@ -355,11 +372,11 @@ else
         var supplierName = $row.find("td.Suplier").text().trim();;
         var POItemModalID = 1;
 
-      
+
         $.get("/RaisePurchaseOrder/GetSuppliers", { itemNumber: itemNumber }, function (data) {
             $("#EditSupplier").empty();
             $.each(data, function (index, row) {
-                $('#EditSupplier').append('<input type="radio" name="supplierName"   value="' + row + '"/>' + row + '<br/>');
+                $('#EditSupplier').append('<input type="radio" name="supplierName"    required="required" value="' + row + '"/>' + row + '<br/>');
 
             });
         });
