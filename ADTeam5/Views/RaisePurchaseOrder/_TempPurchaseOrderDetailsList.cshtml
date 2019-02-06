@@ -102,13 +102,13 @@ else
                                         @Html.DisplayFor(modelItem => item.Price)
                                     </td>
                                     <td>
-                                        <button type="button" class="btn btn-primary editPOItem" style="background-color:transparent; border:transparent">
-                                            <i class="fa fa-edit" style="color:#66B3B3"></i>
+                                        <button class="editPOItem" style="background-color:transparent; border:transparent;">
+                                            <i class="fa fa-edit" style="color:#66B3B3;font-size:14px"></i>
                                         </button>
                                     </td>
                                     <td>
                                         <form asp-action="POItemDelete" asp-route-id="@item.RowID" method="post" data-ajax="true" data-ajax-update="#TempPurchaseOrderDetailsList" role="form" asp-controller="RaisePurchaseOrder">
-                                            <button type="submit" class="btn btn-sm btn-danger d-none d-md-inline-block" style="background-color:transparent; border:transparent">
+                                            <button type="submit" style="background-color:transparent; border:transparent">
                                                 <i class="fa fa-trash-alt" style="color:#dc6460"></i>
                                             </button>
                                         </form>
@@ -120,7 +120,7 @@ else
                         </table>
                         <br />
                         <button type="button" class="btn btn-primary createNewPOItem" style="width:120px;height:32px;border:2px;margin-left:36px; background-color:#00B894">
-                            <i class='fas fa-plus-circle' style='font-size:14px'></i>&nbsp;&nbsp;Create New
+                            <i class='fas fa-plus-circle' style='font-size:14px'></i>&nbsp;&nbsp;Add item
                         </button>
                         <br />
                         <br />
@@ -419,6 +419,7 @@ else
         })
     });
 </script>
+
 <!--select all checkbox-->
 <script>
     $('#select-all').click(function (event) {
