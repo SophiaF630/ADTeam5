@@ -4,6 +4,15 @@
     ViewData["Title"] = "Submitted Request";
 }
 
+@if (TempData["Submitted"] != null)
+{
+    <div class="alert alert-success" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aira-label="close">
+            <span aria-hidden="true">&times</span>
+        </button>
+        @TempData["Submitted"]
+    </div>
+}
 
 <h4>Submitted Request</h4>
 
