@@ -78,7 +78,7 @@ namespace ADTeam5.Controllers
                 //send success email to dept rep
                 var deptrep = context.User.Where(x => x.UserId == userid).First();
                 string email = deptrep.EmailAddress;
-                await _emailSender.SendEmailAsync(email, "Department Representative Appointment", "Dear " + deptrep.Name + ",<br>Stationery collection point for " + deptrep.DepartmentCode + "department has successfully been changed.");
+                await _emailSender.SendEmailAsync(email, "Change in Stationery Collection Point", "Dear " + deptrep.Name + ",<br>Stationery collection point for " + deptrep.DepartmentCode + "department has successfully been changed.");
                 
                 return RedirectToAction("Index");
             }

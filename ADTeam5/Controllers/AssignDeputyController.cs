@@ -107,6 +107,11 @@ namespace ADTeam5.Controllers
                         context.SaveChanges();
                         TempData["EditSuccess"] = "Changes were saved successfully!";
 
+                        //send email to old deputy head
+                        var oldhead = context.User.Where(x => x.UserId == currentDeputyHeadId).First();
+                        string email2 = oldhead.EmailAddress;
+                        await _emailSender.SendEmailAsync(email2, "Department Deputy Head Replacement", "Dear " + oldhead.Name + ",<br>You have been replaced as department deputy head.");
+
                     }
                     else
                     {
@@ -117,6 +122,12 @@ namespace ADTeam5.Controllers
                         context.Add(d2);
                         context.SaveChanges();
                         TempData["NewSuccess"] = "New deputy head appointed!";
+
+                        //send email to new deputy head
+                        var newhead = context.User.Where(x => x.UserId == u.UserId).First();
+                        string email = newhead.EmailAddress;
+                        await _emailSender.SendEmailAsync(email, "Department Deputy Head Appointment", "Dear " + newhead.Name + ",<br>You have been appointed as the department deputy head.");
+
                     }
 
                     return RedirectToAction("Index");
