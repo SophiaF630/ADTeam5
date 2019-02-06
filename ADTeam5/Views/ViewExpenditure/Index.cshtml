@@ -4,7 +4,7 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>View Expenditure</h1>
+@*<h1>View Expenditure</h1>*@
 
 @if (TempData["NoDetails"] != null)
 {
@@ -51,95 +51,101 @@
         @TempData["FilterError"]
     </div>
 }
+<div class="row">
+    <div class="col-md-12">
+        <div class="box box-default">
+            <div class="box-header with-border">
+                <i class="fa fa-warning"></i>
+                <h3 class="box-title">View Expenditure</h3>
+            </div>
+            <form asp-action="Index" method="post">
+                <div class="form-group">
+                    Select start date:
+                    <input type="date" name="startdate" id="start" value="=" />
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    Select end date:
+                    <input type="date" name="enddate" id="end" value=" = " />
 
-<form asp-action="Index" method="post">
-    <div class="form-group">
-        Select start date:
-        <input type="date" name="startdate" id="start" value="=" />
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        Select end date:
-        <input type="date" name="enddate" id="end" value=" = " />
+                    <input type="submit" value="Search" id="searchbtn" />
+                </div>
+                <br />
 
-        <input type="submit" value="Search" id="searchbtn" />
-    </div>
-    <br />
+                @if (ViewData["Show"] != null)
+                {
+                    <p><b>Financial Year: @ViewData["startFinancialYear"] to @ViewData["endFinancialYear"]</b></p>
+                }
 
-    @if (ViewData["Show"] != null)
-    {
-        <p><b>Financial Year: @ViewData["startFinancialYear"] to @ViewData["endFinancialYear"]</b></p>
-    }
-
-    @if (ViewData["StartDate"] != null && ViewData["EndDate"] != null)
-    {
-        <p><b>Search results from @ViewData["StartDate"] to @ViewData["EndDate"]</b></p>
-    }
-
-
-
-</form>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.CompleteDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Dlid)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Status)
-            </th>
-
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CompleteDate)
-                </td>
-                <td>
-                    <a asp-action="Details" asp-route-Dlid="@item.Dlid">
-                        @Html.DisplayFor(modelItem => item.Dlid)
-                    </a>
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Status)
-                </td>
-
-            </tr>
-        }
-    </tbody>
-</table>
-<form asp-action="Index" method="post">
-    <div class="form-group">
-        <h6>Total Expenditure: @ViewData["Sum"] </h6>
-    </div>
-
-</form>
+                @if (ViewData["StartDate"] != null && ViewData["EndDate"] != null)
+                {
+                    <p><b>Search results from @ViewData["StartDate"] to @ViewData["EndDate"]</b></p>
+                }
 
 
-<script>
-    $(document).ready(function () {
-        let now = new Date();
 
-        let day = ("0" + now.getDate()).slice(-2);
-        let month = ("0" + (now.getMonth() + 1)).slice(-2);
+            </form>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.CompleteDate)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Dlid)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Status)
+                        </th>
 
-        let today = (day) + "-" + (month) + "-" + now.getFullYear();
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CompleteDate)
+                            </td>
+                            <td>
+                                <a asp-action="Details" asp-route-Dlid="@item.Dlid">
+                                    @Html.DisplayFor(modelItem => item.Dlid)
+                                </a>
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Status)
+                            </td>
 
-        $('#start').val(today);
-        $('#end').val(today);
-        $('#assignbtn').click(function () {
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <form asp-action="Index" method="post">
+                <div class="form-group">
+                    <h6>Total Expenditure: @ViewData["Sum"] </h6>
+                </div>
 
-            testClicked();
-        });
-    });
-    function testClicked() {
-        $('.getStartDate').html($('#start').val());
-        $('.getEndDate').html($('#end').val());
-    }
+            </form>
 
-</script>
+
+            <script>
+                $(document).ready(function () {
+                    let now = new Date();
+
+                    let day = ("0" + now.getDate()).slice(-2);
+                    let month = ("0" + (now.getMonth() + 1)).slice(-2);
+
+                    let today = (day) + "-" + (month) + "-" + now.getFullYear();
+
+                    $('#start').val(today);
+                    $('#end').val(today);
+                    $('#assignbtn').click(function () {
+
+                        testClicked();
+                    });
+                });
+                function testClicked() {
+                    $('.getStartDate').html($('#start').val());
+                    $('.getEndDate').html($('#end').val());
+                }
+
+            </script>

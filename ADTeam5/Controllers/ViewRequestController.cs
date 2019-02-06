@@ -131,6 +131,21 @@ namespace ADTeam5.Controllers
         }
         public IActionResult Edit(string id)
         {
+
+            List<Catalogue> categoryList = new List<Catalogue>();
+            var q = context.Catalogue.GroupBy(x => new { x.Category }).Select(x => x.FirstOrDefault());
+            foreach (var item in q)
+            {
+                categoryList.Add(item);
+            }
+            categoryList.Insert(0, new Catalogue { ItemNumber = "0", Category = "---Select Category---" });
+            ViewBag.ListofCategory = categoryList;
+
+            List<Catalogue> itemNameList = new List<Catalogue>();
+            itemNameList = (from x in context.Catalogue select x).ToList();
+            itemNameList.Insert(0, new Catalogue { ItemNumber = "0", ItemName = "---Select Item---" });
+            ViewBag.ListofItemName = itemNameList;
+
             rrid = id;
             ViewData["RRID"] = rrid;
 
@@ -176,6 +191,21 @@ namespace ADTeam5.Controllers
             await context.SaveChangesAsync();
             return RedirectToAction("Edit", new { id = rrid});
         }
-    }
+
+        [HttpPost]
+        public async Task<IActionResult> AddItem(string itemNumber, int quantity)
+        {
+            //var q = context.Catalogue.Where(x => x.ItemName == itemName).FirstOrDefault();
+            //string itemNumber = q.ItemNumber;
+            RecordDetails r = new RecordDetails();
+            r.Rrid = rrid;
+            r.ItemNumber = itemNumber;
+            r.Quantity = quantity;
+            context.Add(r);
+            await context.SaveChangesAsync();
+            return RedirectToAction("Edit", new { id = rrid });
+
+        }
+        }
 }
 

@@ -84,7 +84,7 @@ else
                                             </button>
                                         </td>
                                         <td>
-                                            <form asp-action="RequestItemDelete" asp-route-itemNumber="@item.ItemNumber" method="post" data-ajax="true" data-ajax-update="#TempNewRequest" role="form" asp-controller="NewRequest">
+                                            <form asp-action="RequestItemDelete" asp-route-itemNumber="@item.ItemNumber" method="post" data-ajax="true" data-ajax-update="#TempNewRequest" role="form" asp-controller="NewRequest" onclick="return confirm('Are you sure you want to delete this item?');">
                                                 <button style="background-color:transparent; border:transparent">
                                                     <i class="fa fa-trash-alt" style="color:#dc6460"></i>
                                                 </button>
@@ -109,7 +109,7 @@ else
                         </button>
                     </div>*@
                 <div style="margin-left:400px">
-                    <input type="submit" value="Submit" class="btn btn-primary submit" style="background-color: #00B894;width:120px;height:32px;border:2px;" />
+                    <input type="submit" value="Submit" class="btn btn-primary submit" style="background-color: #00B894;width:120px;height:32px;border:2px;" onclick="return confirm('Confirm request submission?');" />
                 </div>
                 <br />
             </div>
@@ -170,7 +170,7 @@ else
                     </div>
                     <div align="center">
                         <button class="btn" data-dismiss="modal" aria-hidden="true" style="width:80px;height:30px;border:2px; background-color:#EEEEEE"><font size="3" color="black">Close</font></button>
-                        <button type="submit" class="btn btn-primary" style="width:120px;height:30px;border:2px; background-color:#3c8dbc"><font size="3" color="white">Save Changes</font></button>
+                        <button type="submit" class="btn btn-primary" style="width:120px;height:30px;border:2px; background-color:#3c8dbc"><font size="3" color="white">Add Item</font></button>
                     </div>
                 </form>
 
@@ -237,7 +237,7 @@ else
         $("#Category").change(function () {
             $.get("/NewRequest/GetItemNameList", { category: $("#Category").val() }, function (data) {
                 $("#ItemNumber").empty();
-                $("#ItemNumber").append("<option value='" + "0" + "'>" + "---Select item---" + "</option>");
+                $("#ItemNumber").append("<option value='" + "0" + "' disabled>" + "---Select item---" + "</option>");
                 $.each(data, function (index, row) {
                     $("#ItemNumber").append("<option value='" + row.itemNumber + "'>" + row.itemName + "</option>")
                 });
@@ -293,7 +293,6 @@ else
             var itemToAdd = $("input:checkbox:checked", "#TempRequestDetails").map(function () {
                 return $(this).val();
             }).get();
-            alert(itemToAdd.join(','));
             $.ajax({
                 type: "POST",
                 url: '@Url.Action("Index", "NewRequest")',
@@ -301,8 +300,7 @@ else
                 data: { itemSubmitted: itemToAdd },
                 success:
                     function (data) {
-                        //$('#result').html(data);
-                        alert("Submitted");
+                       $('#result').html(data);
                         data = JSON.parse(data);
                         window.location.href = data.redirecturl;
                     }

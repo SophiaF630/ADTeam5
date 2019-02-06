@@ -112,6 +112,8 @@ namespace ADTeam5.Controllers
                     e.Status = status;
                     _context.EmployeeRequestRecord.Add(e);
                     _context.SaveChanges();
+
+                    TempData["Submitted"] = "New request has been created successfully!";
                 }
             }
 
