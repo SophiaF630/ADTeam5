@@ -501,14 +501,14 @@ namespace ADTeam5.BusinessLogic
         public void CreateAdjustmentRecord(int userID, string voucherNo, string status)
         {
 
-            if (status == "Submitted")
+            if (status == "Pending Approval")
             {
                 //Generate new adjustment record
                 AdjustmentRecord ar = new AdjustmentRecord();
                 ar.VoucherNo = voucherNo;
                 ar.IssueDate = DateTime.Now.Date;
                 ar.ClerkId = userID;
-                ar.Status = "Submitted";
+                ar.Status = "Pending Approval";
 
                 _context.AdjustmentRecord.Add(ar);
                 _context.SaveChanges();
@@ -581,6 +581,97 @@ namespace ADTeam5.BusinessLogic
                 _context.AdjustmentRecord.Update(ar);
                 _context.SaveChanges();
             }
+        }
+
+
+        //Reject Voucher
+        public void RejectVoucher(int userID, string userRole, string voucherNo)
+        {
+            var ar = _context.AdjustmentRecord.FirstOrDefault(x => x.VoucherNo == voucherNo);
+            if (ar != null)
+            {
+                if (userRole == "Supervisor")
+                {
+                    ar.SuperviserId = userID;
+                    ar.Status = "Reject";
+                    ar.ApproveDate = DateTime.Now.Date;
+                    _context.AdjustmentRecord.Update(ar);
+                    _context.SaveChanges();
+                }
+                else if (userRole == "Manager")
+                {
+                    ar.SuperviserId = userID;
+                    ar.Status = "Reject";
+                    ar.ApproveDate = DateTime.Now.Date;
+                    _context.AdjustmentRecord.Update(ar);
+                    _context.SaveChanges();
+                }
+            }
+        }
+
+        //ApproveVoucher
+        public void ApproveVoucher(int userID, string userRole, string voucherNo)
+        {            
+            var ar = _context.AdjustmentRecord.FirstOrDefault(x => x.VoucherNo == voucherNo);
+            if (ar != null)
+            {
+                var arList = _context.RecordDetails.Where(x => x.Rrid == voucherNo);
+                if (arList != null)
+                {
+                    //value of voucher
+                    decimal? amount = GetTotalAmountForVoucher(voucherNo);
+                    decimal? GST = Math.Round((decimal)(amount * (decimal?)0.07), 2);
+                    decimal? totalAmount = amount + GST;
+                    
+                    if (userRole == "Supervisor")
+                    {
+                        if (totalAmount <= 250)
+                        {
+                            ar.Status = "Approved";
+                            ar.SuperviserId = userID;
+                            ar.ApproveDate = DateTime.Now.Date;
+                            _context.AdjustmentRecord.Update(ar);
+                            _context.SaveChanges();
+
+                            foreach (var item in arList.ToList())
+                            {
+                                UpdateCatalogueStockAfterSuppDeliveryOrVoucherApproved(item.ItemNumber, item.Quantity);
+                                int balance = _context.Catalogue.Find(item.ItemNumber).Stock;
+                                UpdateInventoryTransRecord(item.ItemNumber, voucherNo, item.Quantity, balance);
+                            }                            
+    
+                    }
+                        else if (totalAmount > 250)
+                        {
+                            ar.Status = "Pending Manager Approval";
+                            ar.SuperviserId = userID;
+                            ar.ApproveDate = DateTime.Now.Date;
+                            _context.AdjustmentRecord.Update(ar);
+                            _context.SaveChanges();
+                        }
+                    }
+                    else if (userRole == "Manager")
+                    {
+                        ar.Status = "Approved";
+                        ar.ManagerId = userID;
+                        ar.ApproveDate = DateTime.Now.Date;
+                        _context.AdjustmentRecord.Update(ar);
+                        _context.SaveChanges();
+
+                        foreach (var item in arList.ToList())
+                        {
+                            UpdateCatalogueStockAfterSuppDeliveryOrVoucherApproved(item.ItemNumber, item.Quantity);
+                            int balance = _context.Catalogue.Find(item.ItemNumber).Stock;
+                            UpdateInventoryTransRecord(item.ItemNumber, voucherNo, item.Quantity, balance);
+                        }
+                    }
+                }               
+            }            
+        }
+
+        //Update inventory transaction after voucher approved
+        public void UpdateTransAfterVoucherApproved()
+        {
         }
 
         //Amount(ex. GST) of a voucher, supplier1Price is used
@@ -969,8 +1060,28 @@ namespace ADTeam5.BusinessLogic
             }
         }
 
+        //RemoveRecordDetails
+        public void RemoveRecordDetails(string id)
+        {
+            List<RecordDetails> recordDetailsToBeDeleted = _context.RecordDetails.Where(x => x.Rrid == id).ToList();
+            foreach (var q in recordDetailsToBeDeleted)
+            {
+                _context.RecordDetails.Remove(q);
+                _context.SaveChanges();
+                
+            }
+        }
+
+        //Remove PO record
+        public void RemovePORecord(string id)
+        {
+            PurchaseOrderRecord poRecordToBeDeleted = _context.PurchaseOrderRecord.FirstOrDefault(x => x.Poid == id);
+            _context.PurchaseOrderRecord.Remove(poRecordToBeDeleted);
+            _context.SaveChanges();
+        }
+
         //UpdateCatalogueStockAfterSupplierDelivery
-        public void UpdateCatalogueStockAfterSupplierDelivery(string itemNumber, int quantity)
+        public void UpdateCatalogueStockAfterSuppDeliveryOrVoucherApproved(string itemNumber, int quantity)
         {
             Catalogue item = _context.Catalogue.FirstOrDefault(x => x.ItemNumber == itemNumber);
             int stock = item.Stock;

@@ -98,7 +98,7 @@ namespace ADTeam5.Controllers
 
                     }
                 }
-                b.CreateAdjustmentRecord(userID, voucherNo, "Submitted");
+                b.CreateAdjustmentRecord(userID, voucherNo, "Pending Approval");
                 //return RedirectToAction(nameof(Index));
             }
             else if(itemSavedToDraft.Length != 0)
@@ -155,7 +155,7 @@ namespace ADTeam5.Controllers
 
             List<TempVoucherDetails> tempVoucherDetailsList = b.GetTempVoucherDetailsList(userID);
 
-            if(tempVoucherDetailsList == null)
+            if(tempVoucherDetailsList.Count == 0)
             {
                 tempVoucherDetailsList = new List<TempVoucherDetails>();
             }

@@ -4,114 +4,169 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
+@*<h1>Edit</h1>
 
-<h4>Catalogue</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="ItemNumber" class="control-label"></label>
-                <input asp-for="ItemNumber" class="form-control" readonly="readonly" />
-                <span asp-validation-for="ItemNumber" class="text-danger"></span>
+<h4>Catalogue</h4>*@
+@*<hr />*@
+<section class="content">
+    <!-- SELECT2 EXAMPLE -->
+    <div class="box box-default">
+        <div class="box-header with-border">
+            <div align="center" vertical-align="middle">
+                <div style="width: 300px;padding: 20px;margin: 20px;border-style:outset; border-width:1px; ">
+                    <div align="center" vertical-align="middle">
+                        <h3 class="box-title">
+                            <strong><font size="5">Catalogue Edit Profile</font></strong>
+                        </h3>
+                    </div>
+                    <div class="box-tools">
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Category" class="control-label"></label>
-                <input asp-for="Category" class="form-control" />
-                <span asp-validation-for="Category" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ItemName" class="control-label"></label>
-                <input asp-for="ItemName" class="form-control" />
-                <span asp-validation-for="ItemName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ReorderLevel" class="control-label"></label>
-                <input asp-for="ReorderLevel" class="form-control" />
-                <span asp-validation-for="ReorderLevel" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ReorderQty" class="control-label"></label>
-                <input asp-for="ReorderQty" class="form-control" />
-                <span asp-validation-for="ReorderQty" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UnitOfMeasure" class="control-label"></label>
-                <input asp-for="UnitOfMeasure" class="form-control" />
-                <span asp-validation-for="UnitOfMeasure" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Stock" class="control-label"></label>
-                <input asp-for="Stock" class="form-control" readonly="readonly"/>
-                <span asp-validation-for="Stock" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Supplier1" class="control-label"></label>
-                <input asp-for="Supplier1" class="form-control" readonly="readonly">
-                <span asp-validation-for="Supplier1" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Supplier2" class="control-label"></label>
-                <input asp-for="Supplier2" class="form-control" readonly="readonly">
-                <span asp-validation-for="Supplier2" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Supplier3" class="control-label"></label>
-                <input asp-for="Supplier3" class="form-control" readonly="readonly">
-                <span asp-validation-for="Supplier3" class="text-danger"></span>
-            </div>
+        </div>
 
-            @*<div class="form-group">
-                <label asp-for="Supplier1" class="control-label"></label>
-                <select asp-for="Supplier1" class="form-control" asp-items="@(new SelectList(Catalogue.Supplier1, "SupplierCode", "SupplierCode"))"></select>
-                <span asp-validation-for="Supplier1" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Supplier2" class="control-label"></label>
-                <select asp-for="Supplier2" class="form-control" asp-items="ViewBag.Supplier2"></select>
-                <span asp-validation-for="Supplier2" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Supplier3" class="control-label"></label>
-                <select asp-for="Supplier3" class="form-control" asp-items="ViewBag.Supplier3"></select>
-                <span asp-validation-for="Supplier3" class="text-danger"></span>
-            </div>*@
+        <!-- /.box-header -->
+        <div class="box-body">
+            <form asp-action="Edit">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="form-group">
+                            <label asp-for="ItemNumber" class="control-label"></label>
+                            <input asp-for="ItemNumber" class="form-control" readonly="readonly" />
+                            <span asp-validation-for="ItemNumber" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="ItemName" class="control-label"></label>
+                            <input asp-for="ItemName" class="form-control" />
+                            <span asp-validation-for="ItemName" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="Category" class="control-label"></label>
+                            <input asp-for="Category" class="form-control" />
+                            <span asp-validation-for="Category" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="UnitOfMeasure" class="control-label"></label>
+                            <input asp-for="UnitOfMeasure" class="form-control" />
+                            <span asp-validation-for="UnitOfMeasure" class="text-danger"></span>
+                        </div>
+                    </div>
 
-            <div class="form-group">
-                <label asp-for="Supplier1Price" class="control-label"></label>
-                <input asp-for="Supplier1Price" class="form-control" readonly="readonly"/>
-                <span asp-validation-for="Supplier1Price" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Supplier2Price" class="control-label"></label>
-                <input asp-for="Supplier2Price" class="form-control" readonly="readonly"/>
-                <span asp-validation-for="Supplier2Price" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Supplier3Price" class="control-label"></label>
-                <input asp-for="Supplier3Price" class="form-control" readonly="readonly"/>
-                <span asp-validation-for="Supplier3Price" class="text-danger"></span>
-            </div>
-            @*<div class="form-group">
-                <label asp-for="Location" class="control-label"></label>
-                <input asp-for="Location" class="form-control" />
-                <span asp-validation-for="Location" class="text-danger"></span>
-            </div>*@
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label asp-for="ReorderQty" class="control-label"></label>
+                            <input asp-for="ReorderQty" class="form-control" />
+                            <span asp-validation-for="ReorderQty" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label asp-for="ReorderLevel" class="control-label"></label>
+                            <input asp-for="ReorderLevel" class="form-control" />
+                            <span asp-validation-for="ReorderLevel" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label asp-for="Stock" class="control-label"></label>
+                            <input asp-for="Stock" class="form-control" readonly="readonly" />
+                            <span asp-validation-for="Stock" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label asp-for="Supplier1" class="control-label"></label>
+                            <input asp-for="Supplier1" class="form-control" readonly="readonly">
+                            <span asp-validation-for="Supplier1" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label asp-for="Supplier2" class="control-label"></label>
+                            <input asp-for="Supplier2" class="form-control" readonly="readonly">
+                            <span asp-validation-for="Supplier2" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label asp-for="Supplier3" class="control-label"></label>
+                            <input asp-for="Supplier3" class="form-control" readonly="readonly">
+                            <span asp-validation-for="Supplier3" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                @*<div class="form-group">
+            <label asp-for="Supplier1" class="control-label"></label>
+            <select asp-for="Supplier1" class="form-control" asp-items="@(new SelectList(Catalogue.Supplier1, "SupplierCode", "SupplierCode"))"></select>
+            <span asp-validation-for="Supplier1" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Supplier2" class="control-label"></label>
+            <select asp-for="Supplier2" class="form-control" asp-items="ViewBag.Supplier2"></select>
+            <span asp-validation-for="Supplier2" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Supplier3" class="control-label"></label>
+            <select asp-for="Supplier3" class="form-control" asp-items="ViewBag.Supplier3"></select>
+            <span asp-validation-for="Supplier3" class="text-danger"></span>
+        </div>*@
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label asp-for="Supplier1Price" class="control-label"></label>
+                            <input asp-for="Supplier1Price" class="form-control" readonly="readonly" />
+                            <span asp-validation-for="Supplier1Price" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label asp-for="Supplier2Price" class="control-label"></label>
+                            <input asp-for="Supplier2Price" class="form-control" readonly="readonly" />
+                            <span asp-validation-for="Supplier2Price" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label asp-for="Supplier3Price" class="control-label"></label>
+                            <input asp-for="Supplier3Price" class="form-control" readonly="readonly" />
+                            <span asp-validation-for="Supplier3Price" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                @*<div class="form-group">
+            <label asp-for="Location" class="control-label"></label>
+            <input asp-for="Location" class="form-control" />
+            <span asp-validation-for="Location" class="text-danger"></span>
+        </div>*@
+                <br />
+                <div class="form-group">
+                    <a asp-action="Index">
+                        <button type="button" class="btn btn-primary" style="width:120px;height:32px;margin-left:1px; background-color:transparent;border:1px #B3B6B7 solid;">
+                            <i class='fas fa-arrow-left' style='font-size:14px;border:1px;color:#B3B6B7'></i>&nbsp;&nbsp;<font style='font-size:14px;color:#B3B6B7'>Back To List</font>
+                        </button>
+                    </a>
+                    <input type="submit" value="Save" class="btn btn-primary" style="width:120px;height:32px;border:2px;margin-left:270px;background-color:#00B894" />
+                </div>
+            </form>
+        </div>
     </div>
-</div>
+</section>
+        @section Scripts {
+            @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+        }
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
-
-@*<script src="~/lib/jquery/dist/jquery.js"></script>*@
+        @*<script src="~/lib/jquery/dist/jquery.js"></script>*@
