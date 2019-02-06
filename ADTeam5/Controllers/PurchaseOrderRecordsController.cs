@@ -176,7 +176,7 @@ namespace ADTeam5.Models
                     int rdid = item.RDID;
                     
                     b.UpdateQuantityDeliveredAfterDelivery(qtyDelivered, rdid);
-                    b.UpdateCatalogueStockAfterSupplierDelivery(itemNo, qtyDelivered);
+                    b.UpdateCatalogueStockAfterSuppDeliveryOrVoucherApproved(itemNo, qtyDelivered);
 
                     int balance = _context.Catalogue.Find(itemNo).Stock;
                     b.UpdateInventoryTransRecord(itemNo, id, qtyDelivered, balance);

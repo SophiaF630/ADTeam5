@@ -4,6 +4,26 @@
     ViewData["Title"] = "_TempDetails";
 }
 
+@using ADTeam5.Areas.Identity.Data
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ADTeam5User> SignInManager
+@inject UserManager<ADTeam5User> UserManager
+@inject SSISTeam5Context context
+
+
+@{ if (SignInManager.IsSignedIn(User))
+    {
+        GeneralLogic userCheck;
+        userCheck = new GeneralLogic(context);
+        ADTeam5User user = await UserManager.GetUserAsync(User);
+        List<string> identity = userCheck.checkUserIdentityAsync(user);
+        ViewData["UserRole"] = identity[1];
+    }
+    else
+    { ViewData["UserRole"] = "Not signed"; }
+
+
+}
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
 
@@ -12,6 +32,10 @@
 @*<div class="container">
     <div class="row">
         <div class="col-12">*@
+
+
+<p>Adjustment Record No: @ViewData["VoucherNo"]</p>
+
 @if (Model.Count == 0)
 {
     <div class="row justify-content-center text-center">
@@ -162,14 +186,37 @@ else
                 <i class='fas fa-arrow-left' style='font-size:14px;border:1px;color:#B3B6B7'></i>&nbsp;&nbsp;<font style='font-size:14px;color:#B3B6B7'>Back To List</font>
             </button>
         </a>
-        @if (ViewBag.AdjustmentRecordStatus == "Draft")
+        @switch (ViewData["UserRole"].ToString())
         {
-            <input type="submit" value="Save As Draft" class="btn btn-primary addToDraft" style="width:120px;height:32px;border:2px;margin-left:180px; background-color:#CC9933" />
-        }
-        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-        @if (ViewBag.AdjustmentRecordStatus == "Draft")
-        {
-            <input type="submit" value="Submit" class="btn btn-primary submit" style="background-color: #00B894;width:120px;height:32px;border:2px;" />
+            case "Clerk":
+                @if (ViewBag.AdjustmentRecordStatus == "Draft")
+                {
+                    <input type="submit" value="Save As Draft" class="btn btn-primary addToDraft" style="width:120px;height:32px;border:2px;margin-left:180px; background-color:#CC9933" />
+                    <input type="submit" value="Submit" class="btn btn-primary submit" style="background-color: #00B894;width:120px;height:32px;border:2px;" />
+                }
+                break;
+
+            case "Supervisor":
+                @if (ViewBag.AdjustmentRecordStatus == "Pending Approval")
+                {
+                    <div style="margin-left:320px">
+                        <input type="submit" value="Reject" class="btn btn-primary rejectVoucher" style="width:120px;height:32px;border:2px; background-color:#CC9933" />
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="submit" value="Approve" class="btn btn-primary approveBySup" style="background-color: #00B894;width:120px;height:32px;border:2px;" />
+                    </div>
+                }
+                break;
+
+            case "Manager":
+                @if (ViewBag.AdjustmentRecordStatus == "Pending Manager Approval")
+                {
+                    <div style="margin-left:320px">
+                        <input type="submit" value="Reject" class="btn btn-primary rejectVoucher" style="width:120px;height:32px;border:2px; background-color:#CC9933" />
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="submit" value="Approve" class="btn btn-primary approveByMan" style="background-color: #00B894;width:120px;height:32px;border:2px;" />
+                    </div>
+                }
+                break;
         }
     </div>
 }
@@ -381,6 +428,61 @@ else
         })
     });
 </script>
+
+<script>
+    $(".rejectVoucher").click(function () {
+        var itemToAdd = 1;
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("Details", "AdjustmentRecords")',
+            dataType: "html",
+            data: { rejectVoucher: itemToAdd },
+            success:
+                function (data) {
+                    //$('#result').html(data);
+                    alert("saved to draft");
+                    location.reload();
+                }
+        })
+    });
+</script>
+
+<script>
+    $(".approveBySup").click(function () {
+        var itemToAdd = 1;
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("Details", "AdjustmentRecords")',
+            dataType: "html",
+            data: { approveBySup: itemToAdd },
+            success:
+                function (data) {
+                    //$('#result').html(data);
+                    alert("saved to draft");
+                    location.reload();
+                }
+        })
+    });
+</script>
+
+<script>
+    $(".approveByMan").click(function () {
+        var itemToAdd = 1;
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("Details", "AdjustmentRecords")',
+            dataType: "html",
+            data: { approveByMan: itemToAdd },
+            success:
+                function (data) {
+                    //$('#result').html(data);
+                    alert("saved to draft");
+                    location.reload();
+                }
+        })
+    });
+</script>
+
 
 <script>
     function deleteItem(table) {

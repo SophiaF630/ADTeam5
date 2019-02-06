@@ -45,7 +45,7 @@ namespace ADTeam5
                 }
                 else if (depm.RepId == workID)
                 {
-                    result.Add("Superviser");
+                    result.Add("Supervisor");
                 }
                 else
                 {

@@ -95,7 +95,7 @@ namespace ADTeam5.Controllers
                         
                     }
                 }
-                b.CreateAdjustmentRecord(userID, voucherNo, "Submitted");
+                b.CreateAdjustmentRecord(userID, voucherNo, "Pending Approval");
                 //return RedirectToAction(nameof(Index));
             }
             else if(itemSavedToDraft.Length != 0)
