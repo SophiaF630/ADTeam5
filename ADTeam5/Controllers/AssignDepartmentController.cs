@@ -88,7 +88,7 @@ namespace ADTeam5.Controllers
                 }
 
                 context.SaveChanges();
-                TempData["Alert1"] = "Department Representative Changed Successfully!";
+                TempData["Alert1"] = "Department representative changed successfully!";
 
                 //send email to new dept rep
                 var q = context.User.Where(x => x.UserId == u.UserId).First();
@@ -102,7 +102,7 @@ namespace ADTeam5.Controllers
 
                 return RedirectToAction("Index");
             }
-            TempData["Alert2"] = "Please Try Again";
+            TempData["Alert2"] = "Please try again";
             return RedirectToAction("Index");
 
         }

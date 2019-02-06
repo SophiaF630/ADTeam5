@@ -70,6 +70,16 @@
 </table>
 
 <div>
+    <form asp-action="DeleteRequest"  asp-route-rrid="@ViewData["RRID"]"method="post" role="form" asp-controller="ViewRequest" onclick="return confirm('Are you sure you want to delete this request?');">
+        <button type ="submit"  class="btn btn-lg btn-primary d-none d-md-inline-block mt-3" style="float:left; background-color:darkred">
+        Delete Request
+        </button>
+        </form>
+</div>
+<br/>
+<br/>
+<br/>
+<div>
     <a asp-action="Index">Back to List</a>
 </div>
 

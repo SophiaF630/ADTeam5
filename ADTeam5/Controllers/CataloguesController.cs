@@ -7,21 +7,48 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ADTeam5.Models;
 using ADTeam5.BusinessLogic;
+using Microsoft.AspNetCore.Identity;
+using ADTeam5.Areas.Identity.Data;
 
 namespace ADTeam5.Controllers
 {
     public class CataloguesController : Controller
     {
+
+        static int userid;
+        static string dept;
+        static string role;
+
         private readonly SSISTeam5Context _context;
         BizLogic b = new BizLogic();
-        public CataloguesController(SSISTeam5Context context)
+
+        private readonly UserManager<ADTeam5User> _userManager;
+        readonly GeneralLogic userCheck;
+
+        public CataloguesController(SSISTeam5Context context, UserManager<ADTeam5User> userManager)
         {
             _context = context;
+            _userManager = userManager;
+            userCheck = new GeneralLogic(context);
         }
 
         // GET: Catalogues
         public async Task<IActionResult> Index()
         {
+            ADTeam5User user = await _userManager.GetUserAsync(HttpContext.User);
+            userid = user.WorkID;
+            List<string> identity = userCheck.checkUserIdentityAsync(user);
+            dept = identity[0];
+            role = identity[1];
+
+            if(dept == "STAS")
+            {
+                ViewData["ClerkRole"] = "true";
+            }
+            else
+            {
+                ViewData["ClerkRole"] = null;
+            }
 
             var sSISTeam5Context = _context.Catalogue.Include(c => c.Supplier1Navigation).Include(c => c.Supplier2Navigation).Include(c => c.Supplier3Navigation);
             return View(await sSISTeam5Context.ToListAsync());
