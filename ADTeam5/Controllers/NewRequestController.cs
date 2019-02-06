@@ -103,7 +103,7 @@ namespace ADTeam5.Controllers
                     var findHeadId = _context.Department.Where(x => x.DepartmentCode == dept).First();
                     int headId = findHeadId.HeadId;
                     string deptCode = dept;
-                    string status = "Submitted";
+                    string status = "Pending Approval";
                     e.Rrid = rrid;
                     e.RequestDate = requestDate;
                     e.DepEmpId = empId;
