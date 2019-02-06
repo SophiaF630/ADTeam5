@@ -5,8 +5,7 @@
 }
 
 <form asp-action="Index" method="post">
-    <h1>Assign Department Representative</h1>
-
+    @*<h1>Assign Department Representative</h1>*@
     @if (TempData["Alert1"] != null)
     {
         <div class="alert alert-success" role="alert">
@@ -25,18 +24,35 @@
             @TempData["Alert2"]
         </div>
     }
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-default">
+                <div class="box-header with-border">
+                    <i class="fa fa-warning"></i>
+                    <h3 class="box-title">Assign Department Representative</h3>
+                </div>
 
-    <p>Current Representative: @ViewData["CurrentRepName"]</p>
-
-    <div class="form-group">
-        <p>
-            New Representative:
-            @Html.DropDownListFor(m => m.UserId, new SelectList(ViewBag.listofitems, "UserId", "Name"), "Select")
-        </p>
+                <br />
+                <h4 style="margin-left:300px">&nbsp;Current Representative:&nbsp; @ViewData["CurrentRepName"]</h4>
+                <br />
+                <div class="form-group" style="margin-left:300px">
+                    <h4>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;New Representative:&nbsp;&nbsp;
+                        @Html.DropDownListFor(m => m.UserId, new SelectList(ViewBag.listofitems, "UserId", "Name"), "--- Select ---")
+                    </h4>
+                </div>
+                <br />
+                <br />
+                <div class="form-group">
+                    <input type="submit" value="Save Changes" class="btn btn-primary submit" style="background-color: #00B894;width:170px;height:32px;border:2px;margin-left:380px" />
+                </div>
+                <br />
+            </div>
+            <!-- /.box-body -->
+        </div>
+        <!-- /.box -->
     </div>
-    <div class="form-group">
-        <input type="submit" value="Save" />
-    </div>
+    <!-- /.col -->
 </form>
 
 @*<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
