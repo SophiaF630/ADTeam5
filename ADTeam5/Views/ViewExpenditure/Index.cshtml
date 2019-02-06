@@ -4,7 +4,7 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>View Expenditure</h1>
+@*<h1>View Expenditure</h1>*@
 
 @if (TempData["NoDetails"] != null)
 {
@@ -51,95 +51,144 @@
         @TempData["FilterError"]
     </div>
 }
+<div class="row">
+    <div class="col-lg-12">
+        <div class="box" style=" width:100%">
+            <div class="box-header with-border">
+                <i class="fa fa-warning"></i>
+                <h3 class="box-title">View Expenditure</h3>
+                <br />
+            </div>
+            <br />
 
-<form asp-action="Index" method="post">
-    <div class="form-group">
-        Select start date:
-        <input type="date" name="startdate" id="start" value="=" />
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        Select end date:
-        <input type="date" name="enddate" id="end" value=" = " />
-
-        <input type="submit" value="Search" id="searchbtn" />
+            <form asp-action="Index" method="post">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group" style="margin-left:10px">
+                            <label>Select start date:</label>
+                            <div class="input-group date" style="width:440px">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <input type="date" name="startdate" class="form-control pull-right" id="start" value="=" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group" style="margin-left:30px">
+                            <label>Select end date:</label>
+                            <div class="input-group date" style="width:440px">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <input type="date" name="enddate" class="form-control pull-right" id="end" value=" = " />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <input type="submit" class="btn btn-primary submit" value="Search" id="searchbtn" style="background-color: #00B894;width:150px;height:36px;border:2px;margin-left:460px" />
+                <br />
+                <hr />
+            </form>
+        </div>
     </div>
-    <br />
+</div>
 
-    @if (ViewData["Show"] != null)
-    {
-        <p><b>Financial Year: @ViewData["startFinancialYear"] to @ViewData["endFinancialYear"]</b></p>
-    }
+<div class="row">
+    <div class="col-lg-12">
+        <div class="box" style=" width:100%">
+            <div class="box-header with-border">
+                <i class="fa fa-warning"></i>
+                <h5 class="box-title">
+                    @if (ViewData["Show"] != null)
+                    {
+                    <p>Financial Year &nbsp;: &nbsp;&nbsp;&nbsp;&nbsp; <u> @ViewData["startFinancialYear"]</u> &nbsp;&nbsp;&nbsp;&nbsp; <b>to</b> &nbsp;&nbsp;&nbsp;&nbsp;<u>@ViewData["endFinancialYear"]</u> </p>
+                    }
 
-    @if (ViewData["StartDate"] != null && ViewData["EndDate"] != null)
-    {
-        <p><b>Search results from @ViewData["StartDate"] to @ViewData["EndDate"]</b></p>
-    }
+                    @if (ViewData["StartDate"] != null && ViewData["EndDate"] != null)
+                    {
+                        <p><b>Search results from @ViewData["StartDate"] to @ViewData["EndDate"]</b></p>
+                    }
+                </h5>
+                
+            </div>
+            
+            
 
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Dlid)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.CompleteDate)
+                        </th>
 
+                        <th>
+                            @Html.DisplayNameFor(model => model.Status)
+                        </th>
 
-</form>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.CompleteDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Dlid)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Status)
-            </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td>
+                            <a asp-action="Details" asp-route-Dlid="@item.Dlid">
+                                <u>@Html.DisplayFor(modelItem => item.Dlid)</u>
+                            </a>
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CompleteDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Status)
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+            <br />
+            <hr />
+            <br />
+            <form asp-action="Index" method="post">
+                <div class="form-group" style="margin-left:870px">
+                    <font size="4"><b>Total:&nbsp;&nbsp; $  @ViewData["Sum"] </b> </font>
+                </div>
 
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CompleteDate)
-                </td>
-                <td>
-                    <a asp-action="Details" asp-route-Dlid="@item.Dlid">
-                        @Html.DisplayFor(modelItem => item.Dlid)
-                    </a>
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Status)
-                </td>
-
-            </tr>
-        }
-    </tbody>
-</table>
-<form asp-action="Index" method="post">
-    <div class="form-group">
-        <h6>Total Expenditure: @ViewData["Sum"] </h6>
+            </form>
+            <br />
+        </div>
     </div>
+</div>
 
-</form>
+            <script>
+                $(document).ready(function () {
+                    let now = new Date();
 
+                    let day = ("0" + now.getDate()).slice(-2);
+                    let month = ("0" + (now.getMonth() + 1)).slice(-2);
 
-<script>
-    $(document).ready(function () {
-        let now = new Date();
+                    let today = (day) + "-" + (month) + "-" + now.getFullYear();
 
-        let day = ("0" + now.getDate()).slice(-2);
-        let month = ("0" + (now.getMonth() + 1)).slice(-2);
+                    $('#start').val(today);
+                    $('#end').val(today);
+                    $('#assignbtn').click(function () {
 
-        let today = (day) + "-" + (month) + "-" + now.getFullYear();
+                        testClicked();
+                    });
+                });
+                function testClicked() {
+                    $('.getStartDate').html($('#start').val());
+                    $('.getEndDate').html($('#end').val());
+                }
 
-        $('#start').val(today);
-        $('#end').val(today);
-        $('#assignbtn').click(function () {
-
-            testClicked();
-        });
-    });
-    function testClicked() {
-        $('.getStartDate').html($('#start').val());
-        $('.getEndDate').html($('#end').val());
-    }
-
-</script>
+            </script>

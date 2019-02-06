@@ -41,9 +41,12 @@ namespace ADTeam5.Models
         [Range(0, 10000, ErrorMessage = "Amount cannot be negative")]
         public int Out { get; set; }
         [StringLength(4)]
+        [Required(ErrorMessage = "*This field is required")]
         [Display(Name = "Supplier 1")]
         public string Supplier1 { get; set; }
         [StringLength(4)]
+        [Required(ErrorMessage = "*This field is required")]
+        [Display(Name = "Supplier 2")]
         public string Supplier2 { get; set; }
         [StringLength(4)]
         public string Supplier3 { get; set; }

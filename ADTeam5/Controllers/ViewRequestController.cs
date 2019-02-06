@@ -38,7 +38,7 @@ namespace ADTeam5.Controllers
             dept = identity[0];
             role = identity[1];
 
-            var q = context.EmployeeRequestRecord.Where(x => x.DepCode == dept).OrderByDescending(x=>x.Rrid);
+            var q = context.EmployeeRequestRecord.Where(x => x.DepCode == dept).OrderByDescending(x => x.Rrid);
             return View(q);
         }
 
@@ -131,6 +131,21 @@ namespace ADTeam5.Controllers
         }
         public IActionResult Edit(string id)
         {
+
+            List<Catalogue> categoryList = new List<Catalogue>();
+            var q = context.Catalogue.GroupBy(x => new { x.Category }).Select(x => x.FirstOrDefault());
+            foreach (var item in q)
+            {
+                categoryList.Add(item);
+            }
+            categoryList.Insert(0, new Catalogue { ItemNumber = "0", Category = "---Select Category---" });
+            ViewBag.ListofCategory = categoryList;
+
+            List<Catalogue> itemNameList = new List<Catalogue>();
+            itemNameList = (from x in context.Catalogue select x).ToList();
+            itemNameList.Insert(0, new Catalogue { ItemNumber = "0", ItemName = "---Select Item---" });
+            ViewBag.ListofItemName = itemNameList;
+
             rrid = id;
             ViewData["RRID"] = rrid;
 
@@ -164,7 +179,7 @@ namespace ADTeam5.Controllers
             context.RecordDetails.Remove(q3);
             await context.SaveChangesAsync();
 
-            return RedirectToAction("Edit", "ViewRequest", new { id = rrid});
+            return RedirectToAction("Edit", "ViewRequest", new { id = rrid });
         }
         [HttpPost]
         public async Task<IActionResult> RequestItemEdit(string itemName, int quantity)
@@ -174,7 +189,37 @@ namespace ADTeam5.Controllers
             var q3 = context.RecordDetails.Where(x => x.Rrid == rrid && x.ItemNumber == itemNumber).FirstOrDefault();
             q3.Quantity = quantity;
             await context.SaveChangesAsync();
-            return RedirectToAction("Edit", new { id = rrid});
+            return RedirectToAction("Edit", new { id = rrid });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddItem(string itemNumber, int quantity)
+        {
+            //var q = context.Catalogue.Where(x => x.ItemName == itemName).FirstOrDefault();
+            //string itemNumber = q.ItemNumber;
+            RecordDetails r = new RecordDetails();
+            r.Rrid = rrid;
+            r.ItemNumber = itemNumber;
+            r.Quantity = quantity;
+            context.Add(r);
+            await context.SaveChangesAsync();
+            return RedirectToAction("Edit", new { id = rrid });
+
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteRequest(string rrid)
+        {
+            List<RecordDetails> r = context.RecordDetails.Where(x => x.Rrid == rrid).ToList();
+            foreach (RecordDetails current in r)
+            {
+                context.Remove(current);
+            }
+            EmployeeRequestRecord e = context.EmployeeRequestRecord.Where(x => x.Rrid == rrid).FirstOrDefault();
+            context.Remove(e);
+
+            await context.SaveChangesAsync();
+            return RedirectToAction("Index");
         }
     }
 }

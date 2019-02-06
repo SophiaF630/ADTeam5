@@ -25,6 +25,10 @@
 
 }
 
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+
 @*<div class="container">
     <div class="row">
         <div class="col-12">*@
@@ -33,7 +37,7 @@
     <div class="row justify-content-center text-center">
         <div class="col-12 col-md-10 mt-5">
 
-            <i class="fa fa-user fa-5x mb-5"></i>
+            @*<i class="fa fa-user fa-5x mb-5"></i>*@
 
             <h2>
                 No Record Found
@@ -47,6 +51,11 @@
                 <a asp-action="Create" class="btn btn-lg btn-primary d-none d-md-inline-block mt-3">Create New</a>
 
             }
+            <div>
+                <a @*asp-route-state="PastRecords" *@ href="AdjustmentRecords?state=PastRecords">
+                    <input type="button" value="View Past Records" class="btn btn-primary past" style="background-color: #00B894;width:200px;height:32px;border:2px;" />
+                </a>
+            </div>
         </div>
     </div> <!-- / .row -->
 }
@@ -60,6 +69,16 @@ else
                 <div class="box-header with-border">
                     <h3 class="box-title">Adjustment Record</h3>
                     <br />
+                    <div>
+                        <a @*asp-route-state="OutstandingRecords" *@ href="AdjustmentRecords?state=OutstandingRecords">
+                            <input type="button" value="View Oustanding Records" class="btn btn-primary outstanding" style="width:200px;height:32px;border:2px;margin-left:180px; background-color:#CC9933" />
+                        </a>
+                        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                        <a @*asp-route-state="PastRecords" *@ href="AdjustmentRecords?state=PastRecords">
+                            <input type="button" value="View Past Records" class="btn btn-primary past" style="background-color: #00B894;width:200px;height:32px;border:2px;" />
+                        </a>
+                    </div>
+
                     <div class="box-tools pull-right">
                         <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
                         <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
@@ -175,3 +194,24 @@ else
         $('[data-toggle="tooltip"]').tooltip();
     });
 </script>
+
+@*<script>
+        $(document).ready(function () {
+            $(".outstanding").click(function () {
+                var itemToAdd = 1;
+                //alert(itemToAdd.join(','));
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("Index", "AdjustmentRecords")',
+                    dataType: "html",
+                    data: { outstanding: itemToAdd },
+                    success:
+                        function (data) {
+                            //$('#result').html(data);
+                            alert("submitted");
+                            window.location.reload();
+                        }
+                })
+            });
+        });
+    </script>*@

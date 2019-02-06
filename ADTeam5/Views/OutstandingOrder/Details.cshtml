@@ -49,10 +49,11 @@
 </table>
 
 
-
-<button type="submit" class="btn btn-lg btn-primary d-none d-md-inline-block mt-3 rejectReason" style="background-color: #800000">Reject</button>
-<form asp-controller="OutstandingOrder" asp-action="ApproveOrder" method="post"><button type="submit" class="btn btn-lg btn-primary d-none d-md-inline-block mt-3" style="background-color:#008000">Approve</button></form>
-
+<div style="width:50%; margin:auto;">
+    <div style="display:inline-block; width:45%;text-align:center;">
+        <button type="submit" class="btn btn-lg btn-primary d-none d-md-inline-block mt-3 rejectReason" style="float:left; background-color:darkred">Reject</button> <form asp-controller="OutstandingOrder" asp-action="ApproveOrder" method="post"><button type="submit" class="btn btn-lg btn-primary d-none d-md-inline-block mt-3" style="float:right; background-color:green">Approve</button></form>
+    </div>
+</div>
 
 <!-- Modal for create voucher item-->
 <div class="modal fade in" id="CreateNewVoucherItemModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -62,9 +63,8 @@
             @*<div class="modal-header">*@
 
             <div class="modal-body">
+
                 <form asp-controller="OutstandingOrder" asp-action="RejectOrder" method="post">
-
-
                     <div class="form-group">
                         <label for="rejectReason">Reason for Rejection:</label>
                         @if (TempData["NoText"] != null)
@@ -83,11 +83,12 @@
                         <button type="submit" class="btn btn-primary" style="width:120px;height:30px;border:2px; background-color:#3c8dbc"><font size="3" color="white">Submit</font></button>
                     </div>
                 </form>
-
             </div>
         </div>
     </div>
 </div>
+
+<a asp-action="Index">Back to List</a>
 
 <script>
     $(".rejectReason").click(function () {

@@ -15,6 +15,11 @@
 <p><b>Requisition Form No: @ViewData["RRID"]</b></p>
 <p>Status: @ViewData["Status"]</p>
 
+<div>
+        <button type="button" class="btn btn-lg btn-primary d-none d-md-inline-block mt-3 createNewRequestItem" style="width:100px;height:40px;border:2px; background-color:#00B894">
+            Add Item
+        </button>
+</div>
 
 <table class="table">
     <thead>
@@ -37,35 +42,94 @@
     <tbody>
         @foreach (var item in Model)
         {
-        <tr>
-            <td class="ItemName">
-                @Html.DisplayFor(modelItem => item.itemName)
-            </td>
-            <td class="Quantity">
-                @Html.DisplayFor(modelItem => item.quantity)
-                <meta http-equiv="refresh" content="5" />
-            </td>
-            <td>
-                <button type="button" class="editItem" style="background-color:transparent; border:transparent">
-                    <i class="fa fa-edit" style="color:#66B3B3"></i>
-                </button>
-            </td>
-            <td>
-                <form asp-action="RequestItemDelete" asp-route-itemName="@item.itemName" asp-route-rrid="@item.rrid" method="post" data-ajax="true" data-ajax-update="#TempVoucherDetailsList" role="form" asp-controller="ViewRequest" onclick="return confirm('Are you sure you want to delete this item?');">
-                    <button style="background-color:transparent; border:transparent">
-                        <i class="fa fa-trash-alt" style="color:#dc6460"></i>
-
+            <tr>
+                <td class="ItemName">
+                    @Html.DisplayFor(modelItem => item.itemName)
+                </td>
+                <td class="Quantity">
+                    @Html.DisplayFor(modelItem => item.quantity)
+                    <meta http-equiv="refresh" content="10" />
+                </td>
+                <td>
+                    <button type="button" class="editItem" style="background-color:transparent; border:transparent">
+                        <i class="fa fa-edit" style="color:#66B3B3"></i>
                     </button>
-                    @*<meta http-equiv="refresh" content="10" />*@
-                </form>
-            </td>
-        </tr>
+                </td>
+                <td>
+                    <form asp-action="RequestItemDelete" asp-route-itemName="@item.itemName" asp-route-rrid="@item.rrid" method="post" data-ajax="true" data-ajax-update="#TempVoucherDetailsList" role="form" asp-controller="ViewRequest" onclick="return confirm('Are you sure you want to delete this item?');">
+                        <button style="background-color:transparent; border:transparent">
+                            <i class="fa fa-trash-alt" style="color:#dc6460"></i>
+
+                        </button>
+                        @*<meta http-equiv="refresh" content="10" />*@
+                    </form>
+                </td>
+            </tr>
         }
     </tbody>
 </table>
 
 <div>
+    <form asp-action="DeleteRequest"  asp-route-rrid="@ViewData["RRID"]"method="post" role="form" asp-controller="ViewRequest" onclick="return confirm('Are you sure you want to delete this request?');">
+        <button type ="submit"  class="btn btn-lg btn-primary d-none d-md-inline-block mt-3" style="float:left; background-color:darkred">
+        Delete Request
+        </button>
+        </form>
+</div>
+<br/>
+<br/>
+<br/>
+<div>
     <a asp-action="Index">Back to List</a>
+</div>
+
+<!-- Modal for create Request item-->
+<div class="modal fade in" id="CreateNewRequestItemModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <br />
+            @*<div class="modal-header">*@
+            <div align="center" vertical-align="middle">
+                <div style="width: 400px;padding: 15px;margin: 15px;border-style:outset; border-width:1px; ">
+                    <div align="center" vertical-align="middle">
+                        <h5 class="modal-title" id="exampleModalLongTitle">
+                            <strong><font size="5">Add To Request</font></strong>
+                        </h5>
+                        @*<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>*@
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body">
+                <form method="POST" asp-action="AddItem">
+                    <div class="form-group">
+                        <input type="hidden" id="CreateNewRequestItemModalID" name="createNewRequestItemModalName" class="form-control" value="0" />
+                    </div>
+                    <div class="form-group">
+                        <label for="Category">Category</label>
+                        @if (ViewBag.ListofCategory != null)
+                        {
+                            <select for="Category" class="form-control" id="Category" asp-items="@(new SelectList(ViewBag.ListofCategory, "Category", "Category"))"></select>
+                        }
+                    </div>
+                    <div class="form-group">
+                        <label for="ItemNumber">ItemName</label>
+                        <select for="ItemNumber" class="form-control" id="ItemNumber" required="required" name="itemNumber" asp-items="@(new SelectList(" "))"></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="Quantity">Quantity</label>
+                        <input type="number" min="1" step="1" id="Quantity" name="quantity" required="required" class="form-control" value="" />
+                    </div>
+                    <div align="center">
+                        <button class="btn" data-dismiss="modal" aria-hidden="true" style="width:80px;height:30px;border:2px; background-color:#EEEEEE"><font size="3" color="black">Close</font></button>
+                        <button type="submit" class="btn btn-primary" style="width:120px;height:30px;border:2px; background-color:#3c8dbc"><font size="3" color="white">Save Changes</font></button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
 </div>
 
 <!-- Modal for edit quantity-->
@@ -87,7 +151,7 @@
                     </div>
                     <div class="form-group">
                         <label for="Quantity">Quantity</label>
-                        <input type="number" min="1" step="1" id="Quantity"  required="required" name="quantity" class="form-control" value="" />
+                        <input type="number" min="1" step="1" id="Quantity" required="required" name="quantity" class="form-control" value="" />
                     </div>
                     <div class="modal-footer">
                         <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
@@ -98,6 +162,36 @@
         </div>
     </div>
 </div>
+
+<script>
+    $(".createNewRequestItem").click(function () {
+        //var $row = $(this).closest("tr");    // Find the row
+        var itemNumber = ""; // Find the text
+        var quantity = "";
+        var createNewRequestItemModalID = 1;
+
+        var $modal = $('#CreateNewRequestItemModal');
+        $modal.find('#ItemNumber').val(itemNumber);
+        $modal.find('#Quantity').val(quantity);
+        $modal.find('#CreateNewRequestItemModalID').val(createNewRequestItemModalID);
+
+        $modal.modal('show');
+    });
+</script>
+
+<script>
+    $(document).ready(function () {
+        $("#Category").change(function () {
+            $.get("/NewRequest/GetItemNameList", { category: $("#Category").val() }, function (data) {
+                $("#ItemNumber").empty();
+                $("#ItemNumber").append("<option value='" + "0" + "' disabled>" + "---Select item---" + "</option>");
+                $.each(data, function (index, row) {
+                    $("#ItemNumber").append("<option value='" + row.itemNumber + "'>" + row.itemName + "</option>")
+                });
+            });
+        })
+    });
+</script>
 
 <script>
     $(".editItem").click(function () {

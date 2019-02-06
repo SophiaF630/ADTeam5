@@ -28,8 +28,58 @@ namespace ADTeam5.Controllers
             userCheck = new GeneralLogic(context);
         }
 
-        // GET: AdjustmentRecords
-        public async Task<IActionResult> Index()
+        //// GET: AdjustmentRecords
+        //public async Task<IActionResult> Index()
+        //{
+        //    ADTeam5User user = await _userManager.GetUserAsync(HttpContext.User);
+        //    List<string> identity = userCheck.checkUserIdentityAsync(user);
+        //    int userID = user.WorkID;
+        //    string userRole = identity[1];
+
+        //    List<AdjustmentRecord> arList = new List<AdjustmentRecord>();
+        //    //records shown to clerk
+        //    switch (userRole)
+        //    {
+        //        case "Clerk":
+        //            AdjustmentRecord arC = _context.AdjustmentRecord.FirstOrDefault(x => x.ClerkId == userID && !x.VoucherNo.Contains("Vtemp") && x.Status == "Draft");
+        //            if (arC != null)
+        //            {
+        //                arList = _context.AdjustmentRecord.Where(x => x.ClerkId == userID && !x.VoucherNo.Contains("Vtemp") && x.Status == "Draft").OrderByDescending(x => x.VoucherNo).ToList();
+        //            }
+        //            else
+        //            {
+        //                NotFound();
+        //            }
+        //            break;
+        //        case "Supervisor":
+        //            AdjustmentRecord arS = _context.AdjustmentRecord.FirstOrDefault(x => x.Status == "Pending Approval" && !x.VoucherNo.Contains("Vtemp"));
+        //            if (arS != null)
+        //            {
+        //                arList = _context.AdjustmentRecord.Where(x => x.Status == "Pending Approval" && !x.VoucherNo.Contains("Vtemp")).OrderByDescending(x => x.VoucherNo).ToList();
+        //            }
+        //            else
+        //            {
+        //                NotFound();
+        //            }
+        //            break;
+        //        case "Manager":
+        //            AdjustmentRecord arM = _context.AdjustmentRecord.FirstOrDefault(x => x.Status == "Pending Manager Approval" && !x.VoucherNo.Contains("Vtemp"));
+        //            if (arM != null)
+        //            {
+        //                arList = _context.AdjustmentRecord.Where(x => x.Status == "Pending Manager Approval" && !x.VoucherNo.Contains("Vtemp")).OrderByDescending(x => x.VoucherNo).ToList();
+        //            }
+        //            else
+        //            {
+        //                NotFound();
+        //            }
+        //            break;
+        //    }
+        //    return View(arList);
+        //}
+
+        // POST: AdjustmentRecords
+        //[HttpPost]
+        public async Task<IActionResult> Index(string state)
         {
             ADTeam5User user = await _userManager.GetUserAsync(HttpContext.User);
             List<string> identity = userCheck.checkUserIdentityAsync(user);
@@ -37,43 +87,128 @@ namespace ADTeam5.Controllers
             string userRole = identity[1];
 
             List<AdjustmentRecord> arList = new List<AdjustmentRecord>();
-            //records shown to clerk
-            switch (userRole)
+
+            switch (state)
             {
-                case "Clerk":
-                    AdjustmentRecord arC = _context.AdjustmentRecord.FirstOrDefault(x => x.ClerkId == userID && !x.VoucherNo.Contains("Vtemp") && x.Status != "Draft");
-                    if (arC != null)
+                case "OutstandingRecords":
+                    //records shown to clerk
+                    switch (userRole)
                     {
-                        arList = _context.AdjustmentRecord.Where(x => x.ClerkId == userID && !x.VoucherNo.Contains("Vtemp") && x.Status != "Draft").OrderByDescending(x => x.VoucherNo).ToList();
-                    }
-                    else
-                    {
-                        NotFound();
+                        case "Clerk":
+                            AdjustmentRecord arC = _context.AdjustmentRecord.FirstOrDefault(x => x.ClerkId == userID && !x.VoucherNo.Contains("Vtemp") && x.Status == "Draft");
+                            if (arC != null)
+                            {
+                                arList = _context.AdjustmentRecord.Where(x => x.ClerkId == userID && !x.VoucherNo.Contains("Vtemp") && x.Status == "Draft").OrderByDescending(x => x.VoucherNo).ToList();
+                            }
+                            else
+                            {
+                                NotFound();
+                            }
+                            break;
+                        case "Supervisor":
+                            AdjustmentRecord arS = _context.AdjustmentRecord.FirstOrDefault(x => x.Status == "Pending Approval");
+                            if (arS != null)
+                            {
+                                arList = _context.AdjustmentRecord.Where(x => x.Status == "Pending Approval").OrderByDescending(x => x.VoucherNo).ToList();
+                            }
+                            else
+                            {
+                                NotFound();
+                            }
+                            break;
+                        case "Manager":
+                            AdjustmentRecord arM = _context.AdjustmentRecord.FirstOrDefault(x => x.Status == "Pending Manager Approval");
+                            if (arM != null)
+                            {
+                                arList = _context.AdjustmentRecord.Where(x => x.Status == "Pending Manager Approval").OrderByDescending(x => x.VoucherNo).ToList();
+                            }
+                            else
+                            {
+                                NotFound();
+                            }
+                            break;
                     }
                     break;
-                case "Supervisor":
-                    AdjustmentRecord arS = _context.AdjustmentRecord.FirstOrDefault(x => x.Status == "Pending Approval" && !x.VoucherNo.Contains("Vtemp"));
-                    if (arS != null)
+
+                case "PastRecords":
+                    //records shown to clerk
+                    switch (userRole)
                     {
-                        arList = _context.AdjustmentRecord.Where(x => x.Status == "Pending Approval" && !x.VoucherNo.Contains("Vtemp")).OrderByDescending(x => x.VoucherNo).ToList();
-                    }
-                    else
-                    {
-                        NotFound();
+                        case "Clerk":
+                            AdjustmentRecord arC = _context.AdjustmentRecord.FirstOrDefault(x => x.ClerkId == userID && !x.VoucherNo.Contains("Vtemp") && x.Status != "Draft");
+                            if (arC != null)
+                            {
+                                arList = _context.AdjustmentRecord.Where(x => x.ClerkId == userID && !x.VoucherNo.Contains("Vtemp") && x.Status != "Draft").OrderByDescending(x => x.VoucherNo).ToList();
+                            }
+                            else
+                            {
+                                NotFound();
+                            }
+                            break;
+                        case "Supervisor":
+                            AdjustmentRecord arS = _context.AdjustmentRecord.FirstOrDefault(x => x.Status == "Rejected" || x.Status == "Approved");
+                            if (arS != null)
+                            {
+                                arList = _context.AdjustmentRecord.Where(x => x.Status == "Rejected" || x.Status == "Approved").OrderByDescending(x => x.VoucherNo).ToList();
+                            }
+                            else
+                            {
+                                NotFound();
+                            }
+                            break;
+                        case "Manager":
+                            AdjustmentRecord arM = _context.AdjustmentRecord.FirstOrDefault(x => x.Status == "Rejected" || x.Status == "Approved");
+                            if (arM != null)
+                            {
+                                arList = _context.AdjustmentRecord.Where(x => x.Status == "Rejected" || x.Status == "Approved").OrderByDescending(x => x.VoucherNo).ToList();
+                            }
+                            else
+                            {
+                                NotFound();
+                            }
+                            break;
                     }
                     break;
-                case "Manager":
-                    AdjustmentRecord arM = _context.AdjustmentRecord.FirstOrDefault(x => x.Status == "Pending Manager Approval" && !x.VoucherNo.Contains("Vtemp"));
-                    if (arM != null)
+                default:
+                    switch (userRole)
                     {
-                        arList = _context.AdjustmentRecord.Where(x => x.Status == "Pending Manager Approval" && !x.VoucherNo.Contains("Vtemp")).OrderByDescending(x => x.VoucherNo).ToList();
-                    }
-                    else
-                    {
-                        NotFound();
+                        case "Clerk":
+                            AdjustmentRecord arC = _context.AdjustmentRecord.FirstOrDefault(x => x.ClerkId == userID && !x.VoucherNo.Contains("Vtemp") && x.Status == "Draft");
+                            if (arC != null)
+                            {
+                                arList = _context.AdjustmentRecord.Where(x => x.ClerkId == userID && !x.VoucherNo.Contains("Vtemp") && x.Status == "Draft").OrderByDescending(x => x.VoucherNo).ToList();
+                            }
+                            else
+                            {
+                                NotFound();
+                            }
+                            break;
+                        case "Supervisor":
+                            AdjustmentRecord arS = _context.AdjustmentRecord.FirstOrDefault(x => x.Status == "Pending Approval");
+                            if (arS != null)
+                            {
+                                arList = _context.AdjustmentRecord.Where(x => x.Status == "Pending Approval").OrderByDescending(x => x.VoucherNo).ToList();
+                            }
+                            else
+                            {
+                                NotFound();
+                            }
+                            break;
+                        case "Manager":
+                            AdjustmentRecord arM = _context.AdjustmentRecord.FirstOrDefault(x => x.Status == "Pending Manager Approval");
+                            if (arM != null)
+                            {
+                                arList = _context.AdjustmentRecord.Where(x => x.Status == "Pending Manager Approval").OrderByDescending(x => x.VoucherNo).ToList();
+                            }
+                            else
+                            {
+                                NotFound();
+                            }
+                            break;
                     }
                     break;
             }
+            
             return View(arList);
         }
 
@@ -249,7 +384,7 @@ namespace ADTeam5.Controllers
             List<AdjustmentRecord> tempAdjustmentRecords = new List<AdjustmentRecord>();
             if (ar != null)
             {
-                tempAdjustmentRecords = _context.AdjustmentRecord.Where(x => x.ClerkId == userID && !x.VoucherNo.Contains("Vtemp")).OrderByDescending(x=>x.VoucherNo).ToList();
+                tempAdjustmentRecords = _context.AdjustmentRecord.Where(x => x.ClerkId == userID && !x.VoucherNo.Contains("Vtemp") && x.Status == "Draft").OrderByDescending(x=>x.VoucherNo).ToList();
             }
             else
             {
