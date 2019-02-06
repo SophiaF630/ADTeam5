@@ -1,5 +1,4 @@
-﻿
-@model IEnumerable<ADTeam5.Models.EmployeeRequestRecord>
+﻿@model IEnumerable<ADTeam5.Models.EmployeeRequestRecord>
 
 @{
     ViewData["Title"] = "Index";
@@ -70,10 +69,10 @@
                             <div class="form-group" style="margin-left:10px">
                                 <label>Select start date:</label>
                                 <div class="input-group date" style="width:440px">
-                                    <div class="input-group-addon">
-                                        <i class="fa fa-calendar"></i>
+                                   <div class="input-group-addon">
+                                      <i class="fa fa-calendar"></i>
                                     </div>
-                                    <input type="date" class="form-control pull-right" id="start">
+                                <input type="date" name="startdate" class="form-control pull-right" id="start" value="=" />
                                 </div>
                             </div>
                         </div>
@@ -81,10 +80,10 @@
                             <div class="form-group" style="margin-left:30px">
                                 <label>Select end date:</label>
                                 <div class="input-group date" style="width:440px">
-                                    <div class="input-group-addon">
-                                        <i class="fa fa-calendar"></i>
-                                    </div>
-                                    <input type="date" class="form-control pull-right" name="enddate" id="end">
+                    <div class="input-group-addon">
+                        <i class="fa fa-calendar"></i>
+                    </div>
+                                <input type="date" class="form-control pull-right" name="enddate" id="end" value="=" />
                                 </div>
                             </div>
                         </div>
@@ -92,12 +91,12 @@
                     <br />
                     <input type="submit" value="Search" class="btn btn-primary submit" id="searchbtn" style="background-color: #00B894;width:150px;height:36px;border:2px;margin-left:430px" />
                     <br />
-                    <hr />
-
                     @if (ViewData["StartDate"] != null & ViewData["EndDate"] != null)
                     {
                         <p> <b>Search results from @ViewData["StartDate"] to @ViewData["EndDate"]</b></p>
                     }
+
+
                 </form>
 
                
@@ -150,8 +149,6 @@
                 </div>
             </div>
         </div>
-
-
                     <script>
                         $(document).ready(function () {
                             let now = new Date();
