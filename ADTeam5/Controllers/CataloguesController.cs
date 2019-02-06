@@ -52,9 +52,21 @@ namespace ADTeam5.Controllers
         // GET: Catalogues/Create
         public IActionResult Create()
         {
-            ViewData["Supplier1"] = new SelectList(_context.Supplier, "SupplierCode", "SupplierCode");
-            ViewData["Supplier2"] = new SelectList(_context.Supplier, "SupplierCode", "SupplierCode" );
-            ViewData["Supplier3"] = new SelectList(_context.Supplier, "SupplierCode", "SupplierCode");
+            //ViewData["Supplier1"] = new SelectList(_context.Supplier, "SupplierCode", "SupplierCode");
+            //ViewData["Supplier2"] = new SelectList(_context.Supplier, "SupplierCode", "SupplierCode" );
+            //ViewData["Supplier3"] = new SelectList(_context.Supplier, "SupplierCode", "SupplierCode");
+
+            //Viewbag for supplier1 dropdown list, need to post back
+            List<Supplier> supplier1List = _context.Supplier.ToList();
+            //supplier1List.Insert(0, new Supplier { SupplierCode = " ", SupplierName = " " });
+            ViewBag.Supplier1 = supplier1List;
+            List<Supplier> supplier2List = _context.Supplier.ToList();
+            supplier1List.Insert(0, new Supplier { SupplierCode = " ", SupplierName = " " });
+            ViewBag.Supplier2 = supplier2List;
+            List<Supplier> supplier3List = _context.Supplier.ToList();
+            supplier3List.Insert(0, new Supplier { SupplierCode = " ", SupplierName = " " });
+            ViewBag.Supplier3 = supplier3List;
+
             return View(new Catalogue());
         }
 
@@ -65,6 +77,17 @@ namespace ADTeam5.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ItemNumber,Category,ItemName,ReorderLevel,ReorderQty,UnitOfMeasure,Stock,Out,Supplier1,Supplier2,Supplier3,Supplier1Price,Supplier2Price,Supplier3Price")] Catalogue catalogue)
         {
+            //Viewbag for supplier1 dropdown list, need to post back
+            List<Supplier> supplier1List = _context.Supplier.ToList();
+            //supplier1List.Insert(0, new Supplier { SupplierCode = " ", SupplierName = " " });
+            ViewBag.Supplier1 = supplier1List;
+            List<Supplier> supplier2List = _context.Supplier.ToList();
+            supplier1List.Insert(0, new Supplier { SupplierCode = " ", SupplierName = " " });
+            ViewBag.Supplier2 = supplier2List;
+            List<Supplier> supplier3List = _context.Supplier.ToList();
+            supplier3List.Insert(0, new Supplier { SupplierCode = " ", SupplierName = " " });
+            ViewBag.Supplier3 = supplier3List;
+
             if (ModelState.IsValid)
             {
                 _context.Add(catalogue);
@@ -74,70 +97,7 @@ namespace ADTeam5.Controllers
             }
             return View(catalogue);
         }
-
-
-
-        //// GET: Catalogues/Create
-        //public IActionResult Create()
-        //{
-        //    ViewData["Supplier1"] = new SelectList(_context.Supplier, "SupplierCode", "SupplierCode");
-        //    ViewData["Supplier2"] = new SelectList(_context.Supplier, "SupplierCode", "SupplierCode");
-        //    ViewData["Supplier3"] = new SelectList(_context.Supplier, "SupplierCode", "SupplierCode");
-        //    return View();
-        //}
-
-        //// POST: Catalogues/Create
-        //// To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        //// more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Create([Bind("ItemNumber,Category,ItemName,ReorderLevel,ReorderQty,UnitOfMeasure,Stock,Supplier1,Supplier2,Supplier3,Supplier1Price,Supplier2Price,Supplier3Price,Location")] Catalogue catalogue)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        _context.Add(catalogue);
-        //        await _context.SaveChangesAsync();
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    ViewData["Supplier1"] = new SelectList(_context.Supplier, "SupplierCode", "SupplierCode", catalogue.Supplier1);
-        //    ViewData["Supplier2"] = new SelectList(_context.Supplier, "SupplierCode", "SupplierCode", catalogue.Supplier2);
-        //    ViewData["Supplier3"] = new SelectList(_context.Supplier, "SupplierCode", "SupplierCode", catalogue.Supplier3);
-        //    return View(catalogue);
-        //}
-
-        //GET: Catalogues/Create
-        //public IActionResult Create()
-        //{
-        //    List<Supplier> supplierList = new List<Supplier>();
-        //    supplierList = _context.Supplier.ToList();
-        //    supplierList.Insert(0, new Supplier { SupplierCode = "0", SupplierName = "Select" });
-        //    ViewBag.ListofSupplier = supplierList;
-
-        //    List<Catalogue> catalogueList = new List<Catalogue>();
-        //    catalogueList = (from x in _context.Catalogue select x).ToList();
-        //    catalogueList.Insert(0, new Catalogue { ItemNumber = "0", Category = "Select" });
-        //    ViewBag.ListofCatalogue = catalogueList;
-        //    return View();
-        //}
-
-        //// POST: Catalogues/Create
-        //// To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        //// more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Create([Bind("ItemNumber,Category,ItemName,ReorderLevel,ReorderQty,UnitOfMeasure,Stock,Supplier1,Supplier2,Supplier3,Supplier1Price,Supplier2Price,Supplier3Price,Location")] Catalogue catalogue)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        _context.Add(catalogue);
-        //        await _context.SaveChangesAsync();
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    ViewData["Supplier1"] = new SelectList(_context.Supplier, "SupplierCode", "SupplierCode", catalogue.Supplier1);
-        //    ViewData["Supplier2"] = new SelectList(_context.Supplier, "SupplierCode", "SupplierCode", catalogue.Supplier2);
-        //    ViewData["Supplier3"] = new SelectList(_context.Supplier, "SupplierCode", "SupplierCode", catalogue.Supplier3);
-        //    return View(catalogue);
-        //}
+      
 
         // GET: Catalogues/Edit/5
         public async Task<IActionResult> Edit(string id)
@@ -231,6 +191,26 @@ namespace ADTeam5.Controllers
         private bool CatalogueExists(string id)
         {
             return _context.Catalogue.Any(e => e.ItemNumber == id);
+        }
+
+        public JsonResult GetSupplier1List(string supplier2, string supplier3)
+        {
+
+            List<Supplier> supplier1List = _context.Supplier.Where(x => x.SupplierCode != supplier2 && x.SupplierCode != supplier3).ToList();
+            return Json(supplier1List);
+        }
+
+        public JsonResult GetSupplier2List(string supplier1, string supplier3)
+        {
+
+            List<Supplier> supplier2List = _context.Supplier.Where(x => x.SupplierCode != supplier1 && x.SupplierCode != supplier3).ToList();
+            return Json(supplier2List);
+        }
+
+        public JsonResult GetSupplier3List(string supplier1, string supplier2)
+        {
+            List<Supplier> supplier3List = _context.Supplier.Where(x => x.SupplierCode != supplier1 && x.SupplierCode != supplier2).ToList();
+            return Json(supplier3List);
         }
     }
 }

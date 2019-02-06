@@ -183,25 +183,6 @@
 <script src="~/lib/Highcharts/modules/exporting.js"></script>
 <script src="~/lib/Highcharts/modules/export-data.js"></script>
 
-@*<script>
-        $(document).ready(function () {
-            $(".generatebtn").click(function () {
-                var yearsList = $("#years").map(function () {
-                    return $(this).val();
-                }).get();
-                var monthsList = $("#months").map(function () {
-                    return $(this).val();
-                }).get();
-                alert($("#years").val());
-                $.get("/GenerateReports/GetYearMonthList", { startDate: $("#start").val(), endDate: $("#end").val(), yearsName: yearsList, monthsName: monthsList }, function (data) {
-                    $("#container").empty();
-                    $.each(data, function (index, row) {
-                        $("#").append(row)
-                    });
-                });
-            })
-        });
-    </script>*@
 
 <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 <script type="text/javascript">

@@ -152,7 +152,7 @@ namespace ADTeam5.Controllers
 
             List<TempVoucherDetails> tempVoucherDetailsList = b.GetTempVoucherDetailsList(userID);
 
-            if(tempVoucherDetailsList == null)
+            if(tempVoucherDetailsList.Count == 0)
             {
                 tempVoucherDetailsList = new List<TempVoucherDetails>();
             }

@@ -4,15 +4,25 @@
     ViewData["Title"] = "Index";
 }
 
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
 
+<script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
 
 
 @*<h1>Disbursement List Details</h1>*@
 
 
 @*<div class="container">*@
+
+@if (TempData["IncorrectPassword"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aira-label="close">
+            <span aria-hidden="true">&times</span>
+        </button>
+        @TempData["IncorrectPassword"]
+    </div>
+}
 
 <section class="content">
     <div class="row">
@@ -111,10 +121,10 @@
                     No Show
                 </button>
             }
-                <div>
-                    <a href="#" data-toggle="modal" data-target="#BackToListModal">Back to List</a>
-                </div>
-            
+            <div>
+                <a href="#" data-toggle="modal" data-target="#BackToListModal">Back to List</a>
+            </div>
+
         </div>
 
     </div>
@@ -146,7 +156,7 @@
                     </div>
                     <div class="form-group">
                         <label for="QuantityDelivered">Quantity Delivered</label>
-                        <input type="text" id="QuantityDelivered" name="quantityDelivered" class="form-control" value="" />
+                        <input type="number" min="1" step="1" id="QuantityDelivered" name="quantityDelivered" class="form-control" value="" />
                     </div>
                     <div class="form-group">
                         <label for="Remark">Remark</label>
@@ -184,7 +194,7 @@
                     </div>
                     <div class="form-group">
                         <label for="Quantity">Quantity</label>
-                        <input type="text" id="QuantityForVoucher" name="quantityForVoucher" class="form-control" value="" />
+                        <input type="number" min="1" step="1" id="QuantityForVoucher" name="quantityForVoucher" class="form-control" value="" />
                     </div>
                     <div class="form-group">
                         <label for="Remark">Remark</label>
@@ -205,7 +215,7 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Confirm Delivery</h5>
+                <h2 class="modal-title" id="exampleModalLongTitle">Confirm Delivery</h2>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -216,8 +226,8 @@
                         <input type="hidden" id="ConfirmDeliveryModalID" name="confirmDeliveryModalName" class="form-control" value="1" />
                     </div>
                     <div class="form-group">
-                        <label for="ConfirmationPassword">Please enter confirmation password</label>
-                        <input type="text" id="ConfirmationPassword" name="confirmationPassword" class="form-control" value="" />
+                        <label for="ConfirmationPassword">Please enter 4- digit confirmation password</label>
+                        <input type="text" id="ConfirmationPassword" maxlength="4" pattern="\d{4}" name="confirmationPassword" class="form-control" value="" />
                     </div>
                     <div class="modal-footer">
                         <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
@@ -270,7 +280,7 @@
                     <div class="form-group">
                         <input type="hidden" id="BackToListModalID" name="backToListModalName" class="form-control" value="1" />
                     </div>
-                    Your changes not be saved
+                    No changes will be saved
                     <div class="modal-footer">
                         <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
                         <button type="submit" class="btn btn-primary" value="Redirect" onclick="window.location='@Url.Action("Index", "DisbursementLists")'">Confirm</button>
@@ -306,7 +316,7 @@
     $(".addToVoucher").click(function () {
         var $row = $(this).closest("tr");    // Find the row
         var itemNumber = $row.find("td.ItemNumber").text().trim(); // Find the text
-        var quantityForVoucher = 0;
+        var quantityForVoucher = 1;
         var remark = "";
         var addToVoucherModalID = 1;
 

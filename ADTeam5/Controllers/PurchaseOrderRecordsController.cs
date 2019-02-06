@@ -227,25 +227,24 @@ namespace ADTeam5.Models
         //}
 
         [HttpPost]
-        public async Task<IActionResult> PurchaseOrderDelete(string id)
+        public async Task<IActionResult> PurchaseOrderRecordDelete(string id)
         {
             ADTeam5User user = await _userManager.GetUserAsync(HttpContext.User);
             List<string> identity = userCheck.checkUserIdentityAsync(user);
             int userID = user.WorkID;
 
-            PurchaseOrderRecord poRecordToBeDeleted = _context.PurchaseOrderRecord.FirstOrDefault(x => x.Poid == id);
-            _context.PurchaseOrderRecord.Remove(poRecordToBeDeleted);
-            _context.SaveChanges();
+            b.RemoveRecordDetails(id);
+            b.RemovePORecord(id);
 
-            PurchaseOrderRecord ar = _context.PurchaseOrderRecord.FirstOrDefault(x => !x.Poid.Contains("POTemp"));
+            var q = _context.PurchaseOrderRecord.Where(x => !x.Poid.Contains("POTemp"));
             List<PurchaseOrderRecord> tempPurchaseOrderRecords = new List<PurchaseOrderRecord>();
-            if (ar != null)
+            if (q != null)
             {
-                tempPurchaseOrderRecords = _context.PurchaseOrderRecord.Where(x => !x.Poid.Contains("Vtemp")).OrderByDescending(x => x.Poid).ToList();
+                tempPurchaseOrderRecords = q.OrderByDescending(x => x.Poid).ToList();
             }
             else
             {
-                NotFound();
+                tempPurchaseOrderRecords = new List<PurchaseOrderRecord>();
             }
             return PartialView("_TempPurchaseOrderRecords", tempPurchaseOrderRecords);
         }
