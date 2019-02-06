@@ -4,41 +4,58 @@
     ViewData["Title"] = "Index";
 }
 
-<h2>Outstanding Orders</h2>
+@*<h2>Outstanding Orders</h2>*@
+<div class="row">
+    <div class="col-md-12">
+        <div class="box box-default">
+            <div class="box-header with-border">
+                <i class="fa fa-warning"></i>
+                <h3 class="box-title">Outstanding Orders</h3>
+            </div>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Rrid)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Status)
-            </th>
+            <div class="box-body no-padding">
+                <div class="table-responsive table-full-width">
+                    <table class="table no-margin table-hover table-striped table-responsive table-borderless" style="width: 100%;">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Rrid)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Name)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Status)
+                                </th>
 
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
 
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    <a asp-action="Details" asp-route-id="@item.Rrid">
-                        @Html.DisplayFor(modelItem => item.Rrid)
-                    </a>
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Status)
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td></td>
+                                    <td>
+                                        <a asp-action="Details" asp-route-id="@item.Rrid">
+                                            <u>@Html.DisplayFor(modelItem => item.Rrid)</u>
+                                        </a>
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Name)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Status)
+                                    </td>
+                                    <td></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
