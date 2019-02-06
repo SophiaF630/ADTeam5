@@ -4,26 +4,28 @@
     ViewData["Title"] = "Index";
 }
 
+@if (TempData["Alert1"] != null)
+{
+    <div class="alert alert-success" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aira-label="close">
+            <span aria-hidden="true">&times</span>
+        </button>
+        @TempData["Alert1"]
+    </div>
+}
+
+@if (TempData["Alert2"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aira-label="close">
+            <span aria-hidden="true">&times</span>
+        </button>
+        @TempData["Alert2"]
+    </div>
+}
+
 <form asp-action="Index" method="post">
     @*<h1>Assign Department Representative</h1>*@
-    @if (TempData["Alert1"] != null)
-    {
-        <div class="alert alert-success" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aira-label="close">
-                <span aria-hidden="true">&times</span>
-            </button>
-            @TempData["Alert1"]
-        </div>
-    }
-    @if (TempData["Alert2"] != null)
-    {
-        <div class="alert alert-danger" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aira-label="close">
-                <span aria-hidden="true">&times</span>
-            </button>
-            @TempData["Alert2"]
-        </div>
-    }
     <div class="row">
         <div class="col-md-12">
             <div class="box box-default">

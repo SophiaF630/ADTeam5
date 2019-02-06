@@ -66,21 +66,21 @@
                     <div class="col-md-4">
                         <div class="form-group">
                             <label asp-for="ReorderQty" class="control-label"></label>
-                            <input asp-for="ReorderQty" class="form-control" />
+                            <input asp-for="ReorderQty" min="0" class="form-control" />
                             <span asp-validation-for="ReorderQty" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
                             <label asp-for="ReorderLevel" class="control-label"></label>
-                            <input asp-for="ReorderLevel" class="form-control" />
+                            <input asp-for="ReorderLevel" min ="0" class="form-control" />
                             <span asp-validation-for="ReorderLevel" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
                             <label asp-for="Stock" class="control-label"></label>
-                            <input asp-for="Stock" class="form-control" readonly="readonly" />
+                            <input asp-for="Stock" min ="0"class="form-control" readonly="readonly" />
                             <span asp-validation-for="Stock" class="text-danger"></span>
                         </div>
                     </div>

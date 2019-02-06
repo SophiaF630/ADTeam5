@@ -38,7 +38,7 @@ namespace ADTeam5.Controllers
             dept = identity[0];
             role = identity[1];
 
-            var q = context.EmployeeRequestRecord.Where(x => x.DepCode == dept).OrderByDescending(x=>x.Rrid);
+            var q = context.EmployeeRequestRecord.Where(x => x.DepCode == dept).OrderByDescending(x => x.Rrid);
             return View(q);
         }
 
@@ -179,7 +179,7 @@ namespace ADTeam5.Controllers
             context.RecordDetails.Remove(q3);
             await context.SaveChangesAsync();
 
-            return RedirectToAction("Edit", "ViewRequest", new { id = rrid});
+            return RedirectToAction("Edit", "ViewRequest", new { id = rrid });
         }
         [HttpPost]
         public async Task<IActionResult> RequestItemEdit(string itemName, int quantity)
@@ -189,7 +189,7 @@ namespace ADTeam5.Controllers
             var q3 = context.RecordDetails.Where(x => x.Rrid == rrid && x.ItemNumber == itemNumber).FirstOrDefault();
             q3.Quantity = quantity;
             await context.SaveChangesAsync();
-            return RedirectToAction("Edit", new { id = rrid});
+            return RedirectToAction("Edit", new { id = rrid });
         }
 
         [HttpPost]
@@ -206,6 +206,21 @@ namespace ADTeam5.Controllers
             return RedirectToAction("Edit", new { id = rrid });
 
         }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteRequest(string rrid)
+        {
+            List<RecordDetails> r = context.RecordDetails.Where(x => x.Rrid == rrid).ToList();
+            foreach (RecordDetails current in r)
+            {
+                context.Remove(current);
+            }
+            EmployeeRequestRecord e = context.EmployeeRequestRecord.Where(x => x.Rrid == rrid).FirstOrDefault();
+            context.Remove(e);
+
+            await context.SaveChangesAsync();
+            return RedirectToAction("Index");
         }
+    }
 }
 
