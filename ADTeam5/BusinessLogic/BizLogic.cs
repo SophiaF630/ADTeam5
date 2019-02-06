@@ -593,7 +593,7 @@ namespace ADTeam5.BusinessLogic
                 if (userRole == "Supervisor")
                 {
                     ar.SuperviserId = userID;
-                    ar.Status = "Rejected";
+                    ar.Status = "Draft";
                     ar.ApproveDate = DateTime.Now.Date;
                     _context.AdjustmentRecord.Update(ar);
                     _context.SaveChanges();
@@ -601,7 +601,7 @@ namespace ADTeam5.BusinessLogic
                 else if (userRole == "Manager")
                 {
                     ar.SuperviserId = userID;
-                    ar.Status = "Rejected";
+                    ar.Status = "Draft";
                     ar.ApproveDate = DateTime.Now.Date;
                     _context.AdjustmentRecord.Update(ar);
                     _context.SaveChanges();
