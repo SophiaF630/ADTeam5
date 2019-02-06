@@ -50,6 +50,7 @@ namespace ADTeam5.Models
         }
 
         // GET: PurchaseOrderRecords/Details/5
+        //[HttpPost]
         public async Task<IActionResult> Details(string id)
         {
             ADTeam5User user = await _userManager.GetUserAsync(HttpContext.User);
@@ -102,6 +103,7 @@ namespace ADTeam5.Models
             ViewBag.TotalAmount = amount + GST;
             ViewBag.POStatus = _context.PurchaseOrderRecord.Find(id).Status;
 
+            ViewData["POID"] = id;
 
             if (POItemModalName == 1)
             {
@@ -131,7 +133,7 @@ namespace ADTeam5.Models
                 _context.PurchaseOrderRecord.Update(po);
                 _context.SaveChanges();
 
-                return RedirectToAction(nameof(Index));
+                return Redirect("/PurchaseOrderRecords/Details/" + id);
 
             }
             else if (SubmitModalName == 1)
@@ -153,7 +155,8 @@ namespace ADTeam5.Models
                 _context.PurchaseOrderRecord.Update(po);
                 _context.SaveChanges();
 
-                return RedirectToAction("Details", id);
+                //return RedirectToAction("Details", id);
+                return Redirect("/PurchaseOrderRecords/Details/" + id);
             }
             else if (POItemModalQtyDeliveredName == 1)
             {

@@ -9,6 +9,7 @@
 
 @*<h1>Purchase Order Details -- same as AdjustmentRecordDetails</h1>*@
 
+<p id="po-id">@ViewData["POID"]</p>
 
 <div class="row">
     <div class="col-md-10">
@@ -175,7 +176,7 @@
                     </div>
                     <div class="form-group">
                         <label for="Quantity">Quantity Ordered</label>
-                        <input type="number" min="1" step="1"  id="Quantity" name="quantity" class="form-control" value="" />
+                        <input type="number" min="1" step="1" id="Quantity" name="quantity" class="form-control" value="" />
                     </div>
                     <div class="modal-footer">
                         <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
@@ -213,7 +214,7 @@
                     <div class="form-group">
                         <label for="Quantity">Quantity Ordered</label>
                         <input type="hidden" id="QuantityValue" name="quantity" class="form-control" value="" />
-                        <input type="number" min="1" step="1"  id="QuantityDisplay" name="" class="form-control" value="" disabled />
+                        <input type="number" min="1" step="1" id="QuantityDisplay" name="" class="form-control" value="" disabled />
                     </div>
                     <div class="form-group">
                         <label for="Quantity">Quantity Delivered</label>
@@ -271,7 +272,7 @@
                     Order cannot be changed after submission
                     <div class="modal-footer">
                         <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
-                        <button type="submit" class="btn btn-primary">Confirm</button>
+                        <button type="submit" id="confirm-order-btn" class="btn btn-primary">Confirm</button>
                     </div>
                 </form>
             </div>
@@ -416,5 +417,13 @@
         $(table).parents('tr').remove();
 
     }
+
+    //$('#confirm-order-btn').click(function (e) {
+    //    e.preventDefault();
+    //    var poId = $('#po-id').text();
+    //    ("/PurchaseOrderRecords/Details/" + poId, {}, )
+
+    //});
+
 </script>
 
