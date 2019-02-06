@@ -4,6 +4,27 @@
     ViewData["Title"] = "_TempVoucherDetails";
 }
 
+@using ADTeam5.Areas.Identity.Data
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ADTeam5User> SignInManager
+@inject UserManager<ADTeam5User> UserManager
+@inject SSISTeam5Context context
+
+
+@{ if (SignInManager.IsSignedIn(User))
+    {
+        GeneralLogic userCheck;
+        userCheck = new GeneralLogic(context);
+        ADTeam5User user = await UserManager.GetUserAsync(User);
+        List<string> identity = userCheck.checkUserIdentityAsync(user);
+        ViewData["UserRole"] = identity[1];
+    }
+    else
+    { ViewData["UserRole"] = "Not signed"; }
+
+
+}
+
 @*<html>
     <head>
         <meta charset="utf-8">
@@ -146,7 +167,7 @@ else
                         <hr />
                         <div style="margin-left:800px">
                             <table>
-                                <tr>                         
+                                <tr>
                                     <td>
                                         <label id="amount">
                                             <font size="2">Amount: $</font>
@@ -167,7 +188,7 @@ else
                                         </label>
                                     </td>
                                 </tr>
-                            </table>                            
+                            </table>
                         </div>
 
                         @*<div style="margin-left:800px">
@@ -256,7 +277,7 @@ else
                     </div>
                     <div class="form-group">
                         <label for="Quantity">Quantity</label>
-                        <input type="number" min="1" step="1" id="Quantity" name="quantity"   required="required" class="form-control" value="" />
+                        <input type="number" min="1" step="1" id="Quantity" name="quantity" required="required" class="form-control" value="" />
                     </div>
                     <div class="form-group">
                         <label for="Remark">Remark</label>
@@ -303,7 +324,7 @@ else
                     </div>
                     <div class="form-group">
                         <label for="Remark">Remark</label>
-                        <input type="text" id="Remark" name="remark" required="required"  class="form-control" value="" />
+                        <input type="text" id="Remark" name="remark" required="required" class="form-control" value="" />
                     </div>
                     <div class="modal-footer">
                         <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
@@ -453,7 +474,7 @@ else
             var price = $row.find("td.Price").text().trim();
             amount += quantity * price;
         });
-        GST = Math.round(amount * 0.07*100)/100;
+        GST = Math.round(amount * 0.07 * 100) / 100;
         totalAmount = amount + GST;
         //console.log(amount);
         document.getElementById("number").innerText = "Items to be added to voucher. " + n + " item(s) selected";
@@ -462,5 +483,5 @@ else
         document.getElementById("totalAmount").innerText = "Total Amount: $" + totalAmount;
     });
 </script>
-    @*</html>*@
+@*</html>*@
 

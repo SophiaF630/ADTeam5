@@ -39,7 +39,7 @@ namespace ADTeam5.Controllers
             List<AdjustmentRecord> arList = new List<AdjustmentRecord>();
             if (ar != null)
             {
-                arList = _context.AdjustmentRecord.Where(x => x.ClerkId == userID && !x.VoucherNo.Contains("Vtemp")).ToList();
+                arList = _context.AdjustmentRecord.Where(x => x.ClerkId == userID && !x.VoucherNo.Contains("Vtemp")).OrderByDescending(x => x.VoucherNo).ToList();
             }
             else
             {
@@ -159,7 +159,7 @@ namespace ADTeam5.Controllers
             List<AdjustmentRecord> tempAdjustmentRecords = new List<AdjustmentRecord>();
             if (ar != null)
             {
-                tempAdjustmentRecords = _context.AdjustmentRecord.Where(x => x.ClerkId == userID && !x.VoucherNo.Contains("Vtemp")).ToList();
+                tempAdjustmentRecords = _context.AdjustmentRecord.Where(x => x.ClerkId == userID && !x.VoucherNo.Contains("Vtemp")).OrderByDescending(x => x.VoucherNo).ToList();
             }
             else
             {
@@ -178,12 +178,13 @@ namespace ADTeam5.Controllers
             AdjustmentRecord adjustmentRecordToBeDeleted = _context.AdjustmentRecord.FirstOrDefault(x => x.VoucherNo == id);
             _context.AdjustmentRecord.Remove(adjustmentRecordToBeDeleted);
             _context.SaveChanges();
+            b.RemoveRecordDetails(id);
 
             AdjustmentRecord ar = _context.AdjustmentRecord.FirstOrDefault(x => x.ClerkId == userID && !x.VoucherNo.Contains("Vtemp"));
             List<AdjustmentRecord> tempAdjustmentRecords = new List<AdjustmentRecord>();
             if (ar != null)
             {
-                tempAdjustmentRecords = _context.AdjustmentRecord.Where(x => x.ClerkId == userID && !x.VoucherNo.Contains("Vtemp")).ToList();
+                tempAdjustmentRecords = _context.AdjustmentRecord.Where(x => x.ClerkId == userID && !x.VoucherNo.Contains("Vtemp")).OrderByDescending(x=>x.VoucherNo).ToList();
             }
             else
             {
