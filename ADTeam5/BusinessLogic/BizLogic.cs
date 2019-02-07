@@ -897,9 +897,9 @@ namespace ADTeam5.BusinessLogic
         }
 
         //Create New POItem
-        public void CreateNewPOItem(int userID, string itemNumber, int qty, string supplierName)
+        public void CreateNewPOItem(int userID, string itemNumber, int qty, string supplierCode)
         {
-            string supplierCode = _context.Supplier.FirstOrDefault(x => x.SupplierName == supplierName).SupplierCode;
+            //string supplierCode = _context.Supplier.FirstOrDefault(x => x.SupplierName == supplierName).SupplierCode;
             string poNo = "POTemp" + supplierCode;
             PurchaseOrderRecord purchaseOrderRecord = _context.PurchaseOrderRecord.FirstOrDefault(x => x.Poid == poNo && x.SupplierCode == supplierCode);
 
@@ -939,13 +939,13 @@ namespace ADTeam5.BusinessLogic
         }
 
         //Update POItem
-        public void UpdatePOItem(int userID, int rowID, int quantity, string supplierName, List<TempPurchaseOrderDetails> tempPurchaseOrderDetails)
+        public void UpdatePOItem(int userID, int rowID, int quantity, string supplierCode, List<TempPurchaseOrderDetails> tempPurchaseOrderDetails)
         {
             //get rdid
             TempPurchaseOrderDetails tempPOItem = tempPurchaseOrderDetails.FirstOrDefault(x => x.RowID == rowID);
             int rdid = tempPOItem.RDID;
             string poidOld = _context.RecordDetails.FirstOrDefault(x => x.Rdid == rdid).Rrid;
-            string supplierCode = _context.Supplier.FirstOrDefault(x => x.SupplierName == supplierName).SupplierCode;
+            //string supplierCode = _context.Supplier.FirstOrDefault(x => x.SupplierName == supplierName).SupplierCode;
             string poidNew = "POTemp" + supplierCode;
             //Check if PO ID exists
             PurchaseOrderRecord purchaseOrderRecord = _context.PurchaseOrderRecord.FirstOrDefault(x => x.Poid == poidNew);
