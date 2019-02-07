@@ -45,7 +45,7 @@ namespace ADTeam5.Controllers
 
             for (int i = 0; i < depCodeList.Count(); i++)
             {                
-                List<RecordDetails> rd = b.GenerateDisbursementListDetails(depCodeList[i]);
+                List<RecordDetails> rd = b.GenerateRecordDetailsOfDisbursementList(depCodeList[i]);
             }
 
             List<StationeryRetrievalList> result = b.GetStationeryRetrievalLists();
@@ -67,16 +67,36 @@ namespace ADTeam5.Controllers
 
             if (addToVoucherModalName == 1)
             {
-                b.AddItemToVoucher(userID, itemNumber, quantityForVoucher, remark);
+
+                if (quantityForVoucher == 0)
+                {
+                    TempData["QuantityError"] = "Please select a quantity to add to voucher. Quantity cannot be 0.";
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    b.CreateNewVoucherItem(userID, itemNumber, quantityForVoucher, remark);
+                }
             }
             else if (quantityRetrievedModalName == 1)
             {
-                b.UpdateCatalogueOutAndStockAfterRetrieval(itemNumber, quantityRetrieved);
+                var stockCheck = _context.Catalogue.Where(x => x.ItemNumber == itemNumber).FirstOrDefault();
+                int stockAmt = stockCheck.Stock + stockCheck.Out;
+
+                if (quantityRetrieved > stockAmt)
+                {
+                    TempData["InsufficientStock"] = "Stock level: " + stockAmt + ". There is insufficient stock. Please select a quantity less than or equals to stock level.";
+                }
+                else
+                {
+                    b.UpdateCatalogueOutAndStockAfterRetrieval(itemNumber, quantityRetrieved);
+                }
             }
 
             List<StationeryRetrievalList> result = b.GetStationeryRetrievalLists();
 
             return View(result);
+
         }
 
         private bool RecordDetailsExists(int id)

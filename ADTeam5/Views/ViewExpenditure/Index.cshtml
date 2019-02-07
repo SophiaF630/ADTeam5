@@ -4,96 +4,191 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>View Expenditure</h1>
+@*<h1>View Expenditure</h1>*@
 
-@if (TempData["Alert1"] != null)
+@if (TempData["NoDetails"] != null)
 {
     <div class="alert alert-danger" role="alert">
         <button type="button" class="close" data-dismiss="alert" aira-label="close">
             <span aria-hidden="true">&times</span>
         </button>
-        @TempData["Alert1"]
+        @TempData["NoDetails"]
     </div>
 }
-
-<form asp-action="Index" method="post">
-    <div class="form-group">
-        From:
-        <input type="date" name="startdate" id="start" value="=" />
-        To:
-        <input type="date" name="enddate" id="end" value=" = " />
-
-        <input type="submit" value="Search" id="searchbtn" />
+@if (TempData["EndDateError"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aira-label="close">
+            <span aria-hidden="true">&times</span>
+        </button>
+        @TempData["EndDateError"]
     </div>
-    @if (ViewData["StartDate"] != null && ViewData["EndDate"] != null)
-    {
-        <p>Between @ViewData["StartDate"] to @ViewData["endDate"]</p>
-    }
-
-</form>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.CompleteDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Dlid)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Status)
-            </th>
-
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CompleteDate)
-                </td>
-                <td>
-                    <a asp-action="Details" asp-route-Dlid="@item.Dlid">
-                        @Html.DisplayFor(modelItem => item.Dlid)
-                    </a>
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Status)
-                </td>
-
-            </tr>
-        }
-    </tbody>
-</table>
-<form asp-action="Index" method="post">
-    <div class="form-group">
-        <h6>Total Expenditure: @ViewData["Sum"] </h6>
+}
+@if (TempData["StartDateError"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aira-label="close">
+            <span aria-hidden="true">&times</span>
+        </button>
+        @TempData["StartDateError"]
     </div>
+}
+@if (TempData["StartAndEndDateError"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aira-label="close">
+            <span aria-hidden="true">&times</span>
+        </button>
+        @TempData["StartAndEndDateError"]
+    </div>
+}
+@if (TempData["FilterError"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aira-label="close">
+            <span aria-hidden="true">&times</span>
+        </button>
+        @TempData["FilterError"]
+    </div>
+}
+<div class="row">
+    <div class="col-lg-12">
+        <div class="box" style=" width:100%">
+            <div class="box-header with-border">
+                <i class="fa fa-warning"></i>
+                <h3 class="box-title">View Expenditure</h3>
+                <br />
+            </div>
+            <br />
 
-</form>
+            <form asp-action="Index" method="post">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group" style="margin-left:10px">
+                            <label>Select start date:</label>
+                            <div class="input-group date" style="width:440px">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <input type="date" name="startdate" class="form-control pull-right" id="start" value="=" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group" style="margin-left:30px">
+                            <label>Select end date:</label>
+                            <div class="input-group date" style="width:440px">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <input type="date" name="enddate" class="form-control pull-right" id="end" value=" = " />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <input type="submit" class="btn btn-primary submit" value="Search" id="searchbtn" style="background-color: #00B894;width:150px;height:36px;border:2px;margin-left:400px" />
+                <br />
+                <hr />
+            </form>
+        </div>
+    </div>
+</div>
 
+<div class="row">
+    <div class="col-lg-12">
+        <div class="box" style=" width:100%">
+            <div class="box-header with-border">
+                <i class="fa fa-warning"></i>
+                <h5 class="box-title">
+                    @if (ViewData["Show"] != null)
+                    {
+                    <p>Financial Year &nbsp;: &nbsp;&nbsp;&nbsp;&nbsp;From &nbsp;&nbsp;&nbsp;&nbsp;<b> @ViewData["startFinancialYear"]</b> &nbsp;&nbsp;&nbsp;&nbsp; to &nbsp;&nbsp;&nbsp;&nbsp;<b>@ViewData["endFinancialYear"]</b> </p>
+                    }
 
-<script>
-    $(document).ready(function () {
-        let now = new Date();
+                    @if (ViewData["StartDate"] != null && ViewData["EndDate"] != null)
+                    {
+                        <p><b>Search results from @ViewData["StartDate"] to @ViewData["EndDate"]</b></p>
+                    }
+                </h5>
+                
+            </div>
+            
+            
 
-        let day = ("0" + now.getDate()).slice(-2);
-        let month = ("0" + (now.getMonth() + 1)).slice(-2);
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Dlid)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.CompleteDate)
+                        </th>
 
-        let today = (day) + "-" + (month) + "-" + now.getFullYear();
+                        <th>
+                            @Html.DisplayNameFor(model => model.Status)
+                        </th>
 
-        $('#start').val(today);
-        $('#end').val(today);
-        $('#assignbtn').click(function () {
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td>
+                            <a asp-action="Details" asp-route-Dlid="@item.Dlid">
+                                <u>@Html.DisplayFor(modelItem => item.Dlid)</u>
+                            </a>
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CompleteDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Status)
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+            <br />
+            <hr />
+            <br />
+            <form asp-action="Index" method="post">
+                <div class="form-group" style="margin-left:870px">
+                    <font size="4"><b>Total:&nbsp;&nbsp; $  @ViewData["Sum"] </b> </font>
+                </div>
 
-            testClicked();
-        });
-    });
-    function testClicked() {
-        $('.getStartDate').html($('#start').val());
-        $('.getEndDate').html($('#end').val());
-    }
+            </form>
+            <br />
+        </div>
+    </div>
+</div>
 
-</script>
+            <script>
+                $(document).ready(function () {
+                    let now = new Date();
+
+                    let day = ("0" + now.getDate()).slice(-2);
+                    let month = ("0" + (now.getMonth() + 1)).slice(-2);
+
+                    let today = (day) + "-" + (month) + "-" + now.getFullYear();
+
+                    $('#start').val(today);
+                    $('#end').val(today);
+                    $('#assignbtn').click(function () {
+
+                        testClicked();
+                    });
+                });
+                function testClicked() {
+                    $('.getStartDate').html($('#start').val());
+                    $('.getEndDate').html($('#end').val());
+                }
+
+            </script>

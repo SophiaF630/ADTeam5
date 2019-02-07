@@ -1,101 +1,176 @@
-﻿
-@model IEnumerable<ADTeam5.Models.EmployeeRequestRecord>
+﻿@model IEnumerable<ADTeam5.Models.EmployeeRequestRecord>
 
 @{
     ViewData["Title"] = "Index";
 }
 
-@if (TempData["Alert1"] != null)
-{
-    <div class="alert alert-success" role="alert">
-        <button type="button" class="close" data-dismiss="alert" aira-label="close">
-            <span aria-hidden="true">&times</span>
-        </button>
-        @TempData["Alert1"]
-    </div>
-}
-@if (TempData["Alert2"] != null)
+@if (TempData["NoDetails"] != null)
 {
     <div class="alert alert-danger" role="alert">
         <button type="button" class="close" data-dismiss="alert" aira-label="close">
             <span aria-hidden="true">&times</span>
         </button>
-        @TempData["Alert2"]
+        @TempData["NoDetails"]
     </div>
 }
 
-<h1>View Request</h1>
-<form asp-action="Index" method="post">
-    <div>
-        From:
-        <input type="date" name="startdate" id="start" value="=" />
-        
-        To:
-        <input type="date" name="enddate" id="end" value=" = " />
-
-        <input type="submit" value="Search" id="searchbtn" />
+@if (TempData["EndDateError"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aira-label="close">
+            <span aria-hidden="true">&times</span>
+        </button>
+        @TempData["EndDateError"]
     </div>
+}
+@if (TempData["StartDateError"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aira-label="close">
+            <span aria-hidden="true">&times</span>
+        </button>
+        @TempData["StartDateError"]
+    </div>
+}
+@if (TempData["StartAndEndDateError"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aira-label="close">
+            <span aria-hidden="true">&times</span>
+        </button>
+        @TempData["StartAndEndDateError"]
+    </div>
+}
+@if (TempData["FilterError"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aira-label="close">
+            <span aria-hidden="true">&times</span>
+        </button>
+        @TempData["FilterError"]
+    </div>
+}
+@*<h1>View Request</h1>*@
 
-</form>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                Request Date
-            </th>
-            <th>
-                Requisition Form No. @ViewData["RRID"]
-
-            </th>
-            <th>
-                Status
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.RequestDate)
-                </td>
-                <td>
-                    <a asp-action="Details" asp-route-id="@item.Rrid">
-                        @Html.DisplayFor(modelItem => item.Rrid)
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="box" style=" width:100%">
+                <div class="box-header with-border">
+                    <h3 class="box-title">View Past Orders</h3>
+                    <br />
+                </div>
+                <br />
+                <form asp-action="Index" method="post">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group" style="margin-left:10px">
+                                <label>Select start date:</label>
+                                <div class="input-group date" style="width:440px">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <input type="date" name="startdate" class="form-control pull-right" id="start" value="=" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group" style="margin-left:30px">
+                                <label>Select end date:</label>
+                                <div class="input-group date" style="width:440px">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <input type="date" class="form-control pull-right" name="enddate" id="end" value="=" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <a href="ViewRequest">
+                        <input type="button" value="Reset" class="btn btn-primary reset" style="background-color: #CC9933;width:150px;height:34px;border:2px;margin-left:200px" />
                     </a>
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Status)
-                </td>
+                    <input type="submit" value="Search" class="btn btn-primary submit" id="searchbtn" style="background-color: #00B894;width:150px;height:36px;border:2px;margin-left:430px" />
+                    <br />
 
-            </tr>
-        }
-    </tbody>
-</table>
+                    <hr />
+                </form>
 
 
+                @if (ViewData["StartDate"] != null & ViewData["EndDate"] != null)
+                {
+                    <h4> &nbsp; Search results from <b>@ViewData["StartDate"]</b> to <b>@ViewData["EndDate"]</b></h4>
+                }
+                <hr />
 
-<script>
-    $(document).ready(function () {
-        let now = new Date();
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th>
+                                Request Date
+                            </th>
+                            <th></th>
+                            <th></th>
+                            <th>
+                                Requisition Form No. @ViewData["RRID"]
+                            </th>
+                            <th>
+                                Status
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.RequestDate)
+                                </td>
+                                <td></td>
+                                <td></td>
+                                <td>
+                                    <a asp-action="Details" asp-route-id="@item.Rrid">
+                                        <U>@Html.DisplayFor(modelItem => item.Rrid)</U>
+                                    </a>
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Status)
+                                </td>
 
-        let day = ("0" + now.getDate()).slice(-2);
-        let month = ("0" + (now.getMonth() + 1)).slice(-2);
+                            </tr>
+                        }
+                    </tbody>
+                </table>
 
-        let today = (day) + "-" + (month) + "-" + now.getFullYear();
+            </div>
+            </div>
+        </div>
+                    <script>
+                        $(document).ready(function () {
+                            let now = new Date();
+
+                            let day = ("0" + now.getDate()).slice(-2);
+                            let month = ("0" + (now.getMonth() + 1)).slice(-2);
+
+                            let today = (day) + "-" + (month) + "-" + now.getFullYear();
 
 
-        $('#start').val(today);
-        $('#end').val(today);
-        $('#assignbtn').click(function () {
+                            $('#start').val(today);
+                            $('#end').val(today);
+                            $('#assignbtn').click(function () {
 
-            testClicked();
-        });
-    });
-    function testClicked() {
-        $('.getStartDate').html($('#start').val());
-        $('.getEndDate').html($('#end').val());
-    }
+                                testClicked();
+                            });
+                        });
+                        function testClicked() {
+                            $('.getStartDate').html($('#start').val());
+                            $('.getEndDate').html($('#end').val());
+                        }
 
-</script>
+                    </script>

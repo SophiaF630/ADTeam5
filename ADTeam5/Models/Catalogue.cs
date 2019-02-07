@@ -32,7 +32,7 @@ namespace ADTeam5.Models
         [Display(Name = "Reorder Quantity")]
         [RegularExpression(@"^[0-9]*$", ErrorMessage = "Numbers only")]
         [Range(0, 10000, ErrorMessage = "Reorder Quantity cannot be negative")]
-        public int? ReorderQty { get; set; }
+        public int ReorderQty { get; set; }
         [Display(Name = "Unit of Measure")]
         public string UnitOfMeasure { get; set; }
         [ReadOnly(true)]
@@ -41,18 +41,23 @@ namespace ADTeam5.Models
         [Range(0, 10000, ErrorMessage = "Amount cannot be negative")]
         public int Out { get; set; }
         [StringLength(4)]
+        [Required(ErrorMessage = "*This field is required")]
+        [Display(Name = "Supplier 1")]
         public string Supplier1 { get; set; }
         [StringLength(4)]
+        [Required(ErrorMessage = "*This field is required")]
+        [Display(Name = "Supplier 2")]
         public string Supplier2 { get; set; }
         [StringLength(4)]
         public string Supplier3 { get; set; }
-        [DisplayFormat(ApplyFormatInEditMode = false, DataFormatString = "S{0:c}")]
+        [DisplayFormat(ApplyFormatInEditMode = false, DataFormatString = "S${0:0.00}")]
         [Range(0, 10000, ErrorMessage = "Price cannot be negative")]
+        [Display(Name = "Supplier 1 Price")]
         public decimal? Supplier1Price { get; set; }
-        [DisplayFormat(ApplyFormatInEditMode = false, DataFormatString = "S{0:c}")]
+        [DisplayFormat(ApplyFormatInEditMode = false, DataFormatString = "S${0:0.00}")]
         [Range(0, 10000, ErrorMessage = "Price cannot be negative")]
         public decimal? Supplier2Price { get; set; }
-        [DisplayFormat(ApplyFormatInEditMode = false, DataFormatString = "S{0:c}")]
+        [DisplayFormat(ApplyFormatInEditMode = false, DataFormatString = "S${0:0.00}")]
         [Range(0, 10000, ErrorMessage = "Price cannot be negative")]
         public decimal? Supplier3Price { get; set; }
         [ScaffoldColumn(false)]

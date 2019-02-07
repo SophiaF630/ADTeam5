@@ -4,42 +4,57 @@
     ViewData["Title"] = "Index";
 }
 
+@if (TempData["Alert1"] != null)
+{
+    <div class="alert alert-success" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aira-label="close">
+            <span aria-hidden="true">&times</span>
+        </button>
+        @TempData["Alert1"]
+    </div>
+}
+@if (TempData["Alert2"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aira-label="close">
+            <span aria-hidden="true">&times</span>
+        </button>
+        @TempData["Alert2"]
+    </div>
+}
 
 <form asp-action="Index" method="post">
-    <h1>Change Collection Point</h1>
+    @*<h1>Change Collection Point</h1>*@
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-default">
+                <div class="box-header with-border">
+                    <i class="fa fa-warning"></i>
+                    <h3 class="box-title">Change Collection Point</h3>
+                </div>
 
-    @if (TempData["Alert1"] != null)
-    {
-        <div class="alert alert-success" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aira-label="close">
-                <span aria-hidden="true">&times</span>
-            </button>
-            @TempData["Alert1"]
+                <br />
+
+                <h4 style="margin-left:300px">&nbsp;&nbsp;Current Collection Point:&nbsp; @ViewData["Name"]</h4>
+
+                <br />
+                <div class="form-group" style="margin-left:300px">
+                    <h4>
+                        &nbsp;
+                        Change Collection Point: &nbsp;
+                        @Html.DropDownListFor(m => m.CollectionPointId, new SelectList(ViewBag.listofitems, "CollectionPointId", "CollectionPointName"), "Select")
+                    </h4>
+                    <p></p>
+                </div>
+                <br />
+                <br />
+                <div class="form-group">
+                    <input type="reset" value="Cancel" style="width:80px;height:30px;border:2px;margin-left:350px; background-color:#EEEEEE" />
+                    <input type="Submit" value="Submit" class="btn btn-primary submit" style="background-color: #00B894;width:80px;height:30px;border:2px;margin-left:70px" onclick="return confirm('Changes made after Friday 5.30pm to Monday will only take effect after the next collection. Confirm change collection point?')"/>
+                </div>
+                <br />
+                <br />
+                </div>
+            </div>
         </div>
-    }
-    @if (TempData["Alert2"] != null)
-    {
-        <div class="alert alert-danger" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aira-label="close">
-                <span aria-hidden="true">&times</span>
-            </button>
-            @TempData["Alert2"]
-        </div>
-    }
-
-    <div class="form-group">
-        <p>Current Collection Point: @ViewData["Name"]</p>
-
-    </div>
-    <div class="form-group">
-        <p>
-            Change Collection Point:
-            @Html.DropDownListFor(m => m.CollectionPointId, new SelectList(ViewBag.listofitems, "CollectionPointId", "CollectionPointName"), "Select")
-        </p>
-    </div>
-
-    <div class="form-group">
-        <input type="reset" value="Cancel" />
-        <input type="Submit" value="Submit" />
-    </div>
 </form>

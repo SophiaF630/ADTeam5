@@ -1,44 +1,60 @@
-﻿@model IEnumerable<ADTeam5.Models.RecordDetails>
+﻿@model IEnumerable<ADTeam5.ViewModels.ViewRequestDetails>
 
 @{
     ViewData["Title"] = "Details";
 }
 
 
-<h4>Details</h4>
+@*<h2>Details</h2>*@
+<div class="box">
+    <div class="box-header with-border">
+        <div align="center" vertical-align="middle">
+            <div style="width: 350px;padding: 20px;margin: 20px;border-style:outset; border-width:1px; ">
+                <div align="center" vertical-align="middle">
+                    <h3 class="box-title">
+                        <strong><font size="5">Request Form Details Profile</font></strong>
+                    </h3>
+                </div>
+                <div class="box-tools">
+                </div>
+            </div>
+        </div>
+    </div>
+    <br />
 
-<p>Requisition Form No: @ViewData["RRID"]</p>
+    <p><b>Requisition Form No: @ViewData["RRID"]</b></p>
+    <p>Status: @ViewData["Status"]</p>
 
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                Item Number
-            </th>
-            <th>
-                Item Quantity
-            </th>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Item Name
+                </th>
+                <th>
+                    Quantity
+                </th>
 
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.ItemNumber)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Quantity)
-            </td>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.itemName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.quantity)
+                    </td>
 
-        </tr>
-        }
-    </tbody>
-</table>
+                </tr>
+            }
+        </tbody>
+    </table>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+    <div>
+        <a asp-action="Index">Back to List</a>
+    </div>
 

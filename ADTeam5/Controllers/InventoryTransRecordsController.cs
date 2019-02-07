@@ -46,6 +46,77 @@ namespace ADTeam5.Controllers
                 result.Add(inventoryTransRecordDetails);
             }
             return View(result);
-        }      
+        }
+
+        // POST: InventoryTransRecords
+        [HttpPost]
+        public async Task<IActionResult> Index(DateTime startDate, DateTime endDate)
+        {
+            ViewData["StartDate"] = startDate.ToShortDateString();
+            ViewData["endDate"] = endDate.ToShortDateString();
+
+            DateTime dtpDefault = new DateTime(0001, 1, 1, 0, 0, 0);
+
+            if (startDate != null && endDate != null)
+            {
+                if (startDate.Equals(dtpDefault) || endDate.Equals(dtpDefault))
+                {
+                    TempData["NoDetails"] = "Please fill in all search details.";
+                    return RedirectToAction("Index");
+                }
+                if (startDate <= endDate && startDate <= DateTime.Now.Date && endDate <= DateTime.Now.Date)
+                {
+                    if (ModelState.IsValid)
+                    {
+                        var t = _context.InventoryTransRecord.Where(s => s.Date >= startDate && s.Date <= endDate).OrderByDescending(x => x.TransId);
+                        var result = new List<InventoryTransRecordDetails>();
+                        foreach (var item in t)
+                        {
+                            var inventoryTransRecordDetails = new InventoryTransRecordDetails();
+                            inventoryTransRecordDetails.TransId = item.TransId;
+                            inventoryTransRecordDetails.Date = item.Date;
+                            inventoryTransRecordDetails.ItemName = _context.Catalogue.Find(item.ItemNumber).ItemName;
+                            inventoryTransRecordDetails.DepartmentOrSupplier = b.FindDepartmentOrSupplier(item.RecordId);
+                            inventoryTransRecordDetails.Qty = item.Qty;
+                            inventoryTransRecordDetails.Balance = item.Balance;
+
+                            result.Add(inventoryTransRecordDetails);
+                        }
+
+                        return View(result);
+                    }
+                    else
+                    {
+                        TempData["FilterError"] = "Search request was not completed. Please try again.";
+                        return RedirectToAction("Index");
+                    }
+                }
+                else
+                {
+                    if (startDate > endDate && (startDate > DateTime.Now.Date || endDate > DateTime.Now.Date))
+                    {
+                        TempData["StartAndEndDateError"] = "End date cannot be earlier than start date. Start date and end date cannot be later than today. Please try again.";
+                        return RedirectToAction("Index");
+                    }
+                    if (startDate > endDate)
+                    {
+                        TempData["EndDateError"] = "End date cannot be earlier than start date. Please try again.";
+                        return RedirectToAction("Index");
+                    }
+                    if (startDate > DateTime.Now.Date || endDate > DateTime.Now.Date)
+                    {
+                        TempData["StartDateError"] = "Start date and end date cannot be later than today. Please try again.";
+                        return RedirectToAction("Index");
+                    }
+                    TempData["NoDetails"] = "Please fill in all search details.";
+                    return RedirectToAction("Index");
+                }
+            }
+            else
+            {
+                TempData["NoDetails"] = "Please fill in all search details.";
+                return RedirectToAction("Index");
+            }
+        }
     }
 }

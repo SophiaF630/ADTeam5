@@ -20,6 +20,9 @@
 
 }
 
+
+
+
 <html>
 <head>
     <meta charset="utf-8">
@@ -42,6 +45,8 @@
         <link href="~/plugins/Ionicons/css/ionicons.min.css" rel="stylesheet" />
         <!-- DataTables -->
         <link href="~/plugins/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet" />
+
+        @*<link href="~/lib/jquery-ui/themes/base/jquery-ui.css" rel="stylesheet" />*@
         <!-- Theme style -->
         <link href="~/lib/css/AdminLTE.css" rel="stylesheet" />
         <link href="~/lib/css/skins/skin-black.css" rel="stylesheet" />
@@ -74,7 +79,7 @@
               asp-fallback-href="~/plugins/font-awesome/css/font-awesome.min.css"
               asp-fallback-test-class="fa" asp-fallback-test-property="display" asp-fallback-test-value="inline-block " />
         <link href="~/lib/css/AdminLTE.min.css" rel="stylesheet" />
-        <link href="~/lib/css/skins/skin-black.min.css" rel="stylesheet" />
+        <link href="~/lib/css/skins/skin-blue.min.css" rel="stylesheet" />
     </environment>
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -110,8 +115,10 @@ desired effect
 -->
 <body class="hold-transition skin-black sidebar-mini">
     <div class="wrapper">
+        @*<<<<<<< HEAD
+            @*<div class="sidebar" data-image="~/img/bg1.jpg">*@
         <!-- Main Header -->
-        <header class="main-header">
+        @*<header class="main-header">
             <div class="logo">
                 <!-- logo for regular state and mobile devices -->
                 <span class="logo-lg">
@@ -126,9 +133,48 @@ desired effect
                 <ul class="nav navbar-nav">
                     @if (SignInManager.IsSignedIn(User))
                     {
-                        <li>
-                            <a class="nav-link text-white" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })"> <i class="fas fa-sign-out-alt"></i>Logout</a>
-                        </li>
+                        @*<li>
+                        <a class="nav-link text-white" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })"> <i class="fas fa-sign-out-alt"></i>Logout</a>
+                    </li>*@
+        @*<form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                                <button type="submit" class="nav-link btn btn-link text-dark"><i class="fas fa-sign-out-alt"></i>Logout</button>
+                            </form>
+                        }
+                        else
+                        {
+                            <li>
+                                <a class="nav-link text-white" asp-area="Identity" asp-page="/Account/Login"><i class="fas fa-sign-in-alt"></i>Login</a>
+                            </li>
+                        }
+
+                    </ul>
+
+                </div>
+            </header>*@
+        @*</div>*@
+
+
+        <!-- Main Header -->
+        <header class="main-header">
+            <div class="logo">
+                <!-- logo for regular state and mobile devices -->
+                <span class="logo-lg">
+                    <a href="/"><b>SSIS</b></a>
+                    &nbsp;
+                    @*<button type="submit" class="nav-link btn btn-link" style="background-color: #99CCCC;"><font size="5"><strong>SSIS</strong></font></button>*@
+
+                    <a href="#" data-toggle="push-menu" role="button"><i class="fas fa-angle-double-left"></i></a>
+                </span>
+                <!-- sidebar toggle button for sidebar mini 50x50 pixels -->
+                <span class="logo-mini"><a href="#" data-toggle="push-menu" role="button"><i class="fas fa-angle-double-right"></i></a></span>
+            </div>
+            <div class="navbar-custom-menu">
+                <ul class="nav navbar-nav">
+                    @if (SignInManager.IsSignedIn(User))
+                    {
+                        <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                            <button type="submit" class="nav-link btn btn-link text-gray"><i class="fas fa-sign-out-alt"></i><font size="4.5">&nbsp;Logout</font></button>
+                        </form>
                     }
                     else
                     {
@@ -136,14 +182,12 @@ desired effect
                             <a class="nav-link text-white" asp-area="Identity" asp-page="/Account/Login"><i class="fas fa-sign-in-alt"></i>Login</a>
                         </li>
                     }
-
                 </ul>
-
             </div>
         </header>
     </div>
 
-    <!-- extra dropdown/link codes for reference. can delete if you want-->
+    <!-- extra dropdown/link codes for reference.can delete if you want-->
     @*<li><a href="#">Link</a></li>
         <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <span class="caret"></span></a>
@@ -169,9 +213,29 @@ desired effect
                 @switch (ViewData["UserRole"].ToString())
                 {
                     case "Clerk":
+                        <li>
+                            <a class="nav-link text-white-" asp-area="" asp-controller="Catalogues" asp-action="Index"><i class="fa fa-list-ul"></i> <span>Catalogue</span></a>
+                        </li>
                         <li class="treeview">
                             <a href="#">
-                                <i class="fas fa-people-carry"></i> <span>In/Out Stationery</span>
+                                <i class="fas fa-shopping-basket"></i> <span>Order Stationery</span>
+                                <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
+                            </a>
+                            <ul class="treeview-menu">
+                                <li>
+                                    <a class="nav-link text-white-" asp-area="" asp-controller="NewRequest" asp-action="Index"><i class="fa fa-list-ul"></i>New Order</a>
+                                </li>
+                                <li>
+                                    <a class="nav-link text-white-" asp-area="" asp-controller="ViewRequest" asp-action="Index"><i class="fa fa-list-ul"></i>View Past Orders</a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li class="treeview">
+                            <a href="#">
+                                <i class="fas fa-calendar-minus"></i> <span>Outgoing Stock</span>
                                 <span class="pull-right-container">
                                     <i class="fa fa-angle-left pull-right"></i>
                                 </span>
@@ -183,201 +247,283 @@ desired effect
                                 <li>
                                     <a class="nav-link text-white-" asp-area="" asp-controller="DisbursementLists" asp-action="Index"><i class="fa fa-list-ul"></i>Disbursement List</a>
                                 </li>
+                            </ul>
+                        </li>
+                        <li class="treeview">
+                            <a href="#">
+                                <i class="fas fa-calendar-plus"></i> <span>Incoming Stock</span>
+                                <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
+                            </a>
+                            <ul class="treeview-menu">
                                 <li>
-                                    <a class="nav-link text-white-" asp-area="" asp-controller="AdjustmentRecords" asp-action="Index"><i class="fa fa-list-ul"></i>Adjustment Record</a>
+                                    <a class="nav-link text-white-" asp-area="" asp-controller="RaisePurchaseOrder" asp-action="Index"><i class="fa fa-list-ul"></i>Create Purchase Order</a>
                                 </li>
                                 <li>
-                                    <a class="nav-link text-white-" asp-area="" asp-controller="IssueVoucher" asp-action="Index"><i class="fa fa-list-ul"></i>Issue Voucher</a>
+                                    <a class="nav-link text-white-" asp-area="" asp-controller="PurchaseOrderRecords" asp-action="Index"><i class="fa fa-list-ul"></i>View Purchase Order</a>
                                 </li>
                                 <li>
-                                    <a class="nav-link text-white-" asp-area="" asp-controller="PurchaseOrderRecords" asp-action="Index"><i class="fa fa-list-ul"></i>Purchase Order</a>
+                                    <a class="nav-link text-white-" asp-area="" asp-controller="Suppliers" asp-action="Index"><i class="fa fa-list-ul"></i>View Suppliers</a>
+                                </li>
+
+                            </ul>
+                        </li>
+                        <li class="treeview">
+                            <a href="#">
+                                <i class="fas fa-times-circle"></i> <span>Stationery Discrepancies</span>
+                                <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
+                            </a>
+                            <ul class="treeview-menu">
+                                <li>
+                                    <a class="nav-link text-white-" asp-area="" asp-controller="IssueVoucher" asp-action="Index"><i class="fa fa-list-ul"></i>Create Adjustment Voucher</a>
+                                </li>
+                                <li>
+                                    <a class="nav-link text-white-" asp-area="" asp-controller="AdjustmentRecords" asp-action="Index"><i class="fa fa-list-ul"></i>View Submitted Vouchers</a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li class="treeview">
+                            <a href="#">
+                                <i class="fas fa-newspaper"></i> <span>Reports and Logs</span>
+                                <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
+                            </a>
+                            <ul class="treeview-menu">
+                                <li>
+                                    <a class="nav-link text-white-" asp-area="" asp-controller="GenerateReports" asp-action="StationeryUsage"><i class="fa fa-list-ul"></i>Stationery Usage Reports</a>
+                                </li>
+                                <li>
+                                    <a class="nav-link text-white-" asp-area="" asp-controller="GenerateReports" asp-action="ChargeBack"><i class="fa fa-list-ul"></i>Stationery Charge Back Reports</a>
                                 </li>
                                 <li>
                                     <a class="nav-link text-white-" asp-area="" asp-controller="InventoryTransRecords" asp-action="Index"><i class="fa fa-list-ul"></i>Inventory Transaction Log</a>
-                                </li>
-                                <!--delete it after finish-->
-                                <li>
-                                    <a class="nav-link text-white-" asp-area="" asp-controller="DisbursementLists" asp-action="Index"><i class="fa fa-list-ul"></i>Generate Reports</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="treeview">
-                            <a href="#">
-                                <i class="fas fa-users"></i> <span>Contacts</span>
-                                <span class="pull-right-container">
-                                    <i class="fa fa-angle-left pull-right"></i>
-                                </span>
-                            </a>
-                            <ul class="treeview-menu">
-                                <li>
-                                    <a class="nav-link text-white-" asp-area="" asp-controller="Suppliers" asp-action="Index"><i class="fa fa-list-ul"></i>Supplier List</a>
-                                </li>
-                                <li>
-                                    <a class="nav-link text-white-" asp-area="" asp-controller="DisbursementLists" asp-action="Index"><i class="fa fa-list-ul"></i>Department List</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="treeview">
-                            <a href="#">
-                                <i class="fas fa-user-edit"></i> <span>Management</span>
-                                <span class="pull-right-container">
-                                    <i class="fa fa-angle-left pull-right"></i>
-                                </span>
-                            </a>
-                            <ul class="treeview-menu">
-                                <li>
-                                    <a class="nav-link text-white-" asp-area="" asp-controller="StationeryRetrievalList" asp-action="Index"><i class="fa fa-list-ul"></i>Request Stock Adjustment Voucher</a>
-                                </li>
-                                <li>
-                                    <a class="nav-link text-white-" asp-area="" asp-controller="DisbursementLists" asp-action="Index"><i class="fa fa-list-ul"></i>Generate Reports</a>
                                 </li>
                             </ul>
                         </li>
                         break;
                     case "Manager":
+                        <li>
+                            <a class="nav-link text-white-" asp-area="" asp-controller="Catalogues" asp-action="Index"><i class="fa fa-list-ul"></i> <span>Catalogue</span></a>
 
+                        </li>
+                        <li>
+                            <a class="nav-link text-white-" asp-area="" asp-controller="OutstandingOrder" asp-action="Index"><i class="fa fa-envelope"></i> <span>View Submitted Requests</span></a>
+                        </li>
                         <li class="treeview">
                             <a href="#">
-                                <i class="fas fa-people-carry"></i> <span>In/Out Stationery</span>
+                                <i class="fas fa-calendar-minus"></i> <span>Outgoing Stock</span>
                                 <span class="pull-right-container">
                                     <i class="fa fa-angle-left pull-right"></i>
                                 </span>
                             </a>
                             <ul class="treeview-menu">
-
                                 <li>
                                     <a class="nav-link text-white-" asp-area="" asp-controller="StationeryRetrievalList" asp-action="Index"><i class="fa fa-list-ul"></i>Stationery Retrieval List</a>
                                 </li>
                                 <li>
                                     <a class="nav-link text-white-" asp-area="" asp-controller="DisbursementLists" asp-action="Index"><i class="fa fa-list-ul"></i>Disbursement List</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="treeview">
+                            <a href="#">
+                                <i class="fas fa-calendar-plus"></i> <span>Incoming Stock</span>
+                                <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
+                            </a>
+                            <ul class="treeview-menu">
+                                <li>
+                                    <a class="nav-link text-white-" asp-area="" asp-controller="RaisePurchaseOrder" asp-action="Index"><i class="fa fa-list-ul"></i>Create Purchase Order</a>
+                                </li>
+                                <li>
+                                    <a class="nav-link text-white-" asp-area="" asp-controller="PurchaseOrderRecords" asp-action="Index"><i class="fa fa-list-ul"></i>View Purchase Order</a>
+                                </li>
+                                <li>
+                                    <a class="nav-link text-white-" asp-area="" asp-controller="Suppliers" asp-action="Index"><i class="fa fa-list-ul"></i>View Suppliers</a>
+                                </li>
+
+                            </ul>
+                        </li>
+                        <li class="treeview">
+                            <a href="#">
+                                <i class="fas fa-times-circle"></i> <span>Stationery Discrepancies</span>
+                                <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
+                            </a>
+                            <ul class="treeview-menu">
+                                <li>
+                                    <a class="nav-link text-white-" href="AdjustmentRecords?state=OutstandingRecords"><i class="fa fa-list-ul"></i>Approve/Reject Vouchers</a>
+                                </li>
+                                <li>
+                                    <a class="nav-link text-white-" href="AdjustmentRecords?state=PastRecords"><i class="fa fa-list-ul"></i>View Adjustment Records</a>
+                                </li>
+                            </ul>
+                        </li>
+
+
+                        <li class="treeview">
+                            <a href="#">
+                                <i class="fas fa-newspaper"></i> <span>Reports and Logs</span>
+                                <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
+                            </a>
+                            <ul class="treeview-menu">
+                                <li>
+                                    <a class="nav-link text-white-" asp-area="" asp-controller="GenerateReports" asp-action="StationeryUsage"><i class="fa fa-list-ul"></i>Stationery Usage Reports</a>
+                                </li>
+                                <li>
+                                    <a class="nav-link text-white-" asp-area="" asp-controller="GenerateReports" asp-action="ChargeBack"><i class="fa fa-list-ul"></i>Stationery Charge Back Reports</a>
                                 </li>
                                 <li>
                                     <a class="nav-link text-white-" asp-area="" asp-controller="InventoryTransRecords" asp-action="Index"><i class="fa fa-list-ul"></i>Inventory Transaction Log</a>
                                 </li>
-                                <li>
-                                    <a class="nav-link text-white-" asp-area="" asp-controller="PurchaseOrderRecords" asp-action="Index"><i class="fa fa-list-ul"></i>Order More Stock</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="treeview">
-                            <a href="#">
-                                <i class="fas fa-users"></i> <span>Contacts</span>
-                                <span class="pull-right-container">
-                                    <i class="fa fa-angle-left pull-right"></i>
-                                </span>
-                            </a>
-                            <ul class="treeview-menu">
-                                <li>
-                                    <a class="nav-link text-white-" asp-area="" asp-controller="Suppliers" asp-action="Index"><i class="fa fa-list-ul"></i>Supplier Information</a>
-                                </li>
-                                <li>
-                                    <a class="nav-link text-white-" asp-area="" asp-controller="DisbursementLists" asp-action="Index"><i class="fa fa-list-ul"></i>Department List</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="treeview">
-                            <a href="#">
-                                <i class="fas fa-user-edit"></i> <span>Management</span>
-                                <span class="pull-right-container">
-                                    <i class="fa fa-angle-left pull-right"></i>
-                                </span>
-                            </a>
-                            <ul class="treeview-menu">
-                                <li>
-                                    <a class="nav-link text-white-" asp-area="" asp-controller="AdjustmentRecords" asp-action="Index"><i class="fa fa-list-ul"></i>Approve/Reject Stock Adjustment Voucher</a>
-                                </li>
-                                <li>
-                                    <a class="nav-link text-white-" asp-area="" asp-controller="DisbursementLists" asp-action="Index"><i class="fa fa-list-ul"></i>Generate Reports</a>
-                                </li>
                             </ul>
                         </li>
                         break;
-                    case "Superviser":
+                    case "Supervisor":
+                        <li>
+                            <a class="nav-link text-white-" asp-area="" asp-controller="Catalogues" asp-action="Index"><i class="fa fa-list-ul"></i> <span>Catalogue</span></a>
+
+                        </li>
                         <li class="treeview">
                             <a href="#">
-                                <i class="fas fa-people-carry"></i> <span>In/Out Stationery</span>
+                                <i class="fas fa-calendar-minus"></i> <span>Outgoing Stock</span>
                                 <span class="pull-right-container">
                                     <i class="fa fa-angle-left pull-right"></i>
                                 </span>
                             </a>
                             <ul class="treeview-menu">
-
                                 <li>
                                     <a class="nav-link text-white-" asp-area="" asp-controller="StationeryRetrievalList" asp-action="Index"><i class="fa fa-list-ul"></i>Stationery Retrieval List</a>
                                 </li>
                                 <li>
                                     <a class="nav-link text-white-" asp-area="" asp-controller="DisbursementLists" asp-action="Index"><i class="fa fa-list-ul"></i>Disbursement List</a>
                                 </li>
-                                <li>
-                                    <a class="nav-link text-white-" asp-area="" asp-controller="DisbursementLists" asp-action="Index"><i class="fa fa-list-ul"></i>Inventory Transaction Log</a>
-                                </li>
-                                <li>
-                                    <a class="nav-link text-white-" asp-area="" asp-controller="DisbursementLists" asp-action="Index"><i class="fa fa-list-ul"></i>Order More Stock</a>
-                                </li>
                             </ul>
                         </li>
                         <li class="treeview">
                             <a href="#">
-                                <i class="fas fa-users"></i> <span>Contacts</span>
+                                <i class="fas fa-calendar-plus"></i> <span>Incoming Stock</span>
                                 <span class="pull-right-container">
                                     <i class="fa fa-angle-left pull-right"></i>
                                 </span>
                             </a>
                             <ul class="treeview-menu">
                                 <li>
-                                    <a class="nav-link text-white-" asp-area="" asp-controller="Suppliers" asp-action="Index"><i class="fa fa-list-ul"></i>Supplier Information</a>
+                                    <a class="nav-link text-white-" asp-area="" asp-controller="RaisePurchaseOrder" asp-action="Index"><i class="fa fa-list-ul"></i>Create Purchase Order</a>
                                 </li>
                                 <li>
-                                    <a class="nav-link text-white-" asp-area="" asp-controller="DisbursementLists" asp-action="Index"><i class="fa fa-list-ul"></i>Department List</a>
+                                    <a class="nav-link text-white-" asp-area="" asp-controller="PurchaseOrderRecords" asp-action="Index"><i class="fa fa-list-ul"></i>View Purchase Order</a>
                                 </li>
+                                <li>
+                                    <a class="nav-link text-white-" asp-area="" asp-controller="Suppliers" asp-action="Index"><i class="fa fa-list-ul"></i>View Suppliers</a>
+                                </li>
+
                             </ul>
                         </li>
                         <li class="treeview">
                             <a href="#">
-                                <i class="fas fa-user-edit"></i> <span>Management</span>
+                                <i class="fas fa-times-circle"></i> <span>Stationery Discrepancies</span>
                                 <span class="pull-right-container">
                                     <i class="fa fa-angle-left pull-right"></i>
                                 </span>
                             </a>
                             <ul class="treeview-menu">
                                 <li>
-                                    <a class="nav-link text-white-" asp-area="" asp-controller="StationeryRetrievalList" asp-action="Index"><i class="fa fa-list-ul"></i>Approve/Reject Stock Adjustment Voucher</a>
+                                    <a class="nav-link text-white-" href="AdjustmentRecords?state=OutstandingRecords"><i class="fa fa-list-ul"></i>Approve/Reject Vouchers</a>
                                 </li>
                                 <li>
-                                    <a class="nav-link text-white-" asp-area="" asp-controller="DisbursementLists" asp-action="Index"><i class="fa fa-list-ul"></i>Generate Reports</a>
+                                    <a class="nav-link text-white-" href="AdjustmentRecords?state=PastRecords"><i class="fa fa-list-ul"></i>View Adjustment Records</a>
+                                </li>
+                            </ul>
+                        </li>
+
+
+                        <li class="treeview">
+                            <a href="#">
+                                <i class="fas fa-newspaper"></i> <span>Reports and Logs</span>
+                                <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
+                            </a>
+                            <ul class="treeview-menu">
+                                <li>
+                                    <a class="nav-link text-white-" asp-area="" asp-controller="GenerateReports" asp-action="StationeryUsage"><i class="fa fa-list-ul"></i>Stationery Usage Reports</a>
+                                </li>
+                                <li>
+                                    <a class="nav-link text-white-" asp-area="" asp-controller="GenerateReports" asp-action="ChargeBack"><i class="fa fa-list-ul"></i>Stationery Charge Back Reports</a>
+                                </li>
+                                <li>
+                                    <a class="nav-link text-white-" asp-area="" asp-controller="InventoryTransRecords" asp-action="Index"><i class="fa fa-list-ul"></i>Inventory Transaction Log</a>
                                 </li>
                             </ul>
                         </li>
                         break;
                     case "Rep":
+                        <li>
+                            <a class="nav-link text-white-" asp-area="" asp-controller="ChangeCollectionPoint" asp-action="Index"><i class="fa fa-map-marker-alt"></i> <span>Change Collection Point</span></a>
+
+                        </li>
+                        <li>
+                            <a class="nav-link text-white-" asp-area="" asp-controller="CollectionPassword" asp-action="Index"><i class="fa fa-lock"></i><span>Collection Password</span></a>
+                        </li>
+                        <li>
+                            <a class="nav-link text-white-" asp-area="" asp-controller="Catalogues" asp-action="Index"><i class="fa fa-list-ul"></i> <span>Catalogue</span></a>
+                        </li>
 
                         <li class="treeview">
                             <a href="#">
-                                <i class="fas fa-map-marker-alt"></i> <span>Change Collection Point</span>
-                            </a>
-                        </li>
-                        break;
-                    case "Employee":
-                        <li class="header"><br><strong>Department Staff Sidebar</strong></li>
-                        <li class="treeview">
-                            <a href="#">
-                                <i class="fas fa-pencil-alt"></i> <span>Stationery Requests</span>
+                                <i class="fas fa-shopping-basket"></i> <span> &nbsp; Order Stationery</span>
                                 <span class="pull-right-container">
                                     <i class="fa fa-angle-left pull-right"></i>
                                 </span>
                             </a>
                             <ul class="treeview-menu">
                                 <li>
-                                    <a class="nav-link text-white-" asp-area="" asp-controller="NewRequest" asp-action="Index"><i class="fa fa-list-ul"></i>Make New Request</a>
+                                    <a class="nav-link text-white-" asp-area="" asp-controller="NewRequest" asp-action="Index"><i class="fa fa-list-ul"></i>New Order</a>
                                 </li>
                                 <li>
-                                    <a class="nav-link text-white-" asp-area="" asp-controller="ViewRequest" asp-action="Index"><i class="fa fa-list-ul"></i>Edit Requests</a>
+                                    <a class="nav-link text-white-" asp-area="" asp-controller="ViewRequest" asp-action="Index"><i class="fa fa-list-ul"></i>View Past Orders</a>
                                 </li>
                             </ul>
                         </li>
+
+                        break;
+                    case "Employee":
+                        <li>
+                            <a class="nav-link text-white-" asp-area="" asp-controller="Catalogues" asp-action="Index"><i class="fa fa-list-ul"></i> <span>Catalogue</span></a>
+                        </li>
+                        <li class="treeview">
+                            <a href="#">
+                                <i class="fas fa-shopping-basket"></i> <span>Order Stationery</span>
+                                <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
+                            </a>
+                            <ul class="treeview-menu">
+                                <li>
+                                    <a class="nav-link text-white-" asp-area="" asp-controller="NewRequest" asp-action="Index"><i class="fa fa-list-ul"></i>New Order</a>
+                                </li>
+                                <li>
+                                    <a class="nav-link text-white-" asp-area="" asp-controller="ViewRequest" asp-action="Index"><i class="fa fa-list-ul"></i>View Past Orders</a>
+                                </li>
+                            </ul>
+                        </li>
+
                         break;
                     case "Head":
-                        <li></li>
+                        <li>
+                            <a class="nav-link text-white-" asp-area="" asp-controller="Catalogues" asp-action="Index"><i class="fa fa-list-ul"></i> <span>Catalogue</span></a>
+                        </li>
+
                         <li class="treeview">
                             <a href="#">
                                 <i class="fas fa-sync"></i> <span>Re-assign Staff</span>
@@ -387,32 +533,26 @@ desired effect
                             </a>
                             <ul class="treeview-menu">
                                 <li>
-                                    <a class="nav-link text-white-" asp-area="" asp-controller="AssignDeputy" asp-action="Index"><i class="fas fa-user"></i>Assign Deputy Head</a>
+                                    <a class="nav-link text-white-" asp-area="" asp-controller="AssignDeputy" asp-action="Index"><i class="fas fa-list-ul"></i> <span>Assign Deputy Head</span></a>
                                 </li>
                                 <li>
-                                    <a class="nav-link text-white-" asp-area="" asp-controller="AssignDepartment" asp-action="Index"><i class="fas fa-user"></i>Assign Staff Rep</a>
+                                    <a class="nav-link text-white-" asp-area="" asp-controller="AssignDepartment" asp-action="Index"><i class="fas fa-list-ul"></i> <span>Assign Dept Rep</span></a>
                                 </li>
                             </ul>
                         </li>
-                        <li class="treeview">
-                            <a href="#">
-                                <i class="fas fa-users"></i> <span>Manage Requests</span>
-                                <span class="pull-right-container">
-                                    <i class="fa fa-angle-left pull-right"></i>
-                                </span>
-                            </a>
-                            <ul class="treeview-menu">
-                                <li>
-                                    <a class="nav-link text-white-" asp-area="" asp-controller="StationeryRetrievalList" asp-action="Index"><i class="fa fa-list-ul"></i>Approve/Reject</a>
-                                </li>
-                                <li>
-                                    <a class="nav-link text-white-" asp-area="" asp-controller="DisbursementLists" asp-action="Index"><i class="fa fa-list-ul"></i>Department List</a>
-                                </li>
-                            </ul>
+                        <li>
+                            <a class="nav-link text-white-" asp-area="" asp-controller="OutstandingOrder" asp-action="Index"><i class="fa fa-envelope"></i> <span>View Submitted Requests</span></a>
+                        </li>
+                        <li>
+                            <a class="nav-link text-white-" asp-area="" asp-controller="ViewExpenditure" asp-action="Index"><i class="fa fa-dollar-sign"></i> <span>View Expenditure</span></a>
                         </li>
                         break;
                     default:
+                        <li>
+                            <a asp-area="Identity" asp-page="/Account/Manage/Index">Register your work ID to access the sidebar</a>
+                        </li>
                         break;
+                }
                 }
             </ul>
 
@@ -437,17 +577,19 @@ desired effect
             @RenderBody()
 
 
-
         </section>
+
+
+
         <!-- /.content -->
 
     </div>
 
     <footer class="main-footer">
         <div class="pull-right hidden-xs">
-            Template credit to <a href="https://adminlte.io">Almsaeed Studio</a>
+            <strong>2019 AD Team 5</strong>
         </div>
-        <strong>2019 AD Team 5</strong>
+
     </footer>
 
     <!-- /.content-wrapper -->
@@ -457,10 +599,13 @@ desired effect
         <!-- jQuery 3 -->
         <script src="~/plugins/jquery/dist/jquery.min.js"></script>
         <!-- Bootstrap 3.3.7 -->
+        <script src="~/lib/bootstrap/bootstrap-multiselect.js"></script>
         <script src="~/plugins/bootstrap/dist/js/bootstrap.min.js"></script>
         <!-- DataTables -->
         <script src="~/plugins/datatables.net/js/jquery.dataTables.min.js"></script>
         <script src="~/plugins/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+
+
         <!-- ChartJS -->
         <script src="~/plugins/chart.js/Chart.js"></script>
         <!-- AdminLTE App -->
@@ -470,6 +615,13 @@ desired effect
         user experience. -->
         <!-- ajax -->
         <script src="~/assets/js/jquery.unobtrusive-ajax.min.js"></script>
+
+        <script>
+            var height = $('.content-wrapper').height();
+            $('.sidebar').height(height);
+        </script>
+
+
 
     </environment>
     <environment exclude="Development">
@@ -487,3 +639,6 @@ desired effect
     @RenderSection("Scripts", required: false)
 </body>
 </html>
+
+
+@*Our grateful thanks to to <a href="https://adminlte.io">Almsaeed Studio</a> for the base template!*@

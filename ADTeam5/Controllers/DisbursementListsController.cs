@@ -51,10 +51,10 @@ namespace ADTeam5.Controllers
 
             for (int i = 0; i < depCodeList.Count(); i++)
             {
-                List<RecordDetails> rd = b.GenerateDisbursementListDetails(depCodeList[i]);
+                List<RecordDetails> rd = b.GenerateRecordDetailsOfDisbursementList(depCodeList[i]);
             }
 
-            var sSISTeam5Context = _context.DisbursementList.Include(d => d.CollectionPointNavigation).Include(d => d.DepartmentCodeNavigation).Include(d => d.RepNavigation);
+            var sSISTeam5Context = _context.DisbursementList.Include(d => d.CollectionPointNavigation).Include(d => d.DepartmentCodeNavigation).Include(d => d.RepNavigation).OrderByDescending(x => x.Dlid);
             return View(await sSISTeam5Context.ToListAsync());
         }
 
@@ -75,7 +75,7 @@ namespace ADTeam5.Controllers
             {
                 b.ChangeEstDeliverDate(departmentName, estDeliverDate);
             }
-            var sSISTeam5Context = _context.DisbursementList.Include(d => d.CollectionPointNavigation).Include(d => d.DepartmentCodeNavigation).Include(d => d.RepNavigation);
+            var sSISTeam5Context = _context.DisbursementList.Include(d => d.CollectionPointNavigation).Include(d => d.DepartmentCodeNavigation).Include(d => d.RepNavigation).OrderByDescending(x => x.Dlid);
 
             return View(sSISTeam5Context);
         }
@@ -98,6 +98,9 @@ namespace ADTeam5.Controllers
             List<RecordDetails> rd = _context.RecordDetails.Where(x => x.Rrid == id).ToList();
             List<DisbursementListDetails> result = new List<DisbursementListDetails>();
             List<int> rowIDList = new List<int>();
+
+            //viewbag for status check
+            ViewBag.DisbursementListStatus = _context.DisbursementList.FirstOrDefault(x => x.Dlid == id).Status;
 
             //if pending delivery show temp disbursement list
             if (_context.DisbursementList.Find(id).Status == "Pending Delivery")
@@ -162,15 +165,18 @@ namespace ADTeam5.Controllers
 
         // POST: DisbursementLists/Details/5
         [HttpPost]
-        public async Task<IActionResult> Details(string id, int rowID, string itemNumber, int quantityDelivered, int quantityForVoucher, string remarkForDelivery, string remarkForVoucher, string confirmationPassword, int quantityDeliveredModalName, int addToVoucherModalName, int confirmDeliveryModalName, int backToListModalName)
+        public async Task<IActionResult> Details(string id, int rowID, string itemNumber, int quantityDelivered, int quantityForVoucher, string remarkForDelivery, string remarkForVoucher, string confirmationPassword, int quantityDeliveredModalName, int addToVoucherModalName, int confirmDeliveryModalName, int noShowModalName, int backToListModalName)
         {
             ADTeam5User user = await _userManager.GetUserAsync(HttpContext.User);
             List<string> identity = userCheck.checkUserIdentityAsync(user);
             int userID = user.WorkID;
 
+            //viewbag for status check
+            ViewBag.DisbursementListStatus = _context.DisbursementList.FirstOrDefault(x => x.Dlid == id).Status;
+
             if (addToVoucherModalName == 1)
             {
-                b.AddItemToVoucher(userID, itemNumber, quantityForVoucher, remarkForVoucher);
+                b.CreateNewVoucherItem(userID, itemNumber, quantityForVoucher, remarkForVoucher);
             }
             else if (quantityDeliveredModalName == 1)
             {
@@ -215,13 +221,12 @@ namespace ADTeam5.Controllers
                     
                     //update disbursement list status
                     var disbursementList = _context.DisbursementList.Find(id);
-                    disbursementList.Status = "Delivered";
+                    disbursementList.Status = "Completed";
                     disbursementList.CompleteDate = DateTime.Now;
                     _context.DisbursementList.Update(disbursementList);
                     _context.SaveChanges();
 
-                    //update inventory transaction record
-
+                    TempData["CorrectPassword"] = "Successful confirmation. Delivery completed!";
 
                     return RedirectToAction(nameof(Index));
                 }
@@ -229,7 +234,40 @@ namespace ADTeam5.Controllers
                 {
                     //check
                     //show incorrect password
+                    TempData["IncorrectPassword"] = "Incorrect collection password. Please try again.";
                 }
+            }
+            else if(noShowModalName == 1)
+            {
+                //update disbursement list status
+                var disbursementList = _context.DisbursementList.Find(id);
+                disbursementList.Status = "No Show";
+                disbursementList.CompleteDate = DateTime.Now;
+                _context.DisbursementList.Update(disbursementList);
+                _context.SaveChanges();
+
+                //update out and stock
+                var itemToReturn = _context.RecordDetails.Where(x => x.Rrid == id);
+                if(itemToReturn != null)
+                {
+                    foreach(var item in itemToReturn.ToList())
+                    {
+                        int quantityRequested = item.Quantity;
+                        var q = _context.Catalogue.FirstOrDefault(x => x.ItemNumber == item.ItemNumber);
+                        if(q != null)
+                        {                            
+                            int outQty = q.Out;
+                            int preStock = q.Stock;
+                            q.Stock = preStock + quantityRequested;
+                            q.Out = outQty - quantityRequested;
+
+                            _context.Catalogue.Update(q);
+                            _context.SaveChanges();
+                        }
+                    }
+                }
+                
+                return RedirectToAction(nameof(Index));
             }
             else if(backToListModalName == 1)
             {

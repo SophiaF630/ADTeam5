@@ -4,51 +4,91 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1><br />
-<p>Order No: @ViewBag.orderid</p>
+@*<h1>Details</h1>*@
+<div class="box">
+    <div class="box-header with-border">
+        <div align="center" vertical-align="middle">
+            <div style="width: 350px;padding: 20px;margin: 20px;border-style:outset; border-width:1px; ">
+                <div align="center" vertical-align="middle">
+                    <h3 class="box-title">
+                        <strong><font size="5">Order Details Profile</font></strong>
+                    </h3>
+                </div>
+                <div class="box-tools">
+                </div>
+            </div>
+        </div>
+    </div>
+    <br />
+    <p style="margin-left:68px"><b>Order No: &nbsp;&nbsp; @ViewBag.orderid</b></p>
+    <hr />
+
+    <div class="box-body no-padding">
+        <div class="table-responsive table-full-width">
+            <table class="table no-margin table-hover table-striped table-responsive table-borderless" style="width: 100%;">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>
+                            No
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Category)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Quantity)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Subtotal)
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{int i = 0;}
+
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td></td>
+                            <td>
+                                @(++i)
+                            </td>
+                            <td width="30%">
+                                @Html.DisplayFor(modelItem => item.Category)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Quantity)
+                            </td>
+                            <td>
+                                $@Html.DisplayFor(modelItem => item.Subtotal)
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <hr />
+    <br />
+    <div class="form-group">        
+        <p>
+            <a asp-action="Index">
+                <button type="button" class="btn btn-primary" style="width:120px;height:32px;margin-left:1px; background-color:transparent;border:1px #B3B6B7 solid;margin-left:68px">
+                    <i class='fas fa-arrow-left' style='font-size:14px;border:1px;color:#B3B6B7'></i>&nbsp;&nbsp;<font style='font-size:14px;color:#B3B6B7'>Back To List</font>
+                </button>
+            </a>
+            <font size="4"  style="margin-left:550px">
+                <b>
+                    Total Expenditure:&nbsp;&nbsp; $ &nbsp;@Model.Sum(x => x.Subtotal)
+                </b>
+            </font>
+        </p>
+    </div>
+    <br />
+</div>
 
 
-<p>
-    <a asp-action="Index">Back</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                No
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Category)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Quantity)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Subtotal)
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-        @{int i = 0;}
 
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @(++i)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Category)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Quantity)
-                </td>
-                <td>
-                    $@Html.DisplayFor(modelItem => item.Subtotal)
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
 
-<h6>Total Expenditure: $@Model.Sum(x => x.Subtotal) </h6>
+
+

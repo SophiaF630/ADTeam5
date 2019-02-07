@@ -28,26 +28,200 @@ namespace ADTeam5.Controllers
             userCheck = new GeneralLogic(context);
         }
 
-        // GET: AdjustmentRecords
-        public async Task<IActionResult> Index()
+        //// GET: AdjustmentRecords
+        //public async Task<IActionResult> Index()
+        //{
+        //    ADTeam5User user = await _userManager.GetUserAsync(HttpContext.User);
+        //    List<string> identity = userCheck.checkUserIdentityAsync(user);
+        //    int userID = user.WorkID;
+        //    string userRole = identity[1];
+
+        //    List<AdjustmentRecord> arList = new List<AdjustmentRecord>();
+        //    //records shown to clerk
+        //    switch (userRole)
+        //    {
+        //        case "Clerk":
+        //            AdjustmentRecord arC = _context.AdjustmentRecord.FirstOrDefault(x => x.ClerkId == userID && !x.VoucherNo.Contains("Vtemp") && x.Status == "Draft");
+        //            if (arC != null)
+        //            {
+        //                arList = _context.AdjustmentRecord.Where(x => x.ClerkId == userID && !x.VoucherNo.Contains("Vtemp") && x.Status == "Draft").OrderByDescending(x => x.VoucherNo).ToList();
+        //            }
+        //            else
+        //            {
+        //                NotFound();
+        //            }
+        //            break;
+        //        case "Supervisor":
+        //            AdjustmentRecord arS = _context.AdjustmentRecord.FirstOrDefault(x => x.Status == "Pending Approval" && !x.VoucherNo.Contains("Vtemp"));
+        //            if (arS != null)
+        //            {
+        //                arList = _context.AdjustmentRecord.Where(x => x.Status == "Pending Approval" && !x.VoucherNo.Contains("Vtemp")).OrderByDescending(x => x.VoucherNo).ToList();
+        //            }
+        //            else
+        //            {
+        //                NotFound();
+        //            }
+        //            break;
+        //        case "Manager":
+        //            AdjustmentRecord arM = _context.AdjustmentRecord.FirstOrDefault(x => x.Status == "Pending Manager Approval" && !x.VoucherNo.Contains("Vtemp"));
+        //            if (arM != null)
+        //            {
+        //                arList = _context.AdjustmentRecord.Where(x => x.Status == "Pending Manager Approval" && !x.VoucherNo.Contains("Vtemp")).OrderByDescending(x => x.VoucherNo).ToList();
+        //            }
+        //            else
+        //            {
+        //                NotFound();
+        //            }
+        //            break;
+        //    }
+        //    return View(arList);
+        //}
+
+        // POST: AdjustmentRecords
+        //[HttpPost]
+        public async Task<IActionResult> Index(string state)
         {
             ADTeam5User user = await _userManager.GetUserAsync(HttpContext.User);
             List<string> identity = userCheck.checkUserIdentityAsync(user);
             int userID = user.WorkID;
-            //var sSISTeam5Context = _context.AdjustmentRecord.Include(a => a.clerkID == userID).Include(a => a.Manager).Include(a => a.Superviser);
+            string userRole = identity[1];
 
-            AdjustmentRecord ar = _context.AdjustmentRecord.FirstOrDefault(x => x.ClerkId == userID && !x.VoucherNo.Contains("Vtemp"));
             List<AdjustmentRecord> arList = new List<AdjustmentRecord>();
-            if (ar != null)
+            List<AdjustmentRecordViewModel> arViewModelList = new List<AdjustmentRecordViewModel>();
+
+            switch (state)
             {
-                arList = _context.AdjustmentRecord.Where(x => x.ClerkId == userID && !x.VoucherNo.Contains("Vtemp")).ToList();
+                case "OutstandingRecords":
+                    //records shown to clerk
+                    switch (userRole)
+                    {
+                        case "Clerk":
+                            AdjustmentRecord arC = _context.AdjustmentRecord.FirstOrDefault(x => x.ClerkId == userID && !x.VoucherNo.Contains("Vtemp") && x.Status == "Draft");
+                            if (arC != null)
+                            {
+                                arList = _context.AdjustmentRecord.Where(x => x.ClerkId == userID && !x.VoucherNo.Contains("Vtemp") && x.Status == "Draft").OrderByDescending(x => x.VoucherNo).ToList();
+                                arViewModelList = b.CreateAdjustmentRecordViewModel(arList);
+                            }
+                            else
+                            {
+                                NotFound();
+                            }
+                            break;
+                        case "Supervisor":
+                            AdjustmentRecord arS = _context.AdjustmentRecord.FirstOrDefault(x => x.Status == "Pending Approval");
+                            if (arS != null)
+                            {
+                                arList = _context.AdjustmentRecord.Where(x => x.Status == "Pending Approval").OrderByDescending(x => x.VoucherNo).ToList();
+                                arViewModelList = b.CreateAdjustmentRecordViewModel(arList);
+                            }
+                            else
+                            {
+                                NotFound();
+                            }
+                            break;
+                        case "Manager":
+                            AdjustmentRecord arM = _context.AdjustmentRecord.FirstOrDefault(x => x.Status == "Pending Manager Approval");
+                            if (arM != null)
+                            {
+                                arList = _context.AdjustmentRecord.Where(x => x.Status == "Pending Manager Approval").OrderByDescending(x => x.VoucherNo).ToList();
+                                arViewModelList = b.CreateAdjustmentRecordViewModel(arList);
+                            }
+                            else
+                            {
+                                NotFound();
+                            }
+                            break;
+                    }
+                    break;
+
+                case "PastRecords":
+                    //records shown to clerk
+                    switch (userRole)
+                    {
+                        case "Clerk":
+                            AdjustmentRecord arC = _context.AdjustmentRecord.FirstOrDefault(x => x.ClerkId == userID && !x.VoucherNo.Contains("Vtemp") && x.Status != "Draft");
+                            if (arC != null)
+                            {
+                                arList = _context.AdjustmentRecord.Where(x => x.ClerkId == userID && !x.VoucherNo.Contains("Vtemp") && x.Status != "Draft").OrderByDescending(x => x.VoucherNo).ToList();
+                                arViewModelList = b.CreateAdjustmentRecordViewModel(arList);
+                            }
+                            else
+                            {
+                                NotFound();
+                            }
+                            break;
+                        case "Supervisor":
+                            AdjustmentRecord arS = _context.AdjustmentRecord.FirstOrDefault(x => x.Status == "Rejected" || x.Status == "Approved");
+                            if (arS != null)
+                            {
+                                arList = _context.AdjustmentRecord.Where(x => x.Status == "Rejected" || x.Status == "Approved").OrderByDescending(x => x.VoucherNo).ToList();
+                                arViewModelList = b.CreateAdjustmentRecordViewModel(arList);
+                            }
+                            else
+                            {
+                                NotFound();
+                            }
+                            break;
+                        case "Manager":
+                            AdjustmentRecord arM = _context.AdjustmentRecord.FirstOrDefault(x => x.Status == "Rejected" || x.Status == "Approved");
+                            if (arM != null)
+                            {
+                                arList = _context.AdjustmentRecord.Where(x => x.Status == "Rejected" || x.Status == "Approved").OrderByDescending(x => x.VoucherNo).ToList();
+                                arViewModelList = b.CreateAdjustmentRecordViewModel(arList);
+                            }
+                            else
+                            {
+                                NotFound();
+                            }
+                            break;
+                    }
+                    break;
+                default:
+                    switch (userRole)
+                    {
+                        case "Clerk":
+                            AdjustmentRecord arC = _context.AdjustmentRecord.FirstOrDefault(x => x.ClerkId == userID && !x.VoucherNo.Contains("Vtemp") && x.Status == "Draft");
+                            if (arC != null)
+                            {
+                                arList = _context.AdjustmentRecord.Where(x => x.ClerkId == userID && !x.VoucherNo.Contains("Vtemp") && x.Status == "Draft").OrderByDescending(x => x.VoucherNo).ToList();
+                                arViewModelList = b.CreateAdjustmentRecordViewModel(arList);
+                            }
+                            else
+                            {
+                                NotFound();
+                            }
+                            break;
+                        case "Supervisor":
+                            AdjustmentRecord arS = _context.AdjustmentRecord.FirstOrDefault(x => x.Status == "Pending Approval");
+                            if (arS != null)
+                            {
+                                arList = _context.AdjustmentRecord.Where(x => x.Status == "Pending Approval").OrderByDescending(x => x.VoucherNo).ToList();
+                                arViewModelList = b.CreateAdjustmentRecordViewModel(arList);
+                            }
+                            else
+                            {
+                                NotFound();
+                            }
+                            break;
+                        case "Manager":
+                            AdjustmentRecord arM = _context.AdjustmentRecord.FirstOrDefault(x => x.Status == "Pending Manager Approval");
+                            if (arM != null)
+                            {
+                                arList = _context.AdjustmentRecord.Where(x => x.Status == "Pending Manager Approval").OrderByDescending(x => x.VoucherNo).ToList();
+                                arViewModelList = b.CreateAdjustmentRecordViewModel(arList);
+                            }
+                            else
+                            {
+                                NotFound();
+                            }
+                            break;
+                    }
+                    break;
             }
-            else
-            {
-                NotFound();
-            }
-            return View(arList);
+            
+            return View(arViewModelList);
         }
+
 
         // GET: AdjustmentRecords/Details/5
         public async Task<IActionResult> Details(string id)
@@ -56,112 +230,129 @@ namespace ADTeam5.Controllers
             ADTeam5User user = await _userManager.GetUserAsync(HttpContext.User);
             List<string> identity = userCheck.checkUserIdentityAsync(user);
             int userID = user.WorkID;
-
+            string userRole = identity[1];
             if (id == null)
             {
                 return NotFound();
-            }           
-
-            List<RecordDetails> rd = b.GetAdjustmentRecordDetails(id);
-            List<AdjustmentRecordDetails> result = new List<AdjustmentRecordDetails>();
-            foreach (var item in rd)
-            {
-                AdjustmentRecordDetails arList = new AdjustmentRecordDetails();
-
-                arList.ItemNumber = item.ItemNumber;
-                arList.ItemName = _context.Catalogue.FirstOrDefault(x => x.ItemNumber == item.ItemNumber).ItemName;
-                arList.Quantity = item.Quantity;
-                arList.Remark = item.Remark;
-
-                result.Add(arList);
             }
+            //ViewData for voucherNo
+            ViewData["VoucherNo"] = id;
+
+            //ViewBag for voucher price            
+            decimal? amount = b.GetTotalAmountForVoucher(id);
+            decimal? GST = Math.Round((decimal)(amount * (decimal?)0.07), 2);
+            ViewBag.Amount = amount;
+            ViewBag.GST = GST;
+            ViewBag.TotalAmount = amount + GST;
+
+            List<AdjustmentRecordDetails> result = b.GetAdjustmentRecordDetails(id);
+
+            //Viewbag for category dropdown list, need to post back
+            List<Catalogue> categoryList = new List<Catalogue>();
+            var q = _context.Catalogue.GroupBy(x => new { x.Category }).Select(x => x.FirstOrDefault());
+            foreach (var item in q)
+            {
+                categoryList.Add(item);
+            }
+            categoryList.Insert(0, new Catalogue { ItemNumber = "0", Category = "---Select Category---" });
+            ViewBag.ListofCategory = categoryList;
+
+            //ViewBag for record status
+            ViewBag.AdjustmentRecordStatus = _context.AdjustmentRecord.FirstOrDefault(x => x.VoucherNo == id).Status;
+
             return View(result);
         }
 
-        // GET: AdjustmentRecords/Create
-        public IActionResult Create()
-        {
-            ViewData["ClerkId"] = new SelectList(_context.User, "UserId", "DepartmentCode");
-            ViewData["ManagerId"] = new SelectList(_context.User, "UserId", "DepartmentCode");
-            ViewData["SuperviserId"] = new SelectList(_context.User, "UserId", "DepartmentCode");
-            return View();
-        }
-
-        // POST: AdjustmentRecords/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: AdjustmentRecords/Details/5
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("VoucherNo,IssueDate,ApproveDate,ClerkId,SuperviserId,ManagerId,Status")] AdjustmentRecord adjustmentRecord)
+        public async Task<IActionResult> Details(string id, string itemNumber, int quantity, int rowID, string remark, int createNewVoucherItemModalName, int voucherItemModalName, string itemSubmitted, string itemSavedToDraft, string rejectVoucher, string approveBySup, string approveByMan)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(adjustmentRecord);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["ClerkId"] = new SelectList(_context.User, "UserId", "DepartmentCode", adjustmentRecord.ClerkId);
-            ViewData["ManagerId"] = new SelectList(_context.User, "UserId", "DepartmentCode", adjustmentRecord.ManagerId);
-            ViewData["SuperviserId"] = new SelectList(_context.User, "UserId", "DepartmentCode", adjustmentRecord.SuperviserId);
-            return View(adjustmentRecord);
-        }
-
-        // GET: AdjustmentRecords/Edit/5
-        public async Task<IActionResult> Edit(string id)
-        {
+            ADTeam5User user = await _userManager.GetUserAsync(HttpContext.User);
+            List<string> identity = userCheck.checkUserIdentityAsync(user);
+            int userID = user.WorkID;
+            string userRole = identity[1];
             if (id == null)
             {
                 return NotFound();
             }
 
-            var adjustmentRecord = await _context.AdjustmentRecord.FindAsync(id);
-            if (adjustmentRecord == null)
-            {
-                return NotFound();
-            }
-            ViewData["ClerkId"] = new SelectList(_context.User, "UserId", "DepartmentCode", adjustmentRecord.ClerkId);
-            ViewData["ManagerId"] = new SelectList(_context.User, "UserId", "DepartmentCode", adjustmentRecord.ManagerId);
-            ViewData["SuperviserId"] = new SelectList(_context.User, "UserId", "DepartmentCode", adjustmentRecord.SuperviserId);
-            return View(adjustmentRecord);
-        }
+            //ViewBag for voucher price            
+            decimal? amount = b.GetTotalAmountForVoucher(id);
+            decimal? GST = Math.Round((decimal)(amount * (decimal?)0.07), 2);
+            ViewBag.Amount = amount;
+            ViewBag.GST = GST;
+            ViewBag.TotalAmount = amount + GST;
 
-        // POST: AdjustmentRecords/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("VoucherNo,IssueDate,ApproveDate,ClerkId,SuperviserId,ManagerId,Status")] AdjustmentRecord adjustmentRecord)
-        {
-            if (id != adjustmentRecord.VoucherNo)
+            //ViewData for voucherNo
+            ViewData["VoucherNo"] = id; 
+
+            //handle post action
+            List<AdjustmentRecordDetails> adjustmentRecordDetailsList = b.GetAdjustmentRecordDetails(id);
+
+            if (createNewVoucherItemModalName == 1)
             {
-                return NotFound();
+                b.CreateNewVoucherItem(userID, id, itemNumber, quantity, remark);
+                return RedirectToAction(nameof(Details));
+            }
+            else if (voucherItemModalName == 1)
+            {
+                b.UpdateVoucherItem(rowID, quantity, remark, adjustmentRecordDetailsList);
             }
 
-            if (ModelState.IsValid)
+            if (itemSubmitted == "1")
             {
-                try
+                //changestatus to pending approval
+                b.UpdateRecordStatus("Pending Approval", "AdjustmentRecord", id);
+                return RedirectToAction(nameof(Index));
+            }
+            else if (itemSavedToDraft == "1")
+            {
+                //change status to draft
+                b.UpdateRecordStatus("Draft", "AdjustmentRecord", id);
+                return RedirectToAction(nameof(Index));
+            }
+
+            if (rejectVoucher == "1")
+            {
+                var ar = _context.AdjustmentRecord.FirstOrDefault(x => x.VoucherNo == id);
+                if(ar != null)
                 {
-                    _context.Update(adjustmentRecord);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!AdjustmentRecordExists(adjustmentRecord.VoucherNo))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    //changestatus to reject
+                    b.RejectVoucher(userID, userRole, id);
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ClerkId"] = new SelectList(_context.User, "UserId", "DepartmentCode", adjustmentRecord.ClerkId);
-            ViewData["ManagerId"] = new SelectList(_context.User, "UserId", "DepartmentCode", adjustmentRecord.ManagerId);
-            ViewData["SuperviserId"] = new SelectList(_context.User, "UserId", "DepartmentCode", adjustmentRecord.SuperviserId);
-            return View(adjustmentRecord);
+            else if (approveBySup == "1")
+            {
+                //change status to draft
+                b.ApproveVoucher(userID, userRole, id);
+                return RedirectToAction(nameof(Index));
+            }
+            else if (approveByMan == "1")
+            {
+                //change status to draft
+                b.ApproveVoucher(userID, userRole, id);
+                return RedirectToAction(nameof(Index));
+            }
+
+            //Viewbag for category dropdown list, need to post back
+            List <Catalogue> categoryList = new List<Catalogue>();
+            var q = _context.Catalogue.GroupBy(x => new { x.Category }).Select(x => x.FirstOrDefault());
+            foreach (var item in q)
+            {
+                categoryList.Add(item);
+            }
+            categoryList.Insert(0, new Catalogue { ItemNumber = "0", Category = "---Select Category---" });
+            ViewBag.ListofCategory = categoryList;
+
+            //ViewBag for record status
+            ViewBag.AdjustmentRecordStatus = _context.AdjustmentRecord.FirstOrDefault(x => x.VoucherNo == id).Status;
+
+            List<AdjustmentRecordDetails> result = b.GetAdjustmentRecordDetails(id);
+
+            return View(result);
         }
+
 
         [HttpPost]
         public async Task<IActionResult> AdjustmentRecordSubmit(string id)
@@ -171,14 +362,14 @@ namespace ADTeam5.Controllers
             int userID = user.WorkID;
 
             AdjustmentRecord adjustmentRecordToBeSubmitted = _context.AdjustmentRecord.FirstOrDefault(x => x.VoucherNo == id);
-            adjustmentRecordToBeSubmitted.Status = "Submitted";
+            adjustmentRecordToBeSubmitted.Status = "Pending Approval";
             _context.SaveChanges();
 
             AdjustmentRecord ar = _context.AdjustmentRecord.FirstOrDefault(x => x.ClerkId == userID && !x.VoucherNo.Contains("Vtemp"));
             List<AdjustmentRecord> tempAdjustmentRecords = new List<AdjustmentRecord>();
             if (ar != null)
             {
-                tempAdjustmentRecords = _context.AdjustmentRecord.Where(x => x.ClerkId == userID && !x.VoucherNo.Contains("Vtemp")).ToList();
+                tempAdjustmentRecords = _context.AdjustmentRecord.Where(x => x.ClerkId == userID && !x.VoucherNo.Contains("Vtemp")).OrderByDescending(x => x.VoucherNo).ToList();
             }
             else
             {
@@ -197,18 +388,69 @@ namespace ADTeam5.Controllers
             AdjustmentRecord adjustmentRecordToBeDeleted = _context.AdjustmentRecord.FirstOrDefault(x => x.VoucherNo == id);
             _context.AdjustmentRecord.Remove(adjustmentRecordToBeDeleted);
             _context.SaveChanges();
+            b.RemoveRecordDetails(id);
 
             AdjustmentRecord ar = _context.AdjustmentRecord.FirstOrDefault(x => x.ClerkId == userID && !x.VoucherNo.Contains("Vtemp"));
             List<AdjustmentRecord> tempAdjustmentRecords = new List<AdjustmentRecord>();
             if (ar != null)
             {
-                tempAdjustmentRecords = _context.AdjustmentRecord.Where(x => x.ClerkId == userID && !x.VoucherNo.Contains("Vtemp")).ToList();
+                tempAdjustmentRecords = _context.AdjustmentRecord.Where(x => x.ClerkId == userID && !x.VoucherNo.Contains("Vtemp") && x.Status == "Draft").OrderByDescending(x=>x.VoucherNo).ToList();
             }
             else
             {
                 NotFound();
             }
             return PartialView("_TempAdjustmentRecords", tempAdjustmentRecords);
+        }
+
+        [HttpPost]
+        //[Route("AdjustmentRecords/Details/{id?}")]
+        public async Task<IActionResult> VoucherItemDelete(string id, int rdid)
+        {
+            ADTeam5User user = await _userManager.GetUserAsync(HttpContext.User);
+            List<string> identity = userCheck.checkUserIdentityAsync(user);
+            int userID = user.WorkID;
+
+            //Viewbag for category dropdown list, need to post back
+            List<Catalogue> categoryList = new List<Catalogue>();
+            var q = _context.Catalogue.GroupBy(x => new { x.Category }).Select(x => x.FirstOrDefault());
+            foreach (var item in q)
+            {
+                categoryList.Add(item);
+            }
+            categoryList.Insert(0, new Catalogue { ItemNumber = "0", Category = "---Select Category---" });
+            ViewBag.ListofCategory = categoryList;
+
+            //string voucherNo = _context.RecordDetails.FirstOrDefault(x => x.Rdid == rdid).Rrid;
+            List<AdjustmentRecordDetails> adjustmentRecordDetailsList = new List<AdjustmentRecordDetails>();
+            if (id != null)
+            {
+                List<AdjustmentRecordDetails> adjustmentRecordDetailsList1 = b.GetAdjustmentRecordDetails(id);
+                b.DeleteVoucherItem(rdid, adjustmentRecordDetailsList1);
+                adjustmentRecordDetailsList = b.GetAdjustmentRecordDetails(id);
+            }
+
+            if (adjustmentRecordDetailsList == null)
+            {
+                adjustmentRecordDetailsList = new List<AdjustmentRecordDetails>();
+            }
+
+            //ViewBag for voucher price            
+            decimal? amount = b.GetTotalAmountForVoucher(id);
+            decimal? GST = Math.Round((decimal)(amount * (decimal?)0.07), 2);
+            ViewBag.Amount = amount;
+            ViewBag.GST = GST;
+            ViewBag.TotalAmount = amount + GST;
+
+            return PartialView("_TempDetails", adjustmentRecordDetailsList);
+
+
+        }
+
+        //Create
+        public async Task<IActionResult> Create()
+        {
+            return RedirectToAction("Index", "IssueVoucher", new { area = "" });
         }
 
         private bool AdjustmentRecordExists(string id)

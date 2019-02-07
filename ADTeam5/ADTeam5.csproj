@@ -8,7 +8,20 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Views\manager\**" />
+    <Compile Remove="wwwroot\lib\mdbootstrap\**" />
+    <Content Remove="Views\manager\**" />
+    <Content Remove="wwwroot\lib\mdbootstrap\**" />
+    <EmbeddedResource Remove="Views\manager\**" />
+    <EmbeddedResource Remove="wwwroot\lib\mdbootstrap\**" />
+    <None Remove="Views\manager\**" />
+    <None Remove="wwwroot\lib\mdbootstrap\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="Views\AdjustmentRecords\Create.cshtml" />
     <Content Remove="Views\AdjustmentRecords\Delete.cshtml" />
+    <Content Remove="Views\AdjustmentRecords\Edit.cshtml" />
     <Content Remove="Views\DisbursementLists\Create.cshtml" />
     <Content Remove="Views\DisbursementLists\Delete.cshtml" />
     <Content Remove="Views\DisbursementLists\Edit.cshtml" />
@@ -16,8 +29,16 @@
     <Content Remove="Views\InventoryTransRecords\Delete.cshtml" />
     <Content Remove="Views\InventoryTransRecords\Details.cshtml" />
     <Content Remove="Views\InventoryTransRecords\Edit.cshtml" />
+    <Content Remove="Views\IssueVoucher\Create.cshtml" />
     <Content Remove="Views\IssueVoucher\Delete.cshtml" />
     <Content Remove="Views\IssueVoucher\Details.cshtml" />
+    <Content Remove="Views\IssueVoucher\Edit.cshtml" />
+    <Content Remove="Views\NewRequest\_NewRequest.cshtml" />
+    <Content Remove="Views\PurchaseOrderRecords\Create.cshtml" />
+    <Content Remove="Views\PurchaseOrderRecords\Delete.cshtml" />
+    <Content Remove="Views\PurchaseOrderRecords\Edit.cshtml" />
+    <Content Remove="Views\RaisePurchaseOrder\Create.cshtml" />
+    <Content Remove="Views\RaisePurchaseOrder\Edit.cshtml" />
     <Content Remove="Views\StationeryRetrievalList\Create.cshtml" />
     <Content Remove="Views\StationeryRetrievalList\Delete.cshtml" />
     <Content Remove="Views\StationeryRetrievalList\Details.cshtml" />
@@ -39,12 +60,8 @@
 
 
   <ItemGroup>
-    <Folder Include="Views\manager\" />
-  </ItemGroup>
-
-
-  <ItemGroup>
-    <Folder Include="wwwroot\lib\mdbootstrap\" />
+    <Folder Include="Migrations\" />
+    <Folder Include="wwwroot\lib\Highcharts\" />
   </ItemGroup>
 
 </Project>

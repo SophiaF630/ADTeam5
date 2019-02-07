@@ -1,54 +1,116 @@
-﻿
+﻿@using ADTeam5.Areas.Identity.Data
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ADTeam5User> SignInManager
+@inject UserManager<ADTeam5User> UserManager
+@inject SSISTeam5Context context
+
 @{
     ViewData["Title"] = "Home Page";
 }
+@{string role="";
 
-<style>
+    if (SignInManager.IsSignedIn(User))
+    {
+        GeneralLogic userCheck;
+        userCheck = new GeneralLogic(context);
+        ADTeam5User user = await UserManager.GetUserAsync(User);
+        List<string> identity = userCheck.checkUserIdentityAsync(user);
+        ViewData["UserRole"] = identity[1];
+    }
 
-    body {
-        background: linear-gradient(rgba(255,255,255, 0.3), rgba(255,255,255, 0.3)), url(/img/homepage.jpg) no-repeat center center fixed;
-        -webkit-background-size: cover;
-        -moz-background-size: cover;
-        -o-background-size: cover;
-        background-size: cover;
+    switch (ViewData["UserRole"].ToString())
+    {
+        case "Clerk":
+            role = "Store Clerk";
+            break;
+        case "Manager":
+            role = "Store Manager";
+            break;
+        case "Superviser":
+            role = "Store Supervisor";
+            break;
+        case "Head":
+            role = "Department Head";
+            break;
+        case "Rep":
+            role = "Department Rep";
+            break;
+        case "CoveringHead":
+            role = "Deputy Head";
+            break;
+        case "Employee":
+            role = "Department Employee";
+            break;
+        default:
+            role = "an unassigned employee";
+            break;
+    }
     }
 
 
+    <style>
+
+        body {
+            background: linear-gradient(rgba(255,255,255, 0.3), rgba(255,255,255, 0.3)), url(/img/homepage.jpg) no-repeat center center fixed;
+            -webkit-background-size: cover;
+            -moz-background-size: cover;
+            -o-background-size: cover;
+            background-size: cover;
+        }
 
 
 
-    /* Position text in the middle of the page/image */
-    .bg-text {
-        background-color: rgb(0,0,0); /* Fallback color */
-        background-color: rgba(0,0,0, 0.2); /* Black w/opacity/see-through */
-        color: white;
-        font-weight: bold;
-        border: 3px solid #f1f1f1;
-        position: relative;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, 50%);
+
+
+        /* Position text in the middle of the page/image */
+        .box1 {
+            background-color: rgb(0,0,0); /* Fallback color */
+        background-color: rgba(255, 255, 255, 0.5); /* Black w/opacity/see-through */
+        color: black;
+            font-weight: normal;
+            border: 3px solid #f1f1f1;
+            position: relative;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, 25%);
         z-index: 2;
-        width: fit-content;
-        line-height: 150%;
-        padding: 50px;
-        text-align: center;
-    }
-</style>
+            width: 800px;
+            padding: 40px;
+            text-align: center;
+        }
 
+        .box2 {
+            background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0, 0.2); /* Black w/opacity/see-through */
+    color: black;
+            font-weight: bold;
+            border: 3px solid #f1f1f1;
+            position: relative;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, 150%);
+    z-index: 2;
+            width: fit-content;
+            padding: 10px;
+            text-align: center;
+        }
+    </style>
 
+    <body>
 
+        <div class="bg-image"></div>
+        <div class="box1">
+            <h1>Welcome!</h1>
+            <h3>You are logged in as @role.</h3>
 
-<body>
-    <div class="bg-image">
-        <div class="bg-text">
-            <a href="/Identity/Account/Login">
-                <h1> Welcome, @User.Identity.Name!</h1>             
-            </a>
-            <p> Need to figure out how to load login page from the start</p>
-            
+            <p>
+                Please register your work account
+                <a asp-area="Identity" asp-page="/Account/Manage/Index">here</a>
+            </p>
         </div>
-       
-    </div>
-</body>
+
+        <div class="box2">
+            Use the handy sidebar at the side. <i class="fas fa-angle-double-left"></i>
+        </div>
+    </body>
 

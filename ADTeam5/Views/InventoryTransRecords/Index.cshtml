@@ -4,6 +4,53 @@
     ViewData["Title"] = "Index";
 }
 
+@if (TempData["NoDetails"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aira-label="close">
+            <span aria-hidden="true">&times</span>
+        </button>
+        @TempData["NoDetails"]
+    </div>
+}
+
+@if (TempData["EndDateError"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aira-label="close">
+            <span aria-hidden="true">&times</span>
+        </button>
+        @TempData["EndDateError"]
+    </div>
+}
+@if (TempData["StartDateError"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aira-label="close">
+            <span aria-hidden="true">&times</span>
+        </button>
+        @TempData["StartDateError"]
+    </div>
+}
+@if (TempData["StartAndEndDateError"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aira-label="close">
+            <span aria-hidden="true">&times</span>
+        </button>
+        @TempData["StartAndEndDateError"]
+    </div>
+}
+@if (TempData["FilterError"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aira-label="close">
+            <span aria-hidden="true">&times</span>
+        </button>
+        @TempData["FilterError"]
+    </div>
+}
+
 @*<h1>Index</h1>*@
 
 <section class="content">
@@ -15,13 +62,30 @@
                         <div style="width: 300px;padding: 20px;margin: 20px;border-style:outset; border-width:1px; ">
                             <div align="center" vertical-align="middle">
                                 <h2 class="box-title">
-                                    <strong><font size="5">Iventory Transactions</font></strong>
+                                    <strong><font size="5">Inventory Transactions</font></strong>
                                 </h2>
                             </div>
                             <div class="box-tools">
                             </div>
                         </div>
                     </div>
+                    <form asp-action="Index" method="post">
+                        <div>
+                            Select start date:
+                            <input type="date" name="startdate" id="start" value="=" />
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            Select end date:
+                            <input type="date" name="enddate" id="end" value=" = " />
+
+                            <input type="submit" value="Search" id="searchbtn" />
+                        </div>
+                        <br />
+
+                        @if (ViewData["StartDate"] != null & ViewData["EndDate"] != null)
+                        {
+                            <p> <b>Search results from @ViewData["StartDate"] to @ViewData["EndDate"]</b></p>
+                        }
+                    </form>
 
                     <table class="table">
                         <thead>

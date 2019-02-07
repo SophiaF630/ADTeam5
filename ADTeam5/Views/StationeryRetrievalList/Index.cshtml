@@ -2,6 +2,26 @@
 @{
     ViewData["Title"] = "Index";
 }
+@using ADTeam5.Areas.Identity.Data
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ADTeam5User> SignInManager
+@inject UserManager<ADTeam5User> UserManager
+@inject SSISTeam5Context context
+
+
+@{ if (SignInManager.IsSignedIn(User))
+    {
+        GeneralLogic userCheck;
+        userCheck = new GeneralLogic(context);
+        ADTeam5User user = await UserManager.GetUserAsync(User);
+        List<string> identity = userCheck.checkUserIdentityAsync(user);
+        ViewData["UserRole"] = identity[1];
+    }
+    else
+    { ViewData["UserRole"] = "Not signed"; }
+
+
+}
 
 
 <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
@@ -9,22 +29,89 @@
 
 @*<style>
 
-    .page-item.active .page-link {
-        background-color: #8e9eab;
+        .page-item.active .page-link {
+            background-color: #8e9eab;
+        }
+
+        .page-item.active .page-link {
+            border-color: #000000;
+        }
+    </style>*@
+<style>
+    /* Tooltip container */
+    .tooltip {
+        position: relative;
+        display: inline-block;
+        border-bottom: 1px dotted black; /* If you want dots under the hoverable text */
     }
 
-    .page-item.active .page-link {
-        border-color: #000000;
-    }
-</style>*@
+        /* Tooltip text */
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 120px;
+            background-color: #555;
+            color: #fff;
+            text-align: center;
+            padding: 5px 0;
+            border-radius: 6px;
+            /* Position the tooltip text */
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -60px;
+            /* Fade in tooltip */
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
 
+            /* Tooltip arrow */
+            .tooltip .tooltiptext::after {
+                content: "";
+                position: absolute;
+                top: 100%;
+                left: 50%;
+                margin-left: -5px;
+                border-width: 5px;
+                border-style: solid;
+                border-color: #555 transparent transparent transparent;
+            }
 
+        /* Show the tooltip text when you mouse over the tooltip container */
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+</style>
 
+@if (TempData["QuantityError"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aira-label="close">
+            <span aria-hidden="true">&times</span>
+        </button>
+        @TempData["QuantityError"]
+    </div>
+}
+@if (TempData["InsufficientStock"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aira-label="close">
+            <span aria-hidden="true">&times</span>
+        </button>
+        @TempData["InsufficientStock"]
+    </div>
+}
 <div class="row">
     <div class="col-md-12">
         <div class="box">
-            <div class="box-header">
-                <div align="center" vertical-align="middle">
+            <div class="box-header with-border">
+                <h3 class="box-title">
+                    Stationery Retrieval List
+                </h3>
+                <br />
+            </div>
+            @*<div align="center" vertical-align="middle">
                     <div style="width: 300px;padding: 20px;margin: 20px;border-style:outset; border-width:1px; ">
                         <div align="center" vertical-align="middle">
                             <h2 class="box-title">
@@ -35,71 +122,92 @@
                         <div class="box-tools">
                         </div>
                     </div>
-                </div>
+                </div>*@
 
-                @*<div style="border-style:outset; border-width:1px;">文字内容</div>*@
+            @*<div style="border-style:outset; border-width:1px;">文字内容</div>*@
 
 
-                <!-- /.box-header -->
-                <div class="box-body table-responsive no-padding">
-                    <div class="content table-responsive table-full-width">
-                        <table id="StationeryRetrievalList" class="table table-hover table-striped table-bordered" style="width: 100%;">
-                            <thead>
-                                <tr>
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.ItemNumber)
-                                    </th>
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.ItemName)
-                                    </th>
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.Quantity)
-                                    </th>
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.QuantityRetrieved)
-                                    </th>
-                                    <th></th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var item in Model)
+            <!-- /.box-header -->
+            <div class="box-body no-padding">
+                <div class="table-responsive table-full-width">
+                    <table id="StationeryRetrievalList" class="table no-margin table-hover table-striped table-borderless " style="width: 100%;">
+                        <thead>
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.ItemNumber)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.ItemName)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Quantity)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.QuantityRetrieved)
+                                </th>
+                                @if (ViewData["UserRole"].ToString() == "Clerk")
                                 {
-                                    <tr>
-                                        <td class="ItemNumber">
-                                            @Html.DisplayFor(modelItem => item.ItemNumber)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.ItemName)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.Quantity)
-                                        </td>
-                                        <td class="QuantityRetrieved">
-                                            @Html.DisplayFor(modelItem => item.QuantityRetrieved)
-                                        </td>
-                                        <td>
-                                            <button type="button" class="btn btn-primary editQuantityRetrieved" style="width:70px;height:30px;border:2px; background-color:#3c8dbc">
-                                                Edit
-                                            </button>
-                                        </td>
-                                        <td>
-                                            <button type="button" class="btn btn-primary addToVoucher" style="width:120px;height:30px;border:2px; background-color:#3c8dbc">
-                                                Add to Voucher
-                                            </button>
-                                        </td>
-                                    </tr>
+                                    <th>
+                                    </th>
+                                    <th>
+                                    </th>
                                 }
-                            </tbody>
-                        </table>
-                    </div>
-                    <!-- /.box-body -->
-                </div>
-                <!-- /.box -->
 
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td class="ItemNumber">
+                                        @Html.DisplayFor(modelItem => item.ItemNumber)
+                                    </td>
+                                    <td class="ItemName">
+                                        @Html.DisplayFor(modelItem => item.ItemName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Quantity)
+                                    </td>
+                                    <td class="QuantityRetrieved">
+                                        @Html.DisplayFor(modelItem => item.QuantityRetrieved)
+                                    </td>
+                                    @if (ViewData["UserRole"].ToString() == "Clerk")
+                                    {
+                                        <td>
+                                            <button type="button" class="btn btn-primary editQuantityRetrieved" style="background-color:transparent; border:transparent">
+                                                <i class="fa fa-edit" style="color:#66B3B3;">
+                                                    &nbsp;Edit
+                                                </i>
+                                            </button>
+                                            @*<button type="button" class="btn btn-primary editQuantityRetrieved" style="width:70px;height:30px;border:2px; background-color:#66B3B3">
+                                                  Edit
+                                                </button>*@
+                                        </td>
+                                        <td>
+                                            <button type="button" class="btn btn-primary addToVoucher" style="background-color:transparent; border:transparent;">
+                                                <i class='fas fa-plus-square' style='color:#66B38D;align-content:center'>
+                                                    &nbsp;&nbsp;Add to Voucher
+                                                </i>@*Add to Voucher*@
+                                            </button>
+
+                                            @*<i class='fas fa-plus-square' style='font-size:48px;color:red'></i>*@
+                                            @*<button type="button" class="btn btn-primary addToVoucher" style="width:120px;height:30px;border:2px; background-color:#66B38D">
+                                                   Add to Voucher
+                                                </button>*@
+                                        </td>
+                                    }
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <!-- /.box-body -->
             </div>
+            <!-- /.box -->
+
         </div>
     </div>
+</div>
 </div>
 
 
@@ -131,8 +239,12 @@
                         <input type="text" id="ItemNumberDisplay" name="" class="form-control" value="" disabled />
                     </div>
                     <div class="form-group">
+                        <label for="ItemName">ItemName</label>
+                        <input type="text" id="ItemNameDisplay" name="" class="form-control" value="" disabled />
+                    </div>
+                    <div class="form-group">
                         <label for="QuantityRetrieved">Quantity Retrieved</label>
-                        <input type="text" id="QuantityRetrieved" name="quantityRetrieved" class="form-control" value="" />
+                        <input type="number" min="0" step="1" max="9999" id="QuantityRetrieved" name="quantityRetrieved" class="form-control" value="" />
                     </div>
                     <div align="center">
                         <button class="btn" data-dismiss="modal" aria-hidden="true" style="width:80px;height:30px;border:2px; background-color:#EEEEEE"><font size="3" color="black">Close</font></button>
@@ -150,7 +262,7 @@
 <div class="modal fade" id="AddToVoucherModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
-            <br/>
+            <br />
             <div align="center" vertical-align="middle">
                 <div style="width: 400px;padding: 15px;margin: 15px;border-style:outset; border-width:1px; @*background-color:#3c8dbc*@">
                     <div align="center" vertical-align="middle">
@@ -162,8 +274,8 @@
                 </div>
             </div>
             @*<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>*@
+                    <span aria-hidden="true">&times;</span>
+                </button>*@
 
 
             <div class="modal-body">
@@ -177,20 +289,25 @@
                         <input type="text" id="ItemNumberDisplay" name="" class="form-control" value="" disabled />
                     </div>
                     <div class="form-group">
+                        <label for="ItemName">ItemName</label>
+                        <input type="text" id="ItemNameDisplay" name="" class="form-control" value="" disabled />
+                    </div>
+                    <div class="form-group">
                         <label for="Quantity">Quantity</label>
-                        <input type="text" id="QuantityForVoucher" name="quantityForVoucher" class="form-control" value="" />
+                        <input type="number" step="1" max="9999" id="QuantityForVoucher" name="quantityForVoucher" class="form-control" value="" />
                     </div>
                     <div class="form-group">
                         <label for="Remark">Remark</label>
-                        <input type="text" id="Remark" name="remark" class="form-control" value="" />
+                        <input type="text" required="required" id="Remark" name="remark" class="form-control" value="" />
                     </div>
 
                     <div align="center">
                         <button class="btn" data-dismiss="modal" aria-hidden="true" style="width:80px;height:30px;border:2px; background-color:#EEEEEE"><font size="3" color="black">Close</font></button>
-                        <button type="submit" class="btn btn-primary" style="width:120px;height:30px;border:2px; background-color:#3c8dbc"><font size="3" color="white">Save Changes</font></button>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <button type="submit" class="btn btn-primary" style="width:120px;height:30px;border:2px; background-color:#00B894"><font size="3" color="white">Save Changes</font></button>
                     </div>
                     @*<button class="btn" data-dismiss="modal" aria-hidden="true"><font size="5" color="white">Close</font></button>
-        <button type="submit" class="btn btn-primary">Save changes</button>*@
+                        <button type="submit" class="btn btn-primary">Save changes</button>*@
                 </form>
             </div>
         </div>
@@ -200,6 +317,7 @@
     $(".editQuantityRetrieved").click(function () {
         var $row = $(this).closest("tr");    // Find the row
         var itemNumber = $row.find("td.ItemNumber").text().trim(); // Find the text
+        var itemName = $row.find("td.ItemName").text().trim();
         var quantityRetrieved = $row.find("td.QuantityRetrieved").text().trim();
         var quantityRetrievedModalID = 1;
 
@@ -207,6 +325,7 @@
         var $modal = $('#QuantityRetrievedModal');
         $modal.find('#ItemNumberValue').val(itemNumber);
         $modal.find('#ItemNumberDisplay').val(itemNumber);
+        $modal.find('#ItemNameDisplay').val(itemName);
         $modal.find('#QuantityRetrieved').val(quantityRetrieved);
         $modal.find('#QuantityRetrievedModalID').val(quantityRetrievedModalID);
 
@@ -218,6 +337,7 @@
     $(".addToVoucher").click(function () {
         var $row = $(this).closest("tr");    // Find the row
         var itemNumber = $row.find("td.ItemNumber").text().trim(); // Find the text
+        var itemName = $row.find("td.ItemName").text().trim();
         var quantityForVoucher = 0;
         var remark = "";
         var addToVoucherModalID = 1;
@@ -225,6 +345,7 @@
         var $modal = $('#AddToVoucherModal');
         $modal.find('#ItemNumberValue').val(itemNumber);
         $modal.find('#ItemNumberDisplay').val(itemNumber);
+        $modal.find('#ItemNameDisplay').val(itemName);
         $modal.find('#QuantityForVoucher').val(quantityForVoucher);
         $modal.find('#Remark').val(remark);
         $modal.find('#AddToVoucherModalID').val(addToVoucherModalID);
@@ -234,15 +355,7 @@
 </script>
 
 
-<div class="age">
-    <span>age :</span>
-    <span class="editable">
-        38
-    </span>
-    <input type="button" value="edit" class="btn_edit"></input>
-</div>
-
 <script>
-                                            //$('#StationeryRetrivalList').DataTable();
+       //$('#StationeryRetrivalList').DataTable();
 </script>
 

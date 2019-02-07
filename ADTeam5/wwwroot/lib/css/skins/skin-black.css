@@ -17,9 +17,9 @@
 .skin-black .main-header .navbar {
   background-color: #ffffff;
 }
-.skin-black .main-header .navbar .nav > li > a {
-  color: #333333;
-}
+    .skin-black .main-header .navbar .nav > li > a {
+        color: #B0BEC5;
+    }
 .skin-black .main-header .navbar .nav > li > a:hover,
 .skin-black .main-header .navbar .nav > li > a:active,
 .skin-black .main-header .navbar .nav > li > a:focus,
@@ -90,7 +90,8 @@
   background: #1a2226;
 }
 .skin-black .sidebar-menu > li > a {
-  border-left: 3px solid transparent;
+    white-space: normal;
+    border-left: 3px solid transparent;
 }
 .skin-black .sidebar-menu > li:hover > a,
 .skin-black .sidebar-menu > li.active > a,

@@ -4,6 +4,26 @@
     ViewData["Title"] = "Index";
 }
 
+@using ADTeam5.Areas.Identity.Data
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ADTeam5User> SignInManager
+@inject UserManager<ADTeam5User> UserManager
+@inject SSISTeam5Context context
+
+
+@{ if (SignInManager.IsSignedIn(User))
+    {
+        GeneralLogic userCheck;
+        userCheck = new GeneralLogic(context);
+        ADTeam5User user = await UserManager.GetUserAsync(User);
+        List<string> identity = userCheck.checkUserIdentityAsync(user);
+        ViewData["UserRole"] = identity[1];
+    }
+    else
+    { ViewData["UserRole"] = "Not signed"; }
+
+
+}
 
 <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
@@ -13,6 +33,16 @@
 
 
 @*<div class="container">*@
+
+@if (TempData["IncorrectPassword"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aira-label="close">
+            <span aria-hidden="true">&times</span>
+        </button>
+        @TempData["IncorrectPassword"]
+    </div>
+}
 
 <section class="content">
     <div class="row">
@@ -57,8 +87,11 @@
                                             <th>
                                                 @Html.DisplayNameFor(model => model.Remark)
                                             </th>
-                                            <th></th>
-                                            <th></th>
+                                            @if (ViewData["UserRole"].ToString() == "Clerk" && ViewBag.DisbursementListStatus == "Pending Delivery")
+                                            {
+                                                <th></th>
+                                                <th></th>
+                                            }
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -71,7 +104,7 @@
                                                 <td class="ItemNumber">
                                                     @Html.DisplayFor(modelItem => item.ItemNumber)
                                                 </td>
-                                                <td>
+                                                <td class="ItemName">
                                                     @Html.DisplayFor(modelItem => item.ItemName)
                                                 </td>
                                                 <td>
@@ -83,16 +116,19 @@
                                                 <td class="Remark">
                                                     @Html.DisplayFor(modelItem => item.Remark)
                                                 </td>
-                                                <td>
-                                                    <button type="button" class="btn btn-primary editQuantityDelivered" style="width:70px;height:30px;border:2px; background-color:#3c8dbc">
-                                                        Edit
-                                                    </button>
-                                                </td>
-                                                <td>
-                                                    <button type="button" class="btn btn-primary addToVoucher" style="width:150px;height:30px;border:2px; background-color:#3c8dbc">
-                                                        Add to Voucher
-                                                    </button>
-                                                </td>
+                                                @if (ViewData["UserRole"].ToString() == "Clerk" && ViewBag.DisbursementListStatus == "Pending Delivery")
+                                                {
+                                                    <td>
+                                                        <button type="button" class="btn btn-primary editQuantityDelivered" style="width:70px;height:30px;border:2px; background-color:#3c8dbc">
+                                                            Edit
+                                                        </button>
+                                                    </td>
+                                                    <td>
+                                                        <button type="button" class="btn btn-primary addToVoucher" style="width:150px;height:30px;border:2px; background-color:#3c8dbc">
+                                                            Add to Voucher
+                                                        </button>
+                                                    </td>
+                                                }
                                             </tr>
                                         }
                                     </tbody>
@@ -102,13 +138,36 @@
                     </div>
                 </div>
             </div>
-            <button type="button" class="btn btn-primary confirmDelivery">
-                Confirm Delivery
-            </button>
+            @if (ViewData["UserRole"].ToString() == "Clerk" && ViewBag.DisbursementListStatus == "Pending Delivery")
+            {
+                @*<div>
+                        <a href="#" data-toggle="modal" data-target="#BackToListModal">Back to List</a>
+                    </div>
+                    <a asp-action="Index">*@
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#BackToListModal" style="width:120px;height:32px;margin-left:1px; background-color:transparent;border:1px #B3B6B7 solid;">
+                    <i class='fas fa-arrow-left' style='font-size:14px;border:1px;color:#B3B6B7'></i>&nbsp;&nbsp;<font style='font-size:14px;color:#B3B6B7'>Back To List</font>
+                </button>
+                @*</a>*@
+            }
+            else
+            {
+                <a asp-action="Index">
+                    <button type="button" class="btn btn-primary" style="width:120px;height:32px;margin-left:1px; background-color:transparent;border:1px #B3B6B7 solid;">
+                        <i class='fas fa-arrow-left' style='font-size:14px;border:1px;color:#B3B6B7'></i>&nbsp;&nbsp;<font style='font-size:14px;color:#B3B6B7'>Back To List</font>
+                    </button>
+                </a>
+            }
 
-            <div>
-                <a href="#" data-toggle="modal" data-target="#BackToListModal">Back to List</a>
-            </div>
+            @if (ViewData["UserRole"].ToString() == "Clerk" && ViewBag.DisbursementListStatus == "Pending Delivery")
+            {
+                <button type="button" class="btn btn-primary confirmDelivery">
+                    Confirm Delivery
+                </button>
+                <button type="button" class="btn btn-primary noShow">
+                    No Show
+                </button>
+            }
+
         </div>
 
     </div>
@@ -120,7 +179,7 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Update Quantity Retrieved</h5>
+                <h5 class="modal-title" id="exampleModalLongTitle">Update Quantity Delivered</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -139,8 +198,12 @@
                         <input type="text" id="ItemNumberDisplay" name="" class="form-control" value="" disabled />
                     </div>
                     <div class="form-group">
+                        <label for="ItemName">ItemName</label>
+                        <input type="text" id="ItemNameDisplay" name="" class="form-control" value="" disabled />
+                    </div>
+                    <div class="form-group">
                         <label for="QuantityDelivered">Quantity Delivered</label>
-                        <input type="text" id="QuantityDelivered" name="quantityDelivered" class="form-control" value="" />
+                        <input type="number" min="0" step="1" max="9999" id="QuantityDelivered" name="quantityDelivered" class="form-control" value="" />
                     </div>
                     <div class="form-group">
                         <label for="Remark">Remark</label>
@@ -177,8 +240,12 @@
                         <input type="text" id="ItemNumberDisplay" name="" class="form-control" value="" disabled />
                     </div>
                     <div class="form-group">
+                        <label for="ItemName">ItemName</label>
+                        <input type="text" id="ItemNameDisplay" name="" class="form-control" value="" disabled />
+                    </div>
+                    <div class="form-group">
                         <label for="Quantity">Quantity</label>
-                        <input type="text" id="QuantityForVoucher" name="quantityForVoucher" class="form-control" value="" />
+                        <input type="number" min="-9999" step="1" max="9999" id="QuantityForVoucher" name="quantityForVoucher" class="form-control" value="" />
                     </div>
                     <div class="form-group">
                         <label for="Remark">Remark</label>
@@ -199,7 +266,7 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Confirm Delivery</h5>
+                <h2 class="modal-title" id="exampleModalLongTitle">Confirm Delivery</h2>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -210,9 +277,35 @@
                         <input type="hidden" id="ConfirmDeliveryModalID" name="confirmDeliveryModalName" class="form-control" value="1" />
                     </div>
                     <div class="form-group">
-                        <label for="ConfirmationPassword">Please enter confirmation password</label>
-                        <input type="text" id="ConfirmationPassword" name="confirmationPassword" class="form-control" value="" />
+                        <label for="ConfirmationPassword">Please enter 4- digit confirmation password</label>
+                        <input type="text" id="ConfirmationPassword" maxlength="4" pattern="\d{4}" name="confirmationPassword" class="form-control" value="" />
                     </div>
+                    <div class="modal-footer">
+                        <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Confirm</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for No Show-->
+<div class="modal fade" id="NoShowModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">**Warning**</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="POST">
+                    <div class="form-group">
+                        <input type="hidden" id="NoShowModalID" name="noShowModalName" class="form-control" value="1" />
+                    </div>
+                    Status cannot be changed after confirmation
                     <div class="modal-footer">
                         <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
                         <button type="submit" class="btn btn-primary">Confirm</button>
@@ -238,7 +331,7 @@
                     <div class="form-group">
                         <input type="hidden" id="BackToListModalID" name="backToListModalName" class="form-control" value="1" />
                     </div>
-                    Your form will not be saved
+                    No changes will be saved
                     <div class="modal-footer">
                         <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
                         <button type="submit" class="btn btn-primary" value="Redirect" onclick="window.location='@Url.Action("Index", "DisbursementLists")'">Confirm</button>
@@ -254,6 +347,7 @@
         var $row = $(this).closest("tr");    // Find the row
         var rowID = $row.find("td.RowID").text().trim();
         var itemNumber = $row.find("td.ItemNumber").text().trim(); // Find the text
+        var itemName = $row.find("td.ItemName").text().trim();
         var quantityDelivered = $row.find("td.QuantityDelivered").text().trim();
         var remark = $row.find("td.Remark").text().trim();
         var quantityDeliveredModalID = 1;
@@ -262,6 +356,7 @@
         $modal.find('#RowID').val(rowID);
         $modal.find('#ItemNumberValue').val(itemNumber);
         $modal.find('#ItemNumberDisplay').val(itemNumber);
+        $modal.find('#ItemNameDisplay').val(itemName);
         $modal.find('#QuantityDelivered').val(quantityDelivered);
         $modal.find('#RemarkForDelivery').val(remark);
         $modal.find('#QuantityDeliveredModalID').val(quantityDeliveredModalID);
@@ -274,13 +369,15 @@
     $(".addToVoucher").click(function () {
         var $row = $(this).closest("tr");    // Find the row
         var itemNumber = $row.find("td.ItemNumber").text().trim(); // Find the text
-        var quantityForVoucher = 0;
+        var itemName = $row.find("td.ItemName").text().trim();
+        var quantityForVoucher = 1;
         var remark = "";
         var addToVoucherModalID = 1;
 
         var $modal = $('#AddToVoucherModal');
         $modal.find('#ItemNumberValue').val(itemNumber);
         $modal.find('#ItemNumberDisplay').val(itemNumber);
+        $modal.find('#ItemNameDisplay').val(itemName);
         $modal.find('#QuantityForVoucher').val(quantityForVoucher);
         $modal.find('#RemarkForVoucher').val(remark);
         $modal.find('#AddToVoucherModalID').val(addToVoucherModalID);
@@ -301,7 +398,15 @@
         $modal.modal('show');
     });
 </script>
+<script>
+    $(".noShow").click(function () {
+        var noShowModalID = 1;
 
+        var $modal = $('#NoShowModal');
+        $modal.find('#NoShowModalID').val(noShowModalID);
+        $modal.modal('show');
+    });
+</script>
 <script>
     $(".backToList").click(function () {
         var backToListModalID = 1;
