@@ -234,8 +234,8 @@ else
                             <strong><font size="5">Add To PO</font></strong>
                         </h5>
                         @*<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>*@
+                                <span aria-hidden="true">&times;</span>
+                            </button>*@
                     </div>
                 </div>
             </div>
@@ -257,7 +257,7 @@ else
                     </div>
                     <div class="form-group">
                         <label for="Quantity">Quantity</label>
-                        <input type="number" min="1" step="1" max ="9999" id="Quantity" name="quantity" required="required" class="form-control" value="" />
+                        <input type="number" min="1" step="1" max="9999" id="Quantity" name="quantity" required="required" class="form-control" value="" />
                     </div>
                     <div class="form-group">
                         <label for="Supplier">Supplier</label>
@@ -288,8 +288,8 @@ else
                             <strong><font size="5">Update PO Item</font></strong>
                         </h5>
                         @*<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>*@
+                                <span aria-hidden="true">&times;</span>
+                            </button>*@
                     </div>
                 </div>
             </div>
@@ -323,95 +323,95 @@ else
                 </form>
             </div>
         </div>
-                </div>
-            </div>
+    </div>
+</div>
 
 
-            <script>
-                $(".createNewPOItem").click(function () {
-                    //var $row = $(this).closest("tr");    // Find the row
-                    var itemNumber = ""; // Find the text
-                    var quantity = "";
-                    var supplier = "";
-                    var createNewPOItemModalID = 1;
+<script>
+    $(".createNewPOItem").click(function () {
+        //var $row = $(this).closest("tr");    // Find the row
+        var itemNumber = ""; // Find the text
+        var quantity = "";
+        var supplier = "";
+        var createNewPOItemModalID = 1;
 
-                    var $modal = $('#createNewPOItemModal');
-                    $modal.find('#ItemNumber').val(itemNumber);
-                    $modal.find('#Quantity').val(quantity);
-                    $modal.find('#Supplier').val(supplier);
-                    $modal.find('#createNewPOItemModalID').val(createNewPOItemModalID);
+        var $modal = $('#createNewPOItemModal');
+        $modal.find('#ItemNumber').val(itemNumber);
+        $modal.find('#Quantity').val(quantity);
+        $modal.find('#Supplier').val(supplier);
+        $modal.find('#createNewPOItemModalID').val(createNewPOItemModalID);
 
-                    $modal.modal('show');
+        $modal.modal('show');
+    });
+</script>
+
+<script>
+    $(document).ready(function () {
+        $("#Category").change(function () {
+            $.get("/RaisePurchaseOrder/GetItemNameList", { category: $("#Category").val() }, function (data) {
+                $("#ItemNumber").empty();
+                $("#ItemNumber").append("<option value='" + "" + "'>" + "" + " </option>");
+                $.each(data, function (index, row) {
+                    $("#ItemNumber").append("<option value='" + row.itemNumber + "'>" + row.itemName + "</option>")
                 });
-            </script>
+            });
+        })
+    });
+</script>
 
-            <script>
-                $(document).ready(function () {
-                    $("#Category").change(function () {
-                        $.get("/RaisePurchaseOrder/GetItemNameList", { category: $("#Category").val() }, function (data) {
-                            $("#ItemNumber").empty();
-                            $("#ItemNumber").append("<option value='" + "" + "'>" + "" + " </option>");
-                            $.each(data, function (index, row) {
-                                $("#ItemNumber").append("<option value='" + row.itemNumber + "'>" + row.itemName + "</option>")
-                            });
-                        });
-                    })
+<script>
+    $(document).ready(function () {
+        $("#ItemNumber").change(function () {
+            $.get("/RaisePurchaseOrder/GetSuppliers", { itemNumber: $("#ItemNumber").val() }, function (data) {
+                $("#Supplier").empty();
+                $.each(data, function (index, row) {
+                    $('#Supplier').append('<input type="radio" name="supplierCode" required="required" value="' + row + '"/>' + row + '<br/>');
                 });
-            </script>
+            });
+        })
+    });
+</script>
 
-            <script>
-                $(document).ready(function () {
-                    $("#ItemNumber").change(function () {
-                        $.get("/RaisePurchaseOrder/GetSuppliers", { itemNumber: $("#ItemNumber").val() }, function (data) {
-                            $("#Supplier").empty();
-                            $.each(data, function (index, row) {
-                                $('#Supplier').append('<input type="radio" name="supplierCode" required="required" value="' + row + '"/>' + row + '<br/>');
-                            });
-                        });
-                    })
-                });
-            </script>
+<script>
+    $(".editPOItem").click(function () {
+        var $row = $(this).closest("tr");    // Find the row
+        var rowID = $row.find("td.RowID").text().trim();
+        var itemName = $row.find("td.ItemName").text().trim(); // Find the text
+        var itemNumber = $row.find("td.ItemNumber").text().trim(); // Find the text
+        var quantity = $row.find("td.Quantity").text().trim();
+        var supplier = $row.find("td.Supplier").text().trim();;
+        var POItemModalID = 1;
+        console.log(quantity);
 
-            <script>
-                $(".editPOItem").click(function () {
-                    var $row = $(this).closest("tr");    // Find the row
-                    var rowID = $row.find("td.RowID").text().trim();
-                    var itemName = $row.find("td.ItemName").text().trim(); // Find the text
-                    var itemNumber = $row.find("td.ItemNumber").text().trim(); // Find the text
-                    var quantity = $row.find("td.Quantity").text().trim();
-                    var supplier = $row.find("td.Supplier").text().trim();;
-                    var POItemModalID = 1;
-                    console.log(quantity);
+        $.get("/RaisePurchaseOrder/GetSuppliers", { itemNumber: itemNumber }, function (data) {
+            $("#EditSupplier").empty();
+            $.each(data, function (index, row) {
+                console.log(row);
+                console.log(supplier);
+                if (row == supplier) {
+                    $('#EditSupplier').append('<input type="radio" name="supplierName" required="required" value="' + row + '" checked="checked"/>' + row + '<br/>');
+                }
+                else {
+                    $('#EditSupplier').append('<input type="radio" name="supplierName" required="required" value="' + row + '"/>' + row + '<br/>');
+                }
+            });
+        });
 
-                    $.get("/RaisePurchaseOrder/GetSuppliers", { itemNumber: itemNumber }, function (data) {
-                        $("#EditSupplier").empty();
-                        $.each(data, function (index, row) {
-                            console.log(row);
-                            console.log(supplier);
-                            if (row == supplier) {
-                                $('#EditSupplier').append('<input type="radio" name="supplierName" required="required" value="' + row + '" checked="checked"/>' + row + '<br/>');
-                            }
-                            else {
-                                $('#EditSupplier').append('<input type="radio" name="supplierName" required="required" value="' + row + '"/>' + row + '<br/>');
-                            }
-                        });
-                    });
+        var $modal = $('#POItemModal');
+        $modal.find('#RowID').val(rowID);
+        $modal.find('#ItemNameValue').val(itemName);
+        $modal.find('#ItemNameDisplay').val(itemName);
+        $modal.find('#Quantity').val(quantity);
+        $modal.find('#Supplier').val(supplier);
+        $modal.find('#POItemModalID').val(POItemModalID);
 
-                    var $modal = $('#POItemModal');
-                    $modal.find('#RowID').val(rowID);
-                    $modal.find('#ItemNameValue').val(itemName);
-                    $modal.find('#ItemNameDisplay').val(itemName);
-                    $modal.find('#Quantity').val(quantity);
-                    $modal.find('#Supplier').val(supplier);
-                    $modal.find('#POItemModalID').val(POItemModalID);
-
-                    $modal.modal('show');
-                });
-            </script>
+        $modal.modal('show');
+    });
+</script>
 
 
 
-            <script>
+<script>
     $(document).ready(function () {
         $(".submit").click(function () {
             var itemToAdd = $("input:checkbox:checked", "#TempPurchaseOrderDetails").map(function () {
@@ -434,10 +434,10 @@ else
             })
         });
     });
-            </script>
+</script>
 
 
-            <script>
+<script>
     $(".addToDraft").click(function () {
         var itemToAdd = $("input:checkbox:checked", "#TempPurchaseOrderDetails").map(function () {
             return $(this).val();
@@ -458,7 +458,7 @@ else
                 }
         })
     });
-
+</script>
 
 <!--select all checkbox-->
 <script>
@@ -477,12 +477,13 @@ else
 </script>
 
 <script>
+
     $('#TempPurchaseOrderDetails').click(function () {
         var amount = 0;
-        var GST = 0;
-        var totalAmount = 0;
-        var n = 0;
-        var objs = document.getElementsByName("isChecked");
+            var GST = 0;
+            var totalAmount = 0;
+            var n = 0;
+            var objs = document.getElementsByName("isChecked");
         for (var i = 0; i < objs.length; i++) {
             if (objs[i].checked) {
                 n++;
