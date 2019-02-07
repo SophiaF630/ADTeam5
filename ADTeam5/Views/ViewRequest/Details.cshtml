@@ -22,7 +22,7 @@
     </div>
     <br />
 
-    <p style="margin-left:98px">
+    @*<p style="margin-left:98px">
         <b>Requisition Form No: @ViewData["RRID"]</b>
         <b style="color:#dc6460;margin-left:390px">
             Status:
@@ -73,8 +73,41 @@
         </div>
     </div>
     <br />
-    <hr />
-   
+    <hr />*@
+
+    <p><b>Request Date:</b> @ViewData["RequestDate"] </p>
+    <b>Status: </b>@ViewData["Status"] - @if(ViewData["RejectStatus"] != null){@ViewData["RejectStatus"]}
+
+    <br/>
+    <br/>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Item Name
+                </th>
+                <th>
+                    Quantity
+                </th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.itemName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.quantity)
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+
     <div>
         <a asp-action="Index">
             <button type="button" class="btn btn-primary" style="width:120px;height:32px;margin-left:1px; background-color:transparent;border:1px #B3B6B7 solid;margin-left:98px">

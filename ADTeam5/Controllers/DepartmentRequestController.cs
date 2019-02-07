@@ -127,8 +127,13 @@ namespace ADTeam5.Controllers
             ViewData["RRID"] = rrid;
             var q1 = context.EmployeeRequestRecord.Where(x => x.Rrid == rrid).First();
             EmployeeRequestRecord e1 = q1;
+            var q3 = context.User.Where(x => x.UserId == e1.DepEmpId).FirstOrDefault();
+            string name = q3.Name;
 
+            DateTime requestDate = e1.RequestDate;
             ViewData["Status"] = e1.Status;
+            ViewData["RequestDate"] = requestDate.ToShortDateString();
+            ViewData["Requester"] = name;
 
             if (e1.Status == "Pending Approval")
             {
@@ -136,6 +141,12 @@ namespace ADTeam5.Controllers
             }
             else
             {
+                var reject = context.EmployeeRequestRecord.Where(x => x.Rrid == rrid).FirstOrDefault();
+                if (reject.Status == "Rejected")
+                {
+                    ViewData["RejectStatus"] = reject.Remark;
+                }
+
                 var q2 = from x in context.RecordDetails
                          join s in context.Catalogue on x.ItemNumber equals s.ItemNumber
                          where x.Rrid == rrid
