@@ -87,13 +87,13 @@ namespace ADTeam5.Controllers
 
             //Viewbag for supplier1 dropdown list, need to post back
             List<Supplier> supplier1List = _context.Supplier.ToList();
-            supplier1List.Insert(0, new Supplier { SupplierCode = "---Select Supplier---", SupplierName = "---Select Supplier---" });
+            supplier1List.Insert(0, new Supplier { SupplierCode = "", SupplierName = "" });
             ViewBag.Supplier1 = supplier1List;
             List<Supplier> supplier2List = _context.Supplier.ToList();
-            supplier2List.Insert(0, new Supplier { SupplierCode = "---Select Supplier---", SupplierName = "---Select Supplier---" });
+            supplier2List.Insert(0, new Supplier { SupplierCode = "", SupplierName = "" });
             ViewBag.Supplier2 = supplier2List;
             List<Supplier> supplier3List = _context.Supplier.ToList();
-            supplier3List.Insert(0, new Supplier { SupplierCode = "---Select Supplier---", SupplierName = "---Select Supplier---" });
+            supplier3List.Insert(0, new Supplier { SupplierCode = "", SupplierName = "" });
             ViewBag.Supplier3 = supplier3List;
 
             return View(new Catalogue());
