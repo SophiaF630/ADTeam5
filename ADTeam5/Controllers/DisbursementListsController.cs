@@ -176,7 +176,15 @@ namespace ADTeam5.Controllers
 
             if (addToVoucherModalName == 1)
             {
-                b.CreateNewVoucherItem(userID, itemNumber, quantityForVoucher, remarkForVoucher);
+                if(quantityForVoucher == 0)
+                {
+                    TempData["QuantityError"] = "Please select a quantity to add to voucher. Quantity cannot be 0.";
+                    return RedirectToAction("Details", new {id});
+                }
+                else
+                {
+                    b.CreateNewVoucherItem(userID, itemNumber, quantityForVoucher, remarkForVoucher);
+                }
             }
             else if (quantityDeliveredModalName == 1)
             {
