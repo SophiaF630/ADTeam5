@@ -8,7 +8,7 @@
 <script src="~/lib/bootstrap/bootstrap-multiselect.js"></script>
 
 
-<h1>ChargeBack</h1>
+@*<h1>ChargeBack</h1>*@
 
 <form asp-action="ChargeBack" method="post">
     <div>
@@ -18,60 +18,89 @@
             To:
             <input type="date" name="endDate" id="end" value="=" />*@
     </div>
-    <div>
-        Select Year:
-        <select id="years" multiple="multiple" required name="yearsName">
-            @if (ViewBag.ListOfYear != null)
-            {
-                @foreach (var item in ViewBag.ListOfYear)
-                {
-                    @if (item != null)
-                    {
-                        <option value="@item">
-                            @item
-                        </option>}
-                }
-            }
-        </select>
+    <section class="content">
 
-        Select Month:
-        <select id="months" multiple="multiple" required name="monthsName">
-            @if (ViewBag.ListOfMonth != null)
-            {
-                @foreach (var item in ViewBag.ListOfMonth)
-                {
-                    @if (item != null)
-                    {
-                        <option value="@item">
-                            @item
-                        </option>}
-                }
-            }
-        </select>
-    </div>
-    <div>
-        Select Department:
-        <select id="departments" multiple="multiple" required name="departmentsCode">
-            @if (ViewBag.ListOfDepartment != null)
-            {
-                @foreach (var item in ViewBag.ListOfDepartment)
-                {
-                    @if (item != null)
-                    {
-                        <option value="@item.DepartmentCode">
-                            @item.DepartmentName
-                        </option>}
-                }
-            }
-        </select>
+        <div class="box" style=" width:100%">
+            <div class="box-header with-border">
+                <h3 class="box-title">
+                    Condition Chosen
+                </h3>
+                <br />
+                <div class="box-tools pull-right">
+                    <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
+                    <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
+                </div>
+            </div>
 
-    </div>
-    <div>
-        @*<input type="submit" value="Generate" id="generatebtn" />*@
-        <button type="button" class="btn btn-primary generatebtn">
-            Generate
-        </button>
-    </div>
+            <br />
+            <div class="row">
+                <div class="col-md-6">
+
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Select Year:
+                    <select id="years" multiple="multiple" required name="yearsName">
+                        @if (ViewBag.ListOfYear != null)
+                        {
+                            @foreach (var item in ViewBag.ListOfYear)
+                            {
+                                @if (item != null)
+                                {
+                                    <option value="@item">
+                                        @item
+                                    </option>}
+                            }
+                        }
+                    </select>
+                    <br />
+                    <br />
+                </div>
+                <div class="col-md-6">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Select Month:
+                    <select id="months" multiple="multiple" required name="monthsName">
+                        @if (ViewBag.ListOfMonth != null)
+                        {
+                            @foreach (var item in ViewBag.ListOfMonth)
+                            {
+                                @if (item != null)
+                                {
+                                    <option value="@item">
+                                        @item
+                                    </option>}
+                            }
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    @*<div>*@
+                    Select Department:
+                    <select id="departments" multiple="multiple" required name="departmentsCode">
+                        @if (ViewBag.ListOfDepartment != null)
+                        {
+                            @foreach (var item in ViewBag.ListOfDepartment)
+                            {
+                                @if (item != null)
+                                {
+                                    <option value="@item.DepartmentCode">
+                                        @item.DepartmentName
+                                    </option>}
+                            }
+                        }
+                    </select>
+                    <br />
+                    <br />
+                </div>
+            </div>  
+            <br />
+            <div>
+                <a href="ChargeBack">
+                    <input type="button" value="Reset" class="btn btn-primary reset" style="background-color: #CC9933;width:150px;height:34px;border:2px;margin-left:200px" />
+                </a>
+                <button type="button" class="btn btn-primary generatebtn" style="width:150px;background-color:#00B894;margin-left:200px">
+                    Generate &nbsp; Chart
+                </button>
+            </div>
 </form>
 
 
