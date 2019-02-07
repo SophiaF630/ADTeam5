@@ -125,9 +125,10 @@ namespace ADTeam5.Controllers
             }
             else
             {
-                TempData["EmptyError"] = "Please fill in all details";
+                TempData["EmptyError"] = "Please fill in all details!";
+                return RedirectToAction("Create");
             }
-            return View(catalogue);
+            //return View(catalogue);
         }
       
 
@@ -233,14 +234,13 @@ namespace ADTeam5.Controllers
             {
                 _context.Catalogue.Remove(catalogue);
                 await _context.SaveChangesAsync();
-                TempData["Delete"] = "This item is successfully deleted";
+                TempData["Delete"] = "Item is successfully deleted";
                 ViewBag.IfCanDelete = "Y";
                 return RedirectToAction(nameof(Index));
             }
             else
             {
                 ViewBag.IfCanDelete = "N";
-                TempData["CannotDelete"] = "This item cannot be deleted";
                 return Redirect("Catalogue/Delete/" + id);
             }
             

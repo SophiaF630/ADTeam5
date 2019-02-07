@@ -79,21 +79,21 @@
                     <div class="col-md-4">
                         <div class="form-group">
                             <label asp-for="ReorderQty" class="control-label"></label>
-                            <input asp-for="ReorderQty" class="form-control" />
+                            <input asp-for="ReorderQty" min ="0" class="form-control" />
                             <span asp-validation-for="ReorderQty" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
                             <label asp-for="ReorderLevel" class="control-label"></label>
-                            <input asp-for="ReorderLevel" class="form-control" />
+                            <input asp-for="ReorderLevel" min ="0" class="form-control" />
                             <span asp-validation-for="ReorderLevel" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
                             <label asp-for="Stock" class="control-label"></label>
-                            <input asp-for="Stock" class="form-control" />
+                            <input asp-for="Stock" min ="0" class="form-control" />
                             <span asp-validation-for="Stock" class="text-danger"></span>
                         </div>
                     </div>
@@ -122,7 +122,7 @@
                             <label for="Supplier1">Supplier1</label>
                             @if (ViewBag.Supplier1 != null)
                             {
-                                <select for="Supplier1" class="form-control" id="Supplier1" name="supplier1" asp-items="@(new SelectList(ViewBag.Supplier1, "SupplierCode", "SupplierName"))"></select>
+                                <select for="Supplier1" class="form-control" id="Supplier1" name="supplier1" asp-items="@(new SelectList(ViewBag.Supplier1, "SupplierCode", "SupplierName"))" required ="required" ></select>
                             }
                         </div>
                     </div>
@@ -133,7 +133,7 @@
                                 {
                                     <select for="Supplier2" class="form-control" id="Supplier2" asp-items="@(new SelectList(ViewBag.Supplier2, "SupplierCode", "SupplierName"))"></select>
                                 }*@
-                            <select for="Supplier2" class="form-control" id="Supplier2" name="supplier2" asp-items="@(new SelectList(" "))"></select>
+                            <select for="Supplier2" class="form-control" id="Supplier2" name="supplier2" asp-items="@(new SelectList(" "))" required ="required" ></select>
                         </div>
                     </div>
                     <div class="col-md-4">
@@ -143,29 +143,29 @@
                                 {
                                     <select for="Supplier3" class="form-control" id="Supplier3" asp-items="@(new SelectList(ViewBag.Supplier3, "SupplierCode", "SupplierName"))"></select>
                                 }*@
-                            <select for="Supplier3" class="form-control" id="Supplier3" name="supplier3" asp-items="@(new SelectList(" "))"></select>
+                            <select for="Supplier3" class="form-control" id="Supplier3" name="supplier3" asp-items="@(new SelectList(" "))" required ="required" ></select>
                         </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-4">
-                        <div class="form-group">
+                        <div class="form-group"> 
                             <label asp-for="Supplier1Price" class="control-label"></label>
-                            <input asp-for="Supplier1Price" class="form-control" />
+                            <input asp-for="Supplier1Price" required ="required" class="form-control" />
                             <span asp-validation-for="Supplier1Price" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
                             <label asp-for="Supplier2Price" class="control-label"></label>
-                            <input asp-for="Supplier2Price" class="form-control" />
+                            <input asp-for="Supplier2Price" required ="required" class="form-control" />
                             <span asp-validation-for="Supplier2Price" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
                             <label asp-for="Supplier3Price" class="control-label"></label>
-                            <input asp-for="Supplier3Price" class="form-control" />
+                            <input asp-for="Supplier3Price" required ="required" class="form-control" />
                             <span asp-validation-for="Supplier3Price" class="text-danger"></span>
                         </div>
                     </div>
