@@ -47,7 +47,7 @@
                                         <th>
                                             Collection Point
                                         </th>
-                                        <th>
+                                        <th style="text-align:center">
                                             Collection Time
                                         </th>
                                         <th>
@@ -56,10 +56,10 @@
                                         <th>
                                             Rep
                                         </th>
-                                        <th>
+                                        <th style="text-align:center">
                                             @Html.DisplayNameFor(model => model.EstDeliverDate)
                                         </th>
-                                        <th>
+                                        <th style="text-align:center">
                                             @Html.DisplayNameFor(model => model.CompleteDate)
                                         </th>
                                         <th>
@@ -78,26 +78,26 @@
                                             <td>
                                                 <a asp-action="Details" asp-route-id="@item.Dlid"><U>@Html.DisplayFor(modelItem => item.Dlid)</U></a>
                                             </td>
-                                            <td width="15%">
+                                            <td width="12%">
                                                 @Html.DisplayFor(modelItem => item.CollectionPointNavigation.CollectionPointName)
                                             </td>
-                                            <td width="17%">
+                                            <td width="13%" align="center">
                                                 @*@Html.DisplayFor(modelItem => item.CollectionPointNavigation.CollectionTime).ToString("dd/MMM/yyyy HH:mm tt");*@
                                                 @item.CollectionPointNavigation.CollectionTime.ToShortTimeString()
                                             </td>
                                             <td class="DepartmentName" width="9%">
                                                 @Html.DisplayFor(modelItem => item.DepartmentCodeNavigation.DepartmentName)
                                             </td>
-                                            <td width="5%">
+                                            <td width="10%">
                                                 @Html.DisplayFor(modelItem => item.RepNavigation.Name)
                                             </td>
-                                            <td class="EstDeliverDate" width="24%">
+                                            <td class="EstDeliverDate" width="15%" align="center">
                                                 @Html.DisplayFor(modelItem => item.EstDeliverDate)
                                             </td>
-                                            <td width="16%">
+                                            <td width="16%" align="center">
                                                 @Html.DisplayFor(modelItem => item.CompleteDate)
                                             </td>
-                                            <td width="3%">
+                                            <td width="12%">
                                                 @Html.DisplayFor(modelItem => item.Status)
                                             </td>
                                             <td>
