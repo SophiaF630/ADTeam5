@@ -80,7 +80,17 @@ namespace ADTeam5.Controllers
                 }
                 else if (quantityRetrievedModalName == 1)
                 {
+                var stockCheck = _context.Catalogue.Where(x => x.ItemNumber == itemNumber).FirstOrDefault();
+                int stockAmt = stockCheck.Stock;
+
+                if(quantityRetrieved > stockAmt)
+                {
+                    TempData["InsufficientStock"] = "Stock level: " + stockAmt + ". There is insufficient stock. Please select a quantity less than or equals to stock level.";
+                }
+                else
+                {
                     b.UpdateCatalogueOutAndStockAfterRetrieval(itemNumber, quantityRetrieved);
+                }  
                 }
 
                 List<StationeryRetrievalList> result = b.GetStationeryRetrievalLists();
