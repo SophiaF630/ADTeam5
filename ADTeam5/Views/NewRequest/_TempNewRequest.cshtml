@@ -185,12 +185,24 @@ else
 <div class="modal fade" id="RequestItemModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Update Request Item</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+            <br />
+            @*<div class="modal-header">*@
+            <div align="center" vertical-align="middle">
+                <div style="width: 400px;padding: 15px;margin: 15px;border-style:outset; border-width:1px; @*background-color:#3c8dbc*@">
+                    <div align="center" vertical-align="middle">
+                        <h5 class="modal-title" id="exampleModalLongTitle">
+                            <strong><font size="5">Update Request Item</font></strong>
+                        </h5>
+                    </div>
+                </div>
             </div>
+            @*<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>*@
+            @*</div>*@
+
+
+
             <div class="modal-body">
                 <form method="POST" asp-action="EditItem">
                     <div class="form-group">
@@ -205,90 +217,92 @@ else
                         <label for="Quantity">Quantity</label>
                         <input type="number" min="1" step="1" id="Quantity" name="quantity" class="form-control" value="" />
                     </div>
-                    <div class="modal-footer">
-                        <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-                        <button type="submit" class="btn btn-primary">Save changes</button>
+
+                    <div align="center">
+                        <button class="btn" data-dismiss="modal" aria-hidden="true" style="width:80px;height:30px;border:2px; background-color:#EEEEEE"><font size="3" color="black">Close</font></button>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <button type="submit" class="btn btn-primary" style="width:120px;height:30px;border:2px; background-color:#00B894"><font size="3" color="white">Save Changes</font></button>
                     </div>
                 </form>
             </div>
         </div>
-    </div>
+     </div>
 </div>
 
 
 
-<script>
-    $(".createNewRequestItem").click(function () {
-        //var $row = $(this).closest("tr");    // Find the row
-        var itemNumber = ""; // Find the text
-        var quantity = "";
-        var createNewRequestItemModalID = 1;
+            <script>
+                $(".createNewRequestItem").click(function () {
+                    //var $row = $(this).closest("tr");    // Find the row
+                    var itemNumber = ""; // Find the text
+                    var quantity = "";
+                    var createNewRequestItemModalID = 1;
 
-        var $modal = $('#CreateNewRequestItemModal');
-        $modal.find('#ItemNumber').val(itemNumber);
-        $modal.find('#Quantity').val(quantity);
-        $modal.find('#CreateNewRequestItemModalID').val(createNewRequestItemModalID);
+                    var $modal = $('#CreateNewRequestItemModal');
+                    $modal.find('#ItemNumber').val(itemNumber);
+                    $modal.find('#Quantity').val(quantity);
+                    $modal.find('#CreateNewRequestItemModalID').val(createNewRequestItemModalID);
 
-        $modal.modal('show');
-    });
-</script>
+                    $modal.modal('show');
+                });
+            </script>
 
-<script>
-    $(document).ready(function () {
-        $("#Category").change(function () {
-            $.get("/NewRequest/GetItemNameList", { category: $("#Category").val() }, function (data) {
-                $("#ItemNumber").empty();
-                $("#ItemNumber").append("<option value='" + "0" + "' disabled>" + "---Select item---" + "</option>");
-                $.each(data, function (index, row) {
-                    $("#ItemNumber").append("<option value='" + row.itemNumber + "'>" + row.itemName + "</option>")
+            <script>
+                $(document).ready(function () {
+                    $("#Category").change(function () {
+                        $.get("/NewRequest/GetItemNameList", { category: $("#Category").val() }, function (data) {
+                            $("#ItemNumber").empty();
+                            $("#ItemNumber").append("<option value='" + "0" + "' disabled>" + "---Select item---" + "</option>");
+                            $.each(data, function (index, row) {
+                                $("#ItemNumber").append("<option value='" + row.itemNumber + "'>" + row.itemName + "</option>")
+                            });
+                        });
+                    })
+                });
+            </script>
+
+            <!--select all checkbox-->
+            <script>
+                $('#select-all').click(function (event) {
+                    if (this.checked) {
+                        // Iterate each checkbox
+                        $(':checkbox').each(function () {
+                            this.checked = true;
+                        });
+                    } else {
+                        $(':checkbox').each(function () {
+                            this.checked = false;
+                        });
+                    }
+                });
+            </script>
+
+            <script>
+                $(".editRequestItem").click(function () {
+                    var $row = $(this).closest("tr");    // Find the row
+                    var itemName = $row.find("td.ItemName").text().trim(); // Find the text
+                    var quantity = $row.find("td.Quantity").text().trim();
+                    var requestItemModalID = 1;
+
+                    var $modal = $('#RequestItemModal');
+                    $modal.find('#ItemNameValue').val(itemName);
+                    $modal.find('#ItemNameDisplay').val(itemName);
+                    $modal.find('#Quantity').val(quantity);
+                    $modal.find('#RequestItemModalID').val(requestItemModalID);
+
+                    $modal.modal('show');
+                });
+            </script>
+
+            @*<script>
+            $(document).ready(function () {
+                $(".submit").click(function () {
+                    document.location = '@Url.Action("Submit", "NewRequest")';
                 });
             });
-        })
-    });
-</script>
+        </script>*@
 
-<!--select all checkbox-->
-<script>
-    $('#select-all').click(function (event) {
-        if (this.checked) {
-            // Iterate each checkbox
-            $(':checkbox').each(function () {
-                this.checked = true;
-            });
-        } else {
-            $(':checkbox').each(function () {
-                this.checked = false;
-            });
-        }
-    });
-</script>
-
-<script>
-    $(".editRequestItem").click(function () {
-        var $row = $(this).closest("tr");    // Find the row
-        var itemName = $row.find("td.ItemName").text().trim(); // Find the text
-        var quantity = $row.find("td.Quantity").text().trim();
-        var requestItemModalID = 1;
-
-        var $modal = $('#RequestItemModal');
-        $modal.find('#ItemNameValue').val(itemName);
-        $modal.find('#ItemNameDisplay').val(itemName);
-        $modal.find('#Quantity').val(quantity);
-        $modal.find('#RequestItemModalID').val(requestItemModalID);
-
-        $modal.modal('show');
-    });
-</script>
-
-@*<script>
-        $(document).ready(function () {
-            $(".submit").click(function () {
-                document.location = '@Url.Action("Submit", "NewRequest")';
-            });
-        });
-    </script>*@
-
-<script>
+            <script>
     $(document).ready(function () {
         $(".submit").click(function () {
             var itemToAdd = $("input:checkbox:checked", "#TempRequestDetails").map(function () {
@@ -308,37 +322,37 @@ else
             })
         });
     });
-</script>
+            </script>
 
-@*<script>
-        $(document).ready(function () {
-            $(".submit2").click(function () {
-                //var itemToAdd = $("#TempRequestDetails").map(function () {
-                //    return $(this).val();
-                //    //return $(this).itemName;
-                //}).get();
-                var itemToAdd = [];
-                $.each($("#TempRequestDetails"), function (i, item) {
-                    var ItemName = $(item).find("td.ItemName").text().trim();
-                    itemToAdd.push(ItemName);
+            @*<script>
+            $(document).ready(function () {
+                $(".submit2").click(function () {
+                    //var itemToAdd = $("#TempRequestDetails").map(function () {
+                    //    return $(this).val();
+                    //    //return $(this).itemName;
+                    //}).get();
+                    var itemToAdd = [];
+                    $.each($("#TempRequestDetails"), function (i, item) {
+                        var ItemName = $(item).find("td.ItemName").text().trim();
+                        itemToAdd.push(ItemName);
+                    });
+
+
+                    alert(itemToAdd.join(','));
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("Index", "NewRequest")',
+                        dataType: "html",
+                        //data: { itemSubmitted: itemToAdd },
+                        data: JSON.stringify(itemToAdd),
+                        success:
+                            function (data) {
+                                //$('#result').html(data);
+                                alert("submitted");
+                                window.location.reload();
+                            }
+                    })
                 });
-
-
-                alert(itemToAdd.join(','));
-                $.ajax({
-                    type: "POST",
-                    url: '@Url.Action("Index", "NewRequest")',
-                    dataType: "html",
-                    //data: { itemSubmitted: itemToAdd },
-                    data: JSON.stringify(itemToAdd),
-                    success:
-                        function (data) {
-                            //$('#result').html(data);
-                            alert("submitted");
-                            window.location.reload();
-                        }
-                })
             });
-        });
-    </script>*@
+        </script>*@
 
