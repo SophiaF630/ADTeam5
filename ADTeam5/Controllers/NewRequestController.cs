@@ -177,7 +177,15 @@ namespace ADTeam5.Controllers
         public IActionResult Details(string id)
         {
             ViewData["RRID"] = id;
-            var q = _context.RecordDetails.Where(x => x.Rrid == id);
+
+            var q = from x in _context.RecordDetails
+                     join s in _context.Catalogue on x.ItemNumber equals s.ItemNumber
+                     where x.Rrid == id
+                     select new ViewRequestDetails
+                     {
+                         itemName = s.ItemName,
+                         quantity = x.Quantity
+                     };
 
             return View(q);
         }
