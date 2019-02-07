@@ -79,8 +79,8 @@ else
                             <thead>
                                 <tr>
                                     @*<th>
-            <input type="checkbox" name="select-all" id="select-all"/>
-        </th>*@
+                        <input type="checkbox" name="select-all" id="select-all"/>
+                    </th>*@
                                     <th>
                                         No.
                                     </th>
@@ -96,11 +96,11 @@ else
                                     <th>
                                         Remark
                                     </th>
-                                    @if (ViewData["UserRole"].ToString() == "Clerk" && ViewBag.AdjustmentRecordStatus == "Draft")
+                                    @if (ViewData["UserRole"].ToString() == "Clerk" && (ViewBag.AdjustmentRecordStatus == "Draft" || ViewBag.AdjustmentRecordStatus == "Rejected"))
                                     {
-                                        
-                                            <th></th>
-                                            <th></th>
+
+                                        <th></th>
+                                        <th></th>
 
                                     }
 
@@ -112,8 +112,8 @@ else
                                 {
                                     <tr>
                                         @*<td>
-                                                <input type="checkbox" id="isChecked" name="isChecked" value="@item.RowID">
-                                            </td>*@
+                            <input type="checkbox" id="isChecked" name="isChecked" value="@item.RowID">
+                        </td>*@
                                         <td class="RowID">
                                             @Html.DisplayFor(modelItem => item.RowID)
                                         </td>
@@ -129,7 +129,7 @@ else
                                         <td class="Remark" width="60%">
                                             @Html.DisplayFor(modelItem => item.Remark)
                                         </td>
-                                        @if (ViewData["UserRole"].ToString() == "Clerk" && ViewBag.AdjustmentRecordStatus == "Draft")
+                                        @if (ViewData["UserRole"].ToString() == "Clerk" && (ViewBag.AdjustmentRecordStatus == "Draft" || ViewBag.AdjustmentRecordStatus == "Rejected"))
                                         {
                                             <td>
                                                 <button class="editVoucherItem" style="background-color:transparent; border:transparent">
@@ -149,7 +149,7 @@ else
                             </tbody>
                         </table>
                         <br />
-                        @if (ViewData["UserRole"].ToString() == "Clerk" && ViewBag.AdjustmentRecordStatus == "Draft")
+                        @if (ViewData["UserRole"].ToString() == "Clerk" && (ViewBag.AdjustmentRecordStatus == "Draft" || ViewBag.AdjustmentRecordStatus == "Rejected"))
                         {
                             <button type="button" class="btn btn-primary createNewVoucherItem" style="width:120px;height:32px;border:2px;margin-left:36px; background-color:#00B894">
                                 <i class='fas fa-plus-circle' style='font-size:14px'></i>&nbsp;&nbsp;Add Item
@@ -176,7 +176,7 @@ else
 
                         <br />
                         @*<input type="submit" value="Save" class="btn btn-primary addToDraft" />
-                            <input type="submit" value="Submit" class="btn btn-primary submit" />*@
+        <input type="submit" value="Submit" class="btn btn-primary submit" />*@
                     </div>
                 </div>
             </div>
@@ -192,7 +192,7 @@ else
         @switch (ViewData["UserRole"].ToString())
         {
             case "Clerk":
-                @if (ViewBag.AdjustmentRecordStatus == "Draft")
+                @if (ViewBag.AdjustmentRecordStatus == "Draft" || ViewBag.AdjustmentRecordStatus == "Rejected")
                 {
                     <div style="margin-left:320px">
                         <input type="submit" value="Save As Draft" class="btn btn-primary addToDraft" style="width:120px;height:32px;border:2px;margin-left:180px; background-color:#CC9933" />

@@ -72,7 +72,7 @@ else
                     <br />
                     <div>
                         <a @*asp-route-state="OutstandingRecords" *@ href="/AdjustmentRecords?state=OutstandingRecords">
-                            <input type="button" value="View Oustanding Records" class="btn btn-primary outstanding" style="width:200px;height:32px;border:2px;margin-left:260px; background-color:#CC9933" />
+                            <input type="button" value="View Oustanding Records" class="btn btn-primary outstanding" style="width:200px;height:32px;border:2px;margin-left:200px; background-color:#CC9933" />
                         </a>
                         &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
                         <a @*asp-route-state="PastRecords" *@ href="/AdjustmentRecords?state=PastRecords">
@@ -142,7 +142,7 @@ else
                                             @Html.DisplayFor(modelItem => item.Status)
                                         </td>
 
-                                        @if (item.Status == "Draft")
+                                        @if (item.Status == "Draft" || item.Status == "Rejected")
                                         {
 
                                             @*<td>

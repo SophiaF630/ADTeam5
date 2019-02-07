@@ -283,10 +283,6 @@ namespace ADTeam5.BusinessLogic
                     i.Out = preOut - qtyDelivered;
                     _context.SaveChanges();
                 }
-                else
-                {
-
-                }
             }
         }
 
@@ -299,9 +295,8 @@ namespace ADTeam5.BusinessLogic
         }
 
         //Generate a disbursement list if partial fulfilled
-        public void GenerateDisbursementListForPartialFulfillment(string itemNumber, int qty, string remark, string depCode)
+        public void GenerateDisbursementListForPartialFulfillment(string itemNumber, int qty, string remark, string depCode, string dlID)
         {
-            string dlID = IDGenerator("DL");
             //check if dl record exists
             var q = _context.DisbursementList.FirstOrDefault(x => x.Dlid == dlID);
             if (q == null)
@@ -533,6 +528,15 @@ namespace ADTeam5.BusinessLogic
             TempVoucherDetails tempVoucherItem = tempVoucherDetailsList.FirstOrDefault(x => x.RowID == rowID);
             int rdid = tempVoucherItem.RDID;
 
+            //update voucher issue date
+            var voucher = _context.AdjustmentRecord.FirstOrDefault(x => x.VoucherNo == voucherNo);
+            if(voucher != null)
+            {
+                voucher.IssueDate = DateTime.Now.Date;
+                _context.AdjustmentRecord.Update(voucher);
+                _context.SaveChanges();
+            }
+
             RecordDetails rd = _context.RecordDetails.FirstOrDefault(x => x.Rdid == rdid);
             if (rd != null)
             {
@@ -577,6 +581,7 @@ namespace ADTeam5.BusinessLogic
             {
                 AdjustmentRecord ar = _context.AdjustmentRecord.FirstOrDefault(x => x.VoucherNo == rrid);
                 ar.Status = status;
+                ar.IssueDate = DateTime.Now.Date;
                 _context.AdjustmentRecord.Update(ar);
                 _context.SaveChanges();
             }
@@ -634,16 +639,16 @@ namespace ADTeam5.BusinessLogic
             {
                 if (userRole == "Supervisor")
                 {
-                    ar.SuperviserId = userID;
-                    ar.Status = "Draft";
+                    ar.SuperviserId = 0;
+                    ar.Status = "Rejected";
                     ar.ApproveDate = DateTime.Now.Date;
                     _context.AdjustmentRecord.Update(ar);
                     _context.SaveChanges();
                 }
                 else if (userRole == "Manager")
                 {
-                    ar.SuperviserId = userID;
-                    ar.Status = "Draft";
+                    ar.ManagerId = 0;
+                    ar.Status = "Rejected";
                     ar.ApproveDate = DateTime.Now.Date;
                     _context.AdjustmentRecord.Update(ar);
                     _context.SaveChanges();
@@ -1128,8 +1133,11 @@ namespace ADTeam5.BusinessLogic
             Catalogue item = _context.Catalogue.FirstOrDefault(x => x.ItemNumber == itemNumber);
             int stock = item.Stock;
             item.Stock = stock + quantity;
-            _context.Catalogue.Update(item);
-            _context.SaveChanges();
+            if(item.Stock >= 0)
+            {
+                _context.Catalogue.Update(item);
+                _context.SaveChanges();
+            }            
         }
 
         //Department part
