@@ -209,14 +209,34 @@ namespace ADTeam5.Controllers
         {
             //var q = context.Catalogue.Where(x => x.ItemName == itemName).FirstOrDefault();
             //string itemNumber = q.ItemNumber;
-            RecordDetails r = new RecordDetails();
-            r.Rrid = rrid;
-            r.ItemNumber = itemNumber;
-            r.Quantity = quantity;
-            context.Add(r);
-            await context.SaveChangesAsync();
-            return RedirectToAction("Edit", new { id = rrid });
 
+            bool checkItemExists = false;
+            var q = context.RecordDetails.Where(x => x.Rrid == rrid).ToList();
+            foreach(RecordDetails current in q)
+            {
+                if(current.ItemNumber == itemNumber)
+                {
+                    checkItemExists = true;
+                    current.Quantity = current.Quantity + quantity;
+                    await context.SaveChangesAsync();
+                    break;
+                }
+            }
+            if(checkItemExists == false)
+            {
+                RecordDetails r = new RecordDetails();
+                r.Rrid = rrid;
+                r.ItemNumber = itemNumber;
+                r.Quantity = quantity;
+                context.Add(r);
+                await context.SaveChangesAsync();
+                return RedirectToAction("Edit", new { id = rrid });
+            }
+            else
+            {
+
+                return RedirectToAction("Edit", new { id = rrid });
+            }
         }
 
         [HttpPost]
