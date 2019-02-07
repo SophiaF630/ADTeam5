@@ -45,7 +45,7 @@ namespace ADTeam5.Controllers
         // GET: Suppliers/Create
         public IActionResult Create()
         {
-            List<String> title = new List<String>();
+            List<string> title = new List<string>();
             title.Add("Mr");
             title.Add("Ms");
             title.Add("Mrs");

@@ -592,6 +592,7 @@ namespace ADTeam5.BusinessLogic
                 {
                     AdjustmentRecordViewModel ar = new AdjustmentRecordViewModel();
                     ar.VoucherNo = q.VoucherNo;
+                    ar.IssueDate = q.IssueDate;
                     ar.ApproveDate = q.ApproveDate;
                     ar.ClerkId = q.ClerkId;
                     ar.ClerkName = _context.User.FirstOrDefault(x => x.UserId == q.ClerkId).Name;
