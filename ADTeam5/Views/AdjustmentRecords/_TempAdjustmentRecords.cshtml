@@ -69,16 +69,17 @@ else
                 <div class="box-header with-border">
                     <h3 class="box-title">Adjustment Record</h3>
                     <br />
+                    <br />
                     <div>
                         <a @*asp-route-state="OutstandingRecords" *@ href="AdjustmentRecords?state=OutstandingRecords">
-                            <input type="button" value="View Oustanding Records" class="btn btn-primary outstanding" style="width:200px;height:32px;border:2px;margin-left:180px; background-color:#CC9933" />
+                            <input type="button" value="View Oustanding Records" class="btn btn-primary outstanding" style="width:200px;height:32px;border:2px;margin-left:260px; background-color:#CC9933" />
                         </a>
                         &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
                         <a @*asp-route-state="PastRecords" *@ href="AdjustmentRecords?state=PastRecords">
                             <input type="button" value="View Past Records" class="btn btn-primary past" style="background-color: #00B894;width:200px;height:32px;border:2px;" />
                         </a>
                     </div>
-
+                    <br />
                     <div class="box-tools pull-right">
                         <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
                         <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
@@ -145,24 +146,24 @@ else
                                         {
 
                                             @*<td>
-                                                    <form asp-action="AdjustmentRecordSubmit" asp-route-id="@item.VoucherNo" method="post" data-ajax="true" data-ajax-update="#TempAdjustmentRecords" role="form" asp-controller="AdjustmentRecords">
-                                                        <button type="submit" class="btn btn-primary" style="background-color: #00B894;width:68px;height:33px;border:2px;">
-                                                            <font size="2">Submit</font>
-                                                        </button>
-                                                    </form>
+                                            <form asp-action="AdjustmentRecordSubmit" asp-route-id="@item.VoucherNo" method="post" data-ajax="true" data-ajax-update="#TempAdjustmentRecords" role="form" asp-controller="AdjustmentRecords">
+                                                <button type="submit" class="btn btn-primary" style="background-color: #00B894;width:68px;height:33px;border:2px;">
+                                                    <font size="2">Submit</font>
+                                                </button>
+                                            </form>
 
-                                                </td>
-                                                <td width="10px">
+                                        </td>
+                                        <td width="10px">
 
-                                                </td>*@
+                                        </td>*@
                                             <td>
                                                 <form asp-action="AdjustmentRecordDelete" asp-route-id="@item.VoucherNo" method="post" data-ajax="true" data-ajax-update="#TempAdjustmentRecords" role="form" asp-controller="AdjustmentRecords">
                                                     <button style="background-color:transparent; border:transparent">
                                                         <i class="fa fa-trash-alt" style="color:#dc6460"></i>
                                                     </button>
                                                     @*<button type="submit" class="btn btn-sm btn-danger d-none d-md-inline-block" style="background-color: #dd4b39; width:68px;height:33px;border:2px; ">
-                                                            <font size="2">Delete</font>
-                                                        </button>*@
+                                                    <font size="2">Delete</font>
+                                                </button>*@
                                                 </form>
                                             </td>
                                         }

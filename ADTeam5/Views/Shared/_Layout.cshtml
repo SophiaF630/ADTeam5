@@ -34,9 +34,9 @@
     <environment include="Development">
 
         @*<!-- Site CSS -->
-        <link rel="stylesheet" href="~/css/site.css" />
-        <!-- DataTable CSS -->
-        <link rel="stylesheet" href="~/lib/DataTables/DataTables-1.10.18/css/dataTables.bootstrap4.css" />*@
+            <link rel="stylesheet" href="~/css/site.css" />
+            <!-- DataTable CSS -->
+            <link rel="stylesheet" href="~/lib/DataTables/DataTables-1.10.18/css/dataTables.bootstrap4.css" />*@
 
         <link href="~/plugins/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
         <!-- Font Awesome -->
@@ -64,8 +64,8 @@
 
         <!-- DataTable JavaScript-->
         @*<script src="~/lib/DataTables/jQuery-3.3.1/jquery-3.3.1.min.js"></script>
-        <script src="~/lib/DataTables/DataTables-1.10.18/js/jquery.dataTables.js"></script>
-        <script src="~/lib/DataTables/DataTables-1.10.18/js/dataTables.bootstrap4.js"></script>*@
+            <script src="~/lib/DataTables/DataTables-1.10.18/js/jquery.dataTables.js"></script>
+            <script src="~/lib/DataTables/DataTables-1.10.18/js/dataTables.bootstrap4.js"></script>*@
 
 
     </environment>
@@ -296,9 +296,9 @@ desired effect
                             <ul class="treeview-menu">
                                 <li>
                                     <a class="nav-link text-white-" asp-area="" asp-controller="GenerateReports" asp-action="StationeryUsage"><i class="fa fa-list-ul"></i>Stationery Usage Reports</a>
+                                </li>
+                                <li>
                                     <a class="nav-link text-white-" asp-area="" asp-controller="GenerateReports" asp-action="ChargeBack"><i class="fa fa-list-ul"></i>Stationery Charge Back Reports</a>
-
-                                    <!-- Will add Generate Reports controller when it is added -->
                                 </li>
                                 <li>
                                     <a class="nav-link text-white-" asp-area="" asp-controller="InventoryTransRecords" asp-action="Index"><i class="fa fa-list-ul"></i>Inventory Transaction Log</a>
@@ -310,6 +310,9 @@ desired effect
                         <li>
                             <a class="nav-link text-white-" asp-area="" asp-controller="Catalogues" asp-action="Index"><i class="fa fa-list-ul"></i> <span>Catalogue</span></a>
 
+                        </li>
+                        <li>
+                            <a class="nav-link text-white-" asp-area="" asp-controller="OutstandingOrder" asp-action="Index"><i class="fa fa-envelope"></i> <span>View Submitted Requests</span></a>
                         </li>
                         <li class="treeview">
                             <a href="#">
@@ -371,8 +374,10 @@ desired effect
                             </a>
                             <ul class="treeview-menu">
                                 <li>
-                                    <a class="nav-link text-white-" asp-area="" asp-controller="GenerateReports" asp-action="StationeryUsage"><i class="fa fa-list-ul"></i>Generate Reports</a>
-                                    <!-- Will add Generate Reports controller when it is added -->
+                                    <a class="nav-link text-white-" asp-area="" asp-controller="GenerateReports" asp-action="StationeryUsage"><i class="fa fa-list-ul"></i>Stationery Usage Reports</a>
+                                </li>
+                                <li>
+                                    <a class="nav-link text-white-" asp-area="" asp-controller="GenerateReports" asp-action="ChargeBack"><i class="fa fa-list-ul"></i>Stationery Charge Back Reports</a>
                                 </li>
                                 <li>
                                     <a class="nav-link text-white-" asp-area="" asp-controller="InventoryTransRecords" asp-action="Index"><i class="fa fa-list-ul"></i>Inventory Transaction Log</a>
@@ -448,8 +453,10 @@ desired effect
                             </a>
                             <ul class="treeview-menu">
                                 <li>
-                                    <a class="nav-link text-white-" asp-area="" asp-controller="GenerateReports" asp-action="Index"><i class="fa fa-list-ul"></i>Generate Reports</a>
-                                    <!-- Will add Generate Reports controller when it is added -->
+                                    <a class="nav-link text-white-" asp-area="" asp-controller="GenerateReports" asp-action="StationeryUsage"><i class="fa fa-list-ul"></i>Stationery Usage Reports</a>
+                                </li>
+                                <li>
+                                    <a class="nav-link text-white-" asp-area="" asp-controller="GenerateReports" asp-action="ChargeBack"><i class="fa fa-list-ul"></i>Stationery Charge Back Reports</a>
                                 </li>
                                 <li>
                                     <a class="nav-link text-white-" asp-area="" asp-controller="InventoryTransRecords" asp-action="Index"><i class="fa fa-list-ul"></i>Inventory Transaction Log</a>
@@ -597,8 +604,8 @@ desired effect
         <!-- AdminLTE App -->
         <script src="~/lib/js/adminlte.min.js"></script>
         <!-- Optionally, you can add Slimscroll and FastClick plugins.
-    Both of these plugins are recommended to enhance the
-    user experience. -->
+        Both of these plugins are recommended to enhance the
+        user experience. -->
         <!-- ajax -->
         <script src="~/assets/js/jquery.unobtrusive-ajax.min.js"></script>
 
