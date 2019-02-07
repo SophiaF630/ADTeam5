@@ -46,7 +46,7 @@ namespace ADTeam5.Controllers
             {
                 categoryList.Add(item);
             }
-            categoryList.Insert(0, new Catalogue { ItemNumber = "0", Category = "---Select Category---" });
+            categoryList.Insert(0, new Catalogue { ItemNumber = "0", Category = "" });
             ViewBag.ListofCategory = categoryList;
            
 
