@@ -34,8 +34,8 @@
             @TempData["NoText"]
         </div>
     }
-    <p style="margin-left:68px"><a><b>Requisition Form No: @ViewData["RRID"]</b></a></p>
-    <p style="margin-left:68px"><a><b>Employee Name: @ViewData["Name"]</b></a></p>
+        <p style="margin-left:68px"><b>Requisition Form No: @ViewData["RRID"]</b></p>
+    <p style="margin-left:68px"><b>Employee Name: @ViewData["Name"]</b></p>
     <hr />
 
     <div class="box-body no-padding">
@@ -73,10 +73,9 @@
         </div>
     </div>
     <br />
-    <br />
+   
     <br />
     <hr />
-    <br />
     <br />
     <div class="form-horizontal">
         <a asp-action="Index">
@@ -87,10 +86,11 @@
         @*<div style="margin-left:320px">*@
         <input type="submit" value="Reject" class="btn btn-primary rejectReason" style="background-color:#dc6460;width:100px;height:32px;border:2px;margin-left:160px" />
         <form asp-controller="OutstandingOrder" asp-action="ApproveOrder" method="post" style="display: inline;">
-            <input type="submit" value="Approve" class="btn btn-primary" style="background-color:#00B894;width:100px;height:32px;border:2px;margin-left:220px" />
+            <input type="submit" value="Approve" class="btn btn-primary" style="background-color:#00B894;width:100px;height:32px;border:2px;margin-left:100px" />
         </form>
         <br />
-        <br /><br />
+        <br />
+        <br />
         @*</div>*@
     </div>
 </div>
@@ -125,7 +125,7 @@
                                 <br />
                                 <label for="rejectReason">&nbsp;&nbsp;&nbsp; Reason for Rejection:</label>
                                 <br />
-                                <br />
+                                
                                 @if (TempData["NoText"] != null)
                                 {
                                     <div class="alert alert-danger" role="alert">
