@@ -53,7 +53,8 @@
                         <div class="form-group">
                             <label asp-for="TitleOfCourtesy" class="control-label"></label>
                             @*<input asp-for="TitleOfCourtesy" class="form-control" />*@
-                            <select for="TitleOfCourtesy" class="form-control" asp-items="@(new SelectList(ViewBag.Title))" required="required"></select>
+                            @*<select for="TitleOfCourtesy" class="form-control" id ="title" name ="title" asp-items="@(new SelectList(ViewBag.Title))" required="required"></select>*@
+                            @*<select asp-for="TitleOfCourtesy" class="form-control" asp-items="ViewBag.Title"></select>*@
                             <span asp-validation-for="TitleOfCourtesy" class="text-danger"></span>
                         </div>
                     </div>

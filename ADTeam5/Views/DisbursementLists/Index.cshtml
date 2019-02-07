@@ -4,6 +4,27 @@
     ViewData["Title"] = "Index";
 }
 
+@using ADTeam5.Areas.Identity.Data
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ADTeam5User> SignInManager
+@inject UserManager<ADTeam5User> UserManager
+@inject SSISTeam5Context context
+
+
+@{ if (SignInManager.IsSignedIn(User))
+    {
+        GeneralLogic userCheck;
+        userCheck = new GeneralLogic(context);
+        ADTeam5User user = await UserManager.GetUserAsync(User);
+        List<string> identity = userCheck.checkUserIdentityAsync(user);
+        ViewData["UserRole"] = identity[1];
+    }
+    else
+    { ViewData["UserRole"] = "Not signed"; }
+
+
+}
+
 @*<p>
         @ViewData["Department"]
     </p>
@@ -25,211 +46,213 @@
     </div>
 }
 
-        <div class="row">
-            <div class="col-md-12">
-                <div class="box">
-                    <div class="box-header with-border">
-                        <h3 class="box-title">
-                            Disbursement List
-                        </h3>
-                        <br />
-                    </div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="box">
+            <div class="box-header with-border">
+                <h3 class="box-title">
+                    Disbursement List
+                </h3>
+                <br />
+            </div>
 
-                    <!-- /.box-header -->
-                    <div class="box-body no-padding">
-                        <div class="table-responsive table-full-width">
-                            <table id="DisbursementList" class="table no-margin table-striped table-hover table-borderless" style="width: 100%;">
-                                <thead>
-                                    <tr>
-                                        <th>
-                                            ID
-                                        </th>
-                                        <th>
-                                            Collection Point
-                                        </th>
-                                        <th style="text-align:center">
-                                            Collection Time
-                                        </th>
-                                        <th>
-                                            Department
-                                        </th>
-                                        <th>
-                                            Rep
-                                        </th>
-                                        <th style="text-align:center">
-                                            @Html.DisplayNameFor(model => model.EstDeliverDate)
-                                        </th>
-                                        <th style="text-align:center">
-                                            @Html.DisplayNameFor(model => model.CompleteDate)
-                                        </th>
-                                        <th>
-                                            @Html.DisplayNameFor(model => model.Status)
-                                        </th>
-                                        <th>
-                                           
-                                        </th>
+            <!-- /.box-header -->
+            <div class="box-body no-padding">
+                <div class="table-responsive table-full-width">
+                    <table id="DisbursementList" class="table no-margin table-striped table-hover table-borderless" style="width: 100%;">
+                        <thead>
+                            <tr>
+                                <th>
+                                    ID
+                                </th>
+                                <th>
+                                    Collection Point
+                                </th>
+                                <th style="text-align:center">
+                                    Collection Time
+                                </th>
+                                <th>
+                                    Department
+                                </th>
+                                <th>
+                                    Rep
+                                </th>
+                                <th style="text-align:center">
+                                    @Html.DisplayNameFor(model => model.EstDeliverDate)
+                                </th>
+                                <th style="text-align:center">
+                                    @Html.DisplayNameFor(model => model.CompleteDate)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Status)
+                                </th>
+                                @if (ViewData["UserRole"].ToString() == "Clerk")
+                                {
+                                    <th></th>
+                                }
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        <a asp-action="Details" asp-route-id="@item.Dlid"><U>@Html.DisplayFor(modelItem => item.Dlid)</U></a>
+                                    </td>
+                                    <td width="12%">
+                                        @Html.DisplayFor(modelItem => item.CollectionPointNavigation.CollectionPointName)
+                                    </td>
+                                    <td width="13%" align="center">
+                                        @*@Html.DisplayFor(modelItem => item.CollectionPointNavigation.CollectionTime).ToString("dd/MMM/yyyy HH:mm tt");*@
+                                        @item.CollectionPointNavigation.CollectionTime.ToShortTimeString()
+                                    </td>
+                                    <td class="DepartmentName" width="9%">
+                                        @Html.DisplayFor(modelItem => item.DepartmentCodeNavigation.DepartmentName)
+                                    </td>
+                                    <td width="10%">
+                                        @Html.DisplayFor(modelItem => item.RepNavigation.Name)
+                                    </td>
+                                    <td class="EstDeliverDate" width="15%" align="center">
+                                        @Html.DisplayFor(modelItem => item.EstDeliverDate)
+                                    </td>
+                                    <td width="16%" align="center">
+                                        @Html.DisplayFor(modelItem => item.CompleteDate)
+                                    </td>
+                                    <td width="12%">
+                                        @Html.DisplayFor(modelItem => item.Status)
+                                    </td>
+                                    <td>
+                                        @if (ViewData["UserRole"].ToString() == "Clerk")
+                                        {
 
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var item in Model)
-                                    {
-                                        <tr>
-                                            <td>
-                                                <a asp-action="Details" asp-route-id="@item.Dlid"><U>@Html.DisplayFor(modelItem => item.Dlid)</U></a>
-                                            </td>
-                                            <td width="12%">
-                                                @Html.DisplayFor(modelItem => item.CollectionPointNavigation.CollectionPointName)
-                                            </td>
-                                            <td width="13%" align="center">
-                                                @*@Html.DisplayFor(modelItem => item.CollectionPointNavigation.CollectionTime).ToString("dd/MMM/yyyy HH:mm tt");*@
-                                                @item.CollectionPointNavigation.CollectionTime.ToShortTimeString()
-                                            </td>
-                                            <td class="DepartmentName" width="9%">
-                                                @Html.DisplayFor(modelItem => item.DepartmentCodeNavigation.DepartmentName)
-                                            </td>
-                                            <td width="10%">
-                                                @Html.DisplayFor(modelItem => item.RepNavigation.Name)
-                                            </td>
-                                            <td class="EstDeliverDate" width="15%" align="center">
-                                                @Html.DisplayFor(modelItem => item.EstDeliverDate)
-                                            </td>
-                                            <td width="16%" align="center">
-                                                @Html.DisplayFor(modelItem => item.CompleteDate)
-                                            </td>
-                                            <td width="12%">
-                                                @Html.DisplayFor(modelItem => item.Status)
-                                            </td>
-                                            <td>
-                                                @if (@item.Status == "Pending Delivery")
-                                                {
-                                                    <button type="button" class="btn btn-primary changeEstDeliverDate" style="background-color:transparent; border:transparent;">
-                                                        <i class="fa fa-calendar-alt" style="color:#66B3B3">
-                                                            &nbsp;Change Deliver Date
-                                                        </i>
-                                                    </button>
-                                                }
-                                                else
-                                                {
-                                                    <button type="button" class="btn btn-primary changeEstDeliverDate" style="background-color:transparent; border:transparent;" disabled>
-                                                        <i class="fa fa-calendar-alt" style="color:#D0D3D4">
-                                                            &nbsp;Change Deliver Date
-                                                        </i>
-                                                    </button>
-                                                }
-
-                                            </td>
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+                                            @if (@item.Status == "Pending Delivery")
+                                            {
+                                                <button type="button" class="btn btn-primary changeEstDeliverDate" style="background-color:transparent; border:transparent;">
+                                                    <i class="fa fa-calendar-alt" style="color:#66B3B3">
+                                                        &nbsp;Change Deliver Date
+                                                    </i>
+                                                </button>
+                                            }
+                                            else
+                                            {
+                                                <button type="button" class="btn btn-primary changeEstDeliverDate" style="background-color:transparent; border:transparent;" disabled>
+                                                    <i class="fa fa-calendar-alt" style="color:#D0D3D4">
+                                                        &nbsp;Change Deliver Date
+                                                    </i>
+                                                </button>
+                                            }
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
-        </div>
+    </div>
+</div>
 
 
-        <!-- Modal for edit quantity retrieved-->
-        <div class="modal fade" id="ChangeEstDeliverDateModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <br />
-                    @*<div class="modal-header">*@
+<!-- Modal for edit quantity retrieved-->
+<div class="modal fade" id="ChangeEstDeliverDateModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <br />
+            @*<div class="modal-header">*@
+            <div align="center" vertical-align="middle">
+                <div style="width: 400px;padding: 15px;margin: 15px;border-style:outset; border-width:1px; ">
                     <div align="center" vertical-align="middle">
-                        <div style="width: 400px;padding: 15px;margin: 15px;border-style:outset; border-width:1px; ">
-                            <div align="center" vertical-align="middle">
-                                <h3 class="modal-title" id="exampleModalLongTitle">
-                                    Change Deliver Date
-                                </h3>
-                            </div>
-                        </div>
-                    </div>
-                    @*<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>*@
-
-                    <div class="modal-body">
-                        <form method="POST">
-                            <div class="form-group">
-                                <input type="hidden" id="ChangeEstDeliverDateModalID" name="changeEstDeliverDateModalName" class="form-control" value="1" />
-                            </div>
-                            <div class="form-group">
-                                <label for="DepartmentName">Department Name</label>
-                                <input type="hidden" id="DepartmentNameValue" name="departmentName" class="form-control" value="" />
-                                <input type="text" id="DepartmentNameDisplay" name="" class="form-control" value="" disabled />
-                            </div>
-                            <div class="form-group">
-                                <label for="EstDeliverDate">New Deliver Date</label>       <br>
-                                <input type="date" id="EstDeliverDate" name="estDeliverDate" value="" />
-                            </div>
-                            @*<div class="modal-footer">
-                                    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-                                    <button type="submit" class="btn btn-primary">Save changes</button>
-                                </div>*@
-                            <div align="center">
-                                <button class="btn" data-dismiss="modal" aria-hidden="true" style="width:80px;height:30px;border:2px; background-color:#EEEEEE"><font size="3" color="black">Close</font></button>
-                                <button type="submit" class="btn btn-primary" style="width:120px;height:30px;border:2px; background-color:#3c8dbc"><font size="3" color="white">Save Changes</font></button>
-                            </div>
-                        </form>
+                        <h3 class="modal-title" id="exampleModalLongTitle">
+                            Change Deliver Date
+                        </h3>
                     </div>
                 </div>
             </div>
+            @*<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>*@
+
+            <div class="modal-body">
+                <form method="POST">
+                    <div class="form-group">
+                        <input type="hidden" id="ChangeEstDeliverDateModalID" name="changeEstDeliverDateModalName" class="form-control" value="1" />
+                    </div>
+                    <div class="form-group">
+                        <label for="DepartmentName">Department Name</label>
+                        <input type="hidden" id="DepartmentNameValue" name="departmentName" class="form-control" value="" />
+                        <input type="text" id="DepartmentNameDisplay" name="" class="form-control" value="" disabled />
+                    </div>
+                    <div class="form-group">
+                        <label for="EstDeliverDate">New Deliver Date</label>       <br>
+                        <input type="date" id="EstDeliverDate" name="estDeliverDate" value="" />
+                    </div>
+                    @*<div class="modal-footer">
+                            <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+                            <button type="submit" class="btn btn-primary">Save changes</button>
+                        </div>*@
+                    <div align="center">
+                        <button class="btn" data-dismiss="modal" aria-hidden="true" style="width:80px;height:30px;border:2px; background-color:#EEEEEE"><font size="3" color="black">Close</font></button>
+                        <button type="submit" class="btn btn-primary" style="width:120px;height:30px;border:2px; background-color:#3c8dbc"><font size="3" color="white">Save Changes</font></button>
+                    </div>
+                </form>
+            </div>
         </div>
+    </div>
+</div>
         </section>
-        <!-- ./wrapper -->
-        <!-- DataTables -->
-        <script src="~/plugins/datatables.net/js/jquery.dataTables.min.js"></script>
-        <script src="~/plugins/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+<!-- ./wrapper -->
+<!-- DataTables -->
+<script src="~/plugins/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="~/plugins/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
 
-        <!-- page script -->
-        <script>
-            $(function () {
-                $('#Suppliers').DataTable({
-                    'paging': false,
-                    'lengthChange': true,
-                    'searching': true,
-                    'ordering': true,
-                    'info': true,
-                    'autoWidth': true
-                })
-            })
-        </script>
+<!-- page script -->
+<script>
+    $(function () {
+        $('#Suppliers').DataTable({
+            'paging': false,
+            'lengthChange': true,
+            'searching': true,
+            'ordering': true,
+            'info': true,
+            'autoWidth': true
+        })
+    })
+</script>
 
-        <script>
-            $(".changeEstDeliverDate").click(function () {
-                var $row = $(this).closest("tr");    // Find the row
-                var departmentName = $row.find("td.DepartmentName").text().trim(); // Find the text
-                var estDeliverDate = $row.find("td.EstDeliverDate").text().trim();
-                var changeEstDeliverDateModalID = 1;
+<script>
+    $(".changeEstDeliverDate").click(function () {
+        var $row = $(this).closest("tr");    // Find the row
+        var departmentName = $row.find("td.DepartmentName").text().trim(); // Find the text
+        var estDeliverDate = $row.find("td.EstDeliverDate").text().trim();
+        var changeEstDeliverDateModalID = 1;
 
-                var $modal = $('#ChangeEstDeliverDateModal');
-                $modal.find('#DepartmentNameValue').val(departmentName);
-                $modal.find('#DepartmentNameDisplay').val(departmentName);
-                $modal.find('#EstDeliverDate').val(estDeliverDate);
-                $modal.find('#ChangeEstDeliverDateModalID').val(changeEstDeliverDateModalID);
+        var $modal = $('#ChangeEstDeliverDateModal');
+        $modal.find('#DepartmentNameValue').val(departmentName);
+        $modal.find('#DepartmentNameDisplay').val(departmentName);
+        $modal.find('#EstDeliverDate').val(estDeliverDate);
+        $modal.find('#ChangeEstDeliverDateModalID').val(changeEstDeliverDateModalID);
 
-                $modal.modal('show');
-            });
-        </script>
+        $modal.modal('show');
+    });
+</script>
 
-        <script>
-            $(function () {
-                var dtToday = new Date();
+<script>
+    $(function () {
+        var dtToday = new Date();
 
-                var month = dtToday.getMonth() + 1;
-                var day = dtToday.getDate();
-                var year = dtToday.getFullYear();
-                if (month < 10)
-                    month = '0' + month.toString();
-                if (day < 10)
-                    day = '0' + day.toString();
+        var month = dtToday.getMonth() + 1;
+        var day = dtToday.getDate();
+        var year = dtToday.getFullYear();
+        if (month < 10)
+            month = '0' + month.toString();
+        if (day < 10)
+            day = '0' + day.toString();
 
-                var maxDate = year + '-' + month + '-' + day;
-                $('#EstDeliverDate').attr('min', maxDate);
-            });
-        </script>
+        var maxDate = year + '-' + month + '-' + day;
+        $('#EstDeliverDate').attr('min', maxDate);
+    });
+</script>
 
 
 
