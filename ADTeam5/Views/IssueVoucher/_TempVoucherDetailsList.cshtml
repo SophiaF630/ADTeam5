@@ -403,9 +403,9 @@ else
                 data: { itemSubmitted: itemToAdd },
                 success:
                     function (data) {
-                        //$('#result').html(data);
-                        //alert("Submitted");
-                        window.location.reload();
+                        $('#result').html(data);
+                        data = JSON.parse(data);
+                        window.location.href = data.redirecturl;
                     }
             })
         });
@@ -426,9 +426,9 @@ else
             data: { itemSavedToDraft: itemToAdd },
             success:
                 function (data) {
-                    //$('#result').html(data);
-                    //alert("Saved to draft");
-                    location.reload();
+                    $('#result').html(data);
+                    data = JSON.parse(data);
+                    window.location.href = data.redirecturl;
                 }
         })
     });
