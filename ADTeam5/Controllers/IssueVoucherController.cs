@@ -68,84 +68,92 @@ namespace ADTeam5.Controllers
         [HttpPost]
         public async Task<IActionResult> Index(string itemNumber, int quantity, int rowID, string remark, int createNewVoucherItemModalName, int voucherItemModalName, string[] itemSubmitted, string[] itemSavedToDraft)
         {
-            ADTeam5User user = await _userManager.GetUserAsync(HttpContext.User);
-            List<string> identity = userCheck.checkUserIdentityAsync(user);
-            int userID = user.WorkID;
-            voucherNo = "";
-
-
-            //handle post action
-            List<TempVoucherDetails> tempVoucherDetailsList = b.GetTempVoucherDetailsList(userID);
-
-            if (createNewVoucherItemModalName == 1)
+            if (quantity == 0)
             {
-                b.CreateNewVoucherItem(userID, itemNumber, quantity, remark);
-                return RedirectToAction(nameof(Index));
+                TempData["QuantityError"] = "Please select a quantity to add to voucher. Quantity cannot be 0.";
+                return RedirectToAction("Index");
             }
-            else if (voucherItemModalName == 1)
+            else
             {
-                b.UpdateVoucherItem(rowID, quantity, remark, tempVoucherDetailsList);
-            }
+                ADTeam5User user = await _userManager.GetUserAsync(HttpContext.User);
+                List<string> identity = userCheck.checkUserIdentityAsync(user);
+                int userID = user.WorkID;
+                voucherNo = "";
 
-            if (itemSubmitted.Length != 0)
-            {
-                voucherNo = b.IDGenerator("V");
-                foreach (var item in tempVoucherDetailsList)
+
+                //handle post action
+                List<TempVoucherDetails> tempVoucherDetailsList = b.GetTempVoucherDetailsList(userID);
+
+                if (createNewVoucherItemModalName == 1)
                 {
-                    if (Array.Exists(itemSubmitted, i => i == item.RowID.ToString()))
-                    {
-                        b.AddItemsToVoucher(item.RowID, voucherNo, tempVoucherDetailsList);
-
-                    }
+                    b.CreateNewVoucherItem(userID, itemNumber, quantity, remark);
+                    return RedirectToAction(nameof(Index));
                 }
-                b.CreateAdjustmentRecord(userID, voucherNo, "Pending Approval");
-
-                //send notification email to Head of stationery department
-                
-                var boss = (from x in _context.User
-                             join y in _context.Department
-                             on x.DepartmentCode equals y.DepartmentCode
-                             where y.DepartmentCode == "STAS"
-                             select new
-                             {
-                                 email = x.EmailAddress,
-                                 name = x.Name
-
-                             }).First();
-         
-                string email = boss.email;
-                await _emailSender.SendEmailAsync(email, "New Adjustment Voucher Pending Approval", "Dear " + boss.name + ",<br>There is a new adjustment voucher that needs your approval.");
-
-
-                //return RedirectToAction(nameof(Index));
-            }
-            else if(itemSavedToDraft.Length != 0)
-            {
-                voucherNo = b.IDGenerator("V");
-                foreach (var item in tempVoucherDetailsList)
+                else if (voucherItemModalName == 1)
                 {
-                    if (Array.Exists(itemSavedToDraft, i => i == item.RowID.ToString()))
-                    {
-                        b.AddItemsToVoucher(item.RowID, voucherNo, tempVoucherDetailsList);
-                        
-                    }
+                    b.UpdateVoucherItem(rowID, quantity, remark, tempVoucherDetailsList);
                 }
-                b.CreateAdjustmentRecord(userID, voucherNo, "Draft");
-                //return RedirectToAction(nameof(Index));
-            }
 
-            List<TempVoucherDetails> result = b.GetTempVoucherDetailsList(userID);
+                if (itemSubmitted.Length != 0)
+                {
+                    voucherNo = b.IDGenerator("V");
+                    foreach (var item in tempVoucherDetailsList)
+                    {
+                        if (Array.Exists(itemSubmitted, i => i == item.RowID.ToString()))
+                        {
+                            b.AddItemsToVoucher(item.RowID, voucherNo, tempVoucherDetailsList);
 
-            //Viewbag for category dropdown list, need to post back
-            List<Catalogue> categoryList = new List<Catalogue>();
-            var q = _context.Catalogue.GroupBy(x => new { x.Category }).Select(x => x.FirstOrDefault());
-            foreach (var item in q)
-            {
-                categoryList.Add(item);
+                        }
+                    }
+                    b.CreateAdjustmentRecord(userID, voucherNo, "Pending Approval");
+
+                    //send notification email to Head of stationery department
+
+                    var boss = (from x in _context.User
+                                join y in _context.Department
+                                on x.DepartmentCode equals y.DepartmentCode
+                                where y.DepartmentCode == "STAS"
+                                select new
+                                {
+                                    email = x.EmailAddress,
+                                    name = x.Name
+
+                                }).First();
+
+                    string email = boss.email;
+                    await _emailSender.SendEmailAsync(email, "New Adjustment Voucher Pending Approval", "Dear " + boss.name + ",<br>There is a new adjustment voucher that needs your approval.");
+
+
+                    //return RedirectToAction(nameof(Index));
+                }
+                else if (itemSavedToDraft.Length != 0)
+                {
+                    voucherNo = b.IDGenerator("V");
+                    foreach (var item in tempVoucherDetailsList)
+                    {
+                        if (Array.Exists(itemSavedToDraft, i => i == item.RowID.ToString()))
+                        {
+                            b.AddItemsToVoucher(item.RowID, voucherNo, tempVoucherDetailsList);
+
+                        }
+                    }
+                    b.CreateAdjustmentRecord(userID, voucherNo, "Draft");
+                    //return RedirectToAction(nameof(Index));
+                }
+
+                List<TempVoucherDetails> result = b.GetTempVoucherDetailsList(userID);
+
+                //Viewbag for category dropdown list, need to post back
+                List<Catalogue> categoryList = new List<Catalogue>();
+                var q = _context.Catalogue.GroupBy(x => new { x.Category }).Select(x => x.FirstOrDefault());
+                foreach (var item in q)
+                {
+                    categoryList.Add(item);
+                }
+                categoryList.Insert(0, new Catalogue { ItemNumber = "0", Category = "---Select Category---" });
+                ViewBag.ListofCategory = categoryList;
+                return View(result);
             }
-            categoryList.Insert(0, new Catalogue { ItemNumber = "0", Category = "---Select Category---" });
-            ViewBag.ListofCategory = categoryList;
-            return View(result);
         }
        
 

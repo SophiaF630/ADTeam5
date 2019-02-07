@@ -30,13 +30,23 @@
             <div class="box">
                 <div class="box-header with-border">*@
 
+@if (TempData["Delete"] != null)
+{
+    <div class="alert alert-success" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aira-label="close">
+            <span aria-hidden="true">&times</span>
+        </button>
+        @TempData["Delete"]
+    </div>
+}
+
 <div class="row">
     <div class="col-lg-12">
         <div class="box">
             <div class="box-header with-border">
                 <h3 class="box-title">
                     Catalogues Information
-                    @if (ViewData["ClerkRole"] !=null)
+                    @if (ViewData["ClerkRole"] != null)
                     {
                         <button type="button" class="btn btn-primary createNew" style="width:120px;height:32px;border:2px;margin-left:680px; background-color:#00B894">
                             <i class='fas fa-plus' style='font-size:14px'></i> <a asp-action="Create"><font color="white">&nbsp;&nbsp;Create New</font></a>
@@ -51,8 +61,8 @@
                     <thead>
                         <tr>
                             @*<th>
-            @Html.DisplayNameFor(model => model.ItemNumber)
-        </th>*@
+                                    @Html.DisplayNameFor(model => model.ItemNumber)
+                                </th>*@
                             <th>No.</th>
                             <th>
                                 @Html.DisplayNameFor(model => model.Category)
@@ -79,102 +89,102 @@
                                 @Html.DisplayNameFor(model => model.Supplier1Price)
                             </th>
                             @*<th>
-            @Html.DisplayNameFor(model => model.Supplier2Navigation)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Supplier2Price)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Supplier3Navigation)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Supplier3Price)
-        </th>*@
+                                    @Html.DisplayNameFor(model => model.Supplier2Navigation)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Supplier2Price)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Supplier3Navigation)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Supplier3Price)
+                                </th>*@
                             @*<th>
-            @Html.DisplayNameFor(model => model.Location)
-        </th>*@
+                                    @Html.DisplayNameFor(model => model.Location)
+                                </th>*@
                             @if (ViewData["ClerkRole"] != null)
                             {
                                 <th></th>
                                 <th></th>
                                 <th></th>
                             }
-                            </tr>
+                        </tr>
                     </thead>
                     <tbody>
                         @foreach (var item in Model)
                         {
-                        <tr>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.ItemNumber)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Category)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.ItemName)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.ReorderLevel)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.ReorderQty)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.UnitOfMeasure)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Stock)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Supplier1Navigation.SupplierCode)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Supplier1Price)
-                            </td>
-                            @*<td>
-            @Html.DisplayFor(modelItem => item.Supplier2Navigation.SupplierCode)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Supplier2Price)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Supplier3Navigation.SupplierCode)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Supplier3Price)
-        </td>*@
-                            @*<td>
-            @Html.DisplayFor(modelItem => item.Location)
-        </td>*@
-                            @if (ViewData["ClerkRole"] != null)
-                            {
+                            <tr>
                                 <td>
-                                    <button type="button" class="btn btn-primary" style="background-color:transparent;border:transparent">
-                                        <a asp-action="Edit" asp-route-id="@item.ItemNumber">
-                                            <i class="fa fa-edit" style="color:#66B3B3"></i>
-                                        </a>
-                                    </button>
-                                    @*<a asp-action="Edit" asp-route-id="@item.ItemNumber">Edit</a>*@
+                                    @Html.DisplayFor(modelItem => item.ItemNumber)
                                 </td>
                                 <td>
-                                    <button type="button" class="btn btn-primary" style="background-color:transparent;border:transparent">
-                                        <a asp-action="Details" asp-route-id="@item.ItemNumber">
-                                            <i class="fa fa-list-alt" data-toggle="tooltip" title="View Details" style="color:#666666"></i>
-                                        </a>
-                                    </button>
-                                    @*<i class="fa fa-file-text-o" style="font-size:24px"></i>*@
-                                    @*<a asp-action="Details" asp-route-id="@item.ItemNumber">Details</a>*@
+                                    @Html.DisplayFor(modelItem => item.Category)
                                 </td>
                                 <td>
-                                    <button type="button" class="btn btn-primary" style="background-color:transparent;border:transparent">
-                                        <a asp-action="Delete" asp-route-id="@item.ItemNumber">
-                                            <i class="fa fa-trash-alt" style="color:#dc6460"></i>
-                                        </a>
-                                    </button>
-                                    @*<a asp-action="Delete" asp-route-id="@item.ItemNumber">Delete</a>*@
+                                    @Html.DisplayFor(modelItem => item.ItemName)
                                 </td>
-                            }
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ReorderLevel)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ReorderQty)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.UnitOfMeasure)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Stock)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Supplier1Navigation.SupplierCode)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Supplier1Price)
+                                </td>
+                                @*<td>
+                                        @Html.DisplayFor(modelItem => item.Supplier2Navigation.SupplierCode)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Supplier2Price)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Supplier3Navigation.SupplierCode)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Supplier3Price)
+                                    </td>*@
+                                @*<td>
+                                        @Html.DisplayFor(modelItem => item.Location)
+                                    </td>*@
+                                @if (ViewData["ClerkRole"] != null)
+                                {
+                                    <td>
+                                        <button type="button" class="btn btn-primary" style="background-color:transparent;border:transparent">
+                                            <a asp-action="Edit" asp-route-id="@item.ItemNumber">
+                                                <i class="fa fa-edit" style="color:#66B3B3"></i>
+                                            </a>
+                                        </button>
+                                        @*<a asp-action="Edit" asp-route-id="@item.ItemNumber">Edit</a>*@
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-primary" style="background-color:transparent;border:transparent">
+                                            <a asp-action="Details" asp-route-id="@item.ItemNumber">
+                                                <i class="fa fa-list-alt" data-toggle="tooltip" title="View Details" style="color:#666666"></i>
+                                            </a>
+                                        </button>
+                                        @*<i class="fa fa-file-text-o" style="font-size:24px"></i>*@
+                                        @*<a asp-action="Details" asp-route-id="@item.ItemNumber">Details</a>*@
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-primary" style="background-color:transparent;border:transparent">
+                                            <a asp-action="Delete" asp-route-id="@item.ItemNumber">
+                                                <i class="fa fa-trash-alt" style="color:#dc6460"></i>
+                                            </a>
+                                        </button>
+                                        @*<a asp-action="Delete" asp-route-id="@item.ItemNumber">Delete</a>*@
+                                    </td>
+                                }
                             </tr>
                         }
                     </tbody>
@@ -198,7 +208,7 @@
             'searching': true,
             'ordering': true,
             'info': true,
-            'autoWidth': false,                              
+            'autoWidth': false,
         });
     });
 </script>

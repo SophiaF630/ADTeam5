@@ -104,6 +104,7 @@ namespace ADTeam5.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ItemNumber,Category,ItemName,ReorderLevel,ReorderQty,UnitOfMeasure,Stock,Out,Supplier1,Supplier2,Supplier3,Supplier1Price,Supplier2Price,Supplier3Price")] Catalogue catalogue)
         {
+
             //Viewbag for supplier1 dropdown list, need to post back
             List<Supplier> supplier1List = _context.Supplier.ToList();
             //supplier1List.Insert(0, new Supplier { SupplierCode = " ", SupplierName = " " });
@@ -122,7 +123,12 @@ namespace ADTeam5.Controllers
                 return RedirectToAction(nameof(Index));
 
             }
-            return View(catalogue);
+            else
+            {
+                TempData["EmptyError"] = "Please fill in all details!";
+                return RedirectToAction("Create");
+            }
+            //return View(catalogue);
         }
       
 
@@ -228,14 +234,13 @@ namespace ADTeam5.Controllers
             {
                 _context.Catalogue.Remove(catalogue);
                 await _context.SaveChangesAsync();
-                TempData["Delete"] = "This item is successfully deleted";
+                TempData["Delete"] = "Item is successfully deleted";
                 ViewBag.IfCanDelete = "Y";
                 return RedirectToAction(nameof(Index));
             }
             else
             {
                 ViewBag.IfCanDelete = "N";
-                TempData["CannotDelete"] = "This item cannot be deleted";
                 return Redirect("Catalogue/Delete/" + id);
             }
             

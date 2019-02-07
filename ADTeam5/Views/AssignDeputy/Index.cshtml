@@ -2,9 +2,6 @@
 @{
     ViewData["Title"] = "Index";
 }
-
-<h1>Assign Deputy Head</h1>
-
 @if (TempData["DateAlert"] != null)
 {
     <div class="alert alert-danger" role="alert">
@@ -33,54 +30,104 @@
         @TempData["NewSuccess"]
     </div>
 }
-
-@if (ViewData["CurrentDeputyHead"] != null)
-{
-    <p>Appointed Deputy Head: @ViewData["CurrentDeputyHead"]</p>
-    <p>From: @ViewData["CurrentDeputyHeadStartDate"] To: @ViewData["CurrentDeputyHeadEndDate"]</p>
-    <p>Edit Submitted Details Below:</p>
-}
-<form asp-action="Index" method="post">
-    <div class="form-group">
-        <p>
-            Deputy Head:
-            @Html.DropDownListFor(m => m.UserId, new SelectList(ViewBag.listofitems, "UserId", "Name"), "Select")
-        </p>
-    </div>
-
-    <div>
-        From:
-        <input type="date" name="startdate" id="start" value="=" />
-        To:
-        <input type="date" name="enddate" id="end" value=" = " />
-    </div>
-
-    <br />
-    <div class="form-group">
-        <input type="reset" value="Cancel" onclick="window.location.reload()" />
-        <input type="submit" value="Assign" id="assignbtn" />
-    </div>
-
-</form>
-<script>
-    $(document).ready(function () {
-        let now = new Date();
-
-        let day = ("0" + now.getDate()).slice(-2);
-        let month = ("0" + (now.getMonth() + 1)).slice(-2);
-
-        let today = (day) + "-" + (month) + "-" + now.getFullYear();
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-default">
+                <div class="box-header with-border">
+                    <i class="fa fa-warning"></i>
+                    <h3 class="box-title">Assign Deputy Head</h3>
+                </div>
+                <br />
+                @if (ViewData["CurrentDeputyHead"] != null)
+                {
+                    <h4 style="margin-left:300px">Appointed Deputy Head: <b>@ViewData["CurrentDeputyHead"]</b></h4>
+                    <h4 style="margin-left:300px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; From:&nbsp; <b>@ViewData["CurrentDeputyHeadStartDate"]</b>&nbsp; To:&nbsp; <b>@ViewData["CurrentDeputyHeadEndDate"]</b></h4>
+                    <hr />
+                    <h4>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-edit" style="color:#66B3B3"></i>&nbsp;&nbsp;&nbsp;<a>Edit Submitted Details Below:</a></h4>
+                    <hr />
+                }
+                @*<h1>Assign Deputy Head</h1>*@
 
 
-        $('#start').val(today);
-        $('#end').val(today);
-        $('#assignbtn').click(function () {
+                <form asp-action="Index" method="post">
+                    <div class="form-group">
+                        <h5>
+                            <label>
+                                &nbsp;&nbsp;
+                                Deputy Head:
+                            </label>
+                            &nbsp;&nbsp;
+                            @Html.DropDownListFor(m => m.UserId, new SelectList(ViewBag.listofitems, "UserId", "Name"), "Select")
 
-            testClicked();
-        });
-    });
-    function testClicked() {
-        $('.getStartDate').html($('#start').val());
-        $('.getEndDate').html($('#end').val());
-    }
-</script>
+                        </h5>
+                    </div>
+                    <hr />
+                    @*<div>
+                        From:
+                        <input type="date" name="startdate" id="start" value="=" />
+                        To:
+                        <input type="date" name="enddate" id="end" value=" = " />
+                    </div>*@
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group" style="margin-left:10px">
+                                <label>From:</label>
+                                <div class="input-group date" style="width:440px">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <input type="date" name="startdate" class="form-control pull-right" id="start" value="=" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group" style="margin-left:30px">
+                                <label>To:</label>
+                                <div class="input-group date" style="width:440px">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <input type="date" name="enddate" class="form-control pull-right" id="end" value=" = " />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+
+                    <hr />
+                    <br />
+                    @*<div class="form-group">
+                        <input type="reset" value="Cancel" onclick="window.location.reload()" />
+                        <input type="submit" value="Assign" id="assignbtn" />
+                    </div>*@
+                    <div class="form-group">
+                        <input type="reset" value="Cancel" onclick="window.location.reload()" style="width:80px;height:30px;border:2px;margin-left:350px; background-color:#EEEEEE" />
+                        <input type="submit" value="Assign" id="assignbtn" class="btn btn-primary submit" style="background-color: #00B894;width:80px;height:30px;border:2px;margin-left:70px" />
+                    </div>
+                    <br />
+                </form>
+</div>
+            </div>
+        </div>
+                <script>
+                    $(document).ready(function () {
+                        let now = new Date();
+
+                        let day = ("0" + now.getDate()).slice(-2);
+                        let month = ("0" + (now.getMonth() + 1)).slice(-2);
+
+                        let today = (day) + "-" + (month) + "-" + now.getFullYear();
+
+
+                        $('#start').val(today);
+                        $('#end').val(today);
+                        $('#assignbtn').click(function () {
+
+                            testClicked();
+                        });
+                    });
+                    function testClicked() {
+                        $('.getStartDate').html($('#start').val());
+                        $('.getEndDate').html($('#end').val());
+                    }
+                </script>
