@@ -25,7 +25,6 @@
 {
 <div class="row justify-content-center text-center">
     <div class="col-12 col-md-10 mt-5">
-        <i class="fa fa-user fa-5x mb-5"></i>
 
         <h2>
             No Record Found
@@ -46,7 +45,7 @@ else
 
     <!-- TABLE: Issue Voucher -->
     <div class="row">
-        <div class="col-md-10">
+        <div class="col-12 col-md-10 mt-5">
             <div class="box" style=" width:100%">
                 <div class="box-header with-border">
                     <h3 id="number" class="box-title">Items to be added to voucher. 0 item(s) selected</h3>
@@ -254,6 +253,7 @@ else
                     </div>
                     <div class="form-group">
                         <label for="Quantity">Quantity</label>
+                        <label class="text-muted">(Please use negative number for damaged or missing items)</label>
                         <input type="number" step="1"  max ="9999" id="Quantity" name="quantity" required="required" class="form-control" value="" />
                     </div>
                     <div class="form-group">
@@ -297,6 +297,7 @@ else
                     </div>
                     <div class="form-group">
                         <label for="Quantity">Quantity</label>
+                        <label class="text-muted">(Please use negative number for damaged or missing items)</label>
                         <input type="number" step="1" max ="9999" id="Quantity" name="quantity" class="form-control" value="" />
                     </div>
                     <div class="form-group">
@@ -403,7 +404,7 @@ else
                 success:
                     function (data) {
                         //$('#result').html(data);
-                        alert("Submitted");
+                        //alert("Submitted");
                         window.location.reload();
                     }
             })
@@ -417,7 +418,7 @@ else
         var itemToAdd = $("input:checkbox:checked", "#TempVoucherDetails").map(function () {
             return $(this).val();
         }).get();
-        alert(itemToAdd.join(','));
+        //alert(itemToAdd.join(','));
         $.ajax({
             type: "POST",
             url: '@Url.Action("Index", "IssueVoucher")',
@@ -426,7 +427,7 @@ else
             success:
                 function (data) {
                     //$('#result').html(data);
-                    alert("Saved to draft");
+                    //alert("Saved to draft");
                     location.reload();
                 }
         })
@@ -449,10 +450,11 @@ else
             var $row = $(this).closest("tr");    // Find the row
             var quantity = $row.find("td.Quantity").text().trim();
             var price = $row.find("td.Price").text().trim();
-            amount += quantity * price;
+            amount += Math.abs(quantity) * price;
         });
+        amount = Math.round(amount * 100) / 100
         GST = Math.round(amount * 0.07 * 100) / 100;
-        totalAmount = amount + GST;
+        totalAmount = Math.round( (amount + GST) * 100) / 100;
         //console.log(amount);
         document.getElementById("number").innerText = "Items to be added to voucher. " + n + " item(s) selected";
         document.getElementById("amount").innerText = "Amount: $" + amount;

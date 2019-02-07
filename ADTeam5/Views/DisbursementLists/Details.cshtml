@@ -67,8 +67,11 @@
                                             <th>
                                                 @Html.DisplayNameFor(model => model.Remark)
                                             </th>
-                                            <th></th>
-                                            <th></th>
+                                            @if (ViewBag.DisbursementListStatus == "Pending Delivery")
+                                            {
+                                                <th></th>
+                                                <th></th>
+                                            }
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -93,24 +96,19 @@
                                                 <td class="Remark">
                                                     @Html.DisplayFor(modelItem => item.Remark)
                                                 </td>
-                                                <td>
-                                                    @if (ViewBag.DisbursementListStatus == "Pending Delivery")
-                                                    {
+                                                @if (ViewBag.DisbursementListStatus == "Pending Delivery")
+                                                {
+                                                    <td>
                                                         <button type="button" class="btn btn-primary editQuantityDelivered" style="width:70px;height:30px;border:2px; background-color:#3c8dbc">
                                                             Edit
-                                                        </button>}
-                                                    else
-                                                    {
-                                                        <button type="button" class="btn btn-primary editQuantityDelivered" style="width:70px;height:30px;border:2px; background-color:#3c8dbc" disabled>
-                                                            Edit
-                                                        </button>}
-
-                                                </td>
-                                                <td>
-                                                    <button type="button" class="btn btn-primary addToVoucher" style="width:150px;height:30px;border:2px; background-color:#3c8dbc">
-                                                        Add to Voucher
-                                                    </button>
-                                                </td>
+                                                        </button>
+                                                    </td>
+                                                    <td>
+                                                        <button type="button" class="btn btn-primary addToVoucher" style="width:150px;height:30px;border:2px; background-color:#3c8dbc">
+                                                            Add to Voucher
+                                                        </button>
+                                                    </td>
+                                                }
                                             </tr>
                                         }
                                     </tbody>
@@ -123,9 +121,9 @@
             @if (ViewBag.DisbursementListStatus == "Pending Delivery")
             {
                 @*<div>
-                <a href="#" data-toggle="modal" data-target="#BackToListModal">Back to List</a>
-            </div>
-            <a asp-action="Index">*@
+                        <a href="#" data-toggle="modal" data-target="#BackToListModal">Back to List</a>
+                    </div>
+                    <a asp-action="Index">*@
                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#BackToListModal" style="width:120px;height:32px;margin-left:1px; background-color:transparent;border:1px #B3B6B7 solid;">
                     <i class='fas fa-arrow-left' style='font-size:14px;border:1px;color:#B3B6B7'></i>&nbsp;&nbsp;<font style='font-size:14px;color:#B3B6B7'>Back To List</font>
                 </button>
@@ -185,7 +183,7 @@
                     </div>
                     <div class="form-group">
                         <label for="QuantityDelivered">Quantity Delivered</label>
-                        <input type="number" min="0" step="1" max ="9999" id="QuantityDelivered" name="quantityDelivered" class="form-control" value="" />
+                        <input type="number" min="0" step="1" max="9999" id="QuantityDelivered" name="quantityDelivered" class="form-control" value="" />
                     </div>
                     <div class="form-group">
                         <label for="Remark">Remark</label>
@@ -227,7 +225,7 @@
                     </div>
                     <div class="form-group">
                         <label for="Quantity">Quantity</label>
-                        <input type="number" step="1" max ="9999" id="QuantityForVoucher" name="quantityForVoucher" class="form-control" value="" />
+                        <input type="number" min="-9999" step="1" max="9999" id="QuantityForVoucher" name="quantityForVoucher" class="form-control" value="" />
                     </div>
                     <div class="form-group">
                         <label for="Remark">Remark</label>

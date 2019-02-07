@@ -56,17 +56,17 @@ namespace ADTeam5.Controllers
         public async Task<IActionResult> Index(string itemNumber, int quantityRetrieved, int quantityForVoucher, string remark, int quantityRetrievedModalName, int addToVoucherModalName)
         {
 
-                ADTeam5User user = await _userManager.GetUserAsync(HttpContext.User);
-                List<string> identity = userCheck.checkUserIdentityAsync(user);
-                int userID = user.WorkID;
+            ADTeam5User user = await _userManager.GetUserAsync(HttpContext.User);
+            List<string> identity = userCheck.checkUserIdentityAsync(user);
+            int userID = user.WorkID;
 
-                if (itemNumber == null)
-                {
-                    return NotFound();
-                }
+            if (itemNumber == null)
+            {
+                return NotFound();
+            }
 
-                if (addToVoucherModalName == 1)
-                {
+            if (addToVoucherModalName == 1)
+            {
 
                 if (quantityForVoucher == 0)
                 {
@@ -77,26 +77,26 @@ namespace ADTeam5.Controllers
                 {
                     b.CreateNewVoucherItem(userID, itemNumber, quantityForVoucher, remark);
                 }
-                }
-                else if (quantityRetrievedModalName == 1)
-                {
+            }
+            else if (quantityRetrievedModalName == 1)
+            {
                 var stockCheck = _context.Catalogue.Where(x => x.ItemNumber == itemNumber).FirstOrDefault();
-                int stockAmt = stockCheck.Stock;
+                int stockAmt = stockCheck.Stock + stockCheck.Out;
 
-                if(quantityRetrieved > stockAmt)
+                if (quantityRetrieved > stockAmt)
                 {
                     TempData["InsufficientStock"] = "Stock level: " + stockAmt + ". There is insufficient stock. Please select a quantity less than or equals to stock level.";
                 }
                 else
                 {
                     b.UpdateCatalogueOutAndStockAfterRetrieval(itemNumber, quantityRetrieved);
-                }  
                 }
+            }
 
-                List<StationeryRetrievalList> result = b.GetStationeryRetrievalLists();
+            List<StationeryRetrievalList> result = b.GetStationeryRetrievalLists();
 
-                return View(result);
-            
+            return View(result);
+
         }
 
         private bool RecordDetailsExists(int id)

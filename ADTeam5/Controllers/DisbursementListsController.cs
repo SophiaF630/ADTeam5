@@ -246,6 +246,27 @@ namespace ADTeam5.Controllers
                 _context.DisbursementList.Update(disbursementList);
                 _context.SaveChanges();
 
+                //update out and stock
+                var itemToReturn = _context.RecordDetails.Where(x => x.Rrid == id);
+                if(itemToReturn != null)
+                {
+                    foreach(var item in itemToReturn.ToList())
+                    {
+                        int quantityRequested = item.Quantity;
+                        var q = _context.Catalogue.FirstOrDefault(x => x.ItemNumber == item.ItemNumber);
+                        if(q != null)
+                        {                            
+                            int outQty = q.Out;
+                            int preStock = q.Stock;
+                            q.Stock = preStock + quantityRequested;
+                            q.Out = outQty - quantityRequested;
+
+                            _context.Catalogue.Update(q);
+                            _context.SaveChanges();
+                        }
+                    }
+                }
+                
                 return RedirectToAction(nameof(Index));
             }
             else if(backToListModalName == 1)

@@ -259,17 +259,13 @@ namespace ADTeam5.BusinessLogic
             var i = _context.Catalogue.FirstOrDefault(x => x.ItemNumber == itemNumber);
             if (i != null)
             {
-                int preStock = i.Stock;
+                int preStock = i.Stock + i.Out;
                 int preOut = i.Out;
                 if (preStock >= outQty)
                 {
                     i.Out = outQty;
-                    i.Stock = preStock - (outQty - preOut);
+                    i.Stock = preStock - outQty;
                     _context.SaveChanges();
-                }
-                else
-                {
-
                 }
             }
         }
@@ -337,14 +333,17 @@ namespace ADTeam5.BusinessLogic
         //Update inventory transaction record
         public void UpdateInventoryTransRecord(string itemNumber, string recordID, int qty, int balance)
         {
-            InventoryTransRecord inventoryTransRecord = new InventoryTransRecord();
-            inventoryTransRecord.Date = DateTime.Now.Date;
-            inventoryTransRecord.ItemNumber = itemNumber;
-            inventoryTransRecord.RecordId = recordID;
-            inventoryTransRecord.Qty = qty;
-            inventoryTransRecord.Balance = balance;
-            _context.InventoryTransRecord.Add(inventoryTransRecord);
-            _context.SaveChanges();
+            if(qty != 0)
+            {
+                InventoryTransRecord inventoryTransRecord = new InventoryTransRecord();
+                inventoryTransRecord.Date = DateTime.Now.Date;
+                inventoryTransRecord.ItemNumber = itemNumber;
+                inventoryTransRecord.RecordId = recordID;
+                inventoryTransRecord.Qty = qty;
+                inventoryTransRecord.Balance = balance;
+                _context.InventoryTransRecord.Add(inventoryTransRecord);
+                _context.SaveChanges();
+            }           
         }
 
         //Change Deliver Date

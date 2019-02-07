@@ -145,11 +145,20 @@
     }
 </div>
 
-
-<div>
-    <a href="#" data-toggle="modal" data-target="#BackToListModal">Back to List</a>
-</div>
-
+@if (ViewBag.POStatus != "Completed")
+{
+    <div>
+        <a href="#" data-toggle="modal" data-target="#BackToListModal">Back to List</a>
+    </div>
+}
+else
+{
+    <a asp-action="Index">
+        <button type="button" class="btn btn-primary" style="width:120px;height:32px;margin-left:1px; background-color:transparent;border:1px #B3B6B7 solid;">
+            <i class='fas fa-arrow-left' style='font-size:14px;border:1px;color:#B3B6B7'></i>&nbsp;&nbsp;<font style='font-size:14px;color:#B3B6B7'>Back To List</font>
+        </button>
+    </a>
+}
 
 <!-- Modal for edit quantity-->
 <div class="modal fade" id="POItemModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -176,7 +185,7 @@
                     </div>
                     <div class="form-group">
                         <label for="Quantity">Quantity Ordered</label>
-                        <input type="number" min="1" step="1" max ="9999" id="Quantity" name="quantity" class="form-control" value="" />
+                        <input type="number" min="1" step="1" max="9999" id="Quantity" name="quantity" class="form-control" value="" />
                     </div>
                     <div class="modal-footer">
                         <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
@@ -218,7 +227,7 @@
                     </div>
                     <div class="form-group">
                         <label for="Quantity">Quantity Delivered</label>
-                        <input type="number"  min ="0" max ="9999" id="QuantityDelivered" name="quantityDelivered" class="form-control" value="" />
+                        <input type="number" min="0" max="9999" id="QuantityDelivered" name="quantityDelivered" class="form-control" value="" />
                     </div>
                     <div class="modal-footer">
                         <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
@@ -418,12 +427,12 @@
 
     }
 
-    //$('#confirm-order-btn').click(function (e) {
-    //    e.preventDefault();
-    //    var poId = $('#po-id').text();
-    //    ("/PurchaseOrderRecords/Details/" + poId, {}, )
+        //$('#confirm-order-btn').click(function (e) {
+        //    e.preventDefault();
+        //    var poId = $('#po-id').text();
+        //    ("/PurchaseOrderRecords/Details/" + poId, {}, )
 
-    //});
+        //});
 
 </script>
 
