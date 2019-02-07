@@ -55,9 +55,9 @@ namespace ADTeam5.Controllers
 
         // POST: RaisePO
         [HttpPost]
-        public async Task<IActionResult> Index(string itemNumber, int quantity, int rowID, string supplierName, int createNewPOItemModalName, int POItemModalName, string[] itemSubmitted, string[] itemSavedToDraft)
+        public async Task<IActionResult> Index(string itemNumber, int quantity, int rowID, string supplierCode, int createNewPOItemModalName, int POItemModalName, string[] itemSubmitted, string[] itemSavedToDraft)
         {
-            if(supplierName == null || supplierName == "")
+            if(supplierCode == null || supplierCode == "")
             {
                 TempData["SupplierNameError"] = "Purchase order was not successfully raised. Please try again.";
                 TempData["SupplierSelectionError"] = "Please select supplier.";
@@ -75,12 +75,12 @@ namespace ADTeam5.Controllers
 
                 if (createNewPOItemModalName == 1)
                 {
-                    b.CreateNewPOItem(userID, itemNumber, quantity, supplierName);
+                    b.CreateNewPOItem(userID, itemNumber, quantity, supplierCode);
                     return RedirectToAction(nameof(Index));
                 }
                 else if (POItemModalName == 1)
                 {
-                    b.UpdatePOItem(userID, rowID, quantity, supplierName, tempPurchaseOrderDetailsList);
+                    b.UpdatePOItem(userID, rowID, quantity, supplierCode, tempPurchaseOrderDetailsList);
                 }
 
                 if (itemSubmitted.Length != 0)
@@ -223,9 +223,9 @@ namespace ADTeam5.Controllers
 
             // List<Supplier> supplierList = new List<Supplier>();
             //supplierList = _context.Supplier.Where(x => x.SupplierCode == supplierCode1 || x.SupplierCode == supplierCode2 || x.SupplierCode == supplierCode3).ToList();
-            supplierList.Add(supplier1);
-            supplierList.Add(supplier2);
-            supplierList.Add(supplier3);
+            supplierList.Add(supplierCode1);
+            supplierList.Add(supplierCode2);
+            supplierList.Add(supplierCode3);
             return Json(supplierList);
         }
     }

@@ -322,13 +322,13 @@ else
         //var $row = $(this).closest("tr");    // Find the row
         var itemNumber = ""; // Find the text
         var quantity = "";
-        var supplierName = "";
+        var supplier = "";
         var createNewPOItemModalID = 1;
 
         var $modal = $('#createNewPOItemModal');
         $modal.find('#ItemNumber').val(itemNumber);
         $modal.find('#Quantity').val(quantity);
-        $modal.find('#Supplier').val(supplierName);
+        $modal.find('#Supplier').val(supplier);
         $modal.find('#createNewPOItemModalID').val(createNewPOItemModalID);
 
         $modal.modal('show');
@@ -355,7 +355,7 @@ else
             $.get("/RaisePurchaseOrder/GetSuppliers", { itemNumber: $("#ItemNumber").val() }, function (data) {
                 $("#Supplier").empty();
                 $.each(data, function (index, row) {
-                    $('#Supplier').append('<input type="radio" name="supplierName"  required="required" value="' + row + '"/>' + row + '<br/>');
+                    $('#Supplier').append('<input type="radio" name="supplierCode" required="required" value="' + row + '"/>' + row + '<br/>');
                 });
             });
         })
@@ -369,15 +369,21 @@ else
         var itemName = $row.find("td.ItemName").text().trim(); // Find the text
         var itemNumber = $row.find("td.ItemNumber").text().trim(); // Find the text
         var quantity = $row.find("td.Quantity").text().trim();
-        var supplierName = $row.find("td.Suplier").text().trim();;
+        var supplier = $row.find("td.Supplier").text().trim();;
         var POItemModalID = 1;
-
+        console.log(quantity);
 
         $.get("/RaisePurchaseOrder/GetSuppliers", { itemNumber: itemNumber }, function (data) {
             $("#EditSupplier").empty();
             $.each(data, function (index, row) {
-                $('#EditSupplier').append('<input type="radio" name="supplierName"    required="required" value="' + row + '"/>' + row + '<br/>');
-
+                console.log(row);
+                console.log(supplier);
+                if (row == supplier) {
+                    $('#EditSupplier').append('<input type="radio" name="supplierName" required="required" value="' + row + '" checked="checked"/>' + row + '<br/>');
+                }
+                else {
+                    $('#EditSupplier').append('<input type="radio" name="supplierName" required="required" value="' + row + '"/>' + row + '<br/>');
+                }
             });
         });
 
@@ -386,7 +392,7 @@ else
         $modal.find('#ItemNameValue').val(itemName);
         $modal.find('#ItemNameDisplay').val(itemName);
         $modal.find('#Quantity').val(quantity);
-        $modal.find('#Supplier').val(supplierName);
+        $modal.find('#Supplier').val(supplier);
         $modal.find('#POItemModalID').val(POItemModalID);
 
         $modal.modal('show');
