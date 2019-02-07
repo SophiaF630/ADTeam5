@@ -3,22 +3,34 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Collection Password</h1>
+@*<h1>Collection Password</h1>*@
 
-<div>
-    <form asp-action="GeneratePassword"  method="post" role="form" asp-controller="CollectionPassword">
-        <input type="submit" value="Generate Password" class="btn btn-primary submit" style="float:left; width:150px;height:32px;border:2px; background-color:#00B894; margin-left: 160px" />
-    </form>
-</div>
-<br/>
-<br/>
-<div>
-    <p><b>Please key this password in store department's mobile phone/web upon collection of stationery.</b></p>
-    @if (ViewData["CollectionPassword"] != null)
-    {
-    <label font size="40"style="margin-left: 160px;  color:darkred"> <b>@ViewData["CollectionPassword"]</b></label>
-    }
-</div>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="box" style=" width:100%">
+            <div class="box-header with-border">
+                <h3 class="box-title">Collection Password</h3>
+                <br />
+            </div>
+            <br />
+
+            <i class="fa fa-lock" style="font-size:48px;color:#00B894;margin-left:200px"></i>
+            <br />
+            <br />
+            <div>
+                <form asp-action="GeneratePassword" method="post" role="form" asp-controller="CollectionPassword">
+                    <input type="submit" value="Generate Password" class="btn btn-primary submit" style="float:left; width:150px;height:32px;border:2px; background-color:#00B894; margin-left: 160px" />
+                </form>
+            </div>
+            <br />
+            <br />
+            <div>
+                <p><b>Please key this password in store department's mobile phone/web upon collection of stationery.</b></p>
+                @if (ViewData["CollectionPassword"] != null)
+                {
+                    <label font size="40" style="margin-left: 160px;  color:darkred"> <b>@ViewData["CollectionPassword"]</b></label>
+                }
+            </div>
 
 
 
