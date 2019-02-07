@@ -15,6 +15,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ADTeam5.Models;
 using ADTeam5.Areas.Identity.Data;
+using System.Web.Http;
 
 namespace ADTeam5
 {
@@ -23,7 +24,7 @@ namespace ADTeam5
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-          
+
         }
 
 
@@ -38,7 +39,7 @@ namespace ADTeam5
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
-                
+
             });
 
             services.AddDbContext<ADTeam5UserContext>(options =>
@@ -50,7 +51,8 @@ namespace ADTeam5
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-            var connection = @"Server=(local);Database=SSISTeam5;Trusted_Connection=True;ConnectRetryCount=0";
+            var connection = Configuration.GetConnectionString("SSISTeam5ContextConnection");
+            //var connection = @"Server=(local);Database=SSISTeam5;Trusted_Connection=True;ConnectRetryCount=0";
             services.AddDbContext<SSISTeam5Context>(options => options.UseSqlServer(connection));
         }
 

@@ -621,5 +621,21 @@ namespace ADTeam5.BusinessLogic
             string name = q.Name;
             return name;
         }
+
+        //this part is temp and may not work on other status
+        public string getPriceForAdjust(string VoNo)
+        {
+            List<RecordDetails> tmp = _context.RecordDetails.Where(s => s.Rrid == VoNo).ToList();
+            if (tmp == null)
+                return "0";
+            double price = 0;
+            foreach(RecordDetails i in tmp)
+            {
+                Catalogue k = _context.Catalogue.Where(s => s.ItemNumber == i.ItemNumber).ToList().First();
+                double p = Math.Abs( i.Quantity)*(double)k.Supplier1Price;
+                price += p;
+            }
+            return price.ToString();
+        }
     }
 }
