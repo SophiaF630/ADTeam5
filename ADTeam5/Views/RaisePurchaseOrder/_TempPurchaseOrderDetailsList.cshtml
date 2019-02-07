@@ -480,8 +480,9 @@ else
             var price = $row.find("td.Price").text().trim();
             amount += quantity * price;
         });
+        amount = Math.round(amount * 100) / 100
         GST = Math.round(amount * 0.07 * 100) / 100;
-        totalAmount = amount + GST;
+        totalAmount = Math.round((amount + GST) * 100) / 100;
         //console.log(amount);
         document.getElementById("number").innerText = "Items to be added to voucher. " + n + " item(s) selected";
         document.getElementById("amount").innerText = "Amount: $" + amount;

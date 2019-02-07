@@ -81,7 +81,7 @@
                                     <td class="Quantity">
                                         @Html.DisplayFor(modelItem => item.Quantity)
                                     </td>
-                                    <td class="Supplier">
+                                    <td class="QuantityDelivered">
                                         @Html.DisplayFor(modelItem => item.QuantityDelivered)
                                     </td>
                                     <td class="Price">
@@ -134,6 +134,31 @@
                         </label>
                         <input type="text" value="@ViewBag.TotalAmount" style="background:transparent;border:none;width:60px;" />
                     </div>
+                    @*<div style="margin-left:800px">
+                        <table>
+                            <tr>
+                                <td>
+                                    <label id="amount">
+                                        <font size="2">Amount: $</font>
+                                    </label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label id="GST">
+                                        <font size="2">GST(7%): $</font>
+                                    </label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label id="totalAmount">
+                                        <font size="2">Total: $</font>
+                                    </label>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>*@
                 </div>
             </div>
         </div>
@@ -436,11 +461,52 @@ else
         $modal.modal('show');
     });
 </script>
+<script>
+    var amount = 0;
+    var GST = 0;
+    var totalAmount = 0;
+    $('#TempPurchaseOrderDetails').each(function () {
+        var $row = $(this).closest("tr");    // Find the row
+        var quantity = $row.find("td.Quantity").text().trim();
+        var price = $row.find("td.Price").text().trim();
+        amount += Math.abs(quantity) * price;
+    });
+    amount = Math.round(amount * 100) / 100
+    GST = Math.round(amount * 0.07 * 100) / 100;
+    totalAmount = Math.round((amount + GST) * 100) / 100;
+    //console.log(amount);
+    document.getElementById("amount").innerText = "Amount: $" + amount;
+    document.getElementById("GST").innerText = "GST (7 %): $" + GST;
+    document.getElementById("totalAmount").innerText = "Total Amount: $" + totalAmount;
 
+</script>
 <script>
     function deleteItem(table) {
 
         $(table).parents('tr').remove();
+
+        var amount = 0;
+        var GST = 0;
+        var totalAmount = 0;
+        var objs = document.getElementsByName("isChecked");
+        for (var i = 0; i < objs.length; i++) {
+            if (objs[i].checked) {
+                n++;
+            }
+        }
+        $('#TempPurchaseOrderDetails').each(function () {
+            var $row = $(this).closest("tr");    // Find the row
+            var quantity = $row.find("td.Quantity").text().trim();
+            var price = $row.find("td.Price").text().trim();
+            amount += Math.abs(quantity) * price;
+        });
+        amount = Math.round(amount * 100) / 100
+        GST = Math.round(amount * 0.07 * 100) / 100;
+        totalAmount = Math.round((amount + GST) * 100) / 100;
+        //console.log(amount);
+        document.getElementById("amount").innerText = "Amount: $" + amount;
+        document.getElementById("GST").innerText = "GST (7 %): $" + GST;
+        document.getElementById("totalAmount").innerText = "Total Amount: $" + totalAmount;
 
     }
 
