@@ -258,9 +258,18 @@ namespace ADTeam5.Controllers
                         {                            
                             int outQty = q.Out;
                             int preStock = q.Stock;
-                            q.Stock = preStock + quantityRequested;
-                            q.Out = outQty - quantityRequested;
-
+                            //out number cannot be negative
+                            if(outQty >= quantityRequested)
+                            {
+                                q.Stock = preStock + quantityRequested;
+                                q.Out = outQty - quantityRequested;
+                            }
+                            else
+                            {
+                                q.Stock = preStock + outQty;
+                                q.Out = 0;
+                            }
+                           
                             _context.Catalogue.Update(q);
                             _context.SaveChanges();
                         }

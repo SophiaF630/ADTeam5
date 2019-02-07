@@ -96,10 +96,10 @@ else
                                         <td>
                                             <input type="checkbox" id="isChecked" name="isChecked" value="@item.RowID" onclick="doit();">
                                         </td>
-                                        <td>
+                                        <td class="RowID">
                                             @Html.DisplayFor(modelItem => item.RowID)
                                         </td>
-                                        <td width="20%">
+                                        <td class="ItemNumber" width="20%">
                                             @Html.DisplayFor(modelItem => item.ItemNumber)
                                         </td>
                                         <td class="ItemName" width="40%">

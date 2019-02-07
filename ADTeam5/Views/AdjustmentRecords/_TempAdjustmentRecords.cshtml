@@ -52,7 +52,7 @@
 
             }
             <div>
-                <a @*asp-route-state="PastRecords" *@ href="AdjustmentRecords?state=PastRecords">
+                <a @*asp-route-state="PastRecords" *@ href="/AdjustmentRecords?state=PastRecords">
                     <input type="button" value="View Past Records" class="btn btn-primary past" style="background-color: #00B894;width:200px;height:32px;border:2px;" />
                 </a>
             </div>
@@ -71,11 +71,11 @@ else
                     <br />
                     <br />
                     <div>
-                        <a @*asp-route-state="OutstandingRecords" *@ href="AdjustmentRecords?state=OutstandingRecords">
+                        <a @*asp-route-state="OutstandingRecords" *@ href="/AdjustmentRecords?state=OutstandingRecords">
                             <input type="button" value="View Oustanding Records" class="btn btn-primary outstanding" style="width:200px;height:32px;border:2px;margin-left:260px; background-color:#CC9933" />
                         </a>
                         &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-                        <a @*asp-route-state="PastRecords" *@ href="AdjustmentRecords?state=PastRecords">
+                        <a @*asp-route-state="PastRecords" *@ href="/AdjustmentRecords?state=PastRecords">
                             <input type="button" value="View Past Records" class="btn btn-primary past" style="background-color: #00B894;width:200px;height:32px;border:2px;" />
                         </a>
                     </div>
