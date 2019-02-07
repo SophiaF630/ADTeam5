@@ -176,7 +176,7 @@
                     </div>
                     <div class="form-group">
                         <label for="Quantity">Quantity Ordered</label>
-                        <input type="number" min="1" step="1" id="Quantity" name="quantity" class="form-control" value="" />
+                        <input type="number" min="1" step="1" max ="9999" id="Quantity" name="quantity" class="form-control" value="" />
                     </div>
                     <div class="modal-footer">
                         <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
@@ -214,11 +214,11 @@
                     <div class="form-group">
                         <label for="Quantity">Quantity Ordered</label>
                         <input type="hidden" id="QuantityValue" name="quantity" class="form-control" value="" />
-                        <input type="number" min="1" step="1" id="QuantityDisplay" name="" class="form-control" value="" disabled />
+                        <input type="number" min="1" step="1" max="9999" id="QuantityDisplay" name="" class="form-control" value="" disabled />
                     </div>
                     <div class="form-group">
                         <label for="Quantity">Quantity Delivered</label>
-                        <input type="text" id="QuantityDelivered" name="quantityDelivered" class="form-control" value="" />
+                        <input type="number"  min ="0" max ="9999" id="QuantityDelivered" name="quantityDelivered" class="form-control" value="" />
                     </div>
                     <div class="modal-footer">
                         <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
