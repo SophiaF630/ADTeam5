@@ -201,6 +201,17 @@ namespace ADTeam5.Controllers
                 return NotFound();
             }
 
+            var q = _context.RecordDetails.FirstOrDefault(x => x.ItemNumber == id);
+
+            if (q == null)
+            {
+                ViewBag.IfCanDelete = "Y";
+            }
+            else
+            {
+                ViewBag.IfCanDelete = "N";
+            }
+
             return View(catalogue);
         }
 
@@ -210,9 +221,24 @@ namespace ADTeam5.Controllers
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
             var catalogue = await _context.Catalogue.FindAsync(id);
-            _context.Catalogue.Remove(catalogue);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            //check whether the item is a FK of other records
+            var q = _context.RecordDetails.FirstOrDefault(x => x.ItemNumber == id);
+            
+            if (q == null)
+            {
+                _context.Catalogue.Remove(catalogue);
+                await _context.SaveChangesAsync();
+                TempData["Delete"] = "This item is successfully deleted";
+                ViewBag.IfCanDelete = "Y";
+                return RedirectToAction(nameof(Index));
+            }
+            else
+            {
+                ViewBag.IfCanDelete = "N";
+                TempData["CannotDelete"] = "This item cannot be deleted";
+                return Redirect("Catalogue/Delete/" + id);
+            }
+            
         }
 
         private bool CatalogueExists(string id)

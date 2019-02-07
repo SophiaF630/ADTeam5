@@ -4,6 +4,16 @@
     ViewData["Title"] = "Delete";
 }
 
+@if (TempData["CannotDelete"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aira-label="close">
+            <span aria-hidden="true">&times</span>
+        </button>
+        @TempData["CannotDelete"]
+    </div>
+}
+
 @*<h1>Delete</h1>
 
     <h3>Are you sure you want to delete this?</h3>*@
@@ -27,129 +37,140 @@
         </div>
 
         <div class="content">
-    <dl class="row" style="margin-left:130px">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Category)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Category)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.ItemName)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.ItemName)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.ReorderLevel)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.ReorderLevel)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.ReorderQty)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.ReorderQty)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.UnitOfMeasure)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.UnitOfMeasure)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Stock)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Stock)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Supplier1Price)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Supplier1Price)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Supplier2Price)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Supplier2Price)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Supplier3Price)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Supplier3Price)
-        </dd>
-        @*<dt class = "col-sm-2">
-                @Html.DisplayNameFor(model => model.Location)
-            </dt>
-            <dd class = "col-sm-10">
-                @Html.DisplayFor(model => model.Location)
-            </dd>*@
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Supplier1Navigation)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Supplier1Navigation.SupplierCode)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Supplier2Navigation)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Supplier2Navigation.SupplierCode)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Supplier3Navigation)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Supplier3Navigation.SupplierCode)
-        </dd>
-    </dl>
+            <dl class="row" style="margin-left:130px">
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Category)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Category)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.ItemName)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.ItemName)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.ReorderLevel)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.ReorderLevel)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.ReorderQty)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.ReorderQty)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.UnitOfMeasure)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.UnitOfMeasure)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Stock)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Stock)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Supplier1Price)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Supplier1Price)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Supplier2Price)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Supplier2Price)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Supplier3Price)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Supplier3Price)
+                </dd>
+                @*<dt class = "col-sm-2">
+                        @Html.DisplayNameFor(model => model.Location)
+                    </dt>
+                    <dd class = "col-sm-10">
+                        @Html.DisplayFor(model => model.Location)
+                    </dd>*@
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Supplier1Navigation)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Supplier1Navigation.SupplierCode)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Supplier2Navigation)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Supplier2Navigation.SupplierCode)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Supplier3Navigation)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Supplier3Navigation.SupplierCode)
+                </dd>
+            </dl>
 
-    <form asp-action="Delete">
-        <input type="hidden" asp-for="ItemNumber" />
-        <a asp-action="Index">
-            <button type="button" class="btn btn-primary" style="width:120px;height:32px;background-color:transparent;border:1px #B3B6B7 solid;margin-left:145px">
-                <i class='fas fa-arrow-left' style='font-size:14px;border:1px;color:#B3B6B7'></i>&nbsp;&nbsp;<font style='font-size:14px;color:#B3B6B7'>Back To List</font>
-            </button>
-        </a>
-        <input type="submit" id="btnDelete" value="Delete" class="btn btn-danger" style="width:100px;height:32px;border:2px;margin-left:140px" />
-        @*<div id="confirmDialog" title="Delete Information" hidden>
-            <p>Do you want to Delete </p>
-        </div>*@
-    </form>
-</div>
+            <form asp-action="Delete">
+                <input type="hidden" asp-for="ItemNumber" />
+                <a asp-action="Index">
+                    <button type="button" class="btn btn-primary" style="width:120px;height:32px;background-color:transparent;border:1px #B3B6B7 solid;margin-left:145px">
+                        <i class='fas fa-arrow-left' style='font-size:14px;border:1px;color:#B3B6B7'></i>&nbsp;&nbsp;<font style='font-size:14px;color:#B3B6B7'>Back To List</font>
+                    </button>
+                </a>
+                @if (ViewBag.IfCanDelete == "Y")
+                {
+                    <input type="submit" id="btnDelete" value="Delete" class="btn btn-danger" style="width:100px;height:32px;border:2px;margin-left:140px" />
+
+                }
+                else
+                {
+                    <button type="submit" id="btnDelete" value="Delete" class="btn btn-danger" style="width:100px;height:32px;border:2px;margin-left:140px" disabled>
+                        Delete<i data-toggle="tooltip" title="You cannot delete this item" style="color:#D0D3D4"></i>
+                    </button>
+                }
+                @*<input type="submit" id="btnDelete" value="Delete" class="btn btn-danger" style="width:100px;height:32px;border:2px;margin-left:140px" />*@
+                @*<div id="confirmDialog" title="Delete Information" hidden>
+                        <p>Do you want to Delete </p>
+                    </div>*@
+            </form>
+        </div>
     </div>
 </section>
 
 @*<script>
-    $(function () {
-        $('#btnDelete').click(function (e) {
-            e.preventDefault();
+        $(function () {
+            $('#btnDelete').click(function (e) {
+                e.preventDefault();
+            });
         });
-    });
-</script>
+    </script>
 
-<script>
-    $(function () {
-        $('#btnDelete').click(function (e) {
-            e.preventDefault();
-            $('#confirmDialog').dialog('open');
-        });
-        $("#confirmDialog").dialog({
-            autoOpen: false,
-            modal: true,
-            resizable: false,
-            buttons: {
-                "Ok": function () {
-                    $('studentForm').submit();
+    <script>
+        $(function () {
+            $('#btnDelete').click(function (e) {
+                e.preventDefault();
+                $('#confirmDialog').dialog('open');
+            });
+            $("#confirmDialog").dialog({
+                autoOpen: false,
+                modal: true,
+                resizable: false,
+                buttons: {
+                    "Ok": function () {
+                        $('studentForm').submit();
+                    },
+                    "Cancel": function (e) {
+                        $(this).dialog("close");
+                    }
                 },
-                "Cancel": function (e) {
-                    $(this).dialog("close");
-                }
-            },
+            });
         });
-    });
-</script>*@
+    </script>*@
