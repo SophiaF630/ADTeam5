@@ -4,6 +4,26 @@
     ViewData["Title"] = "Index";
 }
 
+@using ADTeam5.Areas.Identity.Data
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ADTeam5User> SignInManager
+@inject UserManager<ADTeam5User> UserManager
+@inject SSISTeam5Context context
+
+
+@{ if (SignInManager.IsSignedIn(User))
+    {
+        GeneralLogic userCheck;
+        userCheck = new GeneralLogic(context);
+        ADTeam5User user = await UserManager.GetUserAsync(User);
+        List<string> identity = userCheck.checkUserIdentityAsync(user);
+        ViewData["UserRole"] = identity[1];
+    }
+    else
+    { ViewData["UserRole"] = "Not signed"; }
+
+
+}
 
 <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
@@ -67,7 +87,7 @@
                                             <th>
                                                 @Html.DisplayNameFor(model => model.Remark)
                                             </th>
-                                            @if (ViewBag.DisbursementListStatus == "Pending Delivery")
+                                            @if (ViewData["UserRole"].ToString() == "Clerk" && ViewBag.DisbursementListStatus == "Pending Delivery")
                                             {
                                                 <th></th>
                                                 <th></th>
@@ -96,7 +116,7 @@
                                                 <td class="Remark">
                                                     @Html.DisplayFor(modelItem => item.Remark)
                                                 </td>
-                                                @if (ViewBag.DisbursementListStatus == "Pending Delivery")
+                                                @if (ViewData["UserRole"].ToString() == "Clerk" && ViewBag.DisbursementListStatus == "Pending Delivery")
                                                 {
                                                     <td>
                                                         <button type="button" class="btn btn-primary editQuantityDelivered" style="width:70px;height:30px;border:2px; background-color:#3c8dbc">
@@ -118,7 +138,7 @@
                     </div>
                 </div>
             </div>
-            @if (ViewBag.DisbursementListStatus == "Pending Delivery")
+            @if (ViewData["UserRole"].ToString() == "Clerk" && ViewBag.DisbursementListStatus == "Pending Delivery")
             {
                 @*<div>
                         <a href="#" data-toggle="modal" data-target="#BackToListModal">Back to List</a>
@@ -138,7 +158,7 @@
                 </a>
             }
 
-            @if (ViewBag.DisbursementListStatus == "Pending Delivery")
+            @if (ViewData["UserRole"].ToString() == "Clerk" && ViewBag.DisbursementListStatus == "Pending Delivery")
             {
                 <button type="button" class="btn btn-primary confirmDelivery">
                     Confirm Delivery

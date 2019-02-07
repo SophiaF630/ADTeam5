@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ADTeam5.Models.RecordDetails>
+﻿@model IEnumerable<ADTeam5.ViewModels.ViewRequestDetails>
 
 @{
     ViewData["Title"] = "Submitted Request";
@@ -58,11 +58,11 @@
                                 <td></td>
                                 <td></td>
                                 <td width="20%">
-                                    @Html.DisplayFor(modelItem => item.ItemNumber)
+                                    @Html.DisplayFor(modelItem => item.itemName)
                                 </td>
 
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.Quantity)
+                                    @Html.DisplayFor(modelItem => item.quantity)
                                 </td>
 
                             </tr>

@@ -79,8 +79,8 @@ else
                             <thead>
                                 <tr>
                                     @*<th>
-                                            <input type="checkbox" name="select-all" id="select-all"/>
-                                        </th>*@
+            <input type="checkbox" name="select-all" id="select-all"/>
+        </th>*@
                                     <th>
                                         No.
                                     </th>
@@ -96,11 +96,14 @@ else
                                     <th>
                                         Remark
                                     </th>
-                                    @if (ViewBag.AdjustmentRecordStatus == "Draft")
+                                    @if (ViewData["UserRole"].ToString() == "Clerk" && ViewBag.AdjustmentRecordStatus == "Draft")
                                     {
-                                        <th></th>
-                                        <th></th>
+                                        
+                                            <th></th>
+                                            <th></th>
+
                                     }
+
 
                                 </tr>
                             </thead>
@@ -126,7 +129,7 @@ else
                                         <td class="Remark" width="60%">
                                             @Html.DisplayFor(modelItem => item.Remark)
                                         </td>
-                                        @if (ViewBag.AdjustmentRecordStatus == "Draft")
+                                        @if (ViewData["UserRole"].ToString() == "Clerk" && ViewBag.AdjustmentRecordStatus == "Draft")
                                         {
                                             <td>
                                                 <button class="editVoucherItem" style="background-color:transparent; border:transparent">
@@ -146,7 +149,7 @@ else
                             </tbody>
                         </table>
                         <br />
-                        @if (ViewBag.AdjustmentRecordStatus == "Draft")
+                        @if (ViewData["UserRole"].ToString() == "Clerk" && ViewBag.AdjustmentRecordStatus == "Draft")
                         {
                             <button type="button" class="btn btn-primary createNewVoucherItem" style="width:120px;height:32px;border:2px;margin-left:36px; background-color:#00B894">
                                 <i class='fas fa-plus-circle' style='font-size:14px'></i>&nbsp;&nbsp;Add Item
