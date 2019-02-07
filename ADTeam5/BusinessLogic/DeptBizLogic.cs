@@ -341,5 +341,22 @@ namespace ADTeam5.BusinessLogic
             context.SaveChanges();
         }
 
+        public string generateCollectionPassword(string dept)
+        {
+            int _min = 1000;
+            int _max = 9999;
+            Random _rdm = new Random();
+            int num = _rdm.Next(_min, _max);
+            string randomNumber = num.ToString();
+            var q = context.Department.Where(x => x.DepartmentCode == dept).First();
+            int repId = q.RepId;
+            Department d = new Department();
+            d = q;
+            d.CollectionPassword = num.ToString();
+            context.SaveChanges();
+
+            return randomNumber;
+        }
+
     }
 }
