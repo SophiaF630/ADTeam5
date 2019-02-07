@@ -76,20 +76,24 @@
     <br />
     <br />
     <hr />
-    <div class="form-group">
+    <br />
+    <br />
+    <div class="form-horizontal">
         <a asp-action="Index">
             <button type="button" class="btn btn-primary" style="width:120px;height:32px;margin-left:1px; background-color:transparent;border:1px #B3B6B7 solid;margin-left:68px">
                 <i class='fas fa-arrow-left' style='font-size:14px;border:1px;color:#B3B6B7'></i>&nbsp;&nbsp;<font style='font-size:14px;color:#B3B6B7'>Back To List</font>
             </button>
         </a>
-        <div style="margin-left:320px">
-            <input type="submit" value="Reject" class="btn btn-primary rejectReason" style="background-color:#dc6460;width:100px;height:32px;border:2px;" />
-            <form asp-controller="OutstandingOrder" asp-action="ApproveOrder" method="post">
-                <input type="submit" value="Apprrove" class="btn btn-primary" style="background-color:#00B894;width:100px;height:32px;border:2px;" />
-            </form>
-        </div>
+        @*<div style="margin-left:320px">*@
+        <input type="submit" value="Reject" class="btn btn-primary rejectReason" style="background-color:#dc6460;width:100px;height:32px;border:2px;margin-left:160px" />
+        <form asp-controller="OutstandingOrder" asp-action="ApproveOrder" method="post" style="display: inline;">
+            <input type="submit" value="Approve" class="btn btn-primary" style="background-color:#00B894;width:100px;height:32px;border:2px;margin-left:100px" />
+        </form>
+        <br />
+        <br /><br />
+        @*</div>*@
     </div>
-    </div>
+</div>
 
 
     <!-- Modal for create voucher item-->
@@ -101,27 +105,51 @@
 
                 <div class="modal-body">
 
-                    <form asp-controller="OutstandingOrder" asp-action="RejectOrder" method="post">
-                        <div class="form-group">
-                            <label for="rejectReason">Reason for Rejection:</label>
-                            @if (TempData["NoText"] != null)
-                            {
-                                <div class="alert alert-danger" role="alert">
-                                    <button type="button" class="close" data-dismiss="alert" aira-label="close">
-                                        <span aria-hidden="true">&times</span>
-                                    </button>
-                                    @TempData["NoText"]
+                    <div class="box box-default">
+                        <div class="box-header with-border">
+                            <div align="center" vertical-align="middle">
+                                <div style="width: 540px;padding: 10px;border-style:outset; border-width:1px; ">
+                                    <div align="center" vertical-align="middle">
+                                        <h3 class="box-title">
+                                            <strong><font size="5">Are you sure you want to reject this request?</font></strong>
+                                        </h3>
+                                    </div>
+                                    <div class="box-tools">
+                                    </div>
                                 </div>
-                            }
-                            <input type="text" id="rejectReason" name="rejectReason" class="form-control" value="" />
+                            </div>
                         </div>
-                        <div align="center">
-                            <button class="btn" data-dismiss="modal" aria-hidden="true" style="width:80px;height:30px;border:2px; background-color:#EEEEEE"><font size="3" color="black">Cancel</font></button>
-                            <button type="submit" class="btn btn-primary" style="width:120px;height:30px;border:2px; background-color:#3c8dbc"><font size="3" color="white">Submit</font></button>
-                        </div>
-                    </form>
+
+                        <form asp-controller="OutstandingOrder" asp-action="RejectOrder" method="post">
+                            <div class="form-group">
+                                <br />
+                                <label for="rejectReason">&nbsp;&nbsp;&nbsp; Reason for Rejection:</label>
+                                <br />
+                                <br />
+                                @if (TempData["NoText"] != null)
+                                {
+                                    <div class="alert alert-danger" role="alert">
+                                        <button type="button" class="close" data-dismiss="alert" aira-label="close">
+                                            <span aria-hidden="true">&times</span>
+                                        </button>
+                                        @TempData["NoText"]
+                                    </div>
+                                }
+
+                                <input type="text" id="rejectReason" name="rejectReason" class="form-control" value="" style="margin-left:10px;width:550px" />
+                            </div>
+                            <br />
+                            <div align="center">
+                                <button class="btn" data-dismiss="modal" aria-hidden="true" style="width:80px;height:30px;border:2px; background-color:#EEEEEE">Cancel</button>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <button type="submit" class="btn btn-primary" style="background-color:#00B894;width:80px;height:30px;border:2px;">Submit</button>
+                            </div>
+                            <br />
+                        </form>
+                        
+                    </div>
                 </div>
-            </div>
+                </div>
         </div>
     </div>
 
