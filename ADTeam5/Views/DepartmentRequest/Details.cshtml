@@ -22,10 +22,12 @@
     </div>
     <br />
 
-    <p><b>Requisition Form No: @ViewData["RRID"]</b></p>
-    <p>Status: @ViewData["Status"]</p>
-
-
+    <p><b>Requester Name: </b>@ViewData["Requester"]</p>
+    <p><b>Request Date:</b> @ViewData["RequestDate"] </p>
+    <b>Status: </b>@ViewData["Status"] - @if (ViewData["RejectStatus"] != null) {@ViewData["RejectStatus"]}
+      
+    <br/>
+     <br/>
     <table class="table">
         <thead>
             <tr>
