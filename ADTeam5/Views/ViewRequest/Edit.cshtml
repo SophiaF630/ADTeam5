@@ -15,70 +15,87 @@
 <p><b>Requisition Form No: @ViewData["RRID"]</b></p>
 <p>Status: @ViewData["Status"]</p>
 
-<div>
-        <button type="button" class="btn btn-lg btn-primary d-none d-md-inline-block mt-3 createNewRequestItem" style="width:100px;height:40px;border:2px; background-color:#00B894">
+@if (ViewData["CheckRecords"] != null)
+{
+    <div>
+        <button type="button" class="btn btn-primary submit createNewRequestItem" style="width:110px;height:36px;border:2px; background-color:#00B894">
             Add Item
         </button>
-</div>
+    </div>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                Item Name
-            </th>
-            <th>
-                Quantity
-            </th>
-            <th>
-                Edit
-            </th>
-            <th>
-                Delete
-            </th>
 
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
+    <table class="table">
+        <thead>
             <tr>
-                <td class="ItemName">
-                    @Html.DisplayFor(modelItem => item.itemName)
-                </td>
-                <td class="Quantity">
-                    @Html.DisplayFor(modelItem => item.quantity)
-                    <meta http-equiv="refresh" content="10" />
-                </td>
-                <td>
-                    <button type="button" class="editItem" style="background-color:transparent; border:transparent">
-                        <i class="fa fa-edit" style="color:#66B3B3"></i>
-                    </button>
-                </td>
-                <td>
-                    <form asp-action="RequestItemDelete" asp-route-itemName="@item.itemName" asp-route-rrid="@item.rrid" method="post" data-ajax="true" data-ajax-update="#TempVoucherDetailsList" role="form" asp-controller="ViewRequest" onclick="return confirm('Are you sure you want to delete this item?');">
-                        <button style="background-color:transparent; border:transparent">
-                            <i class="fa fa-trash-alt" style="color:#dc6460"></i>
+                <th>
+                    Item Name
+                </th>
+                <th>
+                    Quantity
+                </th>
+                <th>
+                    Edit
+                </th>
+                <th>
+                    Delete
+                </th>
 
-                        </button>
-                        @*<meta http-equiv="refresh" content="10" />*@
-                    </form>
-                </td>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td class="ItemName">
+                        @Html.DisplayFor(modelItem => item.itemName)
+                    </td>
+                    <td class="Quantity">
+                        @Html.DisplayFor(modelItem => item.quantity)
+                        <meta http-equiv="refresh" content="15" />
+                    </td>
+                    <td>
+                        <button type="button" class="editItem" style="background-color:transparent; border:transparent">
+                            <i class="fa fa-edit" style="color:#66B3B3"></i>
+                        </button>
+                    </td>
+                    <td>
+                        <form asp-action="RequestItemDelete" asp-route-itemName="@item.itemName" asp-route-rrid="@item.rrid" method="post" data-ajax="true" data-ajax-update="#TempVoucherDetailsList" role="form" asp-controller="ViewRequest" onclick="return confirm('Are you sure you want to delete this item? Note: It will take a while to reflect the changes.');">
+                            <button style="background-color:transparent; border:transparent">
+                                <i class="fa fa-trash-alt" style="color:#dc6460"></i>
 
-<div>
-    <form asp-action="DeleteRequest"  asp-route-rrid="@ViewData["RRID"]"method="post" role="form" asp-controller="ViewRequest" onclick="return confirm('Are you sure you want to delete this request?');">
-        <button type ="submit"  class="btn btn-lg btn-primary d-none d-md-inline-block mt-3" style="float:left; background-color:darkred">
-        Delete Request
-        </button>
+                            </button>
+                            @*<meta http-equiv="refresh" content="10" />*@
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div>
+        <form asp-action="DeleteRequest" asp-route-rrid="@ViewData["RRID"]" method="post" role="form" asp-controller="ViewRequest" onclick="return confirm('Are you sure you want to delete this request?');">
+            <button type="submit" class="btn btn-primary submit" style="float:left; width:110px;height:36px;border:2px; background-color:darkred">
+                Delete Request
+            </button>
         </form>
-</div>
-<br/>
-<br/>
-<br/>
+    </div>
+    <br />
+    <br />
+    <br />
+}
+else
+{
+
+    <div style="width:50%; margin:auto;">
+        <div style="display:inline-block; width:60%;text-align:center;">
+            <h4>No items in your request!<br />Please add items or delete request.</h4>
+            <button type="button" class="btn btn-primary submit createNewRequestItem" style="float:left; width:110px;height:36px;border:2px;background-color:#00B894">Add Item</button> <form asp-action="DeleteRequest" asp-route-rrid="@ViewData["RRID"]" method="post" role="form" asp-controller="ViewRequest" onclick="return confirm('Are you sure you want to delete this request?');"><button type="submit" class="btn btn-primary submit" style="float:right; width:110px;height:36px;border:2px;background-color:darkred">Delete Request</button></form>
+        </div>
+    </div>
+    <br />
+    <br />
+    <br />
+}
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
