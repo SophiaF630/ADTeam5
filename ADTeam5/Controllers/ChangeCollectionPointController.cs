@@ -66,12 +66,18 @@ namespace ADTeam5.Controllers
                 Models.Department d2 = q1;
                 d2.CollectionPointId = newCollectionPoint;
 
-                //****add in date restriction*****cannot change after Fri 5.30pm
-                var q2 = context.DisbursementList.Where(x => x.DepartmentCode == dept && x.Status == "Pending Delivery");
-                if(q2.Any())
+                TimeSpan cutoff = TimeSpan.Parse("17:30"); // 5.30 PM
+                TimeSpan now = DateTime.Now.TimeOfDay;
+
+                if (DateTime.Now.DayOfWeek == DayOfWeek.Tuesday || DateTime.Now.DayOfWeek == DayOfWeek.Wednesday || DateTime.Now.DayOfWeek == DayOfWeek.Thursday || (DateTime.Now.DayOfWeek == DayOfWeek.Friday && now <= cutoff))
                 {
-                    Models.DisbursementList d1 = q2.First();
-                    d1.CollectionPointId = newCollectionPoint;
+                    var t = context.DisbursementList.Where(x => x.DepartmentCode == dept && x.Status == "Pending Delivery");
+                    if (t.Any())
+                    {
+                        DisbursementList dl = new DisbursementList();
+                        dl = t.First();
+                        dl.CollectionPointId = newCollectionPoint;
+                    }
                 }
                 await context.SaveChangesAsync();
                 TempData["Alert1"] = "Collection Point Changed Successfully";
