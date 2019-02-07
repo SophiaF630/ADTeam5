@@ -34,6 +34,8 @@ namespace ADTeam5.Controllers
         // GET: DisbursementLists
         public async Task<IActionResult> Index()
         {
+            ViewData["InsufficientCheck"] = null;
+
             ADTeam5User user = await _userManager.GetUserAsync(HttpContext.User);
             List<string> identity = userCheck.checkUserIdentityAsync(user);
             int userID = user.WorkID;
@@ -84,6 +86,7 @@ namespace ADTeam5.Controllers
         // GET: DisbursementLists/Details/5
         public async Task<IActionResult> Details(string id)
         {
+            
             ADTeam5User user = await _userManager.GetUserAsync(HttpContext.User);
             List<string> identity = userCheck.checkUserIdentityAsync(user);
             int userID = user.WorkID;
@@ -188,6 +191,19 @@ namespace ADTeam5.Controllers
             }
             else if (quantityDeliveredModalName == 1)
             {
+                var q = _context.RecordDetails.Where(x => x.Rrid == id && x.ItemNumber == itemNumber).FirstOrDefault();
+                int quantityNeeded = q.Quantity;
+                if(quantityDelivered > quantityNeeded)
+                {
+                    TempData["ExcessError"] = "Quantity delivered cannot be greater than quantity requested. Please try again.";
+                    return RedirectToAction("Details", new { id });
+                }
+                if (quantityDelivered < quantityNeeded)
+                {
+                    ViewData["InsufficientCheck"] = "true";
+                    TempData["InsufficientError"] = "As quantity delivered is lesser than quantity requested, please key in remarks. Please try again.";
+                    return RedirectToAction("Details", new { id });
+                }
                 foreach (DisbursementListDetails dlDetails in tempDisbursementListDetails)
                 {
                     if (dlDetails.RowID == rowID)

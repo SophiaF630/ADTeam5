@@ -52,6 +52,26 @@
         @TempData["QuantityError"]
     </div>
 }
+@if (TempData["ExcessError"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aira-label="close">
+            <span aria-hidden="true">&times</span>
+        </button>
+        @TempData["ExcessError"]
+    </div>
+}
+
+@if (TempData["InsufficientError"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aira-label="close">
+            <span aria-hidden="true">&times</span>
+        </button>
+        @TempData["InsufficientError"]
+    </div>
+}
+
 
 <section class="content">
     <div class="row">
@@ -189,6 +209,15 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLongTitle">Update Quantity Delivered</h5>
+                @if (TempData["InsufficientError"] != null)
+                {
+                    <div class="alert alert-danger" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aira-label="close">
+                            <span aria-hidden="true">&times</span>
+                        </button>
+                        @TempData["InsufficientError"]
+                    </div>
+                }
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -212,11 +241,19 @@
                     </div>
                     <div class="form-group">
                         <label for="QuantityDelivered">Quantity Delivered</label>
-                        <input type="number" min="0" step="1" max="9999" id="QuantityDelivered" name="quantityDelivered" required ="required"class="form-control" value="" />
+                        <input type="number" min="0" step="1" max="9999" id="QuantityDelivered" name="quantityDelivered" required="required" class="form-control" value="" />
                     </div>
                     <div class="form-group">
-                        <label for="Remark">Remark</label>
-                        <input type="text" id="RemarkForDelivery" name="remarkForDelivery"  class="form-control" value="" />
+                        @if (ViewData["InsufficientCheck"] != null)
+                        {
+                            <label for="Remark">Remark</label>
+                            <input type="text" id="RemarkForDelivery" name="remarkForDelivery" required="required" class="form-control" value="" />
+                        }
+                        else
+                        {
+                            <label for="Remark">Remark</label>
+                            <input type="text" id="RemarkForDelivery" name="remarkForDelivery" class="form-control" value="" />
+                        }
                     </div>
                     <div class="modal-footer">
                         <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
@@ -258,7 +295,7 @@
                     </div>
                     <div class="form-group">
                         <label for="Remark">Remark</label>
-                        <input type="text" id="RemarkForVoucher" name="remarkForVoucher" required ="required" class="form-control" value="" />
+                        <input type="text" id="RemarkForVoucher" name="remarkForVoucher" required="required" class="form-control" value="" />
                     </div>
                     <div class="modal-footer">
                         <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>

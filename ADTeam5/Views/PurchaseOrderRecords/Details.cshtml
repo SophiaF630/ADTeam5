@@ -8,7 +8,15 @@
 <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
 
 @*<h1>Purchase Order Details -- same as AdjustmentRecordDetails</h1>*@
-
+@if (TempData["QuantityDeliveredError"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aira-label="close">
+            <span aria-hidden="true">&times</span>
+        </button>
+        @TempData["QuantityDeliveredError"]
+    </div>
+}
 <p id="po-id">@ViewData["POID"]</p>
 
 <div class="row">
@@ -202,6 +210,15 @@ else
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
+                @if (TempData["QuantityDeliveredError"] != null)
+                {
+                    <div class="alert alert-danger" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aira-label="close">
+                            <span aria-hidden="true">&times</span>
+                        </button>
+                        @TempData["QuantityDeliveredError"]
+                    </div>
+                }
                 <h5 class="modal-title" id="exampleModalLongTitle">Update Delivery</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
