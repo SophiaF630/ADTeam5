@@ -203,7 +203,7 @@
                 //var supplier2 = $("#Supplier2").val();
                 //if (supplier2 == supplier1 || supplier2 == "") {
                 $("#Supplier2").empty();
-                $("#Supplier2").append("<option value='" + "0" + "' disabled>" + "Select supplier" + "</option>");
+                $("#Supplier2").append("<option value='" + "0" + "'>" + "---Select supplier---" + "</option>");
                 $.each(data, function (index, row) {
                     $("#Supplier2").append("<option value='" + row.supplierCode + "'>" + row.supplierName + "</option>")
                 });
@@ -213,7 +213,7 @@
                 //var supplier3 = $("#Supplier3").val();
                 //if (supplier3 == supplier1) {
                 $("#Supplier3").empty();
-                $("#Supplier3").append("<option value='" + "0" + "'disabled>" + "Select supplier" + "</option>");
+                $("#Supplier3").append("<option value='" + "0" + "'>" + "---Select supplier---" + "</option>");
                 $.each(data, function (index, row) {
                     $("#Supplier3").append("<option value='" + row.supplierCode + "'>" + row.supplierName + "</option>")
                 });
@@ -240,7 +240,7 @@
                 //var supplier3 = $("#Supplier3").val();
                 //if (supplier3 == supplier2 || supplier3 == "") {
                 $("#Supplier3").empty();
-                $("#Supplier3").append("<option value='" + "0" + "'disabled>" + " " + "</option>");
+                $("#Supplier3").append("<option value='" + "0" + "'>" + " " + "</option>");
                 $.each(data, function (index, row) {
                     $("#Supplier3").append("<option value='" + row.supplierCode + "'>" + row.supplierName + "</option>")
                 });

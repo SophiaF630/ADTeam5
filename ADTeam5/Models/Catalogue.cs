@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ADTeam5.Validations;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -42,13 +43,20 @@ namespace ADTeam5.Models
         public int Out { get; set; }
         [StringLength(4)]
         [Required(ErrorMessage = "*This field is required")]
+        [ExcludeChar(@"!@#$%^&*().,<>?/:;'-", ErrorMessage = "Please select a supplier")]
+        [NotNull("")]
         [Display(Name = "Supplier 1")]
         public string Supplier1 { get; set; }
         [StringLength(4)]
+        [ExcludeChar(@"!@#$%^&*().,<>?/:;'-", ErrorMessage = "Please select a supplier")]
+        [NotNull("")]
         [Required(ErrorMessage = "*This field is required")]
         [Display(Name = "Supplier 2")]
         public string Supplier2 { get; set; }
+        [ExcludeChar(@"!@#$%^&*().,<>?/:;'-", ErrorMessage = "Please select a supplier")]
+        [NotNull("")]
         [StringLength(4)]
+        [Display(Name = "Supplier 3")]
         public string Supplier3 { get; set; }
         [DisplayFormat(ApplyFormatInEditMode = false, DataFormatString = "S${0:0.00}")]
         [Range(0, 10000, ErrorMessage = "Price cannot be negative")]

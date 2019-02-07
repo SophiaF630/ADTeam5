@@ -43,7 +43,7 @@ namespace ADTeam5.Controllers
                     return RedirectToAction("Index", "AdjustmentRecords");
                     break;
                 case "Clerk":
-                    return RedirectToAction("Index", "StationeryRetrievalList");
+                    return RedirectToAction("Index", "PurchaseOrderRecords");
                     break;
                 case "Head":
                     return RedirectToAction("Index", "AssignDepartment");

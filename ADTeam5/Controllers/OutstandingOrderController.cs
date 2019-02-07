@@ -72,7 +72,8 @@ namespace ADTeam5.Controllers
             User u1 = q2;
             string username = u1.Name;
             ViewData["Name"] = username;
-
+            ViewData["Status"] = e1.Status;
+            ViewData["Requester"] = username;
             return View(b.getOutstandingOrdersDetails(rrid));
             }
 
