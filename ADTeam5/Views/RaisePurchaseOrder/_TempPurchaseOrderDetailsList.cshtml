@@ -248,7 +248,7 @@ else
                         <label for="Category">Category</label>
                         @if (ViewBag.ListofCategory != null)
                         {
-                            <select for="Category" class="form-control" id="Category" asp-items="@(new SelectList(ViewBag.ListofCategory, "Category", "Category"))"></select>
+                            <select for="Category" class="form-control" id="Category" required="required" asp-items="@(new SelectList(ViewBag.ListofCategory, "Category", "Category"))"></select>
                         }
                     </div>
                     <div class="form-group">
@@ -340,7 +340,7 @@ else
         $("#Category").change(function () {
             $.get("/RaisePurchaseOrder/GetItemNameList", { category: $("#Category").val() }, function (data) {
                 $("#ItemNumber").empty();
-                $("#ItemNumber").append("<option value='" + "0" + "' disabled>" + "---Select item---" + " </option>");
+                $("#ItemNumber").append("<option value='" + "" + "'>" + "" + " </option>");
                 $.each(data, function (index, row) {
                     $("#ItemNumber").append("<option value='" + row.itemNumber + "'>" + row.itemName + "</option>")
                 });
