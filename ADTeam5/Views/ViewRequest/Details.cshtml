@@ -22,8 +22,15 @@
     </div>
     <br />
 
-    <p><b>Requisition Form No: @ViewData["RRID"]</b></p>
-    <p>Status: @ViewData["Status"]</p>
+    <p style="margin-left:98px">
+        <b>Requisition Form No: @ViewData["RRID"]</b>
+        <b style="color:#dc6460;margin-left:390px">
+            Status:
+            @ViewData["Status"]
+        </b>
+    </p>
+    <hr />
+
 
     @if (ViewData["RejectStatus"] != null)
     {
@@ -32,36 +39,49 @@
         </div>
     }
 
-
-    <table class="table">
-        <thead>
-            <tr>
-                <th>
-                    Item Name
-                </th>
-                <th>
-                    Quantity
-                </th>
-
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.itemName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.quantity)
-                    </td>
-
-                </tr>
-            }
-        </tbody>
-    </table>
-
+    <div class="box-body no-padding">
+        <div class="table-responsive table-full-width">
+            <table class="table no-margin table-hover table-striped table-responsive table-borderless" style="width: 100%;">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>
+                            Item Name
+                        </th>
+                        <th>
+                            Quantity
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td></td>
+                            <td width="40%">
+                                @Html.DisplayFor(modelItem => item.itemName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.quantity)
+                            </td>
+                            <td></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <br />
+    <hr />
+   
     <div>
-        <a asp-action="Index">Back to List</a>
+        <a asp-action="Index">
+            <button type="button" class="btn btn-primary" style="width:120px;height:32px;margin-left:1px; background-color:transparent;border:1px #B3B6B7 solid;margin-left:98px">
+                <i class='fas fa-arrow-left' style='font-size:14px;border:1px;color:#B3B6B7'></i>&nbsp;&nbsp;<font style='font-size:14px;color:#B3B6B7'>Back To List</font>
+            </button>
+        </a>
+        <br />
+        <br />
     </div>
 
