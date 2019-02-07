@@ -55,28 +55,35 @@ namespace ADTeam5.Controllers
         [HttpPost]
         public async Task<IActionResult> Index(string itemNumber, int quantityRetrieved, int quantityForVoucher, string remark, int quantityRetrievedModalName, int addToVoucherModalName)
         {
-
-            ADTeam5User user = await _userManager.GetUserAsync(HttpContext.User);
-            List<string> identity = userCheck.checkUserIdentityAsync(user);
-            int userID = user.WorkID;
-
-            if (itemNumber == null)
+            if(quantityForVoucher ==0)
             {
-                return NotFound();
+                TempData["QuantityError"] = "Please select a quantity to add to voucher. Quantity cannot be 0.";
+                return RedirectToAction("Index");
             }
-
-            if (addToVoucherModalName == 1)
+            else
             {
-                b.CreateNewVoucherItem(userID, itemNumber, quantityForVoucher, remark);
-            }
-            else if (quantityRetrievedModalName == 1)
-            {
-                b.UpdateCatalogueOutAndStockAfterRetrieval(itemNumber, quantityRetrieved);
-            }
+                ADTeam5User user = await _userManager.GetUserAsync(HttpContext.User);
+                List<string> identity = userCheck.checkUserIdentityAsync(user);
+                int userID = user.WorkID;
 
-            List<StationeryRetrievalList> result = b.GetStationeryRetrievalLists();
+                if (itemNumber == null)
+                {
+                    return NotFound();
+                }
 
-            return View(result);
+                if (addToVoucherModalName == 1)
+                {
+                    b.CreateNewVoucherItem(userID, itemNumber, quantityForVoucher, remark);
+                }
+                else if (quantityRetrievedModalName == 1)
+                {
+                    b.UpdateCatalogueOutAndStockAfterRetrieval(itemNumber, quantityRetrieved);
+                }
+
+                List<StationeryRetrievalList> result = b.GetStationeryRetrievalLists();
+
+                return View(result);
+            }
         }
 
         private bool RecordDetailsExists(int id)

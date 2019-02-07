@@ -64,6 +64,15 @@
         }
 </style>
 
+@if (TempData["QuantityError"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aira-label="close">
+            <span aria-hidden="true">&times</span>
+        </button>
+        @TempData["QuantityError"]
+    </div>
+}
 <div class="row">
     <div class="col-md-12">
         <div class="box">
@@ -108,10 +117,10 @@
                                     @Html.DisplayNameFor(model => model.QuantityRetrieved)
                                 </th>
                                 <th>
-                                   
+
                                 </th>
                                 <th>
-                                    
+
                                 </th>
                             </tr>
                         </thead>
@@ -133,7 +142,7 @@
                                     </td>
                                     <td>
                                         <button type="button" class="btn btn-primary editQuantityRetrieved" style="background-color:transparent; border:transparent">
-                                            <i class="fa fa-edit" style="color:#66B3B3;">  
+                                            <i class="fa fa-edit" style="color:#66B3B3;">
                                                 &nbsp;Edit
                                             </i>
                                         </button>
@@ -300,6 +309,6 @@
 
 
 <script>
-                                                //$('#StationeryRetrivalList').DataTable();
+                                                    //$('#StationeryRetrivalList').DataTable();
 </script>
 

@@ -5,6 +5,16 @@
     ViewData["Title"] = "Index";
 }
 
+@if (TempData["QuantityError"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aira-label="close">
+            <span aria-hidden="true">&times</span>
+        </button>
+        @TempData["QuantityError"]
+    </div>
+}
+
 @*<h1>Items to be added to voucher</h1>*@
 <section class="content">
     <div class="row">
@@ -24,18 +34,18 @@
                     </div>*@
 
 
-                    <div class="container">
-                        <div class="row">
-                            <div class="col">
-                                <div id="TempVoucherDetailsList">
-                                    <partial name="_TempVoucherDetailsList" model="Model" />
-                                </div>
-                            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col">
+                        <div id="TempVoucherDetailsList">
+                            <partial name="_TempVoucherDetailsList" model="Model" />
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
+    </div>
     </div>
 </section>
 
