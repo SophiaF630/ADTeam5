@@ -38,7 +38,7 @@ namespace ADTeam5.Controllers
             dept = identity[0];
             role = identity[1];
 
-            var q = context.EmployeeRequestRecord.Where(x => x.DepCode == dept).OrderByDescending(x => x.Rrid);
+            var q = context.EmployeeRequestRecord.Where(x => x.DepCode == dept && x.DepEmpId == userid).OrderByDescending(x => x.Rrid);
             return View(q);
         }
 
@@ -62,7 +62,7 @@ namespace ADTeam5.Controllers
                 {
                     if (ModelState.IsValid)
                     {
-                        var t = context.EmployeeRequestRecord.Where(s => s.RequestDate >= startDate && s.RequestDate <= endDate && s.DepCode == dept).OrderByDescending(x => x.Rrid);
+                        var t = context.EmployeeRequestRecord.Where(s => s.RequestDate >= startDate && s.RequestDate <= endDate && s.DepCode == dept && s.DepEmpId == userid).OrderByDescending(x => x.Rrid);
                         return View(t);
                     }
                     else

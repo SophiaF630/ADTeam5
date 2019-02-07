@@ -66,6 +66,7 @@ namespace ADTeam5.Controllers
                 Models.Department d2 = q1;
                 d2.CollectionPointId = newCollectionPoint;
 
+                //****add in date restriction*****cannot change after Fri 5.30pm
                 var q2 = context.DisbursementList.Where(x => x.DepartmentCode == dept && x.Status == "Pending Delivery");
                 if(q2.Any())
                 {
