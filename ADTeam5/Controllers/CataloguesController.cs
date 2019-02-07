@@ -58,6 +58,8 @@ namespace ADTeam5.Controllers
         // GET: Catalogues/Details/5
         public async Task<IActionResult> Details(string id)
         {
+            TempData["Delete"] = null;
+
             if (id == null)
             {
                 return NotFound();
@@ -88,10 +90,10 @@ namespace ADTeam5.Controllers
             //supplier1List.Insert(0, new Supplier { SupplierCode = " ", SupplierName = " " });
             ViewBag.Supplier1 = supplier1List;
             List<Supplier> supplier2List = _context.Supplier.ToList();
-            supplier1List.Insert(0, new Supplier { SupplierCode = " ", SupplierName = " " });
+            //supplier2List.Insert(0, new Supplier { SupplierCode = " ", SupplierName = " " });
             ViewBag.Supplier2 = supplier2List;
             List<Supplier> supplier3List = _context.Supplier.ToList();
-            supplier3List.Insert(0, new Supplier { SupplierCode = " ", SupplierName = " " });
+            //supplier3List.Insert(0, new Supplier { SupplierCode = " ", SupplierName = " " });
             ViewBag.Supplier3 = supplier3List;
 
             return View(new Catalogue());
@@ -110,10 +112,10 @@ namespace ADTeam5.Controllers
             //supplier1List.Insert(0, new Supplier { SupplierCode = " ", SupplierName = " " });
             ViewBag.Supplier1 = supplier1List;
             List<Supplier> supplier2List = _context.Supplier.ToList();
-            supplier1List.Insert(0, new Supplier { SupplierCode = " ", SupplierName = " " });
+            //supplier1List.Insert(0, new Supplier { SupplierCode = " ", SupplierName = " " });
             ViewBag.Supplier2 = supplier2List;
             List<Supplier> supplier3List = _context.Supplier.ToList();
-            supplier3List.Insert(0, new Supplier { SupplierCode = " ", SupplierName = " " });
+            //supplier3List.Insert(0, new Supplier { SupplierCode = " ", SupplierName = " " });
             ViewBag.Supplier3 = supplier3List;
 
             if (ModelState.IsValid)
@@ -234,8 +236,8 @@ namespace ADTeam5.Controllers
             {
                 _context.Catalogue.Remove(catalogue);
                 await _context.SaveChangesAsync();
-                TempData["Delete"] = "Item is successfully deleted";
                 ViewBag.IfCanDelete = "Y";
+                TempData["Delete"] = "Item is successfully deleted";
                 return RedirectToAction(nameof(Index));
             }
             else
