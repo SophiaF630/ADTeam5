@@ -4,6 +4,15 @@
     ViewData["Title"] = "Create";
 }
 
+@if (TempData["EmptyError"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aira-label="close">
+            <span aria-hidden="true">&times</span>
+        </button>
+        @TempData["EmptyError"]
+    </div>
+}
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
@@ -91,29 +100,29 @@
                 </div>
 
                 @*<div class="form-group">
-            <label asp-for="Out" class="control-label"></label>
-            <input asp-for="Out" class="form-control" />
-            <span asp-validation-for="Out" class="text-danger"></span>
-        </div>*@
+                        <label asp-for="Out" class="control-label"></label>
+                        <input asp-for="Out" class="form-control" />
+                        <span asp-validation-for="Out" class="text-danger"></span>
+                    </div>*@
                 @*<div class="form-group">
-            <label asp-for="Supplier1" class="control-label"></label>
-            <select asp-for="Supplier1" class="form-control" asp-items="ViewBag.Supplier1"></select>
-        </div>
-        <div class="form-group">
-            <label asp-for="Supplier2" class="control-label"></label>
-            <select asp-for="Supplier2" class="form-control" asp-items="ViewBag.Supplier2"></select>
-        </div>
-        <div class="form-group">
-            <label asp-for="Supplier3" class="control-label"></label>
-            <select asp-for="Supplier3" class="form-control" asp-items="ViewBag.Supplier3"></select>
-        </div>*@
+                        <label asp-for="Supplier1" class="control-label"></label>
+                        <select asp-for="Supplier1" class="form-control" asp-items="ViewBag.Supplier1"></select>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Supplier2" class="control-label"></label>
+                        <select asp-for="Supplier2" class="form-control" asp-items="ViewBag.Supplier2"></select>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Supplier3" class="control-label"></label>
+                        <select asp-for="Supplier3" class="form-control" asp-items="ViewBag.Supplier3"></select>
+                    </div>*@
                 <div class="row">
                     <div class="col-md-4">
                         <div class="form-group">
                             <label for="Supplier1">Supplier1</label>
                             @if (ViewBag.Supplier1 != null)
                             {
-                                <select for="Supplier1" class="form-control" id="Supplier1"  name="supplier1" asp-items="@(new SelectList(ViewBag.Supplier1, "SupplierCode", "SupplierName"))"></select>
+                                <select for="Supplier1" class="form-control" id="Supplier1" name="supplier1" asp-items="@(new SelectList(ViewBag.Supplier1, "SupplierCode", "SupplierName"))"></select>
                             }
                         </div>
                     </div>
@@ -121,9 +130,9 @@
                         <div class="form-group">
                             <label for="Supplier2">Supplier2</label>
                             @*@if (ViewBag.Supplier2 != null)
-                    {
-                        <select for="Supplier2" class="form-control" id="Supplier2" asp-items="@(new SelectList(ViewBag.Supplier2, "SupplierCode", "SupplierName"))"></select>
-                    }*@
+                                {
+                                    <select for="Supplier2" class="form-control" id="Supplier2" asp-items="@(new SelectList(ViewBag.Supplier2, "SupplierCode", "SupplierName"))"></select>
+                                }*@
                             <select for="Supplier2" class="form-control" id="Supplier2" name="supplier2" asp-items="@(new SelectList(" "))"></select>
                         </div>
                     </div>
@@ -131,9 +140,9 @@
                         <div class="form-group">
                             <label for="Supplier3">Supplier3</label>
                             @*@if (ViewBag.Supplier3 != null)
-                    {
-                        <select for="Supplier3" class="form-control" id="Supplier3" asp-items="@(new SelectList(ViewBag.Supplier3, "SupplierCode", "SupplierName"))"></select>
-                    }*@
+                                {
+                                    <select for="Supplier3" class="form-control" id="Supplier3" asp-items="@(new SelectList(ViewBag.Supplier3, "SupplierCode", "SupplierName"))"></select>
+                                }*@
                             <select for="Supplier3" class="form-control" id="Supplier3" name="supplier3" asp-items="@(new SelectList(" "))"></select>
                         </div>
                     </div>
@@ -162,10 +171,10 @@
                     </div>
                 </div>
                 @*<div class="form-group">
-            <label asp-for="Location" class="control-label"></label>
-            <input asp-for="Location" class="form-control" />
-            <span asp-validation-for="Location" class="text-danger"></span>
-        </div>*@
+                        <label asp-for="Location" class="control-label"></label>
+                        <input asp-for="Location" class="form-control" />
+                        <span asp-validation-for="Location" class="text-danger"></span>
+                    </div>*@
                 <br />
                 <div class="form-group">
                     <a asp-action="Index">
@@ -176,8 +185,8 @@
                     <input type="submit" value="Create" class="btn btn-primary" style="width:120px;height:32px;border:2px;margin-left:270px;background-color:#00B894" />
                 </div>
             </form>
-            </div>
-            </div>
+        </div>
+    </div>
 
 </section>
 

@@ -104,6 +104,7 @@ namespace ADTeam5.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ItemNumber,Category,ItemName,ReorderLevel,ReorderQty,UnitOfMeasure,Stock,Out,Supplier1,Supplier2,Supplier3,Supplier1Price,Supplier2Price,Supplier3Price")] Catalogue catalogue)
         {
+
             //Viewbag for supplier1 dropdown list, need to post back
             List<Supplier> supplier1List = _context.Supplier.ToList();
             //supplier1List.Insert(0, new Supplier { SupplierCode = " ", SupplierName = " " });
@@ -121,6 +122,10 @@ namespace ADTeam5.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
 
+            }
+            else
+            {
+                TempData["EmptyError"] = "Please fill in all details";
             }
             return View(catalogue);
         }
