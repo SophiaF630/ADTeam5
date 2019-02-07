@@ -55,13 +55,7 @@ namespace ADTeam5.Controllers
         [HttpPost]
         public async Task<IActionResult> Index(string itemNumber, int quantityRetrieved, int quantityForVoucher, string remark, int quantityRetrievedModalName, int addToVoucherModalName)
         {
-            if(quantityForVoucher ==0)
-            {
-                TempData["QuantityError"] = "Please select a quantity to add to voucher. Quantity cannot be 0.";
-                return RedirectToAction("Index");
-            }
-            else
-            {
+            
                 ADTeam5User user = await _userManager.GetUserAsync(HttpContext.User);
                 List<string> identity = userCheck.checkUserIdentityAsync(user);
                 int userID = user.WorkID;
@@ -83,7 +77,7 @@ namespace ADTeam5.Controllers
                 List<StationeryRetrievalList> result = b.GetStationeryRetrievalLists();
 
                 return View(result);
-            }
+            
         }
 
         private bool RecordDetailsExists(int id)

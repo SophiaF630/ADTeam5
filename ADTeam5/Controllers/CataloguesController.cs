@@ -112,10 +112,10 @@ namespace ADTeam5.Controllers
             //supplier1List.Insert(0, new Supplier { SupplierCode = " ", SupplierName = " " });
             ViewBag.Supplier1 = supplier1List;
             List<Supplier> supplier2List = _context.Supplier.ToList();
-            supplier1List.Insert(0, new Supplier { SupplierCode = " ", SupplierName = " " });
+            //supplier1List.Insert(0, new Supplier { SupplierCode = " ", SupplierName = " " });
             ViewBag.Supplier2 = supplier2List;
             List<Supplier> supplier3List = _context.Supplier.ToList();
-            supplier3List.Insert(0, new Supplier { SupplierCode = " ", SupplierName = " " });
+            //supplier3List.Insert(0, new Supplier { SupplierCode = " ", SupplierName = " " });
             ViewBag.Supplier3 = supplier3List;
 
             if (ModelState.IsValid)
