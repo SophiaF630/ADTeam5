@@ -148,13 +148,13 @@ namespace ADTeam5.Controllers
             {
                 categoryList.Add(item);
             }
-            categoryList.Insert(0, new Catalogue { ItemNumber = "0", Category = "---Select Category---" });
+            categoryList.Insert(0, new Catalogue { ItemNumber = "0", Category = "" });
             ViewBag.ListofCategory = categoryList;
 
-            List<Catalogue> itemNameList = new List<Catalogue>();
-            itemNameList = (from x in context.Catalogue select x).ToList();
-            itemNameList.Insert(0, new Catalogue { ItemNumber = "0", ItemName = "---Select Item---" });
-            ViewBag.ListofItemName = itemNameList;
+            //List<Catalogue> itemNameList = new List<Catalogue>();
+            //itemNameList = (from x in context.Catalogue select x).ToList();
+            //itemNameList.Insert(0, new Catalogue { ItemNumber = "", ItemName = "---Select Item---" });
+            //ViewBag.ListofItemName = itemNameList;
 
             rrid = id;
             ViewData["RRID"] = rrid;
