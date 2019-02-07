@@ -37,10 +37,10 @@ namespace ADTeam5.Controllers
             switch (ViewData["UserRole"].ToString())
             {
                 case "Manager":
-                    return RedirectToAction("Index", "IssueVoucher");
+                    return RedirectToAction("Index", "AdjustmentRecords");
                     break;
                 case "Superviser":
-                    return RedirectToAction("Index", "IssueVoucher");
+                    return RedirectToAction("Index", "AdjustmentRecords");
                     break;
                 case "Clerk":
                     return RedirectToAction("Index", "StationeryRetrievalList");

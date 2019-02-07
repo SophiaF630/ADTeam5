@@ -88,18 +88,16 @@
                     <br />
                     <input type="submit" value="Search" class="btn btn-primary submit" id="searchbtn" style="background-color: #00B894;width:150px;height:36px;border:2px;margin-left:430px" />
                     <br />
-                    @if (ViewData["StartDate"] != null & ViewData["EndDate"] != null)
-                    {
-                        <p> <b>Search results from @ViewData["StartDate"] to @ViewData["EndDate"]</b></p>
-                    }
+
                     <hr />
                 </form>
 
 
                 @if (ViewData["StartDate"] != null & ViewData["EndDate"] != null)
                 {
-                    <p> <b>Search results from @ViewData["StartDate"] to @ViewData["EndDate"]</b></p>
+                    <h4> &nbsp; Search results from <b>@ViewData["StartDate"]</b> to <b>@ViewData["EndDate"]</b></h4>
                 }
+                <hr />
 
                 <table class="table">
                     <thead>
