@@ -81,7 +81,7 @@
                                                 <td class="ItemNumber">
                                                     @Html.DisplayFor(modelItem => item.ItemNumber)
                                                 </td>
-                                                <td>
+                                                <td class="ItemName">
                                                     @Html.DisplayFor(modelItem => item.ItemName)
                                                 </td>
                                                 <td>
@@ -136,7 +136,7 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Update Quantity Retrieved</h5>
+                <h5 class="modal-title" id="exampleModalLongTitle">Update Quantity Delivered</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -153,6 +153,10 @@
                         <label for="ItemNumber">Item Number</label>
                         <input type="hidden" id="ItemNumberValue" name="itemNumber" class="form-control" value="" />
                         <input type="text" id="ItemNumberDisplay" name="" class="form-control" value="" disabled />
+                    </div>
+                    <div class="form-group">
+                        <label for="ItemName">ItemName</label>
+                        <input type="text" id="ItemNameDisplay" name="" class="form-control" value="" disabled />
                     </div>
                     <div class="form-group">
                         <label for="QuantityDelivered">Quantity Delivered</label>
@@ -193,8 +197,12 @@
                         <input type="text" id="ItemNumberDisplay" name="" class="form-control" value="" disabled />
                     </div>
                     <div class="form-group">
+                        <label for="ItemName">ItemName</label>
+                        <input type="text" id="ItemNameDisplay" name="" class="form-control" value="" disabled />
+                    </div>
+                    <div class="form-group">
                         <label for="Quantity">Quantity</label>
-                        <input type="number"  step="1" id="QuantityForVoucher" name="quantityForVoucher" class="form-control" value="" />
+                        <input type="number" step="1" id="QuantityForVoucher" name="quantityForVoucher" class="form-control" value="" />
                     </div>
                     <div class="form-group">
                         <label for="Remark">Remark</label>
@@ -296,6 +304,7 @@
         var $row = $(this).closest("tr");    // Find the row
         var rowID = $row.find("td.RowID").text().trim();
         var itemNumber = $row.find("td.ItemNumber").text().trim(); // Find the text
+        var itemName = $row.find("td.ItemName").text().trim();
         var quantityDelivered = $row.find("td.QuantityDelivered").text().trim();
         var remark = $row.find("td.Remark").text().trim();
         var quantityDeliveredModalID = 1;
@@ -304,6 +313,7 @@
         $modal.find('#RowID').val(rowID);
         $modal.find('#ItemNumberValue').val(itemNumber);
         $modal.find('#ItemNumberDisplay').val(itemNumber);
+        $modal.find('#ItemNameDisplay').val(itemName);
         $modal.find('#QuantityDelivered').val(quantityDelivered);
         $modal.find('#RemarkForDelivery').val(remark);
         $modal.find('#QuantityDeliveredModalID').val(quantityDeliveredModalID);
@@ -316,6 +326,7 @@
     $(".addToVoucher").click(function () {
         var $row = $(this).closest("tr");    // Find the row
         var itemNumber = $row.find("td.ItemNumber").text().trim(); // Find the text
+        var itemName = $row.find("td.ItemName").text().trim();
         var quantityForVoucher = 1;
         var remark = "";
         var addToVoucherModalID = 1;
@@ -323,6 +334,7 @@
         var $modal = $('#AddToVoucherModal');
         $modal.find('#ItemNumberValue').val(itemNumber);
         $modal.find('#ItemNumberDisplay').val(itemNumber);
+        $modal.find('#ItemNameDisplay').val(itemName);
         $modal.find('#QuantityForVoucher').val(quantityForVoucher);
         $modal.find('#RemarkForVoucher').val(remark);
         $modal.find('#AddToVoucherModalID').val(addToVoucherModalID);
