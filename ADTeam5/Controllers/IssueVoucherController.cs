@@ -80,8 +80,16 @@ namespace ADTeam5.Controllers
 
                 if (createNewVoucherItemModalName == 1)
                 {
+                    if (quantity == 0)
+                    {
+                        TempData["QuantityError"] = "Please select a quantity to add to voucher. Quantity cannot be 0.";
+                        return RedirectToAction("Index");
+                    }
+                    else {
                     b.CreateNewVoucherItem(userID, itemNumber, quantity, remark);
                     return RedirectToAction(nameof(Index));
+                     }
+
                 }
                 else if (voucherItemModalName == 1)
                 {
