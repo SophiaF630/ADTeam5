@@ -39,7 +39,7 @@ namespace ADTeam5.Controllers
                 case "Manager":
                     return RedirectToAction("Index", "AdjustmentRecords");
                     break;
-                case "Superviser":
+                case "Supervisor":
                     return RedirectToAction("Index", "AdjustmentRecords");
                     break;
                 case "Clerk":
