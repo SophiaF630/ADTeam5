@@ -103,12 +103,16 @@ namespace ADTeam5.Controllers
         {
             rrid = id;
 
+
             ViewData["RRID"] = rrid;
             var q1 = context.EmployeeRequestRecord.Where(x => x.Rrid == rrid).First();
             EmployeeRequestRecord e1 = q1;
+            var q3 = context.User.Where(x => x.UserId == e1.DepEmpId).FirstOrDefault();
+            string name = q3.Name;
 
+            DateTime requestDate = e1.RequestDate;
             ViewData["Status"] = e1.Status;
-
+            ViewData["RequestDate"] = requestDate.ToShortDateString();
             if (e1.Status == "Pending Approval")
             {
                 return RedirectToAction("Edit", "ViewRequest", new { id });
