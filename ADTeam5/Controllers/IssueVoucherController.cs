@@ -125,9 +125,9 @@ namespace ADTeam5.Controllers
                     string email = boss.email;
                     await _emailSender.SendEmailAsync(email, "New Adjustment Voucher Pending Approval", "Dear " + boss.name + ",<br>There is a new adjustment voucher that needs your approval.");
 
-
-                    //return RedirectToAction(nameof(Index));
-                }
+                return Json(new { redirecturl = "AdjustmentRecords/Details/" + voucherNo });
+                
+            }
                 else if (itemSavedToDraft.Length != 0)
                 {
                     voucherNo = b.IDGenerator("V");
@@ -140,8 +140,9 @@ namespace ADTeam5.Controllers
                         }
                     }
                     b.CreateAdjustmentRecord(userID, voucherNo, "Draft");
-                    //return RedirectToAction(nameof(Index));
-                }
+                //return RedirectToAction(nameof(Index));
+                return Json(new { redirecturl = "AdjustmentRecords/Details/" + voucherNo });
+            }
 
                 List<TempVoucherDetails> result = b.GetTempVoucherDetailsList(userID);
 
