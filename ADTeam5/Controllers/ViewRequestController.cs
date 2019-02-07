@@ -154,19 +154,31 @@ namespace ADTeam5.Controllers
 
             ViewData["Status"] = e1.Status;
 
-            var q2 = from x in context.RecordDetails
-                     join s in context.Catalogue on x.ItemNumber equals s.ItemNumber
-                     where x.Rrid == rrid
-                     select new ViewRequestDetails
-                     {
-                         rrid = x.Rrid,
-                         itemName = s.ItemName,
-                         quantity = x.Quantity
-                     };
-            List<ViewRequestDetails> list = new List<ViewRequestDetails>();
-            list = q2.ToList();
+            var check = context.RecordDetails.Where(x => x.Rrid == rrid);
+            if(!check.Any())
+            {
+                ViewData["CheckRecords"] = null;
 
-            return View(list);
+                return View();
+            }
+            else
+            {
+                ViewData["CheckRecords"] = "true";
+
+                var q2 = from x in context.RecordDetails
+                         join s in context.Catalogue on x.ItemNumber equals s.ItemNumber
+                         where x.Rrid == rrid
+                         select new ViewRequestDetails
+                         {
+                             rrid = x.Rrid,
+                             itemName = s.ItemName,
+                             quantity = x.Quantity
+                         };
+                List<ViewRequestDetails> list = new List<ViewRequestDetails>();
+                list = q2.ToList();
+
+                return View(list);
+            }
         }
 
         [HttpPost]
