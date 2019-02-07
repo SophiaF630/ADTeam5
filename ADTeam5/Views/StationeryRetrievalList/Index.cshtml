@@ -122,7 +122,7 @@
                                     <td class="ItemNumber">
                                         @Html.DisplayFor(modelItem => item.ItemNumber)
                                     </td>
-                                    <td>
+                                    <td class="ItemName">
                                         @Html.DisplayFor(modelItem => item.ItemName)
                                     </td>
                                     <td>
@@ -196,6 +196,10 @@
                         <input type="text" id="ItemNumberDisplay" name="" class="form-control" value="" disabled />
                     </div>
                     <div class="form-group">
+                        <label for="ItemName">ItemName</label>
+                        <input type="text" id="ItemNameDisplay" name="" class="form-control" value="" disabled />
+                    </div>
+                    <div class="form-group">
                         <label for="QuantityRetrieved">Quantity Retrieved</label>
                         <input type="number" min="0" step="1" id="QuantityRetrieved" name="quantityRetrieved" class="form-control" value="" />
                     </div>
@@ -242,6 +246,10 @@
                         <input type="text" id="ItemNumberDisplay" name="" class="form-control" value="" disabled />
                     </div>
                     <div class="form-group">
+                        <label for="ItemName">ItemName</label>
+                        <input type="text" id="ItemNameDisplay" name="" class="form-control" value="" disabled />
+                    </div>
+                    <div class="form-group">
                         <label for="Quantity">Quantity</label>
                         <input type="number" step="1" id="QuantityForVoucher" name="quantityForVoucher" class="form-control" value="" />
                     </div>
@@ -255,7 +263,7 @@
                         <button type="submit" class="btn btn-primary" style="width:120px;height:30px;border:2px; background-color:#3c8dbc"><font size="3" color="white">Save Changes</font></button>
                     </div>
                     @*<button class="btn" data-dismiss="modal" aria-hidden="true"><font size="5" color="white">Close</font></button>
-                        <button type="submit" class="btn btn-primary">Save changes</button>*@
+        <button type="submit" class="btn btn-primary">Save changes</button>*@
                 </form>
             </div>
         </div>
@@ -265,6 +273,7 @@
     $(".editQuantityRetrieved").click(function () {
         var $row = $(this).closest("tr");    // Find the row
         var itemNumber = $row.find("td.ItemNumber").text().trim(); // Find the text
+        var itemName = $row.find("td.ItemName").text().trim();
         var quantityRetrieved = $row.find("td.QuantityRetrieved").text().trim();
         var quantityRetrievedModalID = 1;
 
@@ -272,6 +281,7 @@
         var $modal = $('#QuantityRetrievedModal');
         $modal.find('#ItemNumberValue').val(itemNumber);
         $modal.find('#ItemNumberDisplay').val(itemNumber);
+        $modal.find('#ItemNameDisplay').val(itemName);
         $modal.find('#QuantityRetrieved').val(quantityRetrieved);
         $modal.find('#QuantityRetrievedModalID').val(quantityRetrievedModalID);
 
@@ -283,6 +293,7 @@
     $(".addToVoucher").click(function () {
         var $row = $(this).closest("tr");    // Find the row
         var itemNumber = $row.find("td.ItemNumber").text().trim(); // Find the text
+        var itemName = $row.find("td.ItemName").text().trim();
         var quantityForVoucher = 0;
         var remark = "";
         var addToVoucherModalID = 1;
@@ -290,6 +301,7 @@
         var $modal = $('#AddToVoucherModal');
         $modal.find('#ItemNumberValue').val(itemNumber);
         $modal.find('#ItemNumberDisplay').val(itemNumber);
+        $modal.find('#ItemNameDisplay').val(itemName);
         $modal.find('#QuantityForVoucher').val(quantityForVoucher);
         $modal.find('#Remark').val(remark);
         $modal.find('#AddToVoucherModalID').val(addToVoucherModalID);
