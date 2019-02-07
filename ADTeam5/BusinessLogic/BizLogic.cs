@@ -421,7 +421,7 @@ namespace ADTeam5.BusinessLogic
                     VoucherNo = voucherNo,
                     IssueDate = DateTime.Today,
                     ClerkId = userId,
-                    Status = "draft"
+                    Status = "Draft"
                 };
                 _context.AdjustmentRecord.Add(adjustmentRecord);
                 _context.SaveChanges();
