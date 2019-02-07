@@ -454,49 +454,50 @@ else
                 }
         })
     });
-            </script>
 
-            <!--select all checkbox-->
-            <script>
-                $('#select-all').click(function (event) {
-                    if (this.checked) {
-                        // Iterate each checkbox
-                        $(':checkbox').each(function () {
-                            this.checked = true;
-                        });
-                    } else {
-                        $(':checkbox').each(function () {
-                            this.checked = false;
-                        });
-                    }
-                });
-            </script>
 
-            <script>
-                $('#TempPurchaseOrderDetails').click(function () {
-                    var amount = 0;
-                    var GST = 0;
-                    var totalAmount = 0;
-                    var n = 0;
-                    var objs = document.getElementsByName("isChecked");
-                    for (var i = 0; i < objs.length; i++) {
-                        if (objs[i].checked) {
-                            n++;
-                        }
-                    }
-                    $('input:checkbox:checked').each(function () {
-                        var $row = $(this).closest("tr");    // Find the row
-                        var quantity = $row.find("td.Quantity").text().trim();
-                        var price = $row.find("td.Price").text().trim();
-                        amount += quantity * price;
-                    });
-                    GST = Math.round(amount * 0.07 * 100) / 100;
-                    totalAmount = amount + GST;
-                    //console.log(amount);
-                    document.getElementById("number").innerText = "Items to be added to voucher. " + n + " item(s) selected";
-                    document.getElementById("amount").innerText = "Amount: $" + amount;
-                    document.getElementById("GST").innerText = "GST (7 %): $" + GST;
-                    document.getElementById("totalAmount").innerText = "Total Amount: $" + totalAmount;
-                });
-            </script>
+<!--select all checkbox-->
+<script>
+    $('#select-all').click(function (event) {
+        if (this.checked) {
+            // Iterate each checkbox
+            $(':checkbox').each(function () {
+                this.checked = true;
+            });
+        } else {
+            $(':checkbox').each(function () {
+                this.checked = false;
+            });
+        }
+    });
+</script>
+
+<script>
+    $('#TempPurchaseOrderDetails').click(function () {
+        var amount = 0;
+        var GST = 0;
+        var totalAmount = 0;
+        var n = 0;
+        var objs = document.getElementsByName("isChecked");
+        for (var i = 0; i < objs.length; i++) {
+            if (objs[i].checked) {
+                n++;
+            }
+        }
+        $('input:checkbox:checked').each(function () {
+            var $row = $(this).closest("tr");    // Find the row
+            var quantity = $row.find("td.Quantity").text().trim();
+            var price = $row.find("td.Price").text().trim();
+            amount += quantity * price;
+        });
+        amount = Math.round(amount * 100) / 100
+        GST = Math.round(amount * 0.07 * 100) / 100;
+        totalAmount = Math.round((amount + GST) * 100) / 100;
+        //console.log(amount);
+        document.getElementById("number").innerText = "Items to be added to voucher. " + n + " item(s) selected";
+        document.getElementById("amount").innerText = "Amount: $" + amount;
+        document.getElementById("GST").innerText = "GST (7 %): $" + GST;
+        document.getElementById("totalAmount").innerText = "Total Amount: $" + totalAmount;
+    });
+</script>
 

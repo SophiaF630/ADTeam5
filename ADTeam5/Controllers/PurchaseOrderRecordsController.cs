@@ -43,7 +43,17 @@ namespace ADTeam5.Models
             List<PurchaseOrderRecord> poList = new List<PurchaseOrderRecord>();
             if (purchaseOrderRecord != null)
             {
+                
                 poList = _context.PurchaseOrderRecord.Where(x => !x.Poid.Contains("POTemp")).OrderByDescending(x =>x.Poid).ToList();
+                //foreach (var q in poList)
+                //{
+                //    var p = _context.RecordDetails.FirstOrDefault(x => x.Rrid == q.Poid);
+                //    if(p == null)
+                //    {
+                //        b.RemovePORecord(q.Poid);
+                //    }
+                //}
+
             }
             else
             {
@@ -136,7 +146,7 @@ namespace ADTeam5.Models
                 _context.PurchaseOrderRecord.Update(po);
                 _context.SaveChanges();
 
-                return Redirect("/PurchaseOrderRecords/Details/" + id);
+                return Redirect("/PurchaseOrderRecords");
 
             }
             else if (SubmitModalName == 1)
@@ -149,6 +159,7 @@ namespace ADTeam5.Models
                     int rdid = item.RDID;
 
                     b.UpdatePOItemQtyOrdered(rdid, qty);
+                   
                 }
 
                 //update disbursement list status
@@ -282,7 +293,7 @@ namespace ADTeam5.Models
                 categoryList.Add(item);
             }
             categoryList.Insert(0, new Catalogue { ItemNumber = "0", Category = "---Select Category---" });
-            ViewBag.ListofCategory = categoryList;
+            ViewBag.ListofCategory = categoryList;           
 
             List<PurchaseOrderRecordDetails> purchaseOrderDetailsList1 = b.GetPurchaseOrderRecordDetails(poid);
 
@@ -290,11 +301,24 @@ namespace ADTeam5.Models
 
             List<PurchaseOrderRecordDetails> purchaseOrderDetailsList = b.GetPurchaseOrderRecordDetails(poid);
 
-            if (purchaseOrderDetailsList == null)
+            //ViewBag for voucher price            
+            decimal? amount = b.GetTotalAmountForPO(poid);
+            decimal? GST = Math.Round((decimal)(amount * (decimal?)0.07), 2);
+            ViewBag.Amount = amount;
+            ViewBag.GST = GST;
+            ViewBag.TotalAmount = amount + GST;
+            ViewBag.POStatus = _context.PurchaseOrderRecord.Find(poid).Status;
+
+            if (purchaseOrderDetailsList.Count == 0)
             {
-                purchaseOrderDetailsList = new List<PurchaseOrderRecordDetails>();
+                purchaseOrderDetailsList = new List<PurchaseOrderRecordDetails>();                
+                return Redirect("/PurchaseOrderRecords");
             }
-            return View("Details", purchaseOrderDetailsList);
+            else
+            {
+                return View("Details", purchaseOrderDetailsList);
+            }
+            
         }
 
         
