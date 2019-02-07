@@ -94,9 +94,17 @@
                                                     @Html.DisplayFor(modelItem => item.Remark)
                                                 </td>
                                                 <td>
-                                                    <button type="button" class="btn btn-primary editQuantityDelivered" style="width:70px;height:30px;border:2px; background-color:#3c8dbc">
-                                                        Edit
-                                                    </button>
+                                                    @if (ViewBag.DisbursementListStatus == "Pending Delivery")
+                                                    {
+                                                        <button type="button" class="btn btn-primary editQuantityDelivered" style="width:70px;height:30px;border:2px; background-color:#3c8dbc">
+                                                            Edit
+                                                        </button>}
+                                                    else
+                                                    {
+                                                        <button type="button" class="btn btn-primary editQuantityDelivered" style="width:70px;height:30px;border:2px; background-color:#3c8dbc" disabled>
+                                                            Edit
+                                                        </button>}
+
                                                 </td>
                                                 <td>
                                                     <button type="button" class="btn btn-primary addToVoucher" style="width:150px;height:30px;border:2px; background-color:#3c8dbc">
@@ -114,6 +122,26 @@
             </div>
             @if (ViewBag.DisbursementListStatus == "Pending Delivery")
             {
+                @*<div>
+                <a href="#" data-toggle="modal" data-target="#BackToListModal">Back to List</a>
+            </div>
+            <a asp-action="Index">*@
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#BackToListModal" style="width:120px;height:32px;margin-left:1px; background-color:transparent;border:1px #B3B6B7 solid;">
+                    <i class='fas fa-arrow-left' style='font-size:14px;border:1px;color:#B3B6B7'></i>&nbsp;&nbsp;<font style='font-size:14px;color:#B3B6B7'>Back To List</font>
+                </button>
+                @*</a>*@
+            }
+            else
+            {
+                <a asp-action="Index">
+                    <button type="button" class="btn btn-primary" style="width:120px;height:32px;margin-left:1px; background-color:transparent;border:1px #B3B6B7 solid;">
+                        <i class='fas fa-arrow-left' style='font-size:14px;border:1px;color:#B3B6B7'></i>&nbsp;&nbsp;<font style='font-size:14px;color:#B3B6B7'>Back To List</font>
+                    </button>
+                </a>
+            }
+
+            @if (ViewBag.DisbursementListStatus == "Pending Delivery")
+            {
                 <button type="button" class="btn btn-primary confirmDelivery">
                     Confirm Delivery
                 </button>
@@ -121,9 +149,6 @@
                     No Show
                 </button>
             }
-            <div>
-                <a href="#" data-toggle="modal" data-target="#BackToListModal">Back to List</a>
-            </div>
 
         </div>
 
