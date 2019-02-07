@@ -103,12 +103,12 @@
                 <h5 class="box-title">
                     @if (ViewData["Show"] != null)
                     {
-                    <p>Financial Year &nbsp;: &nbsp;&nbsp;&nbsp;&nbsp;From &nbsp;&nbsp;&nbsp;&nbsp;<b> @ViewData["startFinancialYear"]</b> &nbsp;&nbsp;&nbsp;&nbsp; to &nbsp;&nbsp;&nbsp;&nbsp;<b>@ViewData["endFinancialYear"]</b> </p>
+                    <p>Financial Year &nbsp;: &nbsp;&nbsp;&nbsp;&nbsp;From &nbsp;&nbsp;&nbsp;&nbsp;<b> @ViewData["startFinancialYear"]</b> &nbsp;&nbsp;&nbsp;&nbsp; To &nbsp;&nbsp;&nbsp;&nbsp;<b>@ViewData["endFinancialYear"]</b> </p>
                     }
 
                     @if (ViewData["StartDate"] != null && ViewData["EndDate"] != null)
                     {
-                        <p><b>Search results from @ViewData["StartDate"] to @ViewData["EndDate"]</b></p>
+                    <p>Search results&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp; From &nbsp;&nbsp;&nbsp;&nbsp;<b> @ViewData["StartDate"]</b> &nbsp;&nbsp;&nbsp;&nbsp; To &nbsp;&nbsp;&nbsp;&nbsp;<b> @ViewData["EndDate"]</b></p>
                     }
                 </h5>
                 
