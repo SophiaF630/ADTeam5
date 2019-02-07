@@ -1,4 +1,4 @@
-﻿@model List<ADTeam5.Models.AdjustmentRecord>
+﻿@model List<ADTeam5.ViewModels.AdjustmentRecordViewModel>
 
 @{
     ViewData["Title"] = "_TempAdjustmentRecords";
@@ -130,13 +130,13 @@ else
                                             @Html.DisplayFor(modelItem => item.ApproveDate)
                                         </td>
                                         <td width="15%">
-                                            @Html.DisplayFor(modelItem => item.Clerk.Name)
+                                            @Html.DisplayFor(modelItem => item.ClerkName)
                                         </td>
                                         <td width="15%">
-                                            @Html.DisplayFor(modelItem => item.Manager.Name)
+                                            @Html.DisplayFor(modelItem => item.SupervisorName)
                                         </td>
                                         <td width="15%">
-                                            @Html.DisplayFor(modelItem => item.Superviser.Name)
+                                            @Html.DisplayFor(modelItem => item.ManagerName)
                                         </td>
                                         <td width="15%">
                                             @Html.DisplayFor(modelItem => item.Status)

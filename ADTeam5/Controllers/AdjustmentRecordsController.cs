@@ -87,6 +87,7 @@ namespace ADTeam5.Controllers
             string userRole = identity[1];
 
             List<AdjustmentRecord> arList = new List<AdjustmentRecord>();
+            List<AdjustmentRecordViewModel> arViewModelList = new List<AdjustmentRecordViewModel>();
 
             switch (state)
             {
@@ -99,6 +100,7 @@ namespace ADTeam5.Controllers
                             if (arC != null)
                             {
                                 arList = _context.AdjustmentRecord.Where(x => x.ClerkId == userID && !x.VoucherNo.Contains("Vtemp") && x.Status == "Draft").OrderByDescending(x => x.VoucherNo).ToList();
+                                arViewModelList = b.CreateAdjustmentRecordViewModel(arList);
                             }
                             else
                             {
@@ -110,6 +112,7 @@ namespace ADTeam5.Controllers
                             if (arS != null)
                             {
                                 arList = _context.AdjustmentRecord.Where(x => x.Status == "Pending Approval").OrderByDescending(x => x.VoucherNo).ToList();
+                                arViewModelList = b.CreateAdjustmentRecordViewModel(arList);
                             }
                             else
                             {
@@ -121,6 +124,7 @@ namespace ADTeam5.Controllers
                             if (arM != null)
                             {
                                 arList = _context.AdjustmentRecord.Where(x => x.Status == "Pending Manager Approval").OrderByDescending(x => x.VoucherNo).ToList();
+                                arViewModelList = b.CreateAdjustmentRecordViewModel(arList);
                             }
                             else
                             {
@@ -139,6 +143,7 @@ namespace ADTeam5.Controllers
                             if (arC != null)
                             {
                                 arList = _context.AdjustmentRecord.Where(x => x.ClerkId == userID && !x.VoucherNo.Contains("Vtemp") && x.Status != "Draft").OrderByDescending(x => x.VoucherNo).ToList();
+                                arViewModelList = b.CreateAdjustmentRecordViewModel(arList);
                             }
                             else
                             {
@@ -150,6 +155,7 @@ namespace ADTeam5.Controllers
                             if (arS != null)
                             {
                                 arList = _context.AdjustmentRecord.Where(x => x.Status == "Rejected" || x.Status == "Approved").OrderByDescending(x => x.VoucherNo).ToList();
+                                arViewModelList = b.CreateAdjustmentRecordViewModel(arList);
                             }
                             else
                             {
@@ -161,6 +167,7 @@ namespace ADTeam5.Controllers
                             if (arM != null)
                             {
                                 arList = _context.AdjustmentRecord.Where(x => x.Status == "Rejected" || x.Status == "Approved").OrderByDescending(x => x.VoucherNo).ToList();
+                                arViewModelList = b.CreateAdjustmentRecordViewModel(arList);
                             }
                             else
                             {
@@ -177,6 +184,7 @@ namespace ADTeam5.Controllers
                             if (arC != null)
                             {
                                 arList = _context.AdjustmentRecord.Where(x => x.ClerkId == userID && !x.VoucherNo.Contains("Vtemp") && x.Status == "Draft").OrderByDescending(x => x.VoucherNo).ToList();
+                                arViewModelList = b.CreateAdjustmentRecordViewModel(arList);
                             }
                             else
                             {
@@ -188,6 +196,7 @@ namespace ADTeam5.Controllers
                             if (arS != null)
                             {
                                 arList = _context.AdjustmentRecord.Where(x => x.Status == "Pending Approval").OrderByDescending(x => x.VoucherNo).ToList();
+                                arViewModelList = b.CreateAdjustmentRecordViewModel(arList);
                             }
                             else
                             {
@@ -199,6 +208,7 @@ namespace ADTeam5.Controllers
                             if (arM != null)
                             {
                                 arList = _context.AdjustmentRecord.Where(x => x.Status == "Pending Manager Approval").OrderByDescending(x => x.VoucherNo).ToList();
+                                arViewModelList = b.CreateAdjustmentRecordViewModel(arList);
                             }
                             else
                             {
@@ -209,7 +219,7 @@ namespace ADTeam5.Controllers
                     break;
             }
             
-            return View(arList);
+            return View(arViewModelList);
         }
 
 

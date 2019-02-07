@@ -583,6 +583,48 @@ namespace ADTeam5.BusinessLogic
             }
         }
 
+        //copy model of adjustment record to view model of adjustment record
+        public List<AdjustmentRecordViewModel> CreateAdjustmentRecordViewModel(List<AdjustmentRecord> arList)
+        {
+            List<AdjustmentRecordViewModel> arViewModel = new List<AdjustmentRecordViewModel>();
+            if (arList.Count != 0)
+            {
+                foreach(var q in arList)
+                {
+                    AdjustmentRecordViewModel ar = new AdjustmentRecordViewModel();
+                    ar.VoucherNo = q.VoucherNo;
+                    ar.ApproveDate = q.ApproveDate;
+                    ar.ClerkId = q.ClerkId;
+                    ar.ClerkName = _context.User.FirstOrDefault(x => x.UserId == q.ClerkId).Name;
+                    ar.SuperviserId = q.SuperviserId;
+                    if(q.SuperviserId != null)
+                    {
+                        ar.SupervisorName = _context.User.FirstOrDefault(x => x.UserId == q.SuperviserId).Name;
+                    }
+                    else
+                    {
+                        ar.SupervisorName = "";
+                    }
+                    
+                    ar.ManagerId = q.ManagerId;
+                    if(q.ManagerId != null)
+                    {
+                        ar.ManagerName = _context.User.FirstOrDefault(x => x.UserId == q.ManagerId).Name;
+                    }
+                    else
+                    {
+                        ar.ManagerName = "";
+                    }
+                    
+                    ar.Status = q.Status;
+
+                    arViewModel.Add(ar);
+                }
+            }
+
+            return arViewModel;
+        }
+
 
         //Reject Voucher
         public void RejectVoucher(int userID, string userRole, string voucherNo)

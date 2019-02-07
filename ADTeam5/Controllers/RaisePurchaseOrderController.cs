@@ -57,15 +57,7 @@ namespace ADTeam5.Controllers
         [HttpPost]
         public async Task<IActionResult> Index(string itemNumber, int quantity, int rowID, string supplierCode, int createNewPOItemModalName, int POItemModalName, string[] itemSubmitted, string[] itemSavedToDraft)
         {
-            if(supplierCode == null || supplierCode == "")
-            {
-                TempData["SupplierNameError"] = "Purchase order was not successfully raised. Please try again.";
-                TempData["SupplierSelectionError"] = "Please select supplier.";
-                return RedirectToAction("Index");
-            }
-            else
-            {
-                ADTeam5User user = await _userManager.GetUserAsync(HttpContext.User);
+             ADTeam5User user = await _userManager.GetUserAsync(HttpContext.User);
                 List<string> identity = userCheck.checkUserIdentityAsync(user);
                 int userID = user.WorkID;
                 poNo = "";
@@ -136,7 +128,7 @@ namespace ADTeam5.Controllers
                 categoryList.Insert(0, new Catalogue { ItemNumber = "0", Category = "---Select Category---" });
                 ViewBag.ListofCategory = categoryList;
                 return View(result);
-            }
+
         }
 
 
