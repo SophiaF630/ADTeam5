@@ -119,7 +119,7 @@ namespace ADTeam5.BusinessLogic
         {
             var q = from x in context.EmployeeRequestRecord
                     join s in context.User on x.DepEmpId equals s.UserId
-                    where x.DepCode.Equals(dept) && x.Status == "Submitted"
+                    where x.DepCode.Equals(dept) && x.Status == "Pending Approval"
                     select new OutstandingOrder
                     {
                         Rrid = x.Rrid,
