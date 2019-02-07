@@ -14,22 +14,36 @@
             </div>
             <br />
 
-            <i class="fa fa-lock" style="font-size:48px;color:#00B894;margin-left:200px"></i>
+            <i class="fa fa-lock" style="font-size:48px;color:#00B894;margin-left:440px"></i>
             <br />
             <br />
             <div>
                 <form asp-action="GeneratePassword" method="post" role="form" asp-controller="CollectionPassword">
-                    <input type="submit" value="Generate Password" class="btn btn-primary submit" style="float:left; width:150px;height:32px;border:2px; background-color:#00B894; margin-left: 160px" />
+                    <input type="submit" value="Generate Password" class="btn btn-primary submit" style="float:left; width:150px;height:32px;border:2px; background-color:#00B894; margin-left: 390px" />
                 </form>
             </div>
             <br />
             <br />
             <div>
-                <p><b>Please key this password in store department's mobile phone/web upon collection of stationery.</b></p>
+                <br />
+
+                <div style="margin-left:163px;">
+                    <b>-------------------------------------------------------------------------------------------------------------------------------------------</b>
+                </div>
+                <br />
+                <p style="margin-left:163px"><b>Please <font color="#dc6460">key the following password</font> in <font color="#dc6460">store department's mobile phone/web</font> upon collection of stationery.</b></p>
+                <div style="margin-left:163px;">
+                    <b>-------------------------------------------------------------------------------------------------------------------------------------------</b>
+                </div>
+                <br />
                 @if (ViewData["CollectionPassword"] != null)
                 {
-                    <label font size="40" style="margin-left: 160px;  color:darkred"> <b>@ViewData["CollectionPassword"]</b></label>
+                    @*<input type="text" value="@ViewData["CollectionPassword"]" style="margin-left: 435px;font-size:23px;width:51px;height:30px" readonly />*@
+                    <input type="text" value="@ViewData["CollectionPassword"]" style="border:1px dashed;margin-left: 442px;font-size:24px;font-style:initial;width:51px;height:30px;align-content:center " readonly />
                 }
+                <br />
+                <br />
+                <br />
             </div>
 
 
