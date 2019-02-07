@@ -113,7 +113,7 @@
                             <label for="Supplier1">Supplier1</label>
                             @if (ViewBag.Supplier1 != null)
                             {
-                                <select for="Supplier1" class="form-control" id="Supplier1" asp-items="@(new SelectList(ViewBag.Supplier1, "SupplierCode", "SupplierName"))"></select>
+                                <select for="Supplier1" class="form-control" id="Supplier1"  name="supplier1" asp-items="@(new SelectList(ViewBag.Supplier1, "SupplierCode", "SupplierName"))"></select>
                             }
                         </div>
                     </div>
