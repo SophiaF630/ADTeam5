@@ -417,7 +417,9 @@ else
                     function (data) {
                         //$('#result').html(data);
                         alert("Purchased order is submitted");
-                        window.location.reload();
+                        $('#result').html(data);
+                        data = JSON.parse(data);
+                        window.location.href = data.redirecturl;
                     }
             })
         });
@@ -439,8 +441,10 @@ else
             success:
                 function (data) {
                     //$('#result').html(data);
-                    alert("Saved to draft");
-                    location.reload();
+                    alert("Purchased order is saved to draft");
+                    $('#result').html(data);
+                    data = JSON.parse(data);
+                    window.location.href = data.redirecturl;
                 }
         })
     });

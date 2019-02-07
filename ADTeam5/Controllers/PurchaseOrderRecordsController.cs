@@ -216,9 +216,8 @@ namespace ADTeam5.Models
                     _context.PurchaseOrderRecord.Update(po);
                     _context.SaveChanges();
 
-                
 
-                return RedirectToAction(nameof(Index));
+                return Redirect("/PurchaseOrderRecords/Details/" + id);
             }
             else if (backToListModalName == 1)
             {

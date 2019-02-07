@@ -112,7 +112,7 @@ namespace ADTeam5.Controllers
                 }
 
                 //return through ajax
-                //return RedirectToAction(nameof(Index));
+                return Json(new { redirecturl = "PurchaseOrderRecords" });
             }
             else if (itemSavedToDraft.Length != 0)
             {
@@ -130,6 +130,7 @@ namespace ADTeam5.Controllers
                     }
                 }
                 //return RedirectToAction(nameof(Index));
+                return Json(new { redirecturl = "PurchaseOrderRecords" });
             }
 
             List<TempPurchaseOrderDetails> result = b.GetTempPurchaseOrderDetailsList();
