@@ -73,6 +73,15 @@
         @TempData["QuantityError"]
     </div>
 }
+@if (TempData["InsufficientStock"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aira-label="close">
+            <span aria-hidden="true">&times</span>
+        </button>
+        @TempData["InsufficientStock"]
+    </div>
+}
 <div class="row">
     <div class="col-md-12">
         <div class="box">
@@ -210,7 +219,7 @@
                     </div>
                     <div class="form-group">
                         <label for="QuantityRetrieved">Quantity Retrieved</label>
-                        <input type="number" min="0" step="1" id="QuantityRetrieved" name="quantityRetrieved" class="form-control" value="" />
+                        <input type="number" min="0" step="1" max="9999" id="QuantityRetrieved" name="quantityRetrieved" class="form-control" value="" />
                     </div>
                     <div align="center">
                         <button class="btn" data-dismiss="modal" aria-hidden="true" style="width:80px;height:30px;border:2px; background-color:#EEEEEE"><font size="3" color="black">Close</font></button>
@@ -260,7 +269,7 @@
                     </div>
                     <div class="form-group">
                         <label for="Quantity">Quantity</label>
-                        <input type="number" step="1" id="QuantityForVoucher" name="quantityForVoucher" class="form-control" value="" />
+                        <input type="number" step="1" max="9999" id="QuantityForVoucher" name="quantityForVoucher" class="form-control" value="" />
                     </div>
                     <div class="form-group">
                         <label for="Remark">Remark</label>
@@ -272,7 +281,7 @@
                         <button type="submit" class="btn btn-primary" style="width:120px;height:30px;border:2px; background-color:#3c8dbc"><font size="3" color="white">Save Changes</font></button>
                     </div>
                     @*<button class="btn" data-dismiss="modal" aria-hidden="true"><font size="5" color="white">Close</font></button>
-        <button type="submit" class="btn btn-primary">Save changes</button>*@
+                        <button type="submit" class="btn btn-primary">Save changes</button>*@
                 </form>
             </div>
         </div>
@@ -321,6 +330,6 @@
 
 
 <script>
-                                                    //$('#StationeryRetrivalList').DataTable();
+                                                        //$('#StationeryRetrivalList').DataTable();
 </script>
 
