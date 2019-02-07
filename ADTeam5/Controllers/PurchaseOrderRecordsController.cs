@@ -10,23 +10,26 @@ using ADTeam5.BusinessLogic;
 using Microsoft.AspNetCore.Identity;
 using ADTeam5.Areas.Identity.Data;
 using ADTeam5.ViewModels;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 namespace ADTeam5.Models
 {
 
     public class PurchaseOrderRecordsController : Controller
     {
+        private readonly IEmailSender _emailSender;
         private readonly UserManager<ADTeam5User> _userManager;
         private readonly SSISTeam5Context _context;
         BizLogic b = new BizLogic();
         readonly GeneralLogic userCheck;
         static List<PurchaseOrderRecordDetails> tempPurchaseOrderRecordDetails = new List<PurchaseOrderRecordDetails>();
 
-        public PurchaseOrderRecordsController(SSISTeam5Context context, UserManager<ADTeam5User> userManager)
+        public PurchaseOrderRecordsController(SSISTeam5Context context, UserManager<ADTeam5User> userManager, IEmailSender emailSender)
         {
             _context = context;
             _userManager = userManager;
             userCheck = new GeneralLogic(context);
+            _emailSender = emailSender;
         }
 
         // GET: PurchaseOrderRecords
@@ -192,7 +195,9 @@ namespace ADTeam5.Models
                     _context.PurchaseOrderRecord.Update(po);
                     _context.SaveChanges();
 
-                    return RedirectToAction(nameof(Index));
+                
+
+                return RedirectToAction(nameof(Index));
             }
             else if (backToListModalName == 1)
             {
@@ -213,7 +218,7 @@ namespace ADTeam5.Models
         //    int userID = user.WorkID;
 
         //    PurchaseOrderRecord poRecordToBeSubmitted = _context.PurchaseOrderRecord.FirstOrDefault(x => x.Poid == id);
-        //    poRecordToBeSubmitted.Status = Pending Approval;
+        //    poRecordToBeSubmitted.Status = "Submitted";
         //    _context.SaveChanges();
 
         //    PurchaseOrderRecord ar = _context.PurchaseOrderRecord.FirstOrDefault(x => !x.Poid.Contains("POTemp"));

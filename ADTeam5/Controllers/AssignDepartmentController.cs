@@ -18,6 +18,7 @@ namespace ADTeam5.Controllers
         static int userid;
         static string dept;
         static string role;
+        static int oldrepid;
 
         private readonly IEmailSender _emailSender;
         private readonly UserManager<ADTeam5User> _userManager;
@@ -43,6 +44,7 @@ namespace ADTeam5.Controllers
 
             Models.Department d1 = b.getDepartmentDetails(dept);
             int currentRepId = d1.RepId;
+            oldrepid = currentRepId;
 
             Models.User u1 = b.getUser(currentRepId);
             string currentRepName = u1.Name;
@@ -88,9 +90,15 @@ namespace ADTeam5.Controllers
                 context.SaveChanges();
                 TempData["Alert1"] = "Department representative changed successfully!";
 
+                //send email to new dept rep
                 var q = context.User.Where(x => x.UserId == u.UserId).First();
                 string email = q.EmailAddress;
-                await _emailSender.SendEmailAsync(email, "Congratulations on New Appointment!", "You have been selected as department rep!");
+                await _emailSender.SendEmailAsync(email, "Department Representative Appointment", "Dear " + q.Name + ",<br>You have been appointed as the department representative for stationery collection.");
+
+                //send email to old dept rep
+                var q2 = context.User.Where(x => x.UserId == oldrepid).First();
+                string email2 = q2.EmailAddress;
+                await _emailSender.SendEmailAsync(email2, "Department Representative Replacement", "Dear " + q2.Name + ",<br>You have been replaced as department representative.");
 
                 return RedirectToAction("Index");
             }
