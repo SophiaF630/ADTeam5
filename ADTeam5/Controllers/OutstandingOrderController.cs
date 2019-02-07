@@ -7,6 +7,7 @@ using ADTeam5.BusinessLogic;
 using ADTeam5.Models;
 using ADTeam5.ViewModels;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -15,21 +16,23 @@ namespace ADTeam5.Controllers
 {
     public class OutstandingOrderController : Controller
     {
-        static int userid;
+        int userid;
         static string dept;
         static string role;
 
+        private readonly IEmailSender _emailSender;
         private readonly SSISTeam5Context context;
         private readonly UserManager<ADTeam5User> _userManager;
         private static string rrid;
         readonly GeneralLogic userCheck;
         DeptBizLogic b = new DeptBizLogic();
 
-        public OutstandingOrderController(SSISTeam5Context context, UserManager<ADTeam5User> userManager)
+        public OutstandingOrderController(SSISTeam5Context context, UserManager<ADTeam5User> userManager, IEmailSender emailSender)
         {
             this.context = context;
             _userManager = userManager;
             userCheck = new GeneralLogic(context);
+            _emailSender = emailSender;
         }
 
         // GET: Outstanding Orders
@@ -63,17 +66,24 @@ namespace ADTeam5.Controllers
             }
 
             [HttpPost]
-            public IActionResult ApproveOrder()
+            public async Task<IActionResult> ApproveOrder()
             {
                 EmployeeRequestRecord e1 = context.EmployeeRequestRecord.Where(x => x.Rrid == rrid).First();
             e1.Status = "Approved";
                 context.SaveChanges();
-                return RedirectToAction(nameof(Index));
+            int userid = e1.DepEmpId;
+
+            //send success email to staff
+            var approvedstaff = context.User.Where(x => x.UserId == userid).First();
+            string email = approvedstaff.EmailAddress;
+            await _emailSender.SendEmailAsync(email, "Approval of New Request", "Dear " + approvedstaff.Name + "<br>Your submitted stationery request has been rejected.");
+
+            return RedirectToAction(nameof(Index));
             }
 
             //Please put in validation reason for null - Validated
             [HttpPost]
-            public IActionResult RejectOrder(string rejectReason)
+            public async Task<IActionResult> RejectOrder(string rejectReason)
             {
             if (String.IsNullOrEmpty(rejectReason))
             {
@@ -86,7 +96,14 @@ namespace ADTeam5.Controllers
                 e1.Status = "Rejected";
                 e1.Remark = rejectReason.ToString();
                 context.SaveChanges();
-               return RedirectToAction(nameof(Index));
+                userid = e1.DepEmpId;
+
+                //send rejection email to staff
+                var rejectedstaff = context.User.Where(x => x.UserId == userid).First();
+                string email = rejectedstaff.EmailAddress;
+                await _emailSender.SendEmailAsync("Hello", "Rejection of New Request", "Dear,<br>Your submitted stationery request has been rejected.");
+
+                return RedirectToAction(nameof(Index));
             }
             
         }

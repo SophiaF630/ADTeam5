@@ -6,6 +6,7 @@ using ADTeam5.Areas.Identity.Data;
 using ADTeam5.BusinessLogic;
 using ADTeam5.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ADTeam5.Controllers
@@ -18,16 +19,18 @@ namespace ADTeam5.Controllers
         static int currentDeputyHeadId;
         static bool edit = false;
 
+        private readonly IEmailSender _emailSender;
         private readonly SSISTeam5Context context;
         private readonly UserManager<ADTeam5User> _userManager;
         readonly GeneralLogic userCheck;
         DeptBizLogic b = new DeptBizLogic();
 
-        public AssignDeputyController(SSISTeam5Context context, UserManager<ADTeam5User> userManager)
+        public AssignDeputyController(SSISTeam5Context context, UserManager<ADTeam5User> userManager, IEmailSender emailSender)
         {
             this.context = context;
             _userManager = userManager;
             userCheck = new GeneralLogic(context);
+            _emailSender = emailSender;
         }
         public async Task<IActionResult> Index()
         {
@@ -64,7 +67,7 @@ namespace ADTeam5.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Index(User u, DateTime startdate, DateTime enddate)
+        public async Task<IActionResult> Index(User u, DateTime startdate, DateTime enddate)
         {
             if (startdate > enddate || startdate < DateTime.Now.Date.AddDays(-1))
             {
@@ -100,8 +103,15 @@ namespace ADTeam5.Controllers
                         d2.UserId = u.UserId;
                         d2.StartDate = startdate;
                         d2.EndDate = enddate;
+
                         context.SaveChanges();
                         TempData["EditSuccess"] = "Changes were saved successfully!";
+
+                        //send email to old deputy head
+                        var oldhead = context.User.Where(x => x.UserId == currentDeputyHeadId).First();
+                        string email2 = oldhead.EmailAddress;
+                        await _emailSender.SendEmailAsync(email2, "Department Deputy Head Replacement", "Dear " + oldhead.Name + ",<br>You have been replaced as department deputy head.");
+
                     }
                     else
                     {
@@ -112,7 +122,14 @@ namespace ADTeam5.Controllers
                         context.Add(d2);
                         context.SaveChanges();
                         TempData["NewSuccess"] = "New deputy head appointed!";
+
+                        //send email to new deputy head
+                        var newhead = context.User.Where(x => x.UserId == u.UserId).First();
+                        string email = newhead.EmailAddress;
+                        await _emailSender.SendEmailAsync(email, "Department Deputy Head Appointment", "Dear " + newhead.Name + ",<br>You have been appointed as the department deputy head.");
+
                     }
+
                     return RedirectToAction("Index");
                 }
                 else

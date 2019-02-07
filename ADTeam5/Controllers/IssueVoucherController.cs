@@ -10,12 +10,14 @@ using ADTeam5.Areas.Identity.Data;
 using ADTeam5.ViewModels;
 using ADTeam5.BusinessLogic;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 
 namespace ADTeam5.Controllers
 {
     public class IssueVoucherController : Controller
     {
+        private readonly IEmailSender _emailSender;
         private readonly UserManager<ADTeam5User> _userManager;
         private readonly SSISTeam5Context _context;
         BizLogic b = new BizLogic();
@@ -25,11 +27,12 @@ namespace ADTeam5.Controllers
         static List<int> QuantityList = new List<int>();
         static string voucherNo = "";
 
-        public IssueVoucherController(SSISTeam5Context context, UserManager<ADTeam5User> userManager)
+        public IssueVoucherController(SSISTeam5Context context, UserManager<ADTeam5User> userManager, IEmailSender emailSender)
         {
-            _context = context;
+           _context = context;
             _userManager = userManager;
             userCheck = new GeneralLogic(context);
+            _emailSender = emailSender;
         }
 
         // GET: IssueVoucher
@@ -92,10 +95,28 @@ namespace ADTeam5.Controllers
                     if (Array.Exists(itemSubmitted, i => i == item.RowID.ToString()))
                     {
                         b.AddItemsToVoucher(item.RowID, voucherNo, tempVoucherDetailsList);
-                        
+
                     }
                 }
                 b.CreateAdjustmentRecord(userID, voucherNo, "Pending Approval");
+
+                //send notification email to Head of stationery department
+                
+                var boss = (from x in _context.User
+                             join y in _context.Department
+                             on x.DepartmentCode equals y.DepartmentCode
+                             where y.DepartmentCode == "STAS"
+                             select new
+                             {
+                                 email = x.EmailAddress,
+                                 name = x.Name
+
+                             }).First();
+         
+                string email = boss.email;
+                await _emailSender.SendEmailAsync(email, "New Adjustment Voucher Pending Approval", "Dear " + boss.name + ",<br>There is a new adjustment voucher that needs your approval.");
+
+
                 //return RedirectToAction(nameof(Index));
             }
             else if(itemSavedToDraft.Length != 0)
