@@ -198,6 +198,7 @@ namespace ADTeam5.Controllers
                 if (confirmationPassword == collectionPassword)
                 {
                     //update out quantity
+                    string dlID = b.IDGenerator("DL");
                     foreach (var item in tempDisbursementListDetails)
                     {
                         string itemNo = item.ItemNumber;
@@ -209,7 +210,7 @@ namespace ADTeam5.Controllers
                         if (qtyDelivered != item.Quantity)
                         {
                             int qty = item.Quantity - qtyDelivered;
-                            b.GenerateDisbursementListForPartialFulfillment(itemNo, qty, remark, depCode);
+                            b.GenerateDisbursementListForPartialFulfillment(itemNo, qty, remark, depCode,dlID);
                         }
 
                         b.UpdateCatalogueOutAfterDelivery(itemNo, qtyDelivered);

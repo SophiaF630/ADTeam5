@@ -145,6 +145,7 @@ namespace ADTeam5.clerkApi
             //temp.QuantityDelivered = int.Parse(amount);
             //_context.Update(temp);
             //await _context.SaveChangesAsync();
+            new BizLogic().UpdateCatalogueOutAndStockAfterRetrieval(temp.ItemNumber,int.Parse(amount));
             return "123";
         }
     }

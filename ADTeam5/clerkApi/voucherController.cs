@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using ADTeam5.Models;
 using ADTeam5.BusinessLogic;
 using ADTeam5.ViewModels;
+using System.Data.Entity;
 
 namespace ADTeam5.clerkApi
 {
@@ -66,16 +67,35 @@ namespace ADTeam5.clerkApi
         }
         //here start issue voucher
         [HttpGet("manager/{id}")]
-        public List<string> GetList1(string id)
+        public async Task<List<string>> GetList1Async(string id)
         {
             List<string> result = new List<string>();
             //int idID = _context.CollectionPoint.Where(s => s.CollectionPointName.Contains(id)).ToList().First().CollectionPointId;
             List<AdjustmentRecord> dis = _context.AdjustmentRecord.Where(s => s.Status== "Submitted").ToList();
             if (dis == null)
                 return null;
+            string role = null;
+            User user = _context.User.Where(s => s.UserId == int.Parse(id)).First();
+            Department department = _context.Department.Where(s => s.DepartmentCode == user.DepartmentCode).First();
+            if (department.DepartmentCode == "STAS")//this part should add the store code
+            {
+                if (department.HeadId == user.UserId)
+                {
+                    role = "Manager";
+                }
+                else if (department.RepId == user.UserId)
+                {
+                    role = "Superviser";
+                }
+            }
             foreach (AdjustmentRecord i in dis)
             {
-                if (i.VoucherNo != ("VTemp" + id))
+                if (role == "Manager"&& double.Parse(new BizLogic().getPriceForAdjust(i.VoucherNo))>= 250)
+                {
+                    
+                    result.Add(i.VoucherNo);
+                }
+                else if(role == "Superviser" && double.Parse(new BizLogic().getPriceForAdjust(i.VoucherNo)) <= 250)
                 {
                     result.Add(i.VoucherNo);
                 }
@@ -180,7 +200,66 @@ namespace ADTeam5.clerkApi
         [HttpGet("ApplyVoucher/{id}")]
         public void ApplyVoucher(int id)
         {
+            List<RecordDetails> source = _context.RecordDetails.Where(s => s.Rrid == ("VTemp" + id)).ToList();
+            string vono = new BizLogic().IDGenerator("V");
+            //shengcheng vocher
+            AdjustmentRecord temp = new AdjustmentRecord();
+            temp.VoucherNo = vono;
+            temp.ClerkId = id;
+            temp.IssueDate = DateTime.Now;
+            temp.Status = "Submitted";
+            _context.AdjustmentRecord.Add(temp);
+            foreach(RecordDetails i in source)
+            {
+                i.Rrid = vono;
+                _context.RecordDetails.Update(i);
+            }
+            _context.SaveChanges();
+            //save changes
+        }
+        //issuevoucher
+        [HttpGet("IssueVoucher/{id}/{uid}")]
+        public void IssueVoucher(string id,string uid)
+        {
+            var ar = _context.AdjustmentRecord.FirstOrDefault(x => x.VoucherNo == id);
+            if (ar != null)
+            {
+                var arList = _context.RecordDetails.Where(x => x.Rrid == id);
+                if (arList != null)
+                {
+                    //value of voucher
+                    decimal? amount = new BizLogic().GetTotalAmountForVoucher(id);
+                    decimal? GST = Math.Round((decimal)(amount * (decimal?)0.07), 2);
+                    decimal? totalAmount = amount + GST;
+                            ar.Status = "Approved";
+                            ar.SuperviserId = int.Parse(uid);
+                            ar.ApproveDate = DateTime.Now.Date;
+                            _context.AdjustmentRecord.Update(ar);
+                            _context.SaveChanges();
 
+                            foreach (var item in arList.ToList())
+                            {
+                                new BizLogic().UpdateCatalogueStockAfterSuppDeliveryOrVoucherApproved(item.ItemNumber, item.Quantity);
+                                int balance = _context.Catalogue.Find(item.ItemNumber).Stock;
+                                new BizLogic().UpdateInventoryTransRecord(item.ItemNumber, id, item.Quantity, balance);
+                            }
+                    }
+                }
+            }
+
+        //reject voucher
+        [HttpGet("RejectIssueVoucher/{id}/{uid}")]
+        public void RejectIssueVoucher(string id,string uid)
+        {
+            var ar = _context.AdjustmentRecord.FirstOrDefault(x => x.VoucherNo == id);
+            if (ar != null)
+            {
+                    ar.SuperviserId = int.Parse(uid);
+                    ar.Status = "Draft";
+                    ar.ApproveDate = DateTime.Now.Date;
+                    _context.AdjustmentRecord.Update(ar);
+                    _context.SaveChanges();
+            }
         }
         //save voucher
         [HttpPost("save")]

@@ -299,9 +299,9 @@ namespace ADTeam5.BusinessLogic
         }
 
         //Generate a disbursement list if partial fulfilled
-        public void GenerateDisbursementListForPartialFulfillment(string itemNumber, int qty, string remark, string depCode)
+        public void GenerateDisbursementListForPartialFulfillment(string itemNumber, int qty, string remark, string depCode, string dlID)
         {
-            string dlID = IDGenerator("DL");
+            
             //check if dl record exists
             var q = _context.DisbursementList.FirstOrDefault(x => x.Dlid == dlID);
             if (q == null)

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ADTeam5.BusinessLogic;
 using ADTeam5.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -21,6 +22,7 @@ namespace ADTeam5.clerkApi
     public class orderController : ControllerBase
     {
         private readonly SSISTeam5Context _context;
+        BizLogic b = new BizLogic();
         public orderController(SSISTeam5Context context)
         {
             _context = context;
@@ -122,6 +124,76 @@ namespace ADTeam5.clerkApi
                 result.Add(tem.CollectionPointName);
             }
             return result;
+        }
+        [HttpGet("NoShow/{id}")]
+        public void noShow(string id)
+        {
+            var disbursementList = _context.DisbursementList.Find(id);
+            disbursementList.Status = "No Show";
+            disbursementList.CompleteDate = DateTime.Now;
+            _context.DisbursementList.Update(disbursementList);
+            _context.SaveChanges();
+
+            //update out and stock
+            var itemToReturn = _context.RecordDetails.Where(x => x.Rrid == id);
+            if (itemToReturn != null)
+            {
+                foreach (var item in itemToReturn.ToList())
+                {
+                    int quantityRequested = item.Quantity;
+                    var q = _context.Catalogue.FirstOrDefault(x => x.ItemNumber == item.ItemNumber);
+                    if (q != null)
+                    {
+                        int outQty = q.Out;
+                        int preStock = q.Stock;
+                        q.Stock = preStock + quantityRequested;
+                        q.Out = outQty - quantityRequested;
+
+                        _context.Catalogue.Update(q);
+                        _context.SaveChanges();
+                    }
+                }
+            }
+
+            return ;
+        }
+        [HttpGet("Delivered/{id}")]
+        public void delivered(string id)
+        {
+            string depCode = _context.DisbursementList.Find(id).DepartmentCode;
+            List<RecordDetails> tempDisbursementListDetails = _context.RecordDetails.Where(s => s.Rrid == id).ToList();
+            string dlID = b.IDGenerator("DL");
+            foreach (var item in tempDisbursementListDetails)
+            {
+                string itemNo = item.ItemNumber;
+                int qtyDelivered = item.QuantityDelivered;
+                int rdid = item.Rdid;
+                string remark = item.Remark;
+
+                //generate a disbursement list if partial fulfilled
+                if (qtyDelivered != item.Quantity)
+                {
+                    int qty = item.Quantity - qtyDelivered;
+                    b.GenerateDisbursementListForPartialFulfillment(itemNo, qty, remark, depCode, dlID);
+                }
+
+                b.UpdateCatalogueOutAfterDelivery(itemNo, qtyDelivered);
+                b.UpdateQuantityDeliveredAfterDelivery(qtyDelivered, rdid);
+
+                int balance = _context.Catalogue.Find(itemNo).Stock;
+                b.UpdateInventoryTransRecord(itemNo, id, -qtyDelivered, balance);
+            }
+
+            //update disbursement list status
+            var disbursementList = _context.DisbursementList.Find(id);
+            disbursementList.Status = "Completed";
+            disbursementList.CompleteDate = DateTime.Now;
+            _context.DisbursementList.Update(disbursementList);
+            _context.SaveChanges();
+
+            //TempData["CorrectPassword"] = "Successful confirmation. Delivery completed!";
+
+            return ;
         }
     }
 }
