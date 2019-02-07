@@ -25,13 +25,6 @@
     <p><b>Requisition Form No: @ViewData["RRID"]</b></p>
     <p>Status: @ViewData["Status"]</p>
 
-    @if (ViewData["RejectStatus"] != null)
-    {
-        <div class="alert alert-danger" role="alert">
-            @ViewData["RejectStatus"]
-        </div>
-    }
-
 
     <table class="table">
         <thead>

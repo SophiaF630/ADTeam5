@@ -115,6 +115,12 @@ namespace ADTeam5.Controllers
             }
             else
             {
+                var reject = context.EmployeeRequestRecord.Where(x => x.Rrid == rrid).FirstOrDefault();
+                if(reject.Status == "Rejected")
+                {
+                    ViewData["RejectStatus"] = reject.Remark; 
+                }
+
                 var q2 = from x in context.RecordDetails
                          join s in context.Catalogue on x.ItemNumber equals s.ItemNumber
                          where x.Rrid == rrid

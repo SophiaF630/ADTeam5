@@ -44,7 +44,18 @@ namespace ADTeam5.Controllers
             dept = identity[0];
             role = identity[1];
 
-            return View(b.getOutstandingOrders(dept));
+            List<OutstandingOrder> list = b.getOutstandingOrders(dept);
+            if(list.Count == 0)
+            {
+                ViewData["Check"] = null;
+                return View();
+            }
+            else
+            {
+                ViewData["Check"] = "true";
+                return View(list);
+            }
+            
             }
 
             // GET: OutstandingOrder/Details/id
@@ -70,6 +81,8 @@ namespace ADTeam5.Controllers
             {
                 EmployeeRequestRecord e1 = context.EmployeeRequestRecord.Where(x => x.Rrid == rrid).First();
             e1.Status = "Approved";
+            DateTime today = DateTime.Now.Date;
+            e1.CompleteDate = today;
                 context.SaveChanges();
             int userid = e1.DepEmpId;
 
@@ -95,6 +108,8 @@ namespace ADTeam5.Controllers
                  EmployeeRequestRecord e1 = context.EmployeeRequestRecord.Where(x => x.Rrid == rrid).First();
                 e1.Status = "Rejected";
                 e1.Remark = rejectReason.ToString();
+                DateTime today = DateTime.Now.Date;
+                e1.CompleteDate = today;
                 context.SaveChanges();
                 userid = e1.DepEmpId;
 

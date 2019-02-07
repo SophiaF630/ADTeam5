@@ -13,7 +13,6 @@ namespace ADTeam5.Models
         public DateTime RequestDate { get; set; }
 
         [DataType(DataType.Date)]
-        
         public DateTime? CompleteDate { get; set; }
         
         [Display(Name ="Employee ID")]
