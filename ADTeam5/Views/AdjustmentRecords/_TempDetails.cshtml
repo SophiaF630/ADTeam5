@@ -34,7 +34,7 @@
         <div class="col-12">*@
 
 
-<p>Adjustment Record No: @ViewData["VoucherNo"]</p>
+
 
 @if (Model.Count == 0)
 {
@@ -65,12 +65,13 @@ else
             <div class="box" style=" width:100%">
                 <div class="box-header with-border">
                     <h3 class="box-title">Items to be added to voucher</h3>
+                    <p style="float:right"><b>Adjustment Record No: @ViewData["VoucherNo"]</b></p>
                     <br />
 
                     @*<div class="box-tools pull-right">
-                            <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
-                            <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
-                        </div>*@
+            <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
+            <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
+        </div>*@
                 </div>
 
 
@@ -420,7 +421,7 @@ else
                 success:
                     function (data) {
                         //$('#result').html(data);
-                        alert("submitted");
+                        alert("Adjustment Voucher has been submitted.");
                         window.location.reload();
                     }
             })
@@ -476,7 +477,7 @@ else
             success:
                 function (data) {
                     //$('#result').html(data);
-                    alert("saved to draft");
+                    alert("Adjustment Voucher has been approved.");
                     location.reload();
                 }
         })
@@ -494,7 +495,7 @@ else
             success:
                 function (data) {
                     //$('#result').html(data);
-                    alert("saved to draft");
+                    alert("Adjustment Voucher has been approved.");
                     location.reload();
                 }
         })

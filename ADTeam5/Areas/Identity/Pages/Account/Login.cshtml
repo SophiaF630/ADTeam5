@@ -2,20 +2,11 @@
 @model LoginModel
 
 @{
-    ViewData["Title"] = "Log in";
-}
+    ViewData["Title"] = "Log In";
 
-@*<img src="~/img/homepage.jpg" />*@
-@{
     Layout = null;
 }
-@*<div align="center">
-        <br />
-        <br />
-        <br />
-        <br />
-        <img src="~/img/logo4.png" height="90" width="400" />
-    </div>*@
+
 <style>
 
     body {
@@ -65,17 +56,17 @@
 <body>
     <div class="center">
         <form id="account" method="post">
-            @*<h1>Login</h1>*@
+            
             <br />
 
             <div align="center">
-                <img src="~/img/logo4.png" height="70" width="300" />
+                <img src="~/img/teamlogo.png" height="80" width="280" />
             </div>
             <br />
 
             
             <div class="form-group">
-            @*<label asp-for="Input.Email"></label>*@
+       
             <input asp-for="Input.Email" style="width:300px; height:40px;margin-top: 10px;" class="form-control" />
             <br />
             <span asp-validation-for="Input.Email" class="text-danger"></span>
@@ -84,7 +75,7 @@
 
             
             <div class="form-group">
-            @*&nbsp; &nbsp; &nbsp; <label asp-for="Input.Password"></label>*@
+        
             <input asp-for="Input.Password" style="width:300px; height:40px;margin-top: 10px;" class="form-control" />
             <br />
             <span asp-validation-for="Input.Password" class="text-danger"></span>
@@ -92,7 +83,7 @@
             <br />
 
             <div class="form-group">
-                <div class="checkbox" value="checkbox" style="zoom:120%;margin-right: 175px">
+                <div class="checkbox" value="checkbox" style="zoom:120%;margin-right: 130px">
                     <label asp-for="Input.RememberMe">
                         <input asp-for="Input.RememberMe" />
                         @Html.DisplayNameFor(m => m.Input.RememberMe)

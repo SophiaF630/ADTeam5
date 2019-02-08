@@ -174,15 +174,6 @@ namespace ADTeam5.Models
             }
             else if (POItemModalQtyDeliveredName == 1)
             {
-                var q = _context.RecordDetails.Where(x => x.Rrid == id).FirstOrDefault();
-                int quantityOrderedCheck = q.Quantity;
-                if(quantityDelivered > quantityOrderedCheck)
-                {
-                    TempData["QuantityDeliveredError"] = "Quantity delivered cannot be more than quantity ordered. Please try again.";
-                    return Redirect("/PurchaseOrderRecords/Details/" + id);
-                }
-                else
-                {
                     foreach (var poDetails in tempPurchaseOrderRecordDetails)
                     {
                         if (poDetails.RowID == rowID)
@@ -190,7 +181,7 @@ namespace ADTeam5.Models
                             poDetails.QuantityDelivered = quantityDelivered;
                         }
                     }
-                }
+                
             }
             else if (confirmDeliveryModalName == 1)
             {
