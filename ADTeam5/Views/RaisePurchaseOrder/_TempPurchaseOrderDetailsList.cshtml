@@ -390,10 +390,10 @@ else
                 console.log(row);
                 console.log(supplier);
                 if (row == supplier) {
-                    $('#EditSupplier').append('<input type="radio" name="supplierName" required="required" value="' + row + '" checked="checked"/>' + row + '<br/>');
+                    $('#EditSupplier').append('<input type="radio" name="supplierCode" required="required" value="' + row + '" checked="checked"/>' + row + '<br/>');
                 }
                 else {
-                    $('#EditSupplier').append('<input type="radio" name="supplierName" required="required" value="' + row + '"/>' + row + '<br/>');
+                    $('#EditSupplier').append('<input type="radio" name="supplierCode" required="required" value="' + row + '"/>' + row + '<br/>');
                 }
             });
         });
