@@ -131,7 +131,7 @@ namespace ADTeam5.BusinessLogic
                 .Where(x => x.DepartmentCode == depCode && x.Status == "Pending Delivery").ToList();
 
             //Get EmployeeRequestRecord of a department, check if it's null
-            List<EmployeeRequestRecord> errList = _context.EmployeeRequestRecord
+             List<EmployeeRequestRecord> errList = _context.EmployeeRequestRecord
                 .Where(x => x.CompleteDate >= start && x.CompleteDate <= cutoff && x.DepCode == depCode && x.Status == "Approved")
                 .ToList();
 
@@ -179,24 +179,43 @@ namespace ADTeam5.BusinessLogic
                     }
                 }
 
-                foreach (RecordDetails r in selectederrList)
+                //groupby item
+                var groupByItem = selectederrList.GroupBy(x => new { x.ItemNumber, x.Remark, x.Rrid }).
+                    Select(x => new { x.Key.Rrid, x.Key.ItemNumber, x.Key.Remark, Quantity = x.Sum(y => y.Quantity) });
+                foreach(var item in groupByItem)
                 {
-                    //check if dl record exists
-                    //RecordDetails rd = new RecordDetails();
-                    var q = _context.RecordDetails.FirstOrDefault(x => x.Rrid == dl.Dlid && x.ItemNumber == r.ItemNumber && x.Remark == null);
+                    var q = _context.RecordDetails.FirstOrDefault(x => x.Rrid == dl.Dlid && x.ItemNumber == item.ItemNumber && x.Remark == null);
                     if (q == null)
                     {
-                        RecordDetails rd = new RecordDetails() { Rrid = dl.Dlid, ItemNumber = r.ItemNumber, Quantity = r.Quantity };
+                        RecordDetails rd = new RecordDetails() { Rrid = dl.Dlid, ItemNumber = item.ItemNumber, Quantity = item.Quantity };
                         _context.RecordDetails.Add(rd);
                     }
                     else
                     {
-                        //RecordDetails rd = new RecordDetails();
-                        q.Quantity += r.Quantity;
+                        q.Quantity = item.Quantity;
                     }
 
                     _context.SaveChanges();
                 }
+
+                //foreach (RecordDetails r in selectederrList)
+                //{
+                //    //check if dl record exists
+                //    //RecordDetails rd = new RecordDetails();
+                //    var q = _context.RecordDetails.FirstOrDefault(x => x.Rrid == dl.Dlid && x.ItemNumber == r.ItemNumber && x.Remark == null);
+                //    if (q == null)
+                //    {
+                //        RecordDetails rd = new RecordDetails() { Rrid = dl.Dlid, ItemNumber = r.ItemNumber, Quantity = r.Quantity };
+                //        _context.RecordDetails.Add(rd);
+                //    }
+                //    else
+                //    {
+                //        RecordDetails rd = new RecordDetails();
+                //        q.Quantity += r.Quantity;
+                //    }
+
+                //    _context.SaveChanges();
+                //}
 
                 result = _context.RecordDetails.Where(x => x.Rrid == dl.Dlid).ToList();
             }
