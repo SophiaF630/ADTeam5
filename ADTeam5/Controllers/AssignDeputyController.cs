@@ -69,75 +69,93 @@ namespace ADTeam5.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Index(User u, DateTime startdate, DateTime enddate)
         {
-            if (startdate > enddate || startdate < DateTime.Now.Date.AddDays(-1))
-            {
-                if (startdate > enddate && startdate < DateTime.Now.Date.AddDays(-1))
-                {
-                    TempData["DateAlert"] = "End date cannot be earlier than start date. Start date cannot be earlier than today. Please try again.";
-                    return RedirectToAction("Index");
-                }
-                if (startdate > enddate)
-                {
-                    TempData["DateAlert"] = "End date cannot be earlier than start date. Please try again.";
-                    return RedirectToAction("Index");
-                }
-                if (startdate < DateTime.Now.Date.AddDays(-1))
-                {
-                    TempData["DateAlert"] = "Start date cannot be earlier than today. Please try again.";
-                    return RedirectToAction("Index");
-                }
-                return RedirectToAction("Index");
-            }
-            else
-            {
-                if (ModelState.IsValid)
-                {
-                    Models.Department d1 = context.Department.Where(x => x.DepartmentCode == dept).First();
-                    d1.CoveringHeadId = u.UserId;
+            DateTime dtpDefault = new DateTime(0001, 1, 1, 0, 0, 0);
 
-                    if (edit == true)
+            if (startdate != null && enddate != null)
+            {
+                if (startdate.Equals(dtpDefault) || enddate.Equals(dtpDefault))
+                {
+                    TempData["NoDetails"] = "Please fill in all details.";
+                    @ViewData["Show"] = null;
+                    return RedirectToAction("Index");
+                }
+                if (startdate <= enddate && startdate >= DateTime.Now.Date && enddate >= DateTime.Now.Date)
+                {
+                    if (ModelState.IsValid)
                     {
-                        var q = context.DepartmentCoveringHeadRecord.Where(x => x.UserId == currentDeputyHeadId).FirstOrDefault();
-                        Models.DepartmentCoveringHeadRecord d2 = new Models.DepartmentCoveringHeadRecord();
-                        d2 = q;
-                        d2.UserId = u.UserId;
-                        d2.StartDate = startdate;
-                        d2.EndDate = enddate;
+                        Models.Department d1 = context.Department.Where(x => x.DepartmentCode == dept).First();
+                        d1.CoveringHeadId = u.UserId;
 
-                        context.SaveChanges();
-                        TempData["EditSuccess"] = "Changes were saved successfully!";
+                        if (edit == true)
+                        {
+                            var q = context.DepartmentCoveringHeadRecord.Where(x => x.UserId == currentDeputyHeadId).FirstOrDefault();
+                            Models.DepartmentCoveringHeadRecord d2 = new Models.DepartmentCoveringHeadRecord();
+                            d2 = q;
+                            d2.UserId = u.UserId;
+                            d2.StartDate = startdate;
+                            d2.EndDate = enddate;
 
-                        //send email to old deputy head
-                        var oldhead = context.User.Where(x => x.UserId == currentDeputyHeadId).First();
-                        string email2 = oldhead.EmailAddress;
-                        await _emailSender.SendEmailAsync(email2, "Department Deputy Head Replacement", "Dear " + oldhead.Name + ",<br>You have been replaced as department deputy head.");
+                            context.SaveChanges();
+                            TempData["EditSuccess"] = "Changes were saved successfully!";
 
+                            //send email to old deputy head
+                            var oldhead = context.User.Where(x => x.UserId == currentDeputyHeadId).First();
+                            string email2 = oldhead.EmailAddress;
+                            await _emailSender.SendEmailAsync(email2, "Department Deputy Head Replacement", "Dear " + oldhead.Name + ",<br>You have been replaced as department deputy head.");
+                        }
+                        else
+                        {
+                            Models.DepartmentCoveringHeadRecord d2 = new Models.DepartmentCoveringHeadRecord();
+                            d2.UserId = u.UserId;
+                            d2.StartDate = startdate;
+                            d2.EndDate = enddate;
+                            context.Add(d2);
+                            context.SaveChanges();
+                            TempData["NewSuccess"] = "New deputy head appointed!";
+
+                            //send email to new deputy head
+                            var newhead = context.User.Where(x => x.UserId == u.UserId).First();
+                            string email = newhead.EmailAddress;
+                            await _emailSender.SendEmailAsync(email, "Department Deputy Head Appointment", "Dear " + newhead.Name + ",<br>You have been appointed as the department deputy head.");
+                        }
+                        return RedirectToAction("Index");
                     }
                     else
                     {
-                        Models.DepartmentCoveringHeadRecord d2 = new Models.DepartmentCoveringHeadRecord();
-                        d2.UserId = u.UserId;
-                        d2.StartDate = startdate;
-                        d2.EndDate = enddate;
-                        context.Add(d2);
-                        context.SaveChanges();
-                        TempData["NewSuccess"] = "New deputy head appointed!";
-
-                        //send email to new deputy head
-                        var newhead = context.User.Where(x => x.UserId == u.UserId).First();
-                        string email = newhead.EmailAddress;
-                        await _emailSender.SendEmailAsync(email, "Department Deputy Head Appointment", "Dear " + newhead.Name + ",<br>You have been appointed as the department deputy head.");
-
+                        TempData["FilterError"] = "Assignment was not completed. Please try again.";
+                        return RedirectToAction("Index");
                     }
-
-                    return RedirectToAction("Index");
                 }
                 else
                 {
-                    return RedirectToAction("Index");
+                    if (startdate > enddate && (startdate < DateTime.Now.Date || enddate < DateTime.Now.Date))
+                    {
+                        TempData["StartAndEndDateError"] = "End date cannot be earlier than start date. Start date and end date cannot be earlier than today. Please try again.";
+                        return RedirectToAction("Index");
+                    }
+                    if (startdate > enddate)
+                    {
+                        TempData["EndDateError"] = "End date cannot be earlier than start date. Please try again.";
+                        return RedirectToAction("Index");
+                    }
+                    if (startdate < DateTime.Now.Date || enddate < DateTime.Now.Date)
+                    {
+                        TempData["StartDateError"] = "Start date and end date cannot be earlier than today. Please try again.";
+                        return RedirectToAction("Index");
+                    }
+                    else
+                    {
+                        TempData["NoDetails"] = "Please fill in all details!";
+                        return RedirectToAction("Index");
+                    }
                 }
-              
             }
+            else
+            {
+                TempData["NoDetails"] = "Please fill in all details!";
+                return RedirectToAction("Index");
+            }
+
         }
 
     }

@@ -832,42 +832,46 @@ namespace ADTeam5.BusinessLogic
 
 
         //Add item at reorder qty to TempPurchaseOrderDetailsList
-        public List<TempPurchaseOrderDetails> AddReorderLevelItemToTempPurchaseOrderDetailsList()
+        public void AddReorderLevelItemToTempPurchaseOrderDetailsList()
         {
             var itemsAtReorderLevel = _context.Catalogue.Where(x => x.Stock <= x.ReorderLevel).ToList();
 
             //find pending delivery items quantity
-            var pendingDeliveryItems = from rd in _context.RecordDetails
+            var pendingDeliveryOrSubmitItems = from rd in _context.RecordDetails
                                        join po in _context.PurchaseOrderRecord on rd.Rrid equals po.Poid
-                                       where po.Status == "Pending Delivery"
+                                       where po.Status == "Pending Delivery" || po.Status == "Draft"
                                        group rd by new { rd.ItemNumber } into g
                                        select new { g.Key.ItemNumber, Quantity = g.Sum(x => x.Quantity) };
 
-            List<TempPurchaseOrderDetails> autoPurchaseOrderDetails = new List<TempPurchaseOrderDetails>();
-            int rowID = 1;
-            foreach(var item in itemsAtReorderLevel)
+            List<TempPurchaseOrderDetails> autoPurchaseOrderDetails = new List<TempPurchaseOrderDetails>();            
+            if(itemsAtReorderLevel != null)
             {
-                var q = pendingDeliveryItems.Where(x => x.ItemNumber == item.ItemNumber && x.Quantity >= item.ReorderQty);
-                foreach(var p in q)
+                int rowID = 1;
+                foreach (var item in itemsAtReorderLevel)
                 {
-                    if (item.ItemNumber != p.ItemNumber)
+                    var q = pendingDeliveryOrSubmitItems.FirstOrDefault(x => x.ItemNumber == item.ItemNumber && x.Quantity >= item.ReorderQty);
+                    if(q == null)
                     {
-                        TempPurchaseOrderDetails tempPOD = new TempPurchaseOrderDetails();
-                        tempPOD.RowID = rowID;
-                        tempPOD.ItemNumber = item.ItemNumber;
-                        tempPOD.ItemName = _context.Catalogue.FirstOrDefault(x => x.ItemNumber == item.ItemNumber).ItemName;
-                        tempPOD.Quantity = item.ReorderQty;
-                        tempPOD.Remark = "";
-                        tempPOD.SupplierCode = _context.Catalogue.FirstOrDefault(x => x.ItemNumber == item.ItemNumber).Supplier1;
+                        //update tempPOdetails
+                        //TempPurchaseOrderDetails tempPOD = new TempPurchaseOrderDetails();
+                        //tempPOD.RowID = rowID;
+                        //tempPOD.ItemNumber = item.ItemNumber;
+                        //tempPOD.ItemName = _context.Catalogue.FirstOrDefault(x => x.ItemNumber == item.ItemNumber).ItemName;
+                        //tempPOD.Quantity = item.ReorderQty;
+                        //tempPOD.Remark = "";
+                        string supplierCode = _context.Catalogue.FirstOrDefault(x => x.ItemNumber == item.ItemNumber).Supplier1;
+                        //tempPOD.SupplierCode = supplierCode;
+                        //tempPOD.Price = GetPriceOfItem(item.ItemNumber, supplierCode);
 
-                        autoPurchaseOrderDetails.Add(tempPOD);
-                        rowID++;
+                        //autoPurchaseOrderDetails.Add(tempPOD);
+                        //rowID++;
+
+                        //add to POTemp
+                        RecordDetails autoAddItem = new RecordDetails();
+                        CreateNewPOItem(0, item.ItemNumber, item.ReorderQty, supplierCode);
                     }
                 }
-                
             }
-
-            return autoPurchaseOrderDetails;
         }
 
         //Get temp PurchaseOrderDetailsList
@@ -876,22 +880,22 @@ namespace ADTeam5.BusinessLogic
             List<TempPurchaseOrderDetails> result = new List<TempPurchaseOrderDetails>();
 
             //Find auto generated items by system
-            List<TempPurchaseOrderDetails> autoPurchaseOrderDetails = AddReorderLevelItemToTempPurchaseOrderDetailsList();
+            AddReorderLevelItemToTempPurchaseOrderDetailsList();
 
             //Find manual add in items via "POTemp"
             List<PurchaseOrderRecord> purchaseOrderRecordList = _context.PurchaseOrderRecord
                 .Where(x => x.Poid.Contains("POTemp")).ToList();
             List<TempPurchaseOrderDetails> manualPurchaseOrderDetails = new List<TempPurchaseOrderDetails>();
             //last row ID of auto
-            int rowID = 0;
-            if (autoPurchaseOrderDetails.Count != 0)
-            {
-                rowID = autoPurchaseOrderDetails.Select(x => x.RowID).Max() + 1;
-            }
-            else
-            {
-                rowID = 1;
-            }
+            int rowID = 1;
+            //if (autoPurchaseOrderDetails.Count != 0)
+            //{
+            //    rowID = autoPurchaseOrderDetails.Select(x => x.RowID).Max() + 1;
+            //}
+            //else
+            //{
+            //    rowID = 1;
+            //}
             if (purchaseOrderRecordList.Count != 0)
             {
                 foreach (var record in purchaseOrderRecordList)
@@ -917,7 +921,8 @@ namespace ADTeam5.BusinessLogic
             }
 
             //join auto and manual generated tempPOlist
-            result = autoPurchaseOrderDetails.Concat(manualPurchaseOrderDetails).ToList<TempPurchaseOrderDetails>();
+            //result = autoPurchaseOrderDetails.Concat(manualPurchaseOrderDetails).ToList<TempPurchaseOrderDetails>();
+            result = manualPurchaseOrderDetails;
             return result;
         }
 
@@ -1202,6 +1207,23 @@ namespace ADTeam5.BusinessLogic
             string name = q.Name;
             return name;
         }
+
+        //this part is temp and may not work on other status
+        public string getPriceForAdjust(string VoNo)
+        {
+            List<RecordDetails> tmp = _context.RecordDetails.Where(s => s.Rrid == VoNo).ToList();
+            if (tmp == null)
+                return "0";
+            double price = 0;
+            foreach(RecordDetails i in tmp)
+            {
+                Catalogue k = _context.Catalogue.Where(s => s.ItemNumber == i.ItemNumber).ToList().First();
+                double p = Math.Abs( i.Quantity)*(double)k.Supplier1Price;
+                price += p;
+            }
+            return price.ToString();
+        }
+
 
         
 

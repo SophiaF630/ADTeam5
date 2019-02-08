@@ -13,17 +13,17 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ADTeam5.DeptAPIController
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     public class DeptAPIController : Controller
     {
-        private readonly SSISTeam5Context context;
+        private readonly SSISTeam5Context context = new SSISTeam5Context();
         AndroidDeptBizLogic b = new AndroidDeptBizLogic();
 
         // GET: api/<controller>/ENGL
         [HttpGet("{dept}")]
-        public IEnumerable<string> Get(string dept)
+        public List<BriefEmp> Get(string dept)
         {
-            return b.ListEmployeeNames(dept);
+            return b.ListEmployees(dept);
         }
 
         // GET api/<controller>/GetRep/ENGL
@@ -33,29 +33,66 @@ namespace ADTeam5.DeptAPIController
             return b.GetRep(dept);
         }
 
-        // GET api/<controller>/GetRep/ENGL
-        [HttpGet("GetBriefEmp/{dept}")]
-        public IEnumerable<BriefEmp> GetBriefEmp(string dept)
-        {
-            return b.ListEmployeesBrief(dept);
-        }
-
         // POST api/<controller>
+        [HttpPost("SaveBriefEmp")]
+        public void SaveBriefEmp(BriefDept briefDept)
+        {
+            b.SaveNewDeptRep(briefDept);
+        }
+
+        [HttpGet("OutstandingOrders/{dept}")]
+        public List<BriefEmpReq> GetOutstandingOrders(string dept)
+        {
+            return b.getOutstandingOrders(dept);
+        }
+
+        [HttpGet("RecordDetails/{rrid}")]
+        public List<BriefRecDetails> GetRecordDetails(string rrid)
+        {
+            return b.getRecordDetails(rrid);
+        }
+
         [HttpPost]
-        public void Post([FromBody]string value)
+        [Route("ApproveRequest")]
+        public void ApproveRequest(BriefEmpReq briefEmpReq)
         {
+            b.ApproveRequest(briefEmpReq);
         }
 
-        // PUT api/<controller>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        [HttpPost("RejectRequest")]
+        public void RejectRequest(BriefEmpReq briefEmpReq)
         {
+            b.RejectRequest(briefEmpReq);
         }
 
-        // DELETE api/<controller>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        [HttpGet("CollectionPassword/{dept}")]
+        public BriefDept CollectionPassword(string dept)
         {
+            return b.generateCollectionPassword(dept);
+        }
+
+        [HttpGet("CurrentCollectionPoint/{dept}")]
+        public BriefDept2 CurrentCollectionPoint(string dept)
+        {
+            return b.currentCollectionPoint(dept);
+        }
+
+        [HttpPost("ChangeCollectionPoint")]
+        public void ChangeCollectionPoint(BriefDept2 briefDept2)
+        {
+            b.changeCollectionPoint(briefDept2);
+        }
+
+        [HttpGet("AllCollectionPoints")]
+        public List<BriefDept2> AllCollectionPoints()
+        {
+            return b.listCollectionPoints();
+        }
+
+        [HttpGet("GetDisbursement/{dept}")]
+        public BriefDisbursement GetDisbursement(string dept)
+        {
+            return b.getBriefDisbursement(dept);
         }
     }
 }

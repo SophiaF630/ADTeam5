@@ -73,134 +73,149 @@
 }
 
 
-<section class="content">
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="box">
-                <div class="box-header">
-                    <div align="center" vertical-align="middle">
-                        <div style="width: 400px;padding: 20px;margin: 20px;border-style:outset; border-width:1px; ">
-                            <div align="center" vertical-align="middle">
-                                <h2 class="box-title">
-                                    <strong><font size="5">Disbursement List Details</font></strong>
-                                </h2>
-                            </div>
-                            <div class="box-tools">
-                            </div>
-                        </div>
-                    </div>
 
-
-
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-12">
-                                <table id="DisbursementListDetails" class="table table-striped table-bordered" style="width: 100%;">
-                                    <thead>
-                                        <tr>
-                                            <th>
-                                                @Html.DisplayNameFor(model => model.RowID)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayNameFor(model => model.ItemNumber)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayNameFor(model => model.ItemName)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayNameFor(model => model.Quantity)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayNameFor(model => model.QuantityDelivered)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayNameFor(model => model.Remark)
-                                            </th>
-                                            @if (ViewData["UserRole"].ToString() == "Clerk" && ViewBag.DisbursementListStatus == "Pending Delivery")
-                                            {
-                                                <th></th>
-                                                <th></th>
-                                            }
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach (var item in Model)
-                                        {
-                                            <tr>
-                                                <td class="RowID">
-                                                    @Html.DisplayFor(modelItem => item.RowID)
-                                                </td>
-                                                <td class="ItemNumber">
-                                                    @Html.DisplayFor(modelItem => item.ItemNumber)
-                                                </td>
-                                                <td class="ItemName">
-                                                    @Html.DisplayFor(modelItem => item.ItemName)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.Quantity)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.QuantityDelivered)
-                                                </td>
-                                                <td class="Remark">
-                                                    @Html.DisplayFor(modelItem => item.Remark)
-                                                </td>
-                                                @if (ViewData["UserRole"].ToString() == "Clerk" && ViewBag.DisbursementListStatus == "Pending Delivery")
-                                                {
-                                                    <td>
-                                                        <button type="button" class="btn btn-primary editQuantityDelivered" style="width:70px;height:30px;border:2px; background-color:#3c8dbc">
-                                                            Edit
-                                                        </button>
-                                                    </td>
-                                                    <td>
-                                                        <button type="button" class="btn btn-primary addToVoucher" style="width:150px;height:30px;border:2px; background-color:#3c8dbc">
-                                                            Add to Voucher
-                                                        </button>
-                                                    </td>
-                                                }
-                                            </tr>
-                                        }
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
+<div class="box">
+    <div class="box-header with-border">
+        <div align="center" vertical-align="middle">
+            <div style="width: 450px;padding: 20px;margin: 20px;border-style:outset; border-width:1px; ">
+                <div align="center" vertical-align="middle">
+                    <h3 class="box-title">
+                        <strong><font size="5">Disbursement List Details Profile</font></strong>
+                    </h3>
+                </div>
+                <div class="box-tools">
                 </div>
             </div>
-            @if (ViewData["UserRole"].ToString() == "Clerk" && ViewBag.DisbursementListStatus == "Pending Delivery")
-            {
-                @*<div>
-                        <a href="#" data-toggle="modal" data-target="#BackToListModal">Back to List</a>
-                    </div>
-                    <a asp-action="Index">*@
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#BackToListModal" style="width:120px;height:32px;margin-left:1px; background-color:transparent;border:1px #B3B6B7 solid;">
-                    <i class='fas fa-arrow-left' style='font-size:14px;border:1px;color:#B3B6B7'></i>&nbsp;&nbsp;<font style='font-size:14px;color:#B3B6B7'>Back To List</font>
-                </button>
-                @*</a>*@
-            }
-            else
-            {
-                <a asp-action="Index">
-                    <button type="button" class="btn btn-primary" style="width:120px;height:32px;margin-left:1px; background-color:transparent;border:1px #B3B6B7 solid;">
-                        <i class='fas fa-arrow-left' style='font-size:14px;border:1px;color:#B3B6B7'></i>&nbsp;&nbsp;<font style='font-size:14px;color:#B3B6B7'>Back To List</font>
-                    </button>
-                </a>
-            }
-
-            @if (ViewData["UserRole"].ToString() == "Clerk" && ViewBag.DisbursementListStatus == "Pending Delivery")
-            {
-                <button type="button" class="btn btn-primary confirmDelivery">
-                    Confirm Delivery
-                </button>
-                <button type="button" class="btn btn-primary noShow">
-                    No Show
-                </button>
-            }
-
         </div>
-
     </div>
-</section>
+    <br />
+
+
+    <div class="box-body no-padding">
+        <div class="table-responsive table-full-width">
+            <table id="DisbursementListDetails" class="table no-margin table-hover table-striped table-responsive table-borderless" style="width:auto">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.RowID)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.ItemNumber)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.ItemName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Quantity)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.QuantityDelivered)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Remark)
+                        </th>
+                        @if (ViewData["UserRole"].ToString() == "Clerk" && ViewBag.DisbursementListStatus == "Pending Delivery")
+                        {
+                            <th></th>
+                            <th></th>
+                        }
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td></td>
+                            <td class="RowID">
+                                @Html.DisplayFor(modelItem => item.RowID)
+                            </td>
+                            <td class="ItemNumber">
+                                @Html.DisplayFor(modelItem => item.ItemNumber)
+                            </td>
+                            <td class="ItemName">
+                                @Html.DisplayFor(modelItem => item.ItemName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Quantity)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.QuantityDelivered)
+                            </td>
+                            <td class="Remark" width="20%">
+                                @Html.DisplayFor(modelItem => item.Remark)
+                            </td>
+                            @if (ViewData["UserRole"].ToString() == "Clerk" && ViewBag.DisbursementListStatus == "Pending Delivery")
+                            {
+                                <td width="10%">
+                                    <button type="button" class="btn btn-primary editQuantityDelivered" style="width:70px;height:30px;border:2px;background-color:transparent;border:transparent">
+                                        <i class="fa fa-edit" style="color:#66B3B3">
+                                            &nbsp;Edit
+                                        </i>
+                                    </button>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-primary addToVoucher" style="width:10px;height:30px;border:transparent; background-color:transparent">
+                                        <i class='fas fa-plus-square' style='color:#66B38D;align-content:center;'>
+                                            &nbsp;&nbsp;Add to Voucher
+                                        </i>
+                                    </button>
+                                </td>
+                            }
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<br />
+
+@if (ViewData["UserRole"].ToString() == "Clerk" && ViewBag.DisbursementListStatus == "Pending Delivery")
+{
+    @*<div>
+            <a href="#" data-toggle="modal" data-target="#BackToListModal">Back to List</a>
+        </div>
+        <a asp-action="Index">*@
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#BackToListModal" style="width:120px;height:32px;margin-left:1px; background-color:transparent;border:1px #B3B6B7 solid;">
+        <i class='fas fa-arrow-left' style='font-size:14px;border:1px;color:#B3B6B7'></i>&nbsp;&nbsp;<font style='font-size:14px;color:#B3B6B7'>Back To List</font>
+    </button>
+    @*</a>*@
+}
+else
+{
+    <a asp-action="Index">
+        <button type="button" class="btn btn-primary" style="width:120px;height:32px;margin-left:1px; background-color:transparent;border:1px #B3B6B7 solid;">
+            <i class='fas fa-arrow-left' style='font-size:14px;border:1px;color:#B3B6B7'></i>&nbsp;&nbsp;<font style='font-size:14px;color:#B3B6B7'>Back To List</font>
+        </button>
+    </a>
+}
+
+@if (ViewData["UserRole"].ToString() == "Clerk" && ViewBag.DisbursementListStatus == "Pending Delivery")
+{
+
+    <button type="button" class="btn btn-primary noShow" style="margin-left:220px;background-color:#66B3B3">
+        No Show
+    </button>
+    <button type="button" class="btn btn-primary confirmDelivery" style="margin-left:120px;background-color:#00B894">
+        Confirm Delivery
+    </button>
+}
 
 
 <!-- Modal for edit quantity delivered-->
@@ -255,9 +270,15 @@
                             <input type="text" id="RemarkForDelivery" name="remarkForDelivery" class="form-control" value="" />
                         }
                     </div>
-                    <div class="modal-footer">
+                    @*<div class="modal-footer">
                         <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
                         <button type="submit" class="btn btn-primary">Save changes</button>
+                    </div>*@
+
+                    <div align="center">
+                        <button class="btn" data-dismiss="modal" aria-hidden="true" style="width:80px;height:30px;border:2px; background-color:#EEEEEE"><font size="3" color="black">Cancel</font></button>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <button type="submit" class="btn btn-primary" style="width:120px;height:30px;border:2px; background-color:#00B894"><font size="3" color="white">Confirm</font></button>
                     </div>
                 </form>
             </div>
@@ -297,9 +318,10 @@
                         <label for="Remark">Remark</label>
                         <input type="text" id="RemarkForVoucher" name="remarkForVoucher" required="required" class="form-control" value="" />
                     </div>
-                    <div class="modal-footer">
-                        <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-                        <button type="submit" class="btn btn-primary">Save changes</button>
+                    <div align="center">
+                        <button class="btn" data-dismiss="modal" aria-hidden="true" style="width:80px;height:30px;border:2px; background-color:#EEEEEE"><font size="3" color="black">Close</font></button>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <button type="submit" class="btn btn-primary" style="width:120px;height:30px;border:2px; background-color:#00B894"><font size="3" color="white">Save Changes</font></button>
                     </div>
                 </form>
             </div>

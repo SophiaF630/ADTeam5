@@ -8,6 +8,7 @@ namespace ADTeam5.ViewModels
 {
     public class PurchaseOrderRecordDetails
     {
+
         [Display(Name = "No.")]
         public int RowID { get; set; }
         [Display(Name = "RDID")]
