@@ -57,6 +57,11 @@ namespace ADTeam5.clerkApi
                         orderDetails += temp.QuantityDelivered;
                         orderDetails += "delivered";
                     }
+                    else if(temp.QuantityDelivered == -1)
+                    {
+                        orderDetails += temp.Quantity;
+                        orderDetails += "delivered";
+                    }
                     orderDetails += "\n";
                     if (temp.Remark != null)
                     {

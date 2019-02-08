@@ -102,6 +102,24 @@ namespace ADTeam5.clerkApi
             await _context.SaveChangesAsync();
             return "123";
         }
+        [HttpPost("PFpf")]
+        public async Task<string> PFitem12Async(order source)
+        {
+            RecordDetails temp = _context.RecordDetails.Where(s => s.Rdid.ToString() == source.DepName).ToList().First();
+            List<RecordDetails> changezero = _context.RecordDetails.Where(s => s.Rrid == temp.Rrid).ToList();
+            foreach (RecordDetails item in changezero)
+            {
+                if (item.QuantityDelivered == 0)
+                {
+                    item.QuantityDelivered = -1;
+                    _context.Update(item);
+                }
+            }
+            temp.Remark = source.status;
+            _context.Update(temp);
+            await _context.SaveChangesAsync();
+            return "123";
+        }
 
         // POST: api/RecordDetails
         [HttpPost]

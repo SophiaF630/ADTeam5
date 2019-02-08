@@ -169,7 +169,10 @@ namespace ADTeam5.clerkApi
                 int qtyDelivered = item.QuantityDelivered;
                 int rdid = item.Rdid;
                 string remark = item.Remark;
-
+                if (qtyDelivered == 0)
+                {
+                    qtyDelivered = item.Quantity;
+                }
                 //generate a disbursement list if partial fulfilled
                 if (qtyDelivered != item.Quantity)
                 {
@@ -194,6 +197,48 @@ namespace ADTeam5.clerkApi
             //TempData["CorrectPassword"] = "Successful confirmation. Delivery completed!";
 
             return ;
+        }
+        [HttpGet("Deliveredpf/{id}")]
+        public void deliveredpf(string id)
+        {
+            string depCode = _context.DisbursementList.Find(id).DepartmentCode;
+            List<RecordDetails> tempDisbursementListDetails = _context.RecordDetails.Where(s => s.Rrid == id).ToList();
+            string dlID = b.IDGenerator("DL");
+            foreach (var item in tempDisbursementListDetails)
+            {
+                string itemNo = item.ItemNumber;
+                int qtyDelivered = item.QuantityDelivered;
+                int rdid = item.Rdid;
+                string remark = item.Remark;
+
+                //generate a disbursement list if partial fulfilled
+                if(qtyDelivered == -1)
+                {
+                    qtyDelivered = item.Quantity;
+                }
+                if (qtyDelivered != item.Quantity)
+                {
+                    int qty = item.Quantity - qtyDelivered;
+                    b.GenerateDisbursementListForPartialFulfillment(itemNo, qty, remark, depCode, dlID);
+                }
+
+                b.UpdateCatalogueOutAfterDelivery(itemNo, qtyDelivered);
+                b.UpdateQuantityDeliveredAfterDelivery(qtyDelivered, rdid);
+
+                int balance = _context.Catalogue.Find(itemNo).Stock;
+                b.UpdateInventoryTransRecord(itemNo, id, -qtyDelivered, balance);
+            }
+
+            //update disbursement list status
+            var disbursementList = _context.DisbursementList.Find(id);
+            disbursementList.Status = "Completed";
+            disbursementList.CompleteDate = DateTime.Now;
+            _context.DisbursementList.Update(disbursementList);
+            _context.SaveChanges();
+
+            //TempData["CorrectPassword"] = "Successful confirmation. Delivery completed!";
+
+            return;
         }
     }
 }
