@@ -843,30 +843,31 @@ namespace ADTeam5.BusinessLogic
                                        group rd by new { rd.ItemNumber } into g
                                        select new { g.Key.ItemNumber, Quantity = g.Sum(x => x.Quantity) };
 
-            List<TempPurchaseOrderDetails> autoPurchaseOrderDetails = new List<TempPurchaseOrderDetails>();
-            int rowID = 1;
-            foreach(var item in itemsAtReorderLevel)
+            List<TempPurchaseOrderDetails> autoPurchaseOrderDetails = new List<TempPurchaseOrderDetails>();            
+            if(itemsAtReorderLevel != null)
             {
-                var q = pendingDeliveryItems.Where(x => x.ItemNumber == item.ItemNumber && x.Quantity >= item.ReorderQty);
-                foreach(var p in q)
+                int rowID = 1;
+                foreach (var item in itemsAtReorderLevel)
                 {
-                    if (item.ItemNumber != p.ItemNumber)
+                    var q = pendingDeliveryItems.Where(x => x.ItemNumber == item.ItemNumber && x.Quantity >= item.ReorderQty);
+                    if(q != null)
                     {
+
                         TempPurchaseOrderDetails tempPOD = new TempPurchaseOrderDetails();
                         tempPOD.RowID = rowID;
                         tempPOD.ItemNumber = item.ItemNumber;
                         tempPOD.ItemName = _context.Catalogue.FirstOrDefault(x => x.ItemNumber == item.ItemNumber).ItemName;
                         tempPOD.Quantity = item.ReorderQty;
                         tempPOD.Remark = "";
-                        tempPOD.SupplierCode = _context.Catalogue.FirstOrDefault(x => x.ItemNumber == item.ItemNumber).Supplier1;
+                        string supplierCode = _context.Catalogue.FirstOrDefault(x => x.ItemNumber == item.ItemNumber).Supplier1;
+                        tempPOD.SupplierCode = supplierCode;
+                        tempPOD.Price = GetPriceOfItem(item.ItemNumber, supplierCode);
 
                         autoPurchaseOrderDetails.Add(tempPOD);
                         rowID++;
                     }
                 }
-                
             }
-
             return autoPurchaseOrderDetails;
         }
 
