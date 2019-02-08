@@ -17,13 +17,14 @@
         @TempData["QuantityDeliveredError"]
     </div>
 }
-<p id="po-id">@ViewData["POID"]</p>
+
 
 <div class="row">
     <div class="col-lg-12">
         <div class="box" style=" width:100%">
             <div class="box-header with-border">
                 <h3 class="box-title">Purchase Order Record</h3>
+                <p id="po-id" style="float:right"><b>@ViewData["POID"]</b></p>
                 <br />
                 @*<div class="box-tools pull-right">
                         <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
