@@ -17,13 +17,14 @@
         @TempData["QuantityDeliveredError"]
     </div>
 }
-<p id="po-id">@ViewData["POID"]</p>
+
 
 <div class="row">
     <div class="col-lg-12">
         <div class="box" style=" width:100%">
             <div class="box-header with-border">
                 <h3 class="box-title">Purchase Order Record</h3>
+                <p id="po-id" style="float:right"><b>@ViewData["POID"]</b></p>
                 <br />
                 @*<div class="box-tools pull-right">
                         <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
@@ -135,30 +136,30 @@
                         <input type="text" value="@ViewBag.TotalAmount" style="background:transparent;border:none;width:60px;" />
                     </div>
                     @*<div style="margin-left:800px">
-                        <table>
-                            <tr>
-                                <td>
-                                    <label id="amount">
-                                        <font size="2">Amount: $</font>
-                                    </label>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <label id="GST">
-                                        <font size="2">GST(7%): $</font>
-                                    </label>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <label id="totalAmount">
-                                        <font size="2">Total: $</font>
-                                    </label>
-                                </td>
-                            </tr>
-                        </table>
-                    </div>*@
+                            <table>
+                                <tr>
+                                    <td>
+                                        <label id="amount">
+                                            <font size="2">Amount: $</font>
+                                        </label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label id="GST">
+                                            <font size="2">GST(7%): $</font>
+                                        </label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label id="totalAmount">
+                                            <font size="2">Total: $</font>
+                                        </label>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>*@
                 </div>
             </div>
         </div>
@@ -235,78 +236,110 @@
                 </form>
             </div>
         </div>
-                </div>
-            </div>
+    </div>
+</div>
 
-            <!-- Modal for edit quantity delivered-->
-            <div class="modal fade" id="POItemQtyDeliveredModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            @if (TempData["QuantityDeliveredError"] != null)
-                            {
-                                <div class="alert alert-danger" role="alert">
-                                    <button type="button" class="close" data-dismiss="alert" aira-label="close">
-                                        <span aria-hidden="true">&times</span>
-                                    </button>
-                                    @TempData["QuantityDeliveredError"]
-                                </div>
-                            }
-                            <h5 class="modal-title" id="exampleModalLongTitle">Update Delivery</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <form method="POST">
-                                <div class="form-group">
-                                    <input type="hidden" id="POItemModalQtyDeliveredID" name="POItemModalQtyDeliveredName" class="form-control" value="0" />
-                                </div>
-                                <div class="form-group">
-                                    <input type="hidden" id="RowID" name="rowID" class="form-control" value="" />
-                                </div>
-                                <div class="form-group">
-                                    <label for="ItemName">Item Name</label>
-                                    <input type="hidden" id="ItemNamerValue" name="itemName" class="form-control" value="" />
-                                    <input type="text" id="ItemNameDisplay" name="" class="form-control" value="" disabled />
-                                </div>
-                                <div class="form-group">
-                                    <label for="Quantity">Quantity Ordered</label>
-                                    <input type="hidden" id="QuantityValue" name="quantity" class="form-control" value="" />
-                                    <input type="number" min="1" step="1" max="9999" id="QuantityDisplay" name="" class="form-control" value="" disabled />
-                                </div>
-                                <div class="form-group">
-                                    <label for="Quantity">Quantity Delivered</label>
-                                    <input type="number" min="0" max="9999" id="QuantityDelivered" name="quantityDelivered" class="form-control" value="" />
-                                </div>
-                                <div class="modal-footer">
-                                    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-                                    <button type="submit" class="btn btn-primary">Save changes</button>
-                                </div>
-                            </form>
-                        </div>
+<!-- Modal for edit quantity delivered-->
+<div class="modal fade" id="POItemQtyDeliveredModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <br />
+            @*<div class="modal-header">*@
+            @if (TempData["QuantityDeliveredError"] != null)
+            {
+                <div class="alert alert-danger" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aira-label="close">
+                        <span aria-hidden="true">&times</span>
+                    </button>
+                    @TempData["QuantityDeliveredError"]
+                </div>
+            }
+            <div align="center" vertical-align="middle">
+                <div style="width: 400px;padding: 15px;margin: 15px;border-style:outset; border-width:1px; ">
+                    <div align="center" vertical-align="middle">
+                        <h5 class="modal-title" id="exampleModalLongTitle">
+                            <strong><font size="5">Update Delivery</font></strong>
+                        </h5>
                     </div>
                 </div>
             </div>
-            <!-- Modal for Add to draft-->
-            <div class="modal fade" id="AddToDraftModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLongTitle">**Warning**</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
+            @*<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>*@
+            @*</div>*@
+            <div class="modal-body">
+                <form method="POST">
+                    <div class="form-group">
+                        <input type="hidden" id="POItemModalQtyDeliveredID" name="POItemModalQtyDeliveredName" class="form-control" value="0" />
+                    </div>
+                    <div class="form-group">
+                        <input type="hidden" id="RowID" name="rowID" class="form-control" value="" />
+                    </div>
+                    <div class="form-group">
+                        <label for="ItemName">Item Name</label>
+                        <input type="hidden" id="ItemNamerValue" name="itemName" class="form-control" value="" />
+                        <input type="text" id="ItemNameDisplay" name="" class="form-control" value="" disabled />
+                    </div>
+                    <div class="form-group">
+                        <label for="Quantity">Quantity Ordered</label>
+                        <input type="hidden" id="QuantityValue" name="quantity" class="form-control" value="" />
+                        <input type="number" min="1" step="1" max="9999" id="QuantityDisplay" name="" class="form-control" value="" disabled />
+                    </div>
+                    <div class="form-group">
+                        <label for="Quantity">Quantity Delivered</label>
+                        <input type="number" min="0" max="9999" id="QuantityDelivered" name="quantityDelivered" class="form-control" value="" />
+                    </div>
+                    <div align="center">
+                        <button class="btn" data-dismiss="modal" aria-hidden="true" style="width:80px;height:30px;border:2px; background-color:#EEEEEE"><font size="3" color="black">Close</font></button>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <button type="submit" class="btn btn-primary" style="width:120px;height:30px;border:2px; background-color:#00B894"><font size="3" color="white">Save Changes</font></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+                </div>
+            </div>
+<!-- Modal for Add to draft-->
+<div class="modal fade" id="AddToDraftModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <br />
+            @*<div class="modal-header">*@
+            <div align="center" vertical-align="middle">
+                <div style="width: 400px;padding: 15px;margin: 15px;border-style:outset; border-width:1px; ">
+                    <div align="center" vertical-align="middle">
+                        <h4 class="modal-title" id="exampleModalLongTitle">
+                            <strong>
+                                <font style="color:#CC9933">
+                                    ***Warning***
+                                </font>
+                            </strong>
+                        </h4>
+                        @*<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>*@
+                        @*</div>*@
                         <div class="modal-body">
                             <form method="POST">
                                 <div class="form-group">
                                     <input type="hidden" id="AddToDraftModalID" name="addToDraftModalName" class="form-control" value="1" />
                                 </div>
-                                Your changes will be saved
-                                <div class="modal-footer">
-                                    <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
-                                    <button type="submit" class="btn btn-primary">Confirm</button>
+                                <div style="margin-left:79px;color:#CC9933">
+                                    <b>---------------------------------------------------------------------------------------</b>
+                                </div>
+                                <b style="margin-left:150px;color:#CC9933">
+                                    Your changes will be saved
+                                </b>
+                                <div style="margin-left:79px;color:#CC9933">
+                                    <b>---------------------------------------------------------------------------------------</b>
+                                </div>
+                                <br />
+                                <br />
+                                <br />
+                                <div align="center">
+                                    <button class="btn" data-dismiss="modal" aria-hidden="true" style="width:80px;height:30px;border:2px; background-color:#EEEEEE"><font size="3" color="black">Cancel</font></button>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <button type="submit" class="btn btn-primary" style="width:120px;height:30px;border:2px; background-color:#00B894"><font size="3" color="white">Confirm</font></button>
                                 </div>
                             </form>
                         </div>
@@ -317,21 +350,42 @@
             <div class="modal fade" id="SubmitModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLongTitle">**Warning**</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
+                        <br />
+                        <div align="center" vertical-align="middle">
+                            <div style="width: 400px;padding: 15px;margin: 15px;border-style:outset; border-width:1px; ">
+                                <div align="center" vertical-align="middle">
+                                    @*<div class="modal-header">*@
+                                    <h4 class="modal-title" id="exampleModalLongTitle">
+                                        <strong><font style="color:#CC9933">***Warning***</font></strong>
+                                    </h4>
+                                </div>
+                            </div>
                         </div>
+                        @*<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>*@
+                        @*</div>*@
                         <div class="modal-body">
                             <form method="POST">
                                 <div class="form-group">
                                     <input type="hidden" id="SubmitModalID" name="submitModalName" class="form-control" value="1" />
                                 </div>
-                                Order cannot be changed after submission
-                                <div class="modal-footer">
-                                    <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
-                                    <button type="submit" id="confirm-order-btn" class="btn btn-primary">Confirm</button>
+                                <div style="margin-left:79px;color:#CC9933">
+                                    <b>---------------------------------------------------------------------------------------</b>
+                                </div>
+                                <b style="margin-left:150px;color:#CC9933">
+                                    Order cannot be changed after submission
+                                </b>
+                                <div style="margin-left:79px;color:#CC9933">
+                                    <b>---------------------------------------------------------------------------------------</b>
+                                </div>
+                                <br />
+                                <br />
+                                <br />
+                                <div align="center">
+                                    <button class="btn" data-dismiss="modal" aria-hidden="true" style="width:80px;height:30px;border:2px; background-color:#EEEEEE"><font size="3" color="black">Cancel</font></button>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <button type="submit" class="btn btn-primary" style="width:80px;height:30px;border:2px; background-color:#00B894"><font size="3" color="white">Confirm</font></button>
                                 </div>
                             </form>
                         </div>
@@ -342,21 +396,40 @@
             <div class="modal fade" id="ConfirmDeliveryModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLongTitle">**Warning**</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
+                        <br />
+                        <div align="center" vertical-align="middle">
+                            <div style="width: 400px;padding: 15px;margin: 15px;border-style:outset; border-width:1px; ">
+                                <div align="center" vertical-align="middle">
+                                    @*<div class="modal-header">*@
+                                    <h4 class="modal-title" id="exampleModalLongTitle">
+                                        <strong><font style="color:#CC9933">***Warning***</font></strong>
+                                    </h4>
+                                </div>
+                            </div>
                         </div>
+                        @*<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>*@
+                        @*</div>*@
                         <div class="modal-body">
                             <form method="POST">
                                 <div class="form-group">
                                     <input type="hidden" id="ConfirmDeliveryModalID" name="confirmDeliveryModalName" class="form-control" value="1" />
                                 </div>
-                                Status cannot be changed after confirmation
-                                <div class="modal-footer">
-                                    <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
-                                    <button type="submit" class="btn btn-primary">Confirm</button>
+                                <div style="margin-left:79px;color:#CC9933">
+                                    <b>---------------------------------------------------------------------------------------</b>
+                                </div>
+                                <b style="margin-left:150px;color:#CC9933">Status cannot be changed after confirmation</b>
+                                <div style="margin-left:79px;color:#CC9933">
+                                    <b>---------------------------------------------------------------------------------------</b>
+                                </div>
+                                <br />
+                                <br />
+                                <br />
+                                <div align="center">
+                                    <button class="btn" data-dismiss="modal" aria-hidden="true" style="width:80px;height:30px;border:2px; background-color:#EEEEEE"><font size="3" color="black">Cancel</font></button>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <button type="submit" class="btn btn-primary" style="width:80px;height:30px;border:2px; background-color:#00B894"><font size="3" color="white">Confirm</font></button>
                                 </div>
                             </form>
                         </div>
@@ -368,21 +441,39 @@
             <div class="modal fade" id="BackToListModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLongTitle">**Warning**</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
+                        <br />
+                        @*<div class="modal-header">*@
+                        <div align="center" vertical-align="middle">
+                            <div style="width: 400px;padding: 15px;margin: 15px;border-style:outset; border-width:1px; ">
+                                <div align="center" vertical-align="middle">
+                                    <h4 class="modal-title" id="exampleModalLongTitle">
+                                        <strong><font style="color:#CC9933">***Warning***</font></strong>
+                                    </h4>
+                                </div>
+                            </div>
                         </div>
+                        @*<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>*@
+                        @*</div>*@
                         <div class="modal-body">
                             <form method="POST">
                                 <div class="form-group">
                                     <input type="hidden" id="BackToListModalID" name="backToListModalName" class="form-control" value="1" />
                                 </div>
-                                Your changes not be saved
-                                <div class="modal-footer">
-                                    <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
-                                    <button type="submit" class="btn btn-primary" value="Redirect" onclick="window.location='@Url.Action("Index", "PurchaseOrderRecords")'">Confirm</button>
+                                <div style="margin-left:79px;color:#CC9933">
+                                    <b>---------------------------------------------------------------------------------------</b>
+                                </div>
+                                <b style="margin-left:150px;color:#CC9933">
+                                    Your changes not be saved
+                                </b>
+                                <div style="margin-left:79px;color:#CC9933">
+                                    <b>---------------------------------------------------------------------------------------</b>
+                                </div>
+                                <div align="center">
+                                    <button class="btn" data-dismiss="modal" aria-hidden="true" style="width:80px;height:30px;border:2px; background-color:#EEEEEE"> <font size="3" color="black">Cancel</font></button>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <button type="submit" class="btn btn-primary" yle="width:120px;height:30px;border:2px; background-color:#00B894" value="Redirect" onclick="window.location='@Url.Action("Index", "PurchaseOrderRecords")'"><font size="3" color="white">Confirm</font></button>
                                 </div>
                             </form>
                         </div>
@@ -391,140 +482,140 @@
             </div>
 
 
-<script>
-    $(".editPOItem").click(function () {
-        var $row = $(this).closest("tr");    // Find the row
-        var rowID = $row.find("td.RowID").text().trim();
-        var itemName = $row.find("td.ItemName").text().trim(); // Find the text
-        var quantity = $row.find("td.Quantity").text().trim();
-        var POItemModalID = 1;
+            <script>
+                $(".editPOItem").click(function () {
+                    var $row = $(this).closest("tr");    // Find the row
+                    var rowID = $row.find("td.RowID").text().trim();
+                    var itemName = $row.find("td.ItemName").text().trim(); // Find the text
+                    var quantity = $row.find("td.Quantity").text().trim();
+                    var POItemModalID = 1;
 
-        var $modal = $('#POItemModal');
-        $modal.find('#RowID').val(rowID);
-        $modal.find('#ItemNameValue').val(itemName);
-        $modal.find('#ItemNameDisplay').val(itemName);
-        $modal.find('#Quantity').val(quantity);
-        $modal.find('#POItemModalID').val(POItemModalID);
+                    var $modal = $('#POItemModal');
+                    $modal.find('#RowID').val(rowID);
+                    $modal.find('#ItemNameValue').val(itemName);
+                    $modal.find('#ItemNameDisplay').val(itemName);
+                    $modal.find('#Quantity').val(quantity);
+                    $modal.find('#POItemModalID').val(POItemModalID);
 
-        $modal.modal('show');
-    });
-</script>
+                    $modal.modal('show');
+                });
+            </script>
 
-<script>
-    $(".editPOItemQtyDelivered").click(function () {
-        var $row = $(this).closest("tr");    // Find the row
-        var rowID = $row.find("td.RowID").text().trim();
-        var itemName = $row.find("td.ItemName").text().trim(); // Find the text
-        var quantity = $row.find("td.Quantity").text().trim();
-        var quantityDelivered = "";
-        var POItemModalQtyDeliveredID = 1;
+            <script>
+                $(".editPOItemQtyDelivered").click(function () {
+                    var $row = $(this).closest("tr");    // Find the row
+                    var rowID = $row.find("td.RowID").text().trim();
+                    var itemName = $row.find("td.ItemName").text().trim(); // Find the text
+                    var quantity = $row.find("td.Quantity").text().trim();
+                    var quantityDelivered = "";
+                    var POItemModalQtyDeliveredID = 1;
 
-        var $modal = $('#POItemQtyDeliveredModal');
-        $modal.find('#RowID').val(rowID);
-        $modal.find('#ItemNameValue').val(itemName);
-        $modal.find('#ItemNameDisplay').val(itemName);
-        $modal.find('#QuantityValue').val(quantity);
-        $modal.find('#QuantityDisplay').val(quantity);
-        $modal.find('#QuantityDelivered').val(quantityDelivered);
-        $modal.find('#POItemModalQtyDeliveredID').val(POItemModalQtyDeliveredID);
+                    var $modal = $('#POItemQtyDeliveredModal');
+                    $modal.find('#RowID').val(rowID);
+                    $modal.find('#ItemNameValue').val(itemName);
+                    $modal.find('#ItemNameDisplay').val(itemName);
+                    $modal.find('#QuantityValue').val(quantity);
+                    $modal.find('#QuantityDisplay').val(quantity);
+                    $modal.find('#QuantityDelivered').val(quantityDelivered);
+                    $modal.find('#POItemModalQtyDeliveredID').val(POItemModalQtyDeliveredID);
 
-        $modal.modal('show');
-    });
-</script>
-<script>
-    $(".addToDraft").click(function () {
-        var ID = 1;
+                    $modal.modal('show');
+                });
+            </script>
+            <script>
+                $(".addToDraft").click(function () {
+                    var ID = 1;
 
-        var $modal = $('#AddToDraftModal');
-        $modal.find('#AddToDraftModalID').val(ID);
-        $modal.modal('show');
-    });
-</script>
-<script>
-    $(".submit").click(function () {
-        var ID = 1;
+                    var $modal = $('#AddToDraftModal');
+                    $modal.find('#AddToDraftModalID').val(ID);
+                    $modal.modal('show');
+                });
+            </script>
+            <script>
+                $(".submit").click(function () {
+                    var ID = 1;
 
-        var $modal = $('#SubmitModal');
-        $modal.find('#SubmitModalID').val(ID);
-        $modal.modal('show');
-    });
-</script>
+                    var $modal = $('#SubmitModal');
+                    $modal.find('#SubmitModalID').val(ID);
+                    $modal.modal('show');
+                });
+            </script>
 
 
-<script>
-    $(".confirmDelivery").click(function () {
-        var confirmDeliveryModalID = 1;
+            <script>
+                $(".confirmDelivery").click(function () {
+                    var confirmDeliveryModalID = 1;
 
-        var $modal = $('#ConfirmDeliveryModal');
-        $modal.find('#ConfirmDeliveryModalID').val(confirmDeliveryModalID);
-        $modal.modal('show');
-    });
-</script>
+                    var $modal = $('#ConfirmDeliveryModal');
+                    $modal.find('#ConfirmDeliveryModalID').val(confirmDeliveryModalID);
+                    $modal.modal('show');
+                });
+            </script>
 
-<script>
-    $(".backToList").click(function () {
-        var backToListModalID = 1;
+            <script>
+                $(".backToList").click(function () {
+                    var backToListModalID = 1;
 
-        var $modal = $('#BackToListModal');
-        $modal.find('#BackToListModalID').val(backToListModalID);
-        $modal.modal('show');
-    });
-</script>
-<script>
-    var amount = 0;
-    var GST = 0;
-    var totalAmount = 0;
-    $('#TempPurchaseOrderDetails').each(function () {
-        var $row = $(this).closest("tr");    // Find the row
-        var quantity = $row.find("td.Quantity").text().trim();
-        var price = $row.find("td.Price").text().trim();
-        amount += Math.abs(quantity) * price;
-    });
-    amount = Math.round(amount * 100) / 100
-    GST = Math.round(amount * 0.07 * 100) / 100;
-    totalAmount = Math.round((amount + GST) * 100) / 100;
-    //console.log(amount);
-    document.getElementById("amount").innerText = "Amount: $" + amount;
-    document.getElementById("GST").innerText = "GST (7 %): $" + GST;
-    document.getElementById("totalAmount").innerText = "Total Amount: $" + totalAmount;
+                    var $modal = $('#BackToListModal');
+                    $modal.find('#BackToListModalID').val(backToListModalID);
+                    $modal.modal('show');
+                });
+            </script>
+            <script>
+                var amount = 0;
+                var GST = 0;
+                var totalAmount = 0;
+                $('#TempPurchaseOrderDetails').each(function () {
+                    var $row = $(this).closest("tr");    // Find the row
+                    var quantity = $row.find("td.Quantity").text().trim();
+                    var price = $row.find("td.Price").text().trim();
+                    amount += Math.abs(quantity) * price;
+                });
+                amount = Math.round(amount * 100) / 100
+                GST = Math.round(amount * 0.07 * 100) / 100;
+                totalAmount = Math.round((amount + GST) * 100) / 100;
+                //console.log(amount);
+                document.getElementById("amount").innerText = "Amount: $" + amount;
+                document.getElementById("GST").innerText = "GST (7 %): $" + GST;
+                document.getElementById("totalAmount").innerText = "Total Amount: $" + totalAmount;
 
-</script>
-<script>
-    function deleteItem(table) {
+            </script>
+            <script>
+                function deleteItem(table) {
 
-        $(table).parents('tr').remove();
+                    $(table).parents('tr').remove();
 
-        var amount = 0;
-        var GST = 0;
-        var totalAmount = 0;
-        var objs = document.getElementsByName("isChecked");
-        for (var i = 0; i < objs.length; i++) {
-            if (objs[i].checked) {
-                n++;
-            }
-        }
-        $('#TempPurchaseOrderDetails').each(function () {
-            var $row = $(this).closest("tr");    // Find the row
-            var quantity = $row.find("td.Quantity").text().trim();
-            var price = $row.find("td.Price").text().trim();
-            amount += Math.abs(quantity) * price;
-        });
-        amount = Math.round(amount * 100) / 100
-        GST = Math.round(amount * 0.07 * 100) / 100;
-        totalAmount = Math.round((amount + GST) * 100) / 100;
-        //console.log(amount);
-        document.getElementById("amount").innerText = "Amount: $" + amount;
-        document.getElementById("GST").innerText = "GST (7 %): $" + GST;
-        document.getElementById("totalAmount").innerText = "Total Amount: $" + totalAmount;
+                    var amount = 0;
+                    var GST = 0;
+                    var totalAmount = 0;
+                    var objs = document.getElementsByName("isChecked");
+                    for (var i = 0; i < objs.length; i++) {
+                        if (objs[i].checked) {
+                            n++;
+                        }
+                    }
+                    $('#TempPurchaseOrderDetails').each(function () {
+                        var $row = $(this).closest("tr");    // Find the row
+                        var quantity = $row.find("td.Quantity").text().trim();
+                        var price = $row.find("td.Price").text().trim();
+                        amount += Math.abs(quantity) * price;
+                    });
+                    amount = Math.round(amount * 100) / 100
+                    GST = Math.round(amount * 0.07 * 100) / 100;
+                    totalAmount = Math.round((amount + GST) * 100) / 100;
+                    //console.log(amount);
+                    document.getElementById("amount").innerText = "Amount: $" + amount;
+                    document.getElementById("GST").innerText = "GST (7 %): $" + GST;
+                    document.getElementById("totalAmount").innerText = "Total Amount: $" + totalAmount;
 
-    }
+                }
 
-                    //$('#confirm-order-btn').click(function (e) {
-                    //    e.preventDefault();
-                    //    var poId = $('#po-id').text();
-                    //    ("/PurchaseOrderRecords/Details/" + poId, {}, )
+                                                                                //$('#confirm-order-btn').click(function (e) {
+                                                                                //    e.preventDefault();
+                                                                                //    var poId = $('#po-id').text();
+                                                                                //    ("/PurchaseOrderRecords/Details/" + poId, {}, )
 
-                    //});
+                                                                                //});
 
             </script>
 

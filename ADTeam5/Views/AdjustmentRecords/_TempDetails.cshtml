@@ -34,25 +34,26 @@
         <div class="col-12">*@
 
 
-<p>Adjustment Record No: @ViewData["VoucherNo"]</p>
+
 
 @if (Model.Count == 0)
 {
     <div class="row justify-content-center text-center">
         <div class="col-12 col-md-10 mt-5">
 
-            <i class="fa fa-user fa-5x mb-5"></i>
+            <i class='far fa-file' style='font-size:116px;color:#00B894'></i>
+            <br />
+            <br />
+                <h2>
+                    No Record Found
+                </h2>
 
-            <h2>
-                No Record Found
-            </h2>
-
-            <p class="text-muted">
-                You do not have any items to be added to voucher.
-            </p>
-            <button type="button" class="btn btn-lg btn-primary d-none d-md-inline-block mt-3 createNewVoucherItem" style="width:120px;height:40px;border:2px; background-color:#3c8dbc">
-                Add Item
-            </button>
+                <p class="text-muted">
+                    You do not have any items to be added to voucher.
+                </p>
+                <button type="button" class="btn btn-lg btn-primary d-none d-md-inline-block mt-3 createNewPOItem" style="width:180px;height:40px;border:2px; background-color:#00B894">
+                    Add Item
+                </button>
         </div>
     </div> <!-- / .row -->
 }
@@ -64,12 +65,13 @@ else
             <div class="box" style=" width:100%">
                 <div class="box-header with-border">
                     <h3 class="box-title">Items to be added to voucher</h3>
+                    <p style="float:right"><b>Adjustment Record No: @ViewData["VoucherNo"]</b></p>
                     <br />
 
                     @*<div class="box-tools pull-right">
-                            <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
-                            <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
-                        </div>*@
+            <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
+            <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
+        </div>*@
                 </div>
 
 
@@ -273,7 +275,8 @@ else
                     </div>
                     <div align="center">
                         <button class="btn" data-dismiss="modal" aria-hidden="true" style="width:80px;height:30px;border:2px; background-color:#EEEEEE"><font size="3" color="black">Close</font></button>
-                        <button type="submit" class="btn btn-primary" style="width:120px;height:30px;border:2px; background-color:#3c8dbc"><font size="3" color="white">Save Changes</font></button>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <button type="submit" class="btn btn-primary" style="width:120px;height:30px;border:2px; background-color:#00B894"><font size="3" color="white">Save Changes</font></button>
                     </div>
                 </form>
             </div>
@@ -286,12 +289,21 @@ else
 <div class="modal fade" id="VoucherItemModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Update Voucher Item</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+            <br />
+            @*<div class="modal-header">*@
+            <div align="center" vertical-align="middle">
+                <div style="width: 400px;padding: 15px;margin: 15px;border-style:outset; border-width:1px; ">
+                    <div align="center" vertical-align="middle">
+                        <h5 class="modal-title" id="exampleModalLongTitle">
+                            <strong><font size="5">Update Voucher Item</font></strong>
+                        </h5>
+                    </div>
+                </div>
             </div>
+            @*<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>*@
+            @*</div>*@
             <div class="modal-body">
                 <form method="POST">
                     <div class="form-group">
@@ -313,89 +325,90 @@ else
                         <label for="Remark">Remark</label>
                         <input type="text" id="Remark" name="remark" class="form-control" value="" />
                     </div>
-                    <div class="modal-footer">
-                        <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-                        <button type="submit" class="btn btn-primary">Save changes</button>
+                    <div align="center">
+                        <button class="btn" data-dismiss="modal" aria-hidden="true" style="width:80px;height:30px;border:2px; background-color:#EEEEEE"><font size="3" color="black">Close</font></button>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <button type="submit" class="btn btn-primary" style="width:120px;height:30px;border:2px; background-color:#00B894"><font size="3" color="white">Save Changes</font></button>
                     </div>
                 </form>
             </div>
         </div>
-    </div>
-</div>
-<div>
+                </div>
+            </div>
+            <div>
 
-</div>
+            </div>
 
 
 
-<script>
-    $(".createNewVoucherItem").click(function () {
-        //var $row = $(this).closest("tr");    // Find the row
-        var itemNumber = ""; // Find the text
-        var quantity = "";
-        var remark = "";
-        var createNewVoucherItemModalID = 1;
+            <script>
+                $(".createNewVoucherItem").click(function () {
+                    //var $row = $(this).closest("tr");    // Find the row
+                    var itemNumber = ""; // Find the text
+                    var quantity = "";
+                    var remark = "";
+                    var createNewVoucherItemModalID = 1;
 
-        var $modal = $('#CreateNewVoucherItemModal');
-        $modal.find('#ItemNumber').val(itemNumber);
-        $modal.find('#Quantity').val(quantity);
-        $modal.find('#Remark').val(remark);
-        $modal.find('#CreateNewVoucherItemModalID').val(createNewVoucherItemModalID);
+                    var $modal = $('#CreateNewVoucherItemModal');
+                    $modal.find('#ItemNumber').val(itemNumber);
+                    $modal.find('#Quantity').val(quantity);
+                    $modal.find('#Remark').val(remark);
+                    $modal.find('#CreateNewVoucherItemModalID').val(createNewVoucherItemModalID);
 
-        $modal.modal('show');
-    });
-</script>
-
-<script>
-    $(document).ready(function () {
-        $("#Category").change(function () {
-            $.get("/IssueVoucher/GetItemNameList", { category: $("#Category").val() }, function (data) {
-                $("#ItemNumber").empty();
-                $.each(data, function (index, row) {
-                    $("#ItemNumber").append("<option value='" + row.itemNumber + "'>" + row.itemName + "</option>")
+                    $modal.modal('show');
                 });
-            });
-        })
-    });
-</script>
+            </script>
 
-<script>
-    $(".editVoucherItem").click(function () {
-        var $row = $(this).closest("tr");    // Find the row
-        var rowID = $row.find("td.RowID").text().trim();
-        var itemName = $row.find("td.ItemName").text().trim(); // Find the text
-        var quantity = $row.find("td.Quantity").text().trim();
-        var remark = $row.find("td.Remark").text().trim();
-        var voucherItemModalID = 1;
+            <script>
+                $(document).ready(function () {
+                    $("#Category").change(function () {
+                        $.get("/IssueVoucher/GetItemNameList", { category: $("#Category").val() }, function (data) {
+                            $("#ItemNumber").empty();
+                            $.each(data, function (index, row) {
+                                $("#ItemNumber").append("<option value='" + row.itemNumber + "'>" + row.itemName + "</option>")
+                            });
+                        });
+                    })
+                });
+            </script>
 
-        var $modal = $('#VoucherItemModal');
-        $modal.find('#RowID').val(rowID);
-        $modal.find('#ItemNameValue').val(itemName);
-        $modal.find('#ItemNameDisplay').val(itemName);
-        $modal.find('#Quantity').val(quantity);
-        $modal.find('#Remark').val(remark);
-        $modal.find('#VoucherItemModalID').val(voucherItemModalID);
+            <script>
+                $(".editVoucherItem").click(function () {
+                    var $row = $(this).closest("tr");    // Find the row
+                    var rowID = $row.find("td.RowID").text().trim();
+                    var itemName = $row.find("td.ItemName").text().trim(); // Find the text
+                    var quantity = $row.find("td.Quantity").text().trim();
+                    var remark = $row.find("td.Remark").text().trim();
+                    var voucherItemModalID = 1;
 
-        $modal.modal('show');
-    });
-</script>
+                    var $modal = $('#VoucherItemModal');
+                    $modal.find('#RowID').val(rowID);
+                    $modal.find('#ItemNameValue').val(itemName);
+                    $modal.find('#ItemNameDisplay').val(itemName);
+                    $modal.find('#Quantity').val(quantity);
+                    $modal.find('#Remark').val(remark);
+                    $modal.find('#VoucherItemModalID').val(voucherItemModalID);
 
-<script>
-    $('#select-all').click(function (event) {
-        if (this.checked) {
-            // Iterate each checkbox
-            $(':checkbox').each(function () {
-                this.checked = true;
-            });
-        } else {
-            $(':checkbox').each(function () {
-                this.checked = false;
-            });
-        }
-    });
-</script>
+                    $modal.modal('show');
+                });
+            </script>
 
-<script>
+            <script>
+                $('#select-all').click(function (event) {
+                    if (this.checked) {
+                        // Iterate each checkbox
+                        $(':checkbox').each(function () {
+                            this.checked = true;
+                        });
+                    } else {
+                        $(':checkbox').each(function () {
+                            this.checked = false;
+                        });
+                    }
+                });
+            </script>
+
+            <script>
     $(document).ready(function () {
         $(".submit").click(function () {
             var itemToAdd = 1;
@@ -414,10 +427,10 @@ else
             })
         });
     });
-</script>
+            </script>
 
 
-<script>
+            <script>
     $(".addToDraft").click(function () {
         var itemToAdd = 1;
         $.ajax({
@@ -433,9 +446,9 @@ else
                 }
         })
     });
-</script>
+            </script>
 
-<script>
+            <script>
     $(".rejectVoucher").click(function () {
         var itemToAdd = 1;
         $.ajax({
@@ -451,9 +464,9 @@ else
                 }
         })
     });
-</script>
+            </script>
 
-<script>
+            <script>
     $(".approveBySup").click(function () {
         var itemToAdd = 1;
         $.ajax({
@@ -469,9 +482,9 @@ else
                 }
         })
     });
-</script>
+            </script>
 
-<script>
+            <script>
     $(".approveByMan").click(function () {
         var itemToAdd = 1;
         $.ajax({
@@ -487,50 +500,50 @@ else
                 }
         })
     });
-</script>
+            </script>
 
 
-<script>
-    function deleteItem(table) {
+            <script>
+                function deleteItem(table) {
 
-        $(table).parents('tr').remove();
-        //if ($('TempVoucherDetails').find('tr').length < 1) {
+                    $(table).parents('tr').remove();
+                    //if ($('TempVoucherDetails').find('tr').length < 1) {
 
-        //    //$(table).parents('tr').remove();
-        //    //var elem = documenet.getElementById('TempVoucherDetails');
-        //    //elem.style.display = 'none';
-        //    //$('container').find('table').remove();
-        //    $("#TempVoucherDetails").remove();
-        //}
-        //else {
-        //    $(table).parents('tr').remove();
-        //};
-    }
-</script>
+                    //    //$(table).parents('tr').remove();
+                    //    //var elem = documenet.getElementById('TempVoucherDetails');
+                    //    //elem.style.display = 'none';
+                    //    //$('container').find('table').remove();
+                    //    $("#TempVoucherDetails").remove();
+                    //}
+                    //else {
+                    //    $(table).parents('tr').remove();
+                    //};
+                }
+            </script>
 
-@*<script>
-        $(document).ready(function () {
-            $(".delete").click(function () {
-                alert("submitted");
-                window.location.reload();
-                var itemToAdd = 1;
-                //alert(itemToAdd.join(','));
-                $.ajax({
-                    type: "POST",
-                    url: '@Url.Action("Details", "AdjustmentRecords")',
-                    dataType: "html",
-                    data: { itemSubmitted: itemToAdd },
-                    success:
-                        function (data) {
-                            //$('#result').html(data);
-                            alert("submitted");
-                            window.location.reload();
-                        }
-                })
+            @*<script>
+            $(document).ready(function () {
+                $(".delete").click(function () {
+                    alert("submitted");
+                    window.location.reload();
+                    var itemToAdd = 1;
+                    //alert(itemToAdd.join(','));
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("Details", "AdjustmentRecords")',
+                        dataType: "html",
+                        data: { itemSubmitted: itemToAdd },
+                        success:
+                            function (data) {
+                                //$('#result').html(data);
+                                alert("submitted");
+                                window.location.reload();
+                            }
+                    })
+                });
             });
-        });
-        function myFunction() {
-            //alert("submitted");
-            window.location.reload();
-        }
-    </script>*@
+            function myFunction() {
+                //alert("submitted");
+                window.location.reload();
+            }
+        </script>*@
