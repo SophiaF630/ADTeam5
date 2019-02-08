@@ -221,7 +221,7 @@ namespace ADTeam5.Controllers
                 //check if password is correct
                 if (confirmationPassword == collectionPassword)
                 {
-                    string dlID = b.IDGenerator("DL");
+
                     //update out quantity
                     string dlID = b.IDGenerator("DL");
                     foreach (var item in tempDisbursementListDetails)
