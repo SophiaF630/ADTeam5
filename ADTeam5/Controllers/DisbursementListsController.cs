@@ -223,7 +223,7 @@ namespace ADTeam5.Controllers
                 {
                     string dlID = b.IDGenerator("DL");
                     //update out quantity
-                    string dlID = b.IDGenerator("DL");
+                    //string dlID = b.IDGenerator("DL");
                     foreach (var item in tempDisbursementListDetails)
                     {
                         string itemNo = item.ItemNumber;
