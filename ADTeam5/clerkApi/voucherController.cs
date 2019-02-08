@@ -71,7 +71,7 @@ namespace ADTeam5.clerkApi
         {
             List<string> result = new List<string>();
             //int idID = _context.CollectionPoint.Where(s => s.CollectionPointName.Contains(id)).ToList().First().CollectionPointId;
-            List<AdjustmentRecord> dis = _context.AdjustmentRecord.Where(s => s.Status== "Submitted").ToList();
+            List<AdjustmentRecord> dis = _context.AdjustmentRecord.Where(s => s.Status== "Pending Approval").ToList();
             if (dis == null)
                 return null;
             string role = null;
@@ -207,7 +207,7 @@ namespace ADTeam5.clerkApi
             temp.VoucherNo = vono;
             temp.ClerkId = id;
             temp.IssueDate = DateTime.Now;
-            temp.Status = "Submitted";
+            temp.Status = "Pending Approval";
             _context.AdjustmentRecord.Add(temp);
             foreach(RecordDetails i in source)
             {

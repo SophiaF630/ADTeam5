@@ -113,7 +113,7 @@ namespace ADTeam5.Controllers
 
                     var boss = (from x in _context.User
                                 join y in _context.Department
-                                on x.DepartmentCode equals y.DepartmentCode
+                                on x.UserId equals y.RepId
                                 where y.DepartmentCode == "STAS"
                                 select new
                                 {
@@ -123,7 +123,7 @@ namespace ADTeam5.Controllers
                                 }).First();
 
                     string email = boss.email;
-                    await _emailSender.SendEmailAsync(email, "New Adjustment Voucher Pending Approval", "Dear " + boss.name + ",<br>There is a new adjustment voucher that needs your approval.");
+                    await _emailSender.SendEmailAsync(email, "New Adjustment Voucher Pending Approval", "Dear " + boss.name + ",<br>There is a new adjustment voucher that needs your approval.<br><br>-- (Automated email, no reply required) --");
 
                 return Json(new { redirecturl = "AdjustmentRecords/Details/" + voucherNo });
                 
