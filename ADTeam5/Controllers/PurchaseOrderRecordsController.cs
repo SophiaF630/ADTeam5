@@ -176,12 +176,20 @@ namespace ADTeam5.Models
             {
                     foreach (var poDetails in tempPurchaseOrderRecordDetails)
                     {
+                        
                         if (poDetails.RowID == rowID)
                         {
-                            poDetails.QuantityDelivered = quantityDelivered;
+                            if(quantityDelivered > poDetails.Quantity)
+                             {
+                            TempData["QuantityDeliveredError"] = "Quantity delivered cannot be greater than quantity ordered. Please try again.";
+                            return Redirect("/PurchaseOrderRecords/Details/" + id);
+                            }
+                            else
+                            {
+                                poDetails.QuantityDelivered = quantityDelivered;
+                            }
                         }
                     }
-                
             }
             else if (confirmDeliveryModalName == 1)
             {
