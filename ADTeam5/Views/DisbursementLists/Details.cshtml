@@ -259,16 +259,9 @@ else
                         <input type="number" min="0" step="1" max="9999" id="QuantityDelivered" name="quantityDelivered" required="required" class="form-control" value="" />
                     </div>
                     <div class="form-group">
-                        @if (ViewData["InsufficientCheck"] != null)
-                        {
-                            <label for="Remark">Remark</label>
-                            <input type="text" id="RemarkForDelivery" name="remarkForDelivery" required="required" class="form-control" value="" />
-                        }
-                        else
-                        {
                             <label for="Remark">Remark</label>
                             <input type="text" id="RemarkForDelivery" name="remarkForDelivery" class="form-control" value="" />
-                        }
+                        
                     </div>
                     @*<div class="modal-footer">
                         <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>

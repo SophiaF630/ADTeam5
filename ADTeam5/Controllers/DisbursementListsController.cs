@@ -198,7 +198,7 @@ namespace ADTeam5.Controllers
                     TempData["ExcessError"] = "Quantity delivered cannot be greater than quantity requested. Please try again.";
                     return RedirectToAction("Details", new { id });
                 }
-                if (quantityDelivered < quantityNeeded)
+                if (quantityDelivered < quantityNeeded &&(remarkForDelivery == null || remarkForDelivery == ""))
                 {
                     ViewData["InsufficientCheck"] = "true";
                     TempData["InsufficientError"] = "As quantity delivered is lesser than quantity requested, please key in remarks. Please try again.";
