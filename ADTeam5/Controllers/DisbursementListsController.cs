@@ -223,6 +223,7 @@ namespace ADTeam5.Controllers
                 {
                     string dlID = b.IDGenerator("DL");
                     //update out quantity
+                    string dlID = b.IDGenerator("DL");
                     foreach (var item in tempDisbursementListDetails)
                     {
                         string itemNo = item.ItemNumber;
@@ -235,6 +236,7 @@ namespace ADTeam5.Controllers
                         {
                             int qty = item.Quantity - qtyDelivered;
                             b.GenerateDisbursementListForPartialFulfillment(itemNo, qty, remark, depCode, dlID);
+
                         }
 
                         b.UpdateCatalogueOutAfterDelivery(itemNo, qtyDelivered);
