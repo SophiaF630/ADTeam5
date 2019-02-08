@@ -39,6 +39,9 @@
 
             @*<i class="fa fa-user fa-5x mb-5"></i>*@
 
+            <i class='far fa-file' style='font-size:116px;color:#00B894'></i>
+            <br />
+            <br />
             <h2>
                 No Record Found
             </h2>
@@ -48,8 +51,10 @@
             </p>
             @if (ViewData["UserRole"].ToString() == "Clerk")
             {
-                <a asp-action="Create" class="btn btn-lg btn-primary d-none d-md-inline-block mt-3">Create New</a>
-
+                @*<a asp-action="Create" class="btn btn-lg btn-primary d-none d-md-inline-block mt-3">Create New</a>*@
+                <button type="button" class="btn btn-lg btn-primary d-none d-md-inline-block mt-3 createNewPOItem" style="width:180px;height:40px;border:2px; background-color:#00B894">
+                    Create New
+                </button>
             }
             <div>
                 <a @*asp-route-state="PastRecords" *@ href="/AdjustmentRecords?state=PastRecords">
