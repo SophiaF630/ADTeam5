@@ -36,7 +36,7 @@
         <p class="text-muted">
             You do not have any items to be added to voucher.
         </p>
-        <button type="button" class="btn btn-lg btn-primary d-none d-md-inline-block mt-3 createNewVoucherItem" style="width:120px;height:40px;border:2px; background-color:#3c8dbc">
+        <button type="button" class="btn btn-lg btn-primary d-none d-md-inline-block mt-3 createNewVoucherItem" style="width:120px;height:40px;border:2px; background-color:#00B894">
             Create New
         </button>
     </div>
@@ -265,7 +265,8 @@ else
                     </div>
                     <div align="center">
                         <button class="btn" data-dismiss="modal" aria-hidden="true" style="width:80px;height:30px;border:2px; background-color:#EEEEEE"><font size="3" color="black">Close</font></button>
-                        <button type="submit" class="btn btn-primary" style="width:120px;height:30px;border:2px; background-color:#3c8dbc"><font size="3" color="white">Save Changes</font></button>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <button type="submit" class="btn btn-primary" style="width:120px;height:30px;border:2px; background-color:#00B894"><font size="3" color="white">Save Changes</font></button>
                     </div>
                 </form>
 
@@ -279,12 +280,22 @@ else
 <div class="modal fade" id="VoucherItemModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Update Voucher Item</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+            <br />
+            <div align="center" vertical-align="middle">
+                <div style="width: 400px;padding: 15px;margin: 15px;border-style:outset; border-width:1px; ">
+                    <div align="center" vertical-align="middle">
+                        @*<div class="modal-header">*@
+                        <h5 class="modal-title" id="exampleModalLongTitle">
+                            <strong><font size="5">Update Voucher Item</font></strong>
+                        </h5>
+                    </div>
+                </div>
             </div>
+            @*<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>*@
+            @*</div>*@
+
             <div class="modal-body">
                 <form method="POST">
                     <div class="form-group">
@@ -301,98 +312,99 @@ else
                     <div class="form-group">
                         <label for="Quantity">Quantity</label>
                         <label class="text-muted">(Please use negative number for damaged or missing items)</label>
-                        <input type="number" step="1" max ="9999" id="Quantity" name="quantity" class="form-control" value="" />
+                        <input type="number" step="1" max="9999" id="Quantity" name="quantity" class="form-control" value="" />
                     </div>
                     <div class="form-group">
                         <label for="Remark">Remark</label>
                         <input type="text" id="Remark" name="remark" required="required" class="form-control" value="" />
                     </div>
-                    <div class="modal-footer">
-                        <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-                        <button type="submit" class="btn btn-primary">Save changes</button>
+                    <div align="center">
+                        <button class="btn" data-dismiss="modal" aria-hidden="true" style="width:80px;height:30px;border:2px; background-color:#EEEEEE"><font size="3" color="black">Close</font></button>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <button type="submit" class="btn btn-primary" style="width:120px;height:30px;border:2px; background-color:#00B894"><font size="3" color="white">Save Changes</font></button>
                     </div>
                 </form>
             </div>
         </div>
-    </div>
-</div>
+                </div>
+            </div>
 
 
 
-<script>
-    $(".createNewVoucherItem").click(function () {
-        //var $row = $(this).closest("tr");    // Find the row
-        var itemNumber = ""; // Find the text
-        var quantity = "";
-        var remark = "";
-        var createNewVoucherItemModalID = 1;
+            <script>
+                $(".createNewVoucherItem").click(function () {
+                    //var $row = $(this).closest("tr");    // Find the row
+                    var itemNumber = ""; // Find the text
+                    var quantity = "";
+                    var remark = "";
+                    var createNewVoucherItemModalID = 1;
 
-        var $modal = $('#CreateNewVoucherItemModal');
-        $modal.find('#ItemNumber').val(itemNumber);
-        $modal.find('#Quantity').val(quantity);
-        $modal.find('#Remark').val(remark);
-        $modal.find('#CreateNewVoucherItemModalID').val(createNewVoucherItemModalID);
+                    var $modal = $('#CreateNewVoucherItemModal');
+                    $modal.find('#ItemNumber').val(itemNumber);
+                    $modal.find('#Quantity').val(quantity);
+                    $modal.find('#Remark').val(remark);
+                    $modal.find('#CreateNewVoucherItemModalID').val(createNewVoucherItemModalID);
 
-        $modal.modal('show');
-    });
-</script>
-
-<script>
-    $(document).ready(function () {
-        $("#Category").change(function () {
-            $.get("/IssueVoucher/GetItemNameList", { category: $("#Category").val() }, function (data) {
-                $("#ItemNumber").empty();
-                $("#ItemNumber").append("<option value='" + "0" + "' disabled>" + "---Select item---" + "</option>");
-                $.each(data, function (index, row) {
-                    $("#ItemNumber").append("<option value='" + row.itemNumber + "'>" + row.itemName + "</option>")
+                    $modal.modal('show');
                 });
-            });
-        })
-    });
-</script>
+            </script>
 
-<!--select all checkbox-->
-<script>
-    $('#select-all').click(function (event) {
-        if (this.checked) {
-            // Iterate each checkbox
-            $(':checkbox').each(function () {
-                this.checked = true;
-            });
-        } else {
-            $(':checkbox').each(function () {
-                this.checked = false;
-            });
-        }
-    });
-</script>
+            <script>
+                $(document).ready(function () {
+                    $("#Category").change(function () {
+                        $.get("/IssueVoucher/GetItemNameList", { category: $("#Category").val() }, function (data) {
+                            $("#ItemNumber").empty();
+                            $("#ItemNumber").append("<option value='" + "0" + "' disabled>" + "---Select item---" + "</option>");
+                            $.each(data, function (index, row) {
+                                $("#ItemNumber").append("<option value='" + row.itemNumber + "'>" + row.itemName + "</option>")
+                            });
+                        });
+                    })
+                });
+            </script>
 
-
-<script>
-    $(".editVoucherItem").click(function () {
-        var $row = $(this).closest("tr");    // Find the row
-        var rowID = $row.find("td.RowID").text().trim();
-        var itemName = $row.find("td.ItemName").text().trim(); // Find the text
-        var quantity = $row.find("td.Quantity").text().trim();
-        var remark = $row.find("td.Remark").text().trim();
-        var voucherItemModalID = 1;
-
-        var $modal = $('#VoucherItemModal');
-        $modal.find('#RowID').val(rowID);
-        $modal.find('#ItemNameValue').val(itemName);
-        $modal.find('#ItemNameDisplay').val(itemName);
-        $modal.find('#ItemNameDisplay').val(itemName);
-        $modal.find('#Quantity').val(quantity);
-        $modal.find('#Remark').val(remark);
-        $modal.find('#VoucherItemModalID').val(voucherItemModalID);
-
-        $modal.modal('show');
-    });
-</script>
+            <!--select all checkbox-->
+            <script>
+                $('#select-all').click(function (event) {
+                    if (this.checked) {
+                        // Iterate each checkbox
+                        $(':checkbox').each(function () {
+                            this.checked = true;
+                        });
+                    } else {
+                        $(':checkbox').each(function () {
+                            this.checked = false;
+                        });
+                    }
+                });
+            </script>
 
 
+            <script>
+                $(".editVoucherItem").click(function () {
+                    var $row = $(this).closest("tr");    // Find the row
+                    var rowID = $row.find("td.RowID").text().trim();
+                    var itemName = $row.find("td.ItemName").text().trim(); // Find the text
+                    var quantity = $row.find("td.Quantity").text().trim();
+                    var remark = $row.find("td.Remark").text().trim();
+                    var voucherItemModalID = 1;
 
-<script>
+                    var $modal = $('#VoucherItemModal');
+                    $modal.find('#RowID').val(rowID);
+                    $modal.find('#ItemNameValue').val(itemName);
+                    $modal.find('#ItemNameDisplay').val(itemName);
+                    $modal.find('#ItemNameDisplay').val(itemName);
+                    $modal.find('#Quantity').val(quantity);
+                    $modal.find('#Remark').val(remark);
+                    $modal.find('#VoucherItemModalID').val(voucherItemModalID);
+
+                    $modal.modal('show');
+                });
+            </script>
+
+
+
+            <script>
     $(document).ready(function () {
         $(".submit").click(function () {
             var itemToAdd = $("input:checkbox:checked", "#TempVoucherDetails").map(function () {
@@ -413,10 +425,10 @@ else
             })
         });
     });
-</script>
+            </script>
 
 
-<script>
+            <script>
     $(".addToDraft").click(function () {
         var itemToAdd = $("input:checkbox:checked", "#TempVoucherDetails").map(function () {
             return $(this).val();
@@ -435,40 +447,40 @@ else
                 }
         })
     });
-</script>
+            </script>
 
-<script>
-    $('#TempVoucherDetails').click(function () {
-        var amount = 0;
-        var GST = 0;
-        var totalAmount = 0;
-        var n = 0;
-        var objs = document.getElementsByName("isChecked");
-        for (var i = 0; i < objs.length; i++) {
-            if (objs[i].checked) {
-                n++;
-            }
-        }
-        $('input:checkbox:checked').each(function () {
-            var $row = $(this).closest("tr");    // Find the row
-            var quantity = $row.find("td.Quantity").text().trim();
-            var price = $row.find("td.Price").text().trim();
-            amount += Math.abs(quantity) * price;
-        });
-        amount = Math.round(amount * 100) / 100
-        GST = Math.round(amount * 0.07 * 100) / 100;
-        totalAmount = Math.round((amount + GST) * 100) / 100;
+            <script>
+                $('#TempVoucherDetails').click(function () {
+                    var amount = 0;
+                    var GST = 0;
+                    var totalAmount = 0;
+                    var n = 0;
+                    var objs = document.getElementsByName("isChecked");
+                    for (var i = 0; i < objs.length; i++) {
+                        if (objs[i].checked) {
+                            n++;
+                        }
+                    }
+                    $('input:checkbox:checked').each(function () {
+                        var $row = $(this).closest("tr");    // Find the row
+                        var quantity = $row.find("td.Quantity").text().trim();
+                        var price = $row.find("td.Price").text().trim();
+                        amount += Math.abs(quantity) * price;
+                    });
+                    amount = Math.round(amount * 100) / 100
+                    GST = Math.round(amount * 0.07 * 100) / 100;
+                    totalAmount = Math.round((amount + GST) * 100) / 100;
 
-        amount = amount.toFixed(2);
-        GST = GST.toFixed(2);
-        totalAmount = totalAmount.toFixed(2);
+                    amount = amount.toFixed(2);
+                    GST = GST.toFixed(2);
+                    totalAmount = totalAmount.toFixed(2);
 
-        //console.log(amount);
-        document.getElementById("number").innerText = "Items to be added to voucher. " + n + " item(s) selected";
-        document.getElementById("amount").innerText = "Amount: $" + amount;
-        document.getElementById("GST").innerText = "GST (7 %): $" + GST;
-        document.getElementById("totalAmount").innerText = "Total Amount: $" + totalAmount;
-    });
-</script>
-@*</html>*@
+                    //console.log(amount);
+                    document.getElementById("number").innerText = "Items to be added to voucher. " + n + " item(s) selected";
+                    document.getElementById("amount").innerText = "Amount: $" + amount;
+                    document.getElementById("GST").innerText = "GST (7 %): $" + GST;
+                    document.getElementById("totalAmount").innerText = "Total Amount: $" + totalAmount;
+                });
+            </script>
+            @*</html>*@
 
