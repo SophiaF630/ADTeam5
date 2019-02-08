@@ -77,10 +77,10 @@
                             Select end date:
                             <input type="date" name="enddate" id="end" value=" = " />
 
-                            <input type="submit" value="Search" id="searchbtn" />
+                            <input type="submit" value="Search" class="btn btn-primary" id="searchbtn" style="background-color:#00B894;border:none;width:80px;height:30px" />
                         </div>
                         <br />
-
+                        <hr />
                         @if (ViewData["StartDate"] != null & ViewData["EndDate"] != null)
                         {
                             <p> <b>Search results from @ViewData["StartDate"] to @ViewData["EndDate"]</b></p>
