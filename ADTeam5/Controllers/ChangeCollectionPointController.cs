@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ADTeam5.Controllers
 {
+    [Authorize]
     public class ChangeCollectionPointController : Controller
     {
         static int userid;

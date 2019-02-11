@@ -11,10 +11,11 @@ using ADTeam5.ViewModels;
 using ADTeam5.BusinessLogic;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
-
+using Microsoft.AspNetCore.Authorization;
 
 namespace ADTeam5.Controllers
 {
+    [Authorize]
     public class IssueVoucherController : Controller
     {
         private readonly IEmailSender _emailSender;

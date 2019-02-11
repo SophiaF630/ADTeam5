@@ -10,10 +10,11 @@ using ADTeam5.Areas.Identity.Data;
 using ADTeam5.ViewModels;
 using ADTeam5.BusinessLogic;
 using Microsoft.AspNetCore.Identity;
-
+using Microsoft.AspNetCore.Authorization;
 
 namespace ADTeam5.Controllers
 {
+    [Authorize]
     public class RaisePurchaseOrderController : Controller
     {
         private readonly UserManager<ADTeam5User> _userManager;

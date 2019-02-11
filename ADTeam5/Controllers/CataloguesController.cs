@@ -9,9 +9,11 @@ using ADTeam5.Models;
 using ADTeam5.BusinessLogic;
 using Microsoft.AspNetCore.Identity;
 using ADTeam5.Areas.Identity.Data;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ADTeam5.Controllers
 {
+    [Authorize]
     public class CataloguesController : Controller
     {
 

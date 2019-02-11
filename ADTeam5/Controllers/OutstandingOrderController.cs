@@ -6,6 +6,7 @@ using ADTeam5.Areas.Identity.Data;
 using ADTeam5.BusinessLogic;
 using ADTeam5.Models;
 using ADTeam5.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -14,6 +15,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ADTeam5.Controllers
 {
+    [Authorize]
     public class OutstandingOrderController : Controller
     {
         int userid;

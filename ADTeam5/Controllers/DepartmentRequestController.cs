@@ -5,11 +5,13 @@ using System.Threading.Tasks;
 using ADTeam5.Areas.Identity.Data;
 using ADTeam5.Models;
 using ADTeam5.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ADTeam5.Controllers
 {
+    [Authorize]
     public class DepartmentRequestController : Controller
     {
         static int userid;

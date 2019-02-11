@@ -8,9 +8,11 @@ using ADTeam5.ViewModels;
 using ADTeam5.BusinessLogic;
 using Microsoft.AspNetCore.Identity;
 using ADTeam5.Areas.Identity.Data;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ADTeam5.Controllers
 {
+    [Authorize]
     public class ViewExpenditureController : Controller
     {
         static int userid;

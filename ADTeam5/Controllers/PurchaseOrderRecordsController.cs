@@ -11,10 +11,11 @@ using Microsoft.AspNetCore.Identity;
 using ADTeam5.Areas.Identity.Data;
 using ADTeam5.ViewModels;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ADTeam5.Models
 {
-
+    [Authorize]
     public class PurchaseOrderRecordsController : Controller
     {
         private readonly IEmailSender _emailSender;

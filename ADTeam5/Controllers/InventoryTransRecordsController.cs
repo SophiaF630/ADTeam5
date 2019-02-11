@@ -10,9 +10,11 @@ using ADTeam5.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using ADTeam5.BusinessLogic;
 using ADTeam5.Areas.Identity.Data;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ADTeam5.Controllers
 {
+    [Authorize]
     public class InventoryTransRecordsController : Controller
     {
         private readonly UserManager<ADTeam5User> _userManager;

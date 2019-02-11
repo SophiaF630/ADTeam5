@@ -6,13 +6,15 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ADTeam5.Models;
+using ADTeam5.ViewModels;
 using ADTeam5.BusinessLogic;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using ADTeam5.Areas.Identity.Data;
-using ADTeam5.ViewModels;
 
 namespace ADTeam5.Controllers
 {
+    [Authorize]
     public class AdjustmentRecordsController : Controller
     {
 

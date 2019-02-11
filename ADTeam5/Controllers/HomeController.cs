@@ -12,8 +12,7 @@ using ADTeam5.Models;
 using ADTeam5.ViewModels;
 
 namespace ADTeam5.Controllers
-{
-    
+{    
     [Authorize]
     public class HomeController : Controller
     {

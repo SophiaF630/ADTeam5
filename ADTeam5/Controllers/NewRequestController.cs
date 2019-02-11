@@ -10,9 +10,11 @@ using ADTeam5.Areas.Identity.Data;
 using Microsoft.AspNetCore.Identity;
 using ADTeam5.ViewModels;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ADTeam5.Controllers
 {
+    [Authorize]
     public class NewRequestController : Controller
     {
         static int userid;
